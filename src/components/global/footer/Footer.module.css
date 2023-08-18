@@ -1,0 +1,17 @@
+.custom-list {
+    list-style: none;
+    padding-left: 20px;
+}
+
+.custom-list li::before {
+    content: "•";
+    position: relative;
+    font-weight: bold;
+    left: -15px;
+    top: 2px;
+}
+
+.custom-title-social-media {
+    display: none !important;
+    visibility: hidden;
+}

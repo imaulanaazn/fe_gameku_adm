@@ -1,0 +1,19 @@
+.nav_link {
+    border: 2px solid transparent;
+    color: white;
+}
+
+.nav_active,
+.nav_link:hover {
+    border-bottom: 2px solid black;
+}
+
+.animation-side-menu {
+    transition: transform 0.3s ease-in-out;
+}
+
+.header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}

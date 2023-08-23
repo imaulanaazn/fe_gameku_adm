@@ -3,11 +3,11 @@ interface IProductsGame {
     name: string;
     price: number;
     cd: string;
+    logoDenom: string;
     gameId: string;
     deleted: boolean;
-    logo: string;
-    createdAt: Date | string;
-    updatedAt: Date | string;
+    createdAt: Date;
+    updatedAt: Date;
 }
 
 interface IProductDetail extends IGame {

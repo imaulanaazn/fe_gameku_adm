@@ -1,4 +1,5 @@
 import FormRegister from "@/components/register/FormRegister";
+import { Metadata } from "next";
 import Link from "next/link";
 
 const Register = () => {
@@ -30,4 +31,10 @@ const Register = () => {
     );
 };
 
+export const generateMetadata = () => {
+    return {
+        title: "Daftar Akun Baru - Gasskeun Topup: Nikmati Kemudahan Topup Game",
+        description: undefined,
+    } as Metadata;
+};
 export default Register;

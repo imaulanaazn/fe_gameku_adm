@@ -26,6 +26,7 @@ const FormLogin = () => {
                 credentials: "include",
                 headers: {
                     "content-type": "application/json",
+                    "ngrok-skip-browser-warning": "true",
                 },
                 body: JSON.stringify({
                     username,
@@ -53,6 +54,7 @@ const FormLogin = () => {
             credentials: "include",
             headers: {
                 "content-type": "application/json",
+                "ngrok-skip-browser-warning": "true",
             },
         });
 

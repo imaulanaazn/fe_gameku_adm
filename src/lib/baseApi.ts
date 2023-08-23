@@ -14,6 +14,7 @@ const sendRequest = async <T>(
             credentials: "include",
             headers: {
                 "x-gasskeun-sign": signGasskeun,
+                "ngrok-skip-browser-warning": "true",
             },
         };
         // console.log(opt);

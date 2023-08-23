@@ -1,50 +1,34 @@
 import FormTopup from "@/components/pageProduct/FormTopup";
-import ListDenom from "@/components/pageProduct/listDenom/ListDenom";
-import { GetServerSideProps } from "next";
-import ErrorPage from "next/error";
+import { Metadata } from "next";
 import NotFound from "./not-found";
+import sendRequest from "@/lib/baseApi";
 
 interface IParams {
     params: {
-        slug: string;
+        productKey: string;
     };
 }
 
-const getProductsGame = async (slug: string): Promise<IProductDetail> => {
-    const res = await fetch("http://localhost:3001/api/v1/bannerss", {
-        cache: "no-cache",
-    });
-    const jsonRes = await res.json();
-    return jsonRes as IProductDetail;
-};
-
-const getPaymentsMethod = async (): Promise<IPaymentMethod[]> => {
-    const res = await fetch("http://localhost:3002/payments", {
-        cache: "no-cache",
-    });
-    const jsonRes = await res.json();
-    return jsonRes as IPaymentMethod[];
-};
-
-const page: React.FC<IParams> = async ({ params }) => {
-    const resProducts = await fetch("http://localhost:3001/api/v1/bannerss", {
-        cache: "no-cache",
-    });
-    if (!resProducts.ok) {
+const page = async ({ params }: IParams) => {
+    const gameDetail = await sendRequest<IGameDetail>("/api/v1/game-detail?slug=" + params.productKey);
+    if (!gameDetail.ok) {
         return <NotFound />;
     }
-    // const paymentsMethod = await getPaymentsMethod();
+    const paymentsMethod = await sendRequest<IPaymentMethod[]>("/api/v1/payments-method");
 
     return (
         <div className="mx-auto mt-10 font-pulse">
-            {/* <FormTopup products={products} paymentsMethod={paymentsMethod} /> */}
+            <FormTopup products={gameDetail.data} paymentsMethod={paymentsMethod.data} />
         </div>
     );
 };
 
-interface IProps {
-    products: IProductDetail;
-    paymentsMethod: IPaymentMethod[];
-}
+export const generateMetadata = ({ params }: IParams) => {
+    console.log(params);
+    return {
+        title: params.productKey,
+        description: undefined,
+    } as Metadata;
+};
 
 export default page;

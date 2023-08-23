@@ -1,13 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { cartState } from "@/atom/cartState";
+import { useRecoilState } from "recoil";
 
 const CodePromo = () => {
-    const [promoCode, setPromoCode] = useState("");
-
+    const [cart, setCart] = useRecoilState(cartState);
     const handleCheckPromoCode = (e: any) => {
-        console.log(promoCode);
+        e.preventDefault();
     };
+
     return (
         <div className="bg-slate-200 shadow-md rounded-lg p-7 mb-4">
             <div className="py-2 px-8 text-white rounded-lg shadow-lg shadow-slate-400 bg-[#B72025] w-fit text-sm">
@@ -19,8 +20,8 @@ const CodePromo = () => {
                     name="promoCode"
                     id="promoCode"
                     className="p-4 rounded-md text-sm pr-24"
-                    value={promoCode}
-                    onChange={(e) => setPromoCode(e.target.value)}
+                    value={cart.promoCode}
+                    onChange={(e) => setCart({ ...cart, promoCode: e.target.value })}
                 />
                 <div
                     onClick={handleCheckPromoCode}

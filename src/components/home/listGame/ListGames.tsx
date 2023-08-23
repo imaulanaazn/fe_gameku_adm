@@ -1,5 +1,4 @@
-import Link from "next/link";
-import Image from "next/image";
+import Game from "@/components/global/game/Game";
 
 const ListGames: React.FC<ListGameProps> = ({ backgroundColor, title, data }) => {
     return (
@@ -12,35 +11,7 @@ const ListGames: React.FC<ListGameProps> = ({ backgroundColor, title, data }) =>
                 </div>
                 <div className="mt-10 flex justify-center items-center gap-4 flex-wrap lg:w-2/3">
                     {data.map((data) => (
-                        <Link
-                            key={data.id}
-                            href={data.slug}
-                            className="flex flex-col w-36 h-52 bg-white shadow-lg transform transition-transform hover:scale-105 rounded-md hover:shadow-gray-600"
-                        >
-                            {/* <div
-                                className="w-36 h-36 mx-auto rounded-md"
-                                style={{
-                                    backgroundImage: `url('${data.logoUrl}')`,
-                                    backgroundSize: "cover",
-                                    backgroundPosition: "center",
-                                    backgroundRepeat: "no-repeat",
-                                }}
-                            ></div> */}
-                            <div className="w-36 h-36 mx-auto rounded-md">
-                                <Image
-                                    src={data.logoUrl}
-                                    alt={data.name}
-                                    className="w-full lg:h-24 h-16 object-cover"
-                                    width="0"
-                                    height="0"
-                                    sizes="100vw"
-                                    style={{ width: "100%", height: "100%" }}
-                                />
-                            </div>
-                            <div className="py-2 px-1">
-                                <div className="font-bold text-sm ">{data.name}</div>
-                            </div>
-                        </Link>
+                        <Game data={data} />
                     ))}
                 </div>
             </div>

@@ -9,60 +9,15 @@ import NomorWhatsapp from "./nomorWhatsapp/NomorWhatsapp";
 import CodePromo from "./codePromo/CodePromo";
 import TotalPayments from "./totalPayments/TotalPayments";
 import DescProduct from "./descProduct/DescProduct";
+import { useRecoilState } from "recoil";
+import { cartState } from "@/atom/cartState";
 
 interface IFormProps {
-    products: IProductDetail;
+    products: IGameDetail;
     paymentsMethod: IPaymentMethod[];
 }
 
 const FormTopup: React.FC<IFormProps> = ({ products, paymentsMethod }) => {
-    const [choosenProduct, setChoosenProduct] = useState<Partial<IProductsGame>>({});
-    const [valueQuantity, setValueQuantity] = useState("1");
-    const [choosenPayment, setChoosenPayment] = useState({});
-    const [allHidePayments, setAllHidePayments] = useState(true);
-    const [productPrices, setProductPrices] = useState(0);
-    const [userID, setUserID] = useState("");
-    const [serverID, setServerID] = useState("");
-
-    const handleClickDenom = (prod: IProductsGame) => {
-        if (prod.id === choosenProduct.id) {
-            setChoosenProduct({});
-        } else {
-            setChoosenProduct(prod);
-        }
-    };
-    const handleChangeValueQuantity = (quantity: string) => {
-        if (parseInt(quantity) < 1) {
-            setValueQuantity("1");
-        } else {
-            setValueQuantity(quantity);
-        }
-    };
-    const handleClickPaymentsMethod = (choosenPayment: Partial<IPaymentMethod>) => {
-        setChoosenPayment(choosenPayment);
-    };
-
-    const handleChangeUserID = (userID: string) => {
-        setUserID(userID);
-    };
-
-    const handleChangeServerID = (serverID: string) => {
-        setServerID(userID);
-    };
-
-    useEffect(() => {
-        if (!Object.keys(choosenProduct).length || !valueQuantity) {
-            setAllHidePayments(true);
-            if (Object.keys(choosenProduct).length) {
-                setProductPrices(choosenProduct.price as number);
-            } else {
-                setProductPrices(0);
-            }
-        } else {
-            setProductPrices((choosenProduct.price as number) * parseInt(valueQuantity));
-            setAllHidePayments(false);
-        }
-    }, [choosenProduct, valueQuantity]);
     return (
         <>
             {products && (
@@ -75,21 +30,11 @@ const FormTopup: React.FC<IFormProps> = ({ products, paymentsMethod }) => {
                                 <div>
                                     <ListDenom
                                         products={products.products}
-                                        handleClick={handleClickDenom}
-                                        choosenProduct={choosenProduct as IProductsGame}
+                                        defaultLogo={products.logoDenom || products.logoUrl}
                                     />
-                                    <Quantity value={valueQuantity} setValue={handleChangeValueQuantity} />
-                                    <ListPaymentsMethod
-                                        paymentsMethod={paymentsMethod}
-                                        allHide={allHidePayments}
-                                        productPrice={productPrices}
-                                        setChoosenPayment={handleClickPaymentsMethod}
-                                        choosenPayment={choosenPayment as IPaymentMethod}
-                                    />
-                                    <DetailAccount
-                                        handleUserID={handleChangeUserID}
-                                        handleServerID={handleChangeServerID}
-                                    />
+                                    <Quantity />
+                                    <ListPaymentsMethod paymentsMethod={paymentsMethod} />
+                                    <DetailAccount />
                                     <NomorWhatsapp />
                                     <CodePromo />
                                 </div>

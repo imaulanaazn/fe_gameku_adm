@@ -8,7 +8,7 @@ const socialMedia = [
     {
         title: "Whatsapp",
         icon: faWhatsapp,
-        to: "https://api.whatsapp.com/send",
+        to: "https://api.whatsapp.com/send?phone=628123456789",
     },
     {
         title: "Instagram",
@@ -75,7 +75,7 @@ const Footer = () => {
                             MAU JOIN <br></br>RESELLER?
                         </p>
                         <Link
-                            href="https://api.whatsapp.com/send?phone=628112065672"
+                            href="https://api.whatsapp.com/send?phone=628123456789"
                             className="sm:py-4 sm:px-8 py-2 px-3 bg-white text-[#B72025] rounded-lg"
                         >
                             GABUNG SEKARANG!

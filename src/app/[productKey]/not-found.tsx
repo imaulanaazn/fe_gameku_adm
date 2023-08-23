@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import Link from "next/link";
 
 export default function NotFound() {
@@ -15,3 +16,9 @@ export default function NotFound() {
         </div>
     );
 }
+
+export const generateMetadata = () => {
+    return {
+        title: "Page Tidak Ditemukan",
+    } as Metadata;
+};

@@ -1,4 +1,5 @@
 import FormLogin from "@/components/login/FormLogin";
+import { Metadata } from "next";
 import Link from "next/link";
 
 const Login = () => {
@@ -28,6 +29,13 @@ const Login = () => {
             </div>
         </div>
     );
+};
+
+export const generateMetadata = () => {
+    return {
+        title: "Login Akun - Gasskeun Topup: Akses Cepat ke Layanan Topup Game",
+        description: undefined,
+    } as Metadata;
 };
 
 export default Login;

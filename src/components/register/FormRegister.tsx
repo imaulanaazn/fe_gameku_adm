@@ -32,6 +32,7 @@ const FormRegister = () => {
                 credentials: "include",
                 headers: {
                     "content-type": "application/json",
+                    "ngrok-skip-browser-warning": "true",
                 },
                 body: JSON.stringify({
                     email,
@@ -62,6 +63,7 @@ const FormRegister = () => {
             credentials: "include",
             headers: {
                 "content-type": "application/json",
+                "ngrok-skip-browser-warning": "true",
             },
         });
 

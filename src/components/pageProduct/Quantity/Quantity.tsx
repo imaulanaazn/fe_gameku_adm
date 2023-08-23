@@ -1,18 +1,32 @@
-import { ChangeEvent } from "react";
+import { cartState } from "@/atom/cartState";
+import { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
 
-interface IQUantityProps {
-    value: string;
-    setValue: (value: string) => void;
-}
+const Quantity = () => {
+    const [quantity, setQuantity] = useState("");
+    const [cart, setCart] = useRecoilState(cartState);
 
-const Quantity: React.FC<IQUantityProps> = ({ value, setValue }) => {
-    const handleValueQuantity = (e: ChangeEvent<HTMLInputElement>) => {
-        if (parseInt(e.target.value) > 100) {
-            setValue("100");
+    const handleChangeQuantity = (qty: string) => {
+        if (qty) {
+            const value = parseInt(qty);
+            if (value > 100) {
+                setQuantity("100");
+            } else if (value < 1) {
+                setQuantity("1");
+            } else {
+                setQuantity(qty);
+            }
         } else {
-            setValue(e.target.value);
+            setQuantity("");
         }
     };
+
+    useEffect(() => {
+        const valueQty = isNaN(parseInt(quantity)) ? 0 : parseInt(quantity);
+        const productPrice = cart.product && cart.product.price ? cart.product.price : 0;
+        const totalAmount = cart.product && cart.paymentMethod && valueQty * productPrice + cart.fee;
+        setCart({ ...cart, quantity: valueQty, prices: valueQty * productPrice, totalAmount });
+    }, [quantity, cart.prices, cart.fee]);
 
     return (
         <div className="bg-slate-200 shadow-md rounded-lg p-7 mb-4">
@@ -21,12 +35,12 @@ const Quantity: React.FC<IQUantityProps> = ({ value, setValue }) => {
             </div>
             <div className="grid grid-cols-1 mt-5">
                 <input
-                    type="number"
+                    type="text"
                     name="quantity"
                     id="quantity"
                     className="p-4 rounded-md text-sm"
-                    value={parseInt(value)}
-                    onChange={handleValueQuantity}
+                    value={quantity}
+                    onChange={(e) => handleChangeQuantity(e.target.value.replace(/[^0-9]/g, ""))}
                 />
             </div>
         </div>

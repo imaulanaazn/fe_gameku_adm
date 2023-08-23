@@ -1,13 +1,7 @@
-"use client";
-
-import React, { useState } from "react";
+import FormCekPesanan from "@/components/cek-pesanan/FormCekPesanan";
+import { Metadata } from "next";
 
 const CekPesanan = () => {
-    const [trxNo, setTrxNo] = useState("");
-
-    const handleSubmit = (e: any) => {
-        e.preventDefault();
-    };
     return (
         <div
             style={{
@@ -24,25 +18,17 @@ const CekPesanan = () => {
                     <p className="font-pulse font-light text-xs tracking-widest">SILAHKAN</p>
                     <h1 className="font-pulse font-semibold text-3xl">Cek Pesanan</h1>
                 </div>
-                <form onSubmit={handleSubmit} className="w-full max-w-md text-xs text-black">
-                    <div className="mb-4">
-                        <input
-                            type="text"
-                            id="text"
-                            className="w-full p-4 border"
-                            value={trxNo}
-                            onChange={(e) => setTrxNo(e.target.value)}
-                            required
-                            placeholder="Masukkan kode transaksi / No Whatsapp"
-                        />
-                    </div>
-                    <button type="submit" className="w-full bg-[#B72025] text-white py-5 hover:bg-[#c5474c]">
-                        Cek Pesanan
-                    </button>
-                </form>
+                <FormCekPesanan />
             </div>
         </div>
     );
+};
+
+export const generateMetadata = () => {
+    return {
+        title: "Cek Transaksi - Gasskeun Topup: Pantau Riwayat Pembayaran Game Anda",
+        description: undefined,
+    } as Metadata;
 };
 
 export default CekPesanan;

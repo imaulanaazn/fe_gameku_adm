@@ -14,6 +14,7 @@ const nextConfig = {
             "esportsgen.com",
             "cdnb.artstation.com",
             "seeklogo.com",
+            "www.bca.co.id",
         ],
     },
 };

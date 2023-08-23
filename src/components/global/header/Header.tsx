@@ -56,6 +56,9 @@ const Header = () => {
         const responseCustomer = await fetch(process.env.NEXT_PUBLIC_BASE_URL + "/api/v1/customer/logout", {
             method: "DELETE",
             credentials: "include",
+            headers: {
+                "ngrok-skip-browser-warning": "true",
+            },
         });
 
         if (responseCustomer.ok) {

@@ -1,73 +1,118 @@
+"use state";
+
+import { cartState } from "@/atom/cartState";
 import { FeeType } from "@/enum";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
 
 interface IPaymentProps {
     payment: IPaymentMethod;
-    allHide: boolean;
-    productPrice: number;
-    setChoosenPayment: (payment: Partial<IPaymentMethod>) => void;
-    choosenPayment: IPaymentMethod;
 }
 
-const Payment: React.FC<IPaymentProps> = ({ payment, allHide, productPrice, setChoosenPayment, choosenPayment }) => {
-    let fee;
-    let productPriceAfterFee: number;
-    if (payment.feeType === FeeType.AMOUNT) {
-        fee = payment.fee;
-        productPriceAfterFee = productPrice + payment.fee;
-    } else {
-        fee = (payment.fee / 100) * productPrice;
-        productPriceAfterFee = productPrice + fee;
-    }
+const Payment: React.FC<IPaymentProps> = ({ payment }) => {
+    const [cart, setCart] = useRecoilState(cartState);
+    const [formatTotalPrices, setFormatTotalPrices] = useState("Rp. 0");
+    const [totalPrices, setTotalPrices] = useState(0);
+    const [formatMinPrice, setFormatMinPrice] = useState("Rp. 0");
+    const [formatMaxPrice, setFormatMaxPrice] = useState("Rp. 0");
+    const [fee, setFee] = useState(0);
+    const [paymentMethod, setPaymentMethod] = useState<Partial<IPaymentMethod>>({});
+    const [msgAmount, setMsgAmount] = useState("");
 
-    let paymentClasses: string = "bg-white cursor-pointer";
-    let notAllowed = false;
-    if (allHide || productPriceAfterFee > payment.maxAmount || productPriceAfterFee < payment.minAmount) {
-        paymentClasses = "grayscale cursor-not-allowed";
-        notAllowed = true;
-    }
+    const [activePaymentClasses, setActivePaymentClasses] = useState("border-2 border-transparent");
+    const [paymentClasses, setPaymentClasses] = useState("bg-white cursor-pointer");
+    const [allowed, setAllowed] = useState(false);
 
-    const formatIdr = new Intl.NumberFormat("id-ID", {
-        style: "currency",
-        currency: "IDR",
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-    }).format(productPrice && productPriceAfterFee);
+    const handleChoosePaymentMethod = (pm: IPaymentMethod) => {
+        if (allowed && cart.paymentMethod.id !== pm.id) {
+            setPaymentMethod(pm);
+            setCart({ ...cart, paymentMethod: pm, totalAmount: totalPrices, fee });
+        } else {
+            setCart({ ...cart, paymentMethod: {} });
+            setPaymentMethod({});
+        }
+    };
 
-    const formatMin = new Intl.NumberFormat("id-ID", {
-        style: "currency",
-        currency: "IDR",
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-    }).format(payment.minAmount);
+    useEffect(() => {
+        const valueFee = payment.feeType === FeeType.PERCENTAGE ? (payment.fee / 100) * cart.prices : payment.fee;
+        setFee(valueFee);
 
-    let choosenClasses = "border-2 border-transparent";
-    if (choosenPayment.id === payment.id) {
-        choosenClasses = "border-2 border-[#B72025]";
-    }
+        const formatIdr = new Intl.NumberFormat("id-ID", {
+            style: "currency",
+            currency: "IDR",
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+        }).format(cart.prices + valueFee);
+
+        setTotalPrices(cart.prices ? cart.prices + valueFee : 0);
+        setFormatTotalPrices(formatIdr);
+    }, [cart.prices, cart.quantity, cart.prices]);
+
+    useEffect(() => {
+        const formatMin = new Intl.NumberFormat("id-ID", {
+            style: "currency",
+            currency: "IDR",
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+        }).format(payment.minAmount);
+
+        setFormatMinPrice(formatMin);
+
+        const formatMax = new Intl.NumberFormat("id-ID", {
+            style: "currency",
+            currency: "IDR",
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+        }).format(payment.maxAmount);
+
+        setFormatMaxPrice(formatMax);
+        setMsgAmount("Tidak tersedia, Min. " + formatMin);
+    }, []);
+
+    useEffect(() => {
+        if (totalPrices > payment.maxAmount || totalPrices < payment.minAmount) {
+            if (totalPrices > payment.maxAmount) {
+                setMsgAmount("Tidak tersedia, Max. " + formatMaxPrice);
+            } else {
+                setMsgAmount("Tidak tersedia, Min. " + formatMinPrice);
+            }
+            setPaymentClasses("grayscale cursor-not-allowed");
+            setAllowed(false);
+        } else {
+            setAllowed(true);
+            setPaymentClasses("bg-white cursor-pointer");
+        }
+    }, [totalPrices, formatMaxPrice, formatMinPrice]);
+
+    useEffect(() => {
+        if (cart.paymentMethod.id === payment.id) {
+            setActivePaymentClasses("border-2 border-[#B72025]");
+        } else {
+            setActivePaymentClasses("border-2 border-transparent");
+        }
+    }, [cart.paymentMethod.id]);
 
     return (
         <div
-            onClick={() => setChoosenPayment(notAllowed ? {} : payment)}
-            className={`bg-white ${paymentClasses} ${choosenClasses} rounded-lg shadow-lg overflow-hidden flex items-center p-2 justify-between font-montserrat`}
+            onClick={() => handleChoosePaymentMethod(payment)}
+            className={`bg-white ${paymentClasses} ${activePaymentClasses} rounded-lg shadow-lg overflow-hidden flex items-center p-2 justify-between font-montserrat`}
         >
-            <div className="min-w-fit w-20 h-10 bg-white shadow-sm shadow-slate-700 rounded-md flex justify-center items-center overflow-hidden">
+            <div className="p-1 w-20 h-10 bg-white shadow-sm shadow-slate-700 rounded-md flex justify-center items-center overflow-hidden">
                 <Image
                     src={payment.logo}
                     alt={payment.name}
-                    className="w-10"
+                    className="object-contain"
                     width="0"
                     height="0"
                     sizes="100vw"
                     style={{ width: "100%", height: "100%" }}
                 />
             </div>
-            {notAllowed ? (
-                <p className="text-[10px] font-bold grayscale-0 text-[#B72025] text-end">
-                    Tidak tersedia, Min. {formatMin}
-                </p>
+            {allowed ? (
+                <p className="text-xs">{formatTotalPrices}</p>
             ) : (
-                <p className="text-xs">{formatIdr}</p>
+                <p className="text-[10px] font-bold grayscale-0 text-[#B72025] text-end">{msgAmount}</p>
             )}
         </div>
     );

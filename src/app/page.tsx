@@ -10,7 +10,7 @@ const Home = async () => {
     const slides = await sendRequest<IImageCarousel[]>("/api/v1/banners");
     const popularGames = await sendRequest<IGame[]>("/api/v1/games?isPopular=true");
     const gameCategories = await sendRequest<IGameCategoryWithGame[]>("/api/v1/games-category?limit=3&withGame=true");
-    const posts = await sendRequest<INewsPost[]>("/api/v1/newest-articles");
+    const posts = await sendRequest<{ data: INewsPost[]; totalData: number }>("/api/v1/newest-articles?limit=3");
     const youtubeVideo = await sendRequest<INewsVideos[]>("/api/v1/videos");
 
     return (
@@ -24,7 +24,7 @@ const Home = async () => {
                     data={data.games}
                 />
             ))}
-            <NewsPost posts={posts.data} />
+            <NewsPost posts={posts.data.data} />
             <NewsVideo videos={youtubeVideo.data} />
         </div>
     );

@@ -21,11 +21,3 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     );
 }
 
-export const generateMetadata = () => {
-    return {
-        title: "Gasskeun TOPUP - Beli Voucher Game Online di Gasskeun Topup Cepat dan Mudah!",
-        description:
-            "Gasskeun Top Up adalah sebuah website topup game online terpercaya di Indonesia mulai dari Mobile Legends, PUBG Mobile, Free Fire, dan masih banyak lainnya. untuk mempermudah pembayaran anda disini kami juga menyediokan metode pembayaran Alfamart, Bank BCA, Bank Mandiri, Bank BNI DANA, OVO, dll",
-    } as Metadata;
-};
-

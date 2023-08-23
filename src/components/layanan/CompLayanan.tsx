@@ -16,10 +16,10 @@ const CompLayanan: React.FC<ICompLayananProps> = ({ gameCategories, games, defau
             <FormSearch />
             <div className="flex gap-3 mt-3">
                 {defaultCategory.map((data) => (
-                    <ListCategory data={data} />
+                    <ListCategory data={data} key={data.id} />
                 ))}
                 {gameCategories.map((data) => (
-                    <ListCategory data={data} />
+                    <ListCategory data={data} key={data.id} />
                 ))}
             </div>
 

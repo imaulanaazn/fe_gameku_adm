@@ -11,7 +11,7 @@ const ListGames: React.FC<ListGameProps> = ({ backgroundColor, title, data }) =>
                 </div>
                 <div className="mt-10 flex justify-center items-center gap-4 flex-wrap lg:w-2/3">
                     {data.map((data) => (
-                        <Game data={data} />
+                        <Game data={data} key={data.id} />
                     ))}
                 </div>
             </div>

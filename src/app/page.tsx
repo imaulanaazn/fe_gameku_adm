@@ -19,6 +19,7 @@ const Home = async () => {
             <ListGames backgroundColor={"bg-[#F4F4F4]"} title="Game Popular" data={popularGames.data} />
             {gameCategories.data.map((data, index) => (
                 <ListGames
+                    key={index}
                     backgroundColor={index % 2 === 0 ? "bg-white" : "bg-[#F4F4F4]"}
                     title={data.name}
                     data={data.games}

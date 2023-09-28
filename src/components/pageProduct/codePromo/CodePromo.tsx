@@ -1,16 +1,74 @@
 "use client";
 
 import { cartState } from "@/atom/cartState";
-import { useRecoilState } from "recoil";
+import { msgState } from "@/atom/msgState";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { useRecoilState, useSetRecoilState } from "recoil";
 
 const CodePromo = () => {
     const [cart, setCart] = useRecoilState(cartState);
-    const handleCheckPromoCode = (e: any) => {
-        e.preventDefault();
+    const [allowed, setAllowed] = useState(false);
+    const [loading, setLoading] = useState(false);
+
+    const checkPromoCode = async () => {
+        const toastId = toast.loading("Mengecek kode promo...");
+        setLoading(true);
+        const request = await fetch(process.env.NEXT_PUBLIC_BASE_URL + "/api/v1/check-promotion", {
+            method: "POST",
+            headers: {
+                "content-type": "application/json",
+                "ngrok-skip-browser-warning": "true",
+            },
+            credentials: "include",
+            body: JSON.stringify({
+                promoCode: cart.promoCode,
+                gameId: cart.gameId,
+                quantity: cart.quantity,
+                productId: cart.product.id,
+            }),
+        });
+
+        const res = await request.json();
+        if (request.ok) {
+            toast.update(toastId, {
+                render: "Kode Promo Bisa Digunakan",
+                type: "success",
+                isLoading: false,
+                position: "top-right",
+                autoClose: 3000,
+            });
+            setCart({ ...cart, pricesAfterDiscount: res.priceAfterDiscount, discount: res.discount });
+        } else {
+            toast.update(toastId, {
+                render: res.message,
+                type: "error",
+                isLoading: false,
+                position: "top-right",
+                autoClose: 3000,
+            });
+            setCart({ ...cart, promoCode: "" });
+        }
+        setLoading(false);
     };
 
+    const handleCheckPromoCode = (e: any) => {
+        e.preventDefault();
+        checkPromoCode();
+    };
+
+    useEffect(() => {
+        if (!cart.promoCode || !cart.product || !cart.quantity) {
+            setAllowed(false);
+        } else {
+            setAllowed(true);
+        }
+    }, [cart.promoCode, cart.product, cart.quantity]);
+
     return (
-        <div className="bg-slate-200 shadow-md rounded-lg p-7 mb-4">
+        <div className="bg-slate-200 shadow-md rounded-lg lg:p-7 p-4 mb-4">
             <div className="py-2 px-8 text-white rounded-lg shadow-lg shadow-slate-400 bg-[#B72025] w-fit text-sm">
                 Code Promo
             </div>
@@ -23,12 +81,28 @@ const CodePromo = () => {
                     value={cart.promoCode}
                     onChange={(e) => setCart({ ...cart, promoCode: e.target.value })}
                 />
-                <div
-                    onClick={handleCheckPromoCode}
-                    className="sm:w-44 w-20 text-white py-3 bg-[#B72025] flex justify-center items-center rounded-lg absolute top-1 lg:right-4 right-1 cursor-pointer text-sm"
-                >
-                    Cek Kode
-                </div>
+                {loading ? (
+                    <div className="sm:w-44 w-20 bg-gray-400 text-black py-2 flex justify-center items-center rounded-lg absolute top-1 lg:right-4 right-1 cursor-wait text-sm">
+                        <FontAwesomeIcon icon={faSpinner} size="2x" spinPulse />
+                    </div>
+                ) : allowed ? (
+                    cart.pricesAfterDiscount !== 0 ? (
+                        <div className="sm:w-44 bg-gray-400 text-black py-3 px-5 flex justify-center items-center rounded-lg absolute top-1 lg:right-4 right-1 cursor-not-allowed text-sm">
+                            Digunakan
+                        </div>
+                    ) : (
+                        <div
+                            onClick={handleCheckPromoCode}
+                            className="sm:w-44 w-20 text-white bg-[#B72025] py-3 flex justify-center items-center rounded-lg absolute top-1 lg:right-4 right-1 cursor-pointer text-sm"
+                        >
+                            Cek Kode
+                        </div>
+                    )
+                ) : (
+                    <div className="sm:w-44 w-20 bg-gray-400 text-black py-3 flex justify-center items-center rounded-lg absolute top-1 lg:right-4 right-1 cursor-not-allowed text-sm">
+                        Cek Kode
+                    </div>
+                )}
             </div>
         </div>
     );

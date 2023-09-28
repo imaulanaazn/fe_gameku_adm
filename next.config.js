@@ -15,8 +15,11 @@ const nextConfig = {
             "cdnb.artstation.com",
             "seeklogo.com",
             "www.bca.co.id",
+            "img.freepik.com",
+            "png.pngtree.com",
         ],
     },
+    output: "standalone",
 };
 
 module.exports = nextConfig;

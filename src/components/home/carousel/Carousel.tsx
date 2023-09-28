@@ -22,7 +22,9 @@ const Carousel = ({ slides }: { slides: IImageCarousel[] }) => {
 
     useEffect(() => {
         const handleSlidePerView = () => {
-            if (width > 1024) {
+            if (slides.length < 3) {
+                setSlidePerView(slides.length);
+            } else if (width > 1024) {
                 setSlidePerView(2);
             } else if (width >= 768) {
                 setSlidePerView(2);
@@ -45,6 +47,7 @@ const Carousel = ({ slides }: { slides: IImageCarousel[] }) => {
     useEffect(() => {
         if (!slides || !slides.length) {
             setLoading(true);
+            console.log(slides);
         } else {
             setLoading(false);
         }
@@ -59,7 +62,7 @@ const Carousel = ({ slides }: { slides: IImageCarousel[] }) => {
                     slidesPerView={slidePerView}
                     freeMode={true}
                     centeredSlides={true}
-                    loop={true}
+                    loop={slides.length > 3}
                     autoplay={{
                         delay: 4000,
                     }}
@@ -76,21 +79,21 @@ const Carousel = ({ slides }: { slides: IImageCarousel[] }) => {
                                 key={slide.id}
                                 className="swiper-slide mx-auto flex justify-center items-center relative"
                             >
-                                {loading}
-
                                 <Link
                                     href={slide.eventUrl ? slide.eventUrl : "#"}
                                     target={slide.eventUrl && slide.eventUrl !== "#" ? "_blank" : "_self"}
                                     className="flex justify-center items-center relative"
                                 >
-                                    <div className={`rounded-lg lg:h-80 md:h-60 sm:h-60 h-40`}>
-                                        <Image
+                                    <div
+                                        className={`rounded-lg lg:h-80 md:h-60 sm:h-60 h-40 ${
+                                            slides.length > 1 && "w-full"
+                                        }`}
+                                    >
+                                        <img
                                             src={slide.imageUrl}
-                                            alt={"Slide Image"}
-                                            width="0"
-                                            height="0"
-                                            sizes="100vw"
-                                            style={{ width: "100%", height: "100%" }}
+                                            alt="Slide Image"
+                                            loading="lazy"
+                                            className="h-full w-full rounded-lg"
                                         />
                                     </div>
                                 </Link>

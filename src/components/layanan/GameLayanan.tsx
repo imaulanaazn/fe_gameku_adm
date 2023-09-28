@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import Game from "../global/game/Game";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { layananState } from "@/atom/layananState";
 
 const GameLayanan: React.FC<{ games: IGame[] }> = ({ games }) => {
-    const [category, setCategory] = useRecoilState(layananState);
+    const category = useRecoilValue(layananState);
     const [gamesCateg, setGameCateg] = useState<IGame[] | undefined>();
 
     const requestGame = async (path: string) => {
@@ -14,6 +14,9 @@ const GameLayanan: React.FC<{ games: IGame[] }> = ({ games }) => {
             method: "GET",
             credentials: "include",
             cache: "no-cache",
+            headers: {
+                "ngrok-skip-browser-warning": "true",
+            },
         });
 
         const res = await request.json();
@@ -36,7 +39,7 @@ const GameLayanan: React.FC<{ games: IGame[] }> = ({ games }) => {
     }, [category.id, category.search]);
 
     return (
-        <div className="container flex gap-5 mt-10 flex-wrap">
+        <div className="container flex gap-5 mt-10 flex-wrap md:justify-start justify-center">
             {gamesCateg
                 ? gamesCateg.map((data) => <Game data={data} key={data.id} />)
                 : games.map((data) => <Game data={data} key={data.id} />)}

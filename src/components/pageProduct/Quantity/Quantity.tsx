@@ -16,6 +16,12 @@ const Quantity = () => {
             } else {
                 setQuantity(qty);
             }
+
+            setCart({
+                ...cart,
+                pricesAfterDiscount: 0,
+                discount: 0,
+            });
         } else {
             setQuantity("");
         }
@@ -25,11 +31,17 @@ const Quantity = () => {
         const valueQty = isNaN(parseInt(quantity)) ? 0 : parseInt(quantity);
         const productPrice = cart.product && cart.product.price ? cart.product.price : 0;
         const totalAmount = cart.product && cart.paymentMethod && valueQty * productPrice + cart.fee;
-        setCart({ ...cart, quantity: valueQty, prices: valueQty * productPrice, totalAmount });
+        setCart({
+            ...cart,
+            quantity: valueQty,
+            prices: valueQty * productPrice,
+            totalAmount,
+            promoCode: "",
+        });
     }, [quantity, cart.prices, cart.fee]);
 
     return (
-        <div className="bg-slate-200 shadow-md rounded-lg p-7 mb-4">
+        <div className="bg-slate-200 shadow-md rounded-lg lg:p-7 p-4 mb-4">
             <div className="py-2 px-8 text-white rounded-lg shadow-lg shadow-slate-400 bg-[#B72025] w-fit text-sm">
                 Jumlah Pembelian
             </div>

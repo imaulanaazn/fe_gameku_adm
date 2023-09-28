@@ -1,33 +1,66 @@
+"use client";
+
 import ButtonSocialMedia from "./ButtonSocialMedia";
-import { faWhatsapp, faInstagram, faTiktok, faYoutube } from "@fortawesome/free-brands-svg-icons";
+import * as brandsIcon from "@fortawesome/free-brands-svg-icons";
 import styles from "./Footer.module.css";
 import Link from "next/link";
 import Image from "next/image";
+import sendRequest from "@/lib/baseApi";
+import { useEffect, useState } from "react";
+
+interface DisplaySocialMedia {
+    title: string;
+    to: string;
+    icon: string;
+}
+
+type BrandsIconType = Record<string, any>;
 
 const socialMedia = [
     {
         title: "Whatsapp",
-        icon: faWhatsapp,
+        icon: brandsIcon.faWhatsapp,
         to: "https://api.whatsapp.com/send?phone=628123456789",
     },
     {
         title: "Instagram",
-        icon: faInstagram,
+        icon: brandsIcon.faInstagram,
         to: "https://instagram.com/",
     },
     {
         title: "Tiktok",
-        icon: faTiktok,
+        icon: brandsIcon.faTiktok,
         to: "https://tiktok.com/",
     },
     {
         title: "Youtube",
-        icon: faYoutube,
+        icon: brandsIcon.faYoutube,
         to: "https://youtube.com",
     },
 ];
 
 const Footer = () => {
+    const [socialMedia, setSocialMedia] = useState<DisplaySocialMedia[]>([]);
+    const getSocialMedia = async () => {
+        const request = await fetch(process.env.NEXT_PUBLIC_BASE_URL + "/api/v1/social-media", {
+            cache: "no-cache",
+            method: "GET",
+            credentials: "include",
+            headers: {
+                "ngrok-skip-browser-warning": "true",
+            },
+        });
+
+        const res = await request.json();
+        if (request.ok) {
+            setSocialMedia(res);
+        }
+    };
+
+    useEffect(() => {
+        getSocialMedia();
+    }, []);
+
     return (
         <div className="mx-auto">
             <div className="flex px-5 lg:px-0 justify-center items-center gap-10 py-10 bg-white flex-wrap">
@@ -38,7 +71,12 @@ const Footer = () => {
                 </div>
                 <div className="flex items-start gap-3 flex-wrap justify-between">
                     {socialMedia.map((value, i) => (
-                        <ButtonSocialMedia title={value.title} icon={value.icon} to={value.to} key={i} />
+                        <ButtonSocialMedia
+                            title={value.title}
+                            icon={(brandsIcon as BrandsIconType)[value.icon]}
+                            to={value.to || "#"}
+                            key={i}
+                        />
                     ))}
                 </div>
             </div>

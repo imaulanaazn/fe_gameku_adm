@@ -20,7 +20,7 @@ const ListCategory: React.FC<IDataProps> = ({ data }) => {
                 onClick={() => setCategory({ ...category, id: data.id, search: "" })}
                 className={`${
                     category.id === data.id ? "bg-[#B72025] text-white" : "bg-[#eeeeee] text-black"
-                } px-5 py-2 rounded-md font-pulse text-sm cursor-pointer`}
+                } px-5 py-2 rounded-md font-pulse md:text-sm cursor-pointer text-xs`}
             >
                 {data.name}
             </div>

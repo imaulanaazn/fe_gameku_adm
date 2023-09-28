@@ -6,7 +6,7 @@ interface IListPaymentsMethodProps {
 
 const ListPaymentsMethod: React.FC<IListPaymentsMethodProps> = ({ paymentsMethod }) => {
     return (
-        <div className="bg-slate-200 shadow-md rounded-lg p-7 mb-4">
+        <div className="bg-slate-200 shadow-md rounded-lg lg:p-7 p-4 mb-4">
             <div className="py-2 px-8 text-white rounded-lg shadow-lg shadow-slate-400 bg-[#B72025] w-fit text-sm">
                 Pilih Pembayaran
             </div>

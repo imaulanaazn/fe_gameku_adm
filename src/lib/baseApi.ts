@@ -17,7 +17,6 @@ const sendRequest = async <T>(
                 "ngrok-skip-browser-warning": "true",
             },
         };
-        // console.log(opt);
         const response = await fetch(baseUrl + url, opt);
         const data = await response.json();
         return { data, ok: response.ok, status: response.status };

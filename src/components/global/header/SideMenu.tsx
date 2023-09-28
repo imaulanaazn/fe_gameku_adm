@@ -33,15 +33,17 @@ const SideMenu: React.FC<SideMenuProps> = ({ onClose, currentPath }) => {
     return (
         <div className={`absolute top-0 left-0 h-screen w-52 bg-[#B72025] z-50 shadow-lg shadow-gray-600`}>
             <div className="mt-5 flex items-center flex-col relative">
-                <Image
-                    src="/images/logo_gasskeun.jpg"
-                    alt="Logo Gasskeun Topup"
-                    className="h-12"
-                    width="0"
-                    height="0"
-                    sizes="100vw"
-                    style={{ width: "100%", height: "100%" }}
-                />
+                <div className="w-28 h-28 rounded-lg">
+                    <Image
+                        src="/images/logo_gasskeun.jpg"
+                        alt="Logo Gasskeun Topup"
+                        className="rounded-lg"
+                        width="0"
+                        height="0"
+                        sizes="100vw"
+                        style={{ width: "100%", height: "100%" }}
+                    />
+                </div>
                 <div className="flex flex-col mt-5">
                     {links.map((link, index) => (
                         <Link

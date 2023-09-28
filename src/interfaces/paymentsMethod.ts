@@ -15,3 +15,11 @@ interface IPaymentMethod {
     createdAt: string | Date;
     updatedAt: string | Date;
 }
+
+interface IPaymentMethodPagination extends IPagination {
+    data: IPaymentMethod[];
+}
+
+interface IPaymentMethodPaginationWithSearch extends IPaymentMethodPagination {
+    keySearch: string;
+}

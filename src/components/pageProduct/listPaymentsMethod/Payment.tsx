@@ -1,10 +1,11 @@
 "use state";
 
 import { cartState } from "@/atom/cartState";
+import { formCashtag } from "@/atom/formCashtag";
 import { FeeType } from "@/enum";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 
 interface IPaymentProps {
     payment: IPaymentMethod;
@@ -19,6 +20,7 @@ const Payment: React.FC<IPaymentProps> = ({ payment }) => {
     const [fee, setFee] = useState(0);
     const [paymentMethod, setPaymentMethod] = useState<Partial<IPaymentMethod>>({});
     const [msgAmount, setMsgAmount] = useState("");
+    const setActiveCashtag = useSetRecoilState(formCashtag);
 
     const [activePaymentClasses, setActivePaymentClasses] = useState("border-2 border-transparent");
     const [paymentClasses, setPaymentClasses] = useState("bg-white cursor-pointer");
@@ -26,6 +28,11 @@ const Payment: React.FC<IPaymentProps> = ({ payment }) => {
 
     const handleChoosePaymentMethod = (pm: IPaymentMethod) => {
         if (allowed && cart.paymentMethod.id !== pm.id) {
+            if (pm.cd === "ID_JENIUSPAY") {
+                setActiveCashtag(true);
+            } else {
+                setActiveCashtag(false);
+            }
             setPaymentMethod(pm);
             setCart({ ...cart, paymentMethod: pm, totalAmount: totalPrices, fee });
         } else {
@@ -37,17 +44,23 @@ const Payment: React.FC<IPaymentProps> = ({ payment }) => {
     useEffect(() => {
         const valueFee = payment.feeType === FeeType.PERCENTAGE ? (payment.fee / 100) * cart.prices : payment.fee;
         setFee(valueFee);
+        let prices = 0;
+        if (cart.pricesAfterDiscount !== 0) {
+            prices = cart.pricesAfterDiscount + valueFee;
+        } else if (cart.prices !== 0) {
+            prices = cart.prices + valueFee;
+        }
 
         const formatIdr = new Intl.NumberFormat("id-ID", {
             style: "currency",
             currency: "IDR",
             minimumFractionDigits: 0,
             maximumFractionDigits: 0,
-        }).format(cart.prices + valueFee);
+        }).format(prices);
 
-        setTotalPrices(cart.prices ? cart.prices + valueFee : 0);
+        setTotalPrices(prices);
         setFormatTotalPrices(formatIdr);
-    }, [cart.prices, cart.quantity, cart.prices]);
+    }, [cart.prices, cart.quantity, cart.prices, cart.pricesAfterDiscount]);
 
     useEffect(() => {
         const formatMin = new Intl.NumberFormat("id-ID", {

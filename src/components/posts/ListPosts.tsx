@@ -1,6 +1,6 @@
 "use client";
 
-import { faCommentAlt } from "@fortawesome/free-solid-svg-icons";
+import { faCommentAlt, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import dayjs from "dayjs";
 import Link from "next/link";
@@ -13,13 +13,18 @@ const ListPosts: React.FC<{ blogs: { data: INewsPost[]; totalData: number }; lim
     const [articles, setArticles] = useState(blogs.data);
     const [page, setPage] = useState(2);
     const [isEnd, setIsEnd] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const getArticles = async () => {
+        setLoading(true);
         const request = await fetch(
             `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/newest-articles?limit=${limit}&page=${page}`,
             {
                 method: "GET",
                 credentials: "include",
+                headers: {
+                    "ngrok-skip-browser-warning": "true",
+                },
             },
         );
 
@@ -27,6 +32,7 @@ const ListPosts: React.FC<{ blogs: { data: INewsPost[]; totalData: number }; lim
         if (request.ok) {
             setArticles([...articles, ...res.data]);
         }
+        setLoading(false);
     };
     const handleMoreArticles = () => {
         getArticles();
@@ -46,7 +52,7 @@ const ListPosts: React.FC<{ blogs: { data: INewsPost[]; totalData: number }; lim
                 <Link
                     href={!blog.isExternal ? "/posts/" + blog.slug : blog.externalUrl ? blog.externalUrl : "#"}
                     key={blog.id}
-                    className="flex w-full h-60 bg-white shadow-md mt-5 p-5 gap-10 hover:bg-slate-200 rounded-md"
+                    className="flex w-full lg:h-60 min-h-[7rem] bg-white shadow-md lg:mt-5 lg:p-5 mt-2 p-2 lg:gap-10 gap-2 hover:bg-slate-200 rounded-md"
                 >
                     <div className=" w-1/4">
                         <Image
@@ -59,8 +65,8 @@ const ListPosts: React.FC<{ blogs: { data: INewsPost[]; totalData: number }; lim
                             className="object-cover"
                         />
                     </div>
-                    <div className="flex flex-col justify-between w-3/4">
-                        <h1 className="text-3xl font-semibold">{blog.title}</h1>
+                    <div className="flex flex-col justify-between lg:w-3/4 w-full">
+                        <h1 className="lg:text-3xl text-sm font-semibold w-full h-1/2">{blog.title}</h1>
                         <div>
                             <p className="text-gray-500 font-montserrat font-semibold mb-2 text-xs">
                                 {dayjs(blog.publishDate).format("DD-MM-YYYY")} -
@@ -70,21 +76,26 @@ const ListPosts: React.FC<{ blogs: { data: INewsPost[]; totalData: number }; lim
                                 <FontAwesomeIcon icon={faCommentAlt} size="xs" className="text-[#B72025] mr-1" />
                                 {blog.totalComments} Komentar
                             </p>
-                            <div className="mb-5 py-3 sm:px-10 px-4 rounded-md text-xs text-white font-montserrat font-bold bg-[#B72025] inline-block w-fit">
+                            <div className="hidden mb-5 py-3 sm:px-10 px-4 rounded-md text-xs text-white font-montserrat font-bold bg-[#B72025] lg:inline-block w-fit">
                                 READ MORE
                             </div>
                         </div>
                     </div>
                 </Link>
             ))}
-            {!isEnd && (
-                <div
-                    onClick={handleMoreArticles}
-                    className="text-[#B72025] font-pulse font-bold hover:text-[#d46b6f] cursor-pointer text-center mt-5"
-                >
-                    Tampilkan lebih banyak
-                </div>
-            )}
+            {!isEnd &&
+                (loading ? (
+                    <div className="text-center mt-5 ">
+                        <FontAwesomeIcon icon={faSpinner} spin />
+                    </div>
+                ) : (
+                    <div
+                        onClick={handleMoreArticles}
+                        className="text-[#B72025] font-pulse font-bold hover:text-[#d46b6f] cursor-pointer text-center mt-5"
+                    >
+                        Tampilkan lebih banyak
+                    </div>
+                ))}
         </>
     );
 };

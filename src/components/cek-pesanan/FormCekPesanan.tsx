@@ -1,18 +1,49 @@
 "use client";
 
+import { msgState } from "@/atom/msgState";
+import { orderHistoryState } from "@/atom/orderHistory";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import validator from "validator";
 
 const FormCekPesanan = () => {
     const [trxNo, setTrxNo] = useState("");
     const [loading, setLoading] = useState(false);
     const [allowed, setAllowed] = useState(false);
+    const [isMobileNo, setIsMobileNo] = useState(false);
+    const [orderHistory, setOrderHistory] = useRecoilState(orderHistoryState);
+    const setMessage = useSetRecoilState(msgState);
+
+    const getOrderHistory = async () => {
+        setLoading(true);
+        const querySearch = (isMobileNo ? "mobileNumber=" : "invoice=") + trxNo;
+        const result = await fetch(process.env.NEXT_PUBLIC_BASE_URL + "/api/v1/order-history?" + querySearch, {
+            method: "GET",
+            cache: "no-cache",
+            headers: {
+                "ngrok-skip-browser-warning": "true",
+            },
+            credentials: "include",
+        });
+
+        const res = await result.json();
+        if (result.ok) {
+            setOrderHistory({ keySearch: querySearch, ...res });
+        } else {
+            setMessage({
+                type: "error",
+                time: 3,
+                msg: "Kesalahan dalam mengambil riwayat transaksi, silahkan coba lagi",
+            });
+        }
+        setLoading(false);
+    };
 
     const handleSubmit = (e: any) => {
         e.preventDefault();
-        setLoading(true);
-        setLoading(false);
+        getOrderHistory();
     };
 
     useEffect(() => {
@@ -20,6 +51,14 @@ const FormCekPesanan = () => {
             setAllowed(false);
         } else {
             setAllowed(true);
+
+            const convertedNumber = trxNo.replace(/^(\+62|62|0)?(\d+)/, "0$2");
+            const mobileNo = validator.isMobilePhone(convertedNumber, "id-ID");
+            if (mobileNo) {
+                setIsMobileNo(true);
+            } else {
+                setIsMobileNo(false);
+            }
         }
     }, [trxNo]);
 

@@ -3,13 +3,19 @@ interface IGame {
     categoryId: string;
     name: string;
     logoUrl: string;
-    logoDenom: string;
     isPopular: boolean;
     popSequence?: number;
     slug: string;
+    logoDenom: string;
     deleted: boolean;
+    needServerId: boolean;
+    typeServerId: string;
+    type: string;
+    voucherType: string;
     createdAt: Date | string;
     updatedAt: Date | string;
+
+    categoryName?: string;
 }
 
 interface ListGameProps {
@@ -20,4 +26,13 @@ interface ListGameProps {
 
 interface IGameDetail extends IGame {
     products: IProductsGame[];
+    servers?: IServer[];
+}
+
+interface IGamePagination extends IPagination {
+    data: IGame[];
+}
+
+interface IGamePaginationWithSearch extends IGamePagination {
+    keySearch: string;
 }

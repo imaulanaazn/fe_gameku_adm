@@ -9,3 +9,11 @@ interface IUser {
     createdAt: Date;
     updatedAt: Date;
 }
+
+interface IUserPagination extends IPagination {
+    data: IUser[];
+}
+
+interface IUserPaginationWithSearch extends IUserPagination {
+    keySearch: string;
+}

@@ -9,7 +9,7 @@ import styles from "./Header.module.css";
 import SideMenu from "./SideMenu";
 import Image from "next/image";
 import { userState } from "@/atom/userState";
-import { useRecoilValue, useRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 
 const links = [
     {

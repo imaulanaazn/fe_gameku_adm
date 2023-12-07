@@ -84,6 +84,13 @@ const optionsSearchBy = [
         value: "code",
     },
 ];
+const optionStatus = [
+    {
+        label: "Dipublikasikan",
+        value: "active",
+    },
+    { label: "Diarsipkan", value: "archive" },
+];
 
 const TableDenom: React.FC<{ denom: IProductPagination }> = ({ denom }) => {
     const [optionGame, setOptionGame] = useState<{ label: string; value: string }[]>([]);
@@ -116,6 +123,10 @@ const TableDenom: React.FC<{ denom: IProductPagination }> = ({ denom }) => {
         value: number;
     } | null>(null);
     const [selectedFilterGame, setSelectedFilterGame] = useState<{
+        label: string;
+        value: number;
+    } | null>(null);
+    const [selectedFilterStatus, setSelectedFilterStatus] = useState<{
         label: string;
         value: number;
     } | null>(null);
@@ -399,6 +410,55 @@ const TableDenom: React.FC<{ denom: IProductPagination }> = ({ denom }) => {
                                 }}
                                 options={optionGame}
                                 placeholder="Filter Game"
+                                styles={{
+                                    control: (provided, state) => ({
+                                        ...provided,
+                                        paddingTop: "6px",
+                                        paddingBottom: "6px",
+                                        cursor: "pointer",
+                                    }),
+                                    singleValue: (provided, state) => ({
+                                        ...provided,
+                                        color: "#333",
+                                        cursor: "pointer",
+                                    }),
+                                    option: (provided, state) => ({
+                                        ...provided,
+                                        backgroundColor: state.isSelected ? "#007BFF" : "white",
+                                        color: state.isSelected ? "white" : "#333",
+                                        cursor: "pointer",
+                                        ":hover": {
+                                            backgroundColor: "#f0f0f0",
+                                        },
+                                    }),
+                                }}
+                            />
+                        )}
+                        {optionStatus && (
+                            <Select
+                                id="filterStatus"
+                                value={selectedFilterStatus}
+                                onChange={(e: any) => {
+                                    const data = {
+                                        key: "status",
+                                        value: e.value,
+                                    };
+                                    setQuery((prev) => {
+                                        const check = prev.search.find((item) => item.key === "status");
+                                        if (check) {
+                                            check.value = e.value;
+                                        } else {
+                                            prev.search.push(data);
+                                        }
+
+                                        prev.page = 1;
+
+                                        return prev;
+                                    });
+                                    setSelectedFilterStatus(e);
+                                }}
+                                options={optionStatus}
+                                placeholder="Filter Status"
                                 styles={{
                                     control: (provided, state) => ({
                                         ...provided,

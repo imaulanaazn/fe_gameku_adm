@@ -1,40 +1,147 @@
 "use client";
 
-import { gameAdminState } from "@/atom/gameAdminState";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
-import ReactPaginate from "react-paginate";
-import { msgState } from "@/atom/msgState";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleDown, faInfo, faInfoCircle, faPencil, faTimes, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {
+    faAngleDown,
+    faArrowDown,
+    faArrowUp,
+    faInfo,
+    faInfoCircle,
+    faPencil,
+    faPlus,
+    faSearch,
+    faTimes,
+    faTrash,
+} from "@fortawesome/free-solid-svg-icons";
 import Loading from "@/app/(admin)/admin/game/loading";
 import { productAdminState } from "@/atom/denomAdminState";
-import ConfirmDelete from "../ConfirmDelete";
 import Pagination from "../Pagination";
-import ActionBulk from "../ActionBulk";
 import { selectedAdminState } from "@/atom/selectedAdminState";
-import { IActionBulk } from "@/interfaces/actionBulk";
 import { showDeleteState } from "@/atom/showDeleteState";
+import { Tooltip as ReactTooltip } from "react-tooltip";
+import formatter from "@/lib/formatter";
+import Select from "react-select";
+import ConfirmDelete from "../ConfirmDelete";
+import FormDenom from "./FormDenom";
+
+const column = [
+    {
+        id: "name",
+        name: "Nama",
+    },
+    {
+        id: "code",
+        name: "Kode Produk",
+    },
+    {
+        id: "priceBuy",
+        name: "Harga Beli",
+    },
+    {
+        id: "price",
+        name: "Harga Jual",
+    },
+];
+const optionLimit = [
+    {
+        label: "10",
+        value: 10,
+    },
+    {
+        label: "20",
+        value: 20,
+    },
+    {
+        label: "30",
+        value: 30,
+    },
+    {
+        label: "40",
+        value: 40,
+    },
+    {
+        label: "50",
+        value: 50,
+    },
+    {
+        label: "100",
+        value: 100,
+    },
+];
+const optionsSearchBy = [
+    {
+        label: "Nama",
+        value: "name",
+    },
+    {
+        label: "Kode Produk",
+        value: "code",
+    },
+];
 
 const TableDenom: React.FC<{ denom: IProductPagination }> = ({ denom }) => {
+    const [optionGame, setOptionGame] = useState<{ label: string; value: string }[]>([]);
+    const [query, setQuery] = useState<{
+        search: {
+            key: string;
+            value: any;
+        }[];
+        order: string;
+        limit: number;
+        page: number;
+        sort: string;
+    }>({
+        search: [],
+        order: denom.order,
+        limit: denom.limit,
+        page: denom.page,
+        sort: denom.sort,
+    });
+    const [inputSearch, setInputSearch] = useState("");
+    const [selectedOptionSearchBy, setSelectedOptionSearchBy] = useState<{ label: string; value: string }>(
+        optionsSearchBy[0],
+    );
+    const [selectedOptionSearchByBefore, setSelectedOptionSearchByBefore] = useState<{
+        key: string;
+        value: string;
+    } | null>(null);
+    const [selectedFilterLimit, setSelectedFilterLimit] = useState<{
+        label: string;
+        value: number;
+    } | null>(null);
+    const [selectedFilterGame, setSelectedFilterGame] = useState<{
+        label: string;
+        value: number;
+    } | null>(null);
+
+    const [showForm, setShowForm] = useState(false);
+    const [typeForm, setTypeForm] = useState("");
+    const [detailData, setDetailData] = useState<IProductsGame | null>(null);
+
     const [loading, setLoading] = useState(false);
     const [selectAll, setSelectAll] = useState(false);
-    const [dataActionBulk, setDataActionBulk] = useState<IActionBulk[]>([]);
 
     const [denoms, setDenoms] = useRecoilState(productAdminState);
     const [selected, setSelected] = useRecoilState(selectedAdminState);
     const [showDelete, setShowDelete] = useRecoilState(showDeleteState);
 
-    const getDenoms = async (pagination: Partial<IPagination>) => {
+    const getDenoms = async () => {
         setLoading(true);
         const searchParams = new URLSearchParams();
-        denoms.keySearch && searchParams.append("name", denoms.keySearch);
-        pagination.page && searchParams.append("page", pagination.page.toString());
-        searchParams.append("limit", denoms.limit.toString());
-        searchParams.append("order", denoms.order);
-        searchParams.append("sort", denoms.sort);
-        const req = await fetch(process.env.NEXT_PUBLIC_BASE_URL + "/api/v1/denom?" + searchParams.toString(), {
+        if (query.search.length > 0) {
+            for (const item of query.search) {
+                searchParams.append(item.key, item.value);
+            }
+        }
+
+        searchParams.append("page", query.page.toString());
+        searchParams.append("limit", query.limit.toString());
+        searchParams.append("order", query.order);
+        searchParams.append("sort", query.sort);
+        const req = await fetch(process.env.NEXT_PUBLIC_BASE_URL + "/v1/denom?" + searchParams.toString(), {
             cache: "no-cache",
             method: "GET",
             credentials: "include",
@@ -44,7 +151,6 @@ const TableDenom: React.FC<{ denom: IProductPagination }> = ({ denom }) => {
         });
 
         const res = await req.json();
-        console.log(res);
         if (req.ok) {
             setDenoms({ ...denoms, ...res });
         }
@@ -52,16 +158,76 @@ const TableDenom: React.FC<{ denom: IProductPagination }> = ({ denom }) => {
         setLoading(false);
     };
 
-    const handlePageClick = ({ selected }: { selected: any }) => {
-        const page = selected + 1;
-        getDenoms({ page });
-        setDenoms({
-            ...denoms,
-            page,
+    const getGames = async () => {
+        setLoading(true);
+        const req = await fetch(process.env.NEXT_PUBLIC_BASE_URL + "/v1/game/attr", {
+            cache: "no-cache",
+            method: "GET",
+            credentials: "include",
+            headers: {
+                "ngrok-skip-browser-warning": "true",
+            },
         });
+
+        const res = await req.json();
+        if (req.ok) {
+            setOptionGame(
+                res.map((item: any) => ({
+                    label: item.name,
+                    value: item.id,
+                })),
+            );
+        }
+
+        setLoading(false);
+    };
+
+    const handlePageClick = ({ selected }: { selected: any }) => {
+        setQuery((prev) => ({
+            ...prev,
+            page: selected + 1,
+        }));
         setSelectAll(false);
         setSelected([]);
     };
+
+    const handleClickSearch = () => {
+        setQuery((prev) => {
+            prev.search = prev.search.filter((item) => item.key !== selectedOptionSearchByBefore?.key);
+            const check = prev.search.findIndex((item) => item.key === selectedOptionSearchBy.value);
+
+            if (check !== -1) {
+                prev.search[check].value = inputSearch;
+            } else {
+                prev.search.push({
+                    key: selectedOptionSearchBy.value,
+                    value: inputSearch,
+                });
+            }
+
+            prev.page = 1;
+
+            return { ...prev };
+        });
+    };
+
+    const handleClickClearButton = () => {
+        setQuery((prev) => {
+            return {
+                ...prev,
+                page: 1,
+                search: [],
+                limit: 10,
+            };
+        });
+
+        setSelectedFilterLimit(null);
+        setSelectedFilterGame(null);
+    };
+
+    useEffect(() => {
+        getDenoms();
+    }, [JSON.stringify(query), query.search.length]);
 
     const handleSelectAll = () => {
         setSelectAll(!selectAll);
@@ -81,24 +247,13 @@ const TableDenom: React.FC<{ denom: IProductPagination }> = ({ denom }) => {
     };
 
     useEffect(() => {
-        setDenoms({ ...denoms, ...denom });
+        setDenoms((prev) => ({
+            ...prev,
+            ...denom,
+        }));
+        setSelected([]);
+        getGames();
     }, []);
-
-    useEffect(() => {
-        const actionBulk = [
-            {
-                title: `Delete ${selected.length} items`,
-                icon: faTrash,
-                classActive: "bg-[#B72025] hover:bg-[#c5474c] text-white cursor-pointer",
-                classNotAllowed: "bg-gray-300 text-gray-800 cursor-not-allowed",
-                onClick() {
-                    setShowDelete(selected.length > 0);
-                },
-            },
-        ];
-
-        setDataActionBulk(actionBulk);
-    }, [selected.length]);
 
     useEffect(() => {
         if (denoms.data.length !== selected.length) {
@@ -108,130 +263,389 @@ const TableDenom: React.FC<{ denom: IProductPagination }> = ({ denom }) => {
         }
     }, [denoms.data.length, selected.length, selectAll]);
 
-    useEffect(() => {
-        console.log(denoms.page);
-    }, [denoms.page]);
-
     return (
         <>
-            {/* Task BE Delete Denom Bulk */}
-            {showDelete && <ConfirmDelete path="/api/v1/denom/belumtapi ehehehe" method="PUT" field="productId" />}
+            <div className="w-full bg-white rounded shadow p-5 mt-5">
+                <div className="w-1/2 flex gap-3 items-center">
+                    <div className="w-3/4 relative">
+                        <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                            <FontAwesomeIcon icon={faSearch} />
+                        </div>
+                        <input
+                            type="search"
+                            id="default-search-promoCode"
+                            className="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                            placeholder={`Cari berdasarkan ${selectedOptionSearchBy.label}`}
+                            value={inputSearch}
+                            onChange={(e) => setInputSearch(e.target.value)}
+                        />
+                        <button
+                            type="button"
+                            disabled={!inputSearch}
+                            onClick={(e) => handleClickSearch()}
+                            className={`${
+                                !inputSearch
+                                    ? "bg-gray-400 text-black cursor-not-allowed"
+                                    : "bg-blue-700 hover:bg-blue-800"
+                            } text-white absolute right-2.5 bottom-2.5 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2`}
+                        >
+                            Cari
+                        </button>
+                    </div>
+                    <Select
+                        id="filterSearchBy"
+                        value={selectedOptionSearchBy}
+                        onChange={(e: any) => {
+                            const check = query.search.find((item) => item.key === selectedOptionSearchBy.value);
+                            if (check) {
+                                setSelectedOptionSearchByBefore(check);
+                            }
+                            setSelectedOptionSearchBy(e);
+                        }}
+                        options={optionsSearchBy}
+                        placeholder="Cari Berdasarkan"
+                        styles={{
+                            control: (provided, state) => ({
+                                ...provided,
+                                paddingTop: "6px",
+                                paddingBottom: "6px",
+                                cursor: "pointer",
+                            }),
+                            singleValue: (provided, state) => ({
+                                ...provided,
+                                color: "#333",
+                                cursor: "pointer",
+                            }),
+                            option: (provided, state) => ({
+                                ...provided,
+                                backgroundColor: state.isSelected ? "#007BFF" : "white",
+                                color: state.isSelected ? "white" : "#333",
+                                cursor: "pointer",
+                                ":hover": {
+                                    backgroundColor: "#f0f0f0",
+                                },
+                            }),
+                        }}
+                    />
+                </div>
+                <div className="flex mt-5 justify-between">
+                    <div className="flex gap-3 ">
+                        {optionGame.length > 0 && (
+                            <Select
+                                id="filterGame"
+                                value={selectedFilterGame}
+                                onChange={(e: any) => {
+                                    const data = {
+                                        key: "gameId",
+                                        value: e.value,
+                                    };
+                                    setQuery((prev) => {
+                                        const check = prev.search.find((item) => item.key === "gameId");
+                                        if (check) {
+                                            check.value = e.value;
+                                        } else {
+                                            prev.search.push(data);
+                                        }
+
+                                        prev.page = 1;
+
+                                        return prev;
+                                    });
+                                    setSelectedFilterGame(e);
+                                }}
+                                options={optionGame}
+                                placeholder="Filter Game"
+                                styles={{
+                                    control: (provided, state) => ({
+                                        ...provided,
+                                        paddingTop: "6px",
+                                        paddingBottom: "6px",
+                                        cursor: "pointer",
+                                    }),
+                                    singleValue: (provided, state) => ({
+                                        ...provided,
+                                        color: "#333",
+                                        cursor: "pointer",
+                                    }),
+                                    option: (provided, state) => ({
+                                        ...provided,
+                                        backgroundColor: state.isSelected ? "#007BFF" : "white",
+                                        color: state.isSelected ? "white" : "#333",
+                                        cursor: "pointer",
+                                        ":hover": {
+                                            backgroundColor: "#f0f0f0",
+                                        },
+                                    }),
+                                }}
+                            />
+                        )}
+                        {optionLimit && (
+                            <div>
+                                <Select
+                                    id="filterLimit"
+                                    value={selectedFilterLimit}
+                                    onChange={(e: any) => {
+                                        setSelectedFilterLimit(e);
+                                        setQuery((prev) => {
+                                            return { ...prev, limit: e.value };
+                                        });
+                                    }}
+                                    options={optionLimit}
+                                    placeholder="Limit PerPage"
+                                    styles={{
+                                        control: (provided, state) => ({
+                                            ...provided,
+                                            paddingTop: "6px",
+                                            paddingBottom: "6px",
+                                            cursor: "pointer",
+                                        }),
+                                        singleValue: (provided, state) => ({
+                                            ...provided,
+                                            color: "#333",
+                                            cursor: "pointer",
+                                        }),
+                                        option: (provided, state) => ({
+                                            ...provided,
+                                            backgroundColor: state.isSelected ? "#007BFF" : "white",
+                                            color: state.isSelected ? "white" : "#333",
+                                            cursor: "pointer",
+                                            ":hover": {
+                                                backgroundColor: "#f0f0f0",
+                                            },
+                                        }),
+                                    }}
+                                />
+                            </div>
+                        )}
+                    </div>
+                    <button
+                        onClick={() => handleClickClearButton()}
+                        className="h-12 aspect-square rounded-md text-white bg-blue-700 hover:bg-blue-800 cursor-pointer"
+                    >
+                        <FontAwesomeIcon icon={faTimes} />
+                    </button>
+                </div>
+            </div>
+            {showDelete && (
+                <ConfirmDelete path={"/v1/denom/delete-bulk"} method={"DELETE"} getNewData={() => getDenoms()} />
+            )}
+            {showForm && (
+                <FormDenom
+                    handleShowForm={(value: boolean) => setShowForm(value)}
+                    getNewData={getDenoms}
+                    data={detailData || undefined}
+                    type={typeForm}
+                />
+            )}
             {loading ? (
                 <Loading />
             ) : (
-                <>
-                    <div className="w-full p-5 bg-white rounded-lg shadow-lg overflow-x-scroll md:overflow-x-auto mt-5">
-                        <div className="flex justify-end my-1 gap-2">
-                            <ActionBulk data={dataActionBulk} />
-                            <div
-                                // onClick={() => setShowForm(!showForm)}
-                                className="py-3 rounded-md text-center px-4 bg-green-600 font-semibold text-white cursor-pointer"
-                            >
-                                Tambahkan Denom
+                <div className="w-full bg-white rounded shadow overflow-x-scroll md:overflow-x-auto overflow-y-hidden mt-5">
+                    <div className={`p-5 ${selected.length > 0 ? "bg-green-200" : "bg-white"}`}>
+                        {selected.length === 0 && (
+                            <div className="flex items-center justify-between">
+                                <p className="text-xl font-semibold">Denom</p>
+                                <div
+                                    onClick={() => {
+                                        setShowForm(!showForm);
+                                        setTypeForm("add");
+                                    }}
+                                    className="flex justify-between py-3 px-4 gap-5 items-center bg-green-600 hover:bg-green-500 text-white rounded-md cursor-pointer"
+                                >
+                                    <p>Denom Baru</p>
+                                    <FontAwesomeIcon icon={faPlus} size="lg" />
+                                </div>
+                            </div>
+                        )}
+                        {selected.length > 0 && (
+                            <div className="flex items-center justify-between">
+                                <p className="text-xl font-semibold text-green-600">{selected.length} Selected</p>
+                                <div className="flex gap-3">
+                                    <div className="relative">
+                                        <div
+                                            onClick={() => setShowDelete(true)}
+                                            className="bg-red-800 hover:bg-red-600 w-10 h-10 rounded-full cursor-pointer grid place-content-center shadow"
+                                            data-tooltip-id="tooltip-delete"
+                                            data-tooltip-content="Hapus"
+                                        >
+                                            <FontAwesomeIcon icon={faTrash} size="xl" className="text-white" />
+                                        </div>
+                                        <ReactTooltip
+                                            id="tooltip-delete"
+                                            style={{
+                                                fontSize: "12px",
+                                                padding: "10px",
+                                            }}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                    <div className="flex flex-col">
+                        <div className="overflow-x-auto">
+                            <div className="w-full inline-block align-middle">
+                                <div className="overflow-hidden px-5">
+                                    <table className="min-w-full divide-y divide-gray-200">
+                                        <thead className="bg-gray-50">
+                                            <tr>
+                                                <th scope="col" className="py-3 pl-4">
+                                                    <div className="flex items-center h-5 relative">
+                                                        <input
+                                                            type="checkbox"
+                                                            name="selectAll"
+                                                            id="selectAll"
+                                                            checked={selectAll}
+                                                            onChange={handleSelectAll}
+                                                            className={`h-4 w-4 absolute cursor-pointer ${
+                                                                !selectAll && selected.length > 0 && "appearance-none"
+                                                            }`}
+                                                        />
+                                                        {!selectAll && selected.length > 0 && (
+                                                            <div className="h-4 w-4 bg-gray-400 flex items-center justify-center">
+                                                                <div className="w-2 h-1 bg-gray-200"></div>
+                                                            </div>
+                                                        )}
+
+                                                        <label htmlFor="checkbox" className="sr-only">
+                                                            Checkbox
+                                                        </label>
+                                                    </div>
+                                                </th>
+                                                {column.map((item) => (
+                                                    <th
+                                                        key={item.id}
+                                                        scope="col"
+                                                        className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase "
+                                                    >
+                                                        <div
+                                                            className="flex gap-3 cursor-pointer items-center"
+                                                            onClick={() =>
+                                                                setQuery((prev) => ({
+                                                                    ...prev,
+                                                                    sort: item.id,
+                                                                    order:
+                                                                        query.sort === item.id && query.order === "ASC"
+                                                                            ? "DESC"
+                                                                            : "ASC",
+                                                                }))
+                                                            }
+                                                        >
+                                                            <p>{item.name}</p>
+                                                            {query.sort === item.id && (
+                                                                <FontAwesomeIcon
+                                                                    icon={
+                                                                        query.order === "ASC" ? faArrowUp : faArrowDown
+                                                                    }
+                                                                />
+                                                            )}
+                                                        </div>
+                                                    </th>
+                                                ))}
+                                                <th
+                                                    scope="col"
+                                                    className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase "
+                                                >
+                                                    Terjual
+                                                </th>
+                                                <th
+                                                    scope="col"
+                                                    className="px-6 py-3 text-xs font-bold text-right text-gray-500 uppercase "
+                                                >
+                                                    Aksi
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody className="divide-y divide-gray-200">
+                                            {denoms.data.map((denom) => (
+                                                <tr
+                                                    key={denom.id}
+                                                    onClick={() => handleRowSelect(denom.id)}
+                                                    className={`${
+                                                        selected.includes(denom.id)
+                                                            ? "bg-gray-200"
+                                                            : "bg-white hover:bg-gray-100"
+                                                    }`}
+                                                >
+                                                    <td className="py-3 pl-4">
+                                                        <div className="flex items-center h-5">
+                                                            <input
+                                                                type="checkbox"
+                                                                name={denom.id}
+                                                                id={denom.id}
+                                                                checked={selected.includes(denom.id)}
+                                                                onChange={() => handleRowSelect(denom.id)}
+                                                                className="h-4 w-4 cursor-pointer"
+                                                            />
+                                                            <label htmlFor="checkbox" className="sr-only">
+                                                                Checkbox
+                                                            </label>
+                                                        </div>
+                                                    </td>
+                                                    <td className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">
+                                                        <div className="flex gap-3 items-center">
+                                                            <div className="h-10 aspect-square flex items-center">
+                                                                <Image
+                                                                    src={denom.logoDenom || denom.logoUrl || ""}
+                                                                    alt={`Logo ${denom.name}`}
+                                                                    width="0"
+                                                                    height="0"
+                                                                    sizes="100vw"
+                                                                    style={{ width: "100%", height: "100%" }}
+                                                                    className="rounded-lg object-contain"
+                                                                />
+                                                            </div>
+                                                            <div>
+                                                                <p>{denom.name}</p>
+                                                                <p className="text-xs text-gray-400">
+                                                                    {denom.gameName}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
+                                                        {denom.code}
+                                                    </td>
+                                                    <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
+                                                        {formatter(denom.priceBuy || 0)}
+                                                    </td>
+                                                    <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
+                                                        {formatter(denom.price)}
+                                                    </td>
+                                                    <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
+                                                        {denom.totalSold}
+                                                    </td>
+                                                    <td className="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">
+                                                        <div className="flex justify-end w-full">
+                                                            <div
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    setShowForm(true);
+                                                                    setTypeForm("detail");
+                                                                    setDetailData(denom);
+                                                                }}
+                                                                className="bg-green-600 px-4 py-2 rounded-md text-white cursor-pointer"
+                                                            >
+                                                                Lihat
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
-                        <Pagination
-                            onPageChange={handlePageClick}
-                            page={denoms.page}
-                            limit={denoms.limit}
-                            total={denoms.total}
-                            totalPage={denoms.totalPage}
-                        />
-                        <table className="w-full text-XS text-left text-gray-500 table-auto">
-                            <thead className="text-xs text-gray-700 uppercase bg-white border-b-2 border-gray-300">
-                                <tr>
-                                    <th scope="col" className="py-3 px-4">
-                                        <input
-                                            type="checkbox"
-                                            name="selectAll"
-                                            id="selectAll"
-                                            checked={selectAll}
-                                            onChange={handleSelectAll}
-                                        />
-                                    </th>
-                                    <th scope="col" className="py-3 px-4">
-                                        Nama
-                                    </th>
-                                    <th scope="col" className="py-3 px-4">
-                                        Game
-                                    </th>
-                                    <th scope="col" className="py-3 px-4">
-                                        Harga
-                                    </th>
-                                    <th scope="col" className="py-3 px-4">
-                                        Tipe
-                                    </th>
-                                    <th scope="col" className="py-3 px-4">
-                                        Denom Unit
-                                    </th>
-                                    <th scope="col" className="py-3 px-4">
-                                        Denom Bonus
-                                    </th>
-                                    <th scope="col" className="py-3 px-4">
-                                        Aksi
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {denoms.data.map((denom) => (
-                                    <tr
-                                        key={denom.id}
-                                        className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
-                                    >
-                                        <td className="w-10 text-center">
-                                            <input
-                                                type="checkbox"
-                                                name={denom.id}
-                                                id={denom.id}
-                                                checked={selected.includes(denom.id)}
-                                                onChange={() => handleRowSelect(denom.id)}
-                                            />
-                                        </td>
-                                        <td className="w-60 text-ellipsis overflow-hidden py-4 font-medium px-4 text-gray-900 whitespace-nowrap dark:text-white flex gap-3 items-center">
-                                            <div className="w-12 min-w-[3rem] h-12 object-fill">
-                                                <Image
-                                                    src={denom.logoDenom}
-                                                    alt={`Logo ${denom.name}`}
-                                                    width="0"
-                                                    height="0"
-                                                    sizes="100vw"
-                                                    style={{ width: "100%", height: "100%" }}
-                                                    className="rounded-lg object-contain"
-                                                />
-                                            </div>
-                                            <p className="text-xs">{denom.name}</p>
-                                        </td>
-                                        <td className="w-28 overflow-hidden py-4 font-medium px-4 text-gray-900 whitespace-nowrap dark:text-white text-xs">
-                                            {denom.gameName}
-                                        </td>
-                                        <td className="w-28 overflow-hidden py-4 font-medium px-4 text-gray-900 whitespace-nowrap dark:text-white text-xs">
-                                            {denom.price}
-                                        </td>
-                                        <td className="upper-case w-28 overflow-hidden py-4 font-medium px-4 text-gray-900 whitespace-nowrap dark:text-white text-xs">
-                                            {denom.cd}
-                                        </td>
-                                        <td className="w-28 overflow-hidden py-4 font-medium px-4 text-gray-900 whitespace-nowrap dark:text-white text-xs">
-                                            {denom.unit}
-                                        </td>
-                                        <td className="w-28 overflow-hidden py-4 font-medium px-4 text-gray-900 whitespace-nowrap dark:text-white text-xs">
-                                            {denom.unitBonus || 0}
-                                        </td>
-                                        <td className="py-4 font-medium px-4 text-gray-900 whitespace-nowrap dark:text-white text-xs">
-                                            <div className="flex flex-row gap-2 w-full h-full">
-                                                <div className="w-6 h-6 cursor-pointer bg-blue-600 rounded-full text-white flex justify-center items-center">
-                                                    <FontAwesomeIcon icon={faInfo} size="sm" />
-                                                </div>
-                                                <div className="w-6 h-6 cursor-pointer bg-yellow-600 rounded-full text-white flex justify-center items-center">
-                                                    <FontAwesomeIcon icon={faPencil} size="sm" />
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
                     </div>
-                </>
+                    <Pagination
+                        onPageChange={handlePageClick}
+                        page={denoms.page}
+                        limit={denoms.limit}
+                        total={denoms.total}
+                        totalPage={denoms.totalPage}
+                    />
+                </div>
             )}
         </>
     );

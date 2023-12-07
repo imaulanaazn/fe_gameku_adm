@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { msgState } from "@/atom/msgState";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { toast } from "react-toastify";
 
 const TotalPayments = () => {
     const router = useRouter();
@@ -23,7 +24,9 @@ const TotalPayments = () => {
 
     const postCheckout = async () => {
         setLoading(true);
-        const request = await fetch(process.env.NEXT_PUBLIC_BASE_URL + "/api/v1/order", {
+        const user = localStorage.getItem("user");
+        const toastId = toast.loading("Memproses checkout");
+        const request = await fetch(process.env.NEXT_PUBLIC_BASE_URL + "/v1/order", {
             method: "POST",
             headers: {
                 "content-type": "application/json",
@@ -40,14 +43,28 @@ const TotalPayments = () => {
                 cashtag: cart.cashtag,
                 quantity: cart.quantity,
                 promoCode: cart.promoCode,
+                ...(user && { customerId: JSON.parse(user).id }),
             }),
         });
 
         const res = await request.json();
         if (request.ok) {
             router.push(`/payment/${res.invoice}`);
+            toast.update(toastId, {
+                render: "Checkout berhasil",
+                type: "success",
+                isLoading: false,
+                position: "top-right",
+                autoClose: 3000,
+            });
         } else {
-            setMsg({ type: "error", time: 3, msg: res.message });
+            toast.update(toastId, {
+                render: res?.message || "Gagal checkout silahkan coba beberapa saat lagi",
+                type: "error",
+                isLoading: false,
+                position: "top-right",
+                autoClose: 3000,
+            });
         }
 
         setLoading(false);

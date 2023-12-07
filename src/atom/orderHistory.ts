@@ -11,5 +11,6 @@ export const orderHistoryState = atom({
         order: "DESC",
         sort: "createdAt",
         page: 1,
-    } as ICheckOrder,
+        analytics: {},
+    } as IOrderWithAnalitycsPaginationWithDetailWithSearch,
 });

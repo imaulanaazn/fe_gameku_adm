@@ -15,18 +15,9 @@ const DescProduct: React.FC<IDescProductProps> = ({ products }) => {
                     }}
                     className="w-20 h-20"
                 ></div>
-                <h1 className="text-xl lg:text-xl">{products.name}</h1>
+                <h1 className="text-base font-bold">{products.name}</h1>
             </div>
-            <div className="mt-5">
-                {/* // TODO DESC PRODUCT */}
-                {/* <h1>Cara TopUp</h1>
-                <ol className="list-decimal list-inside text-sm mt-2">
-                    <li>Masukkan User ID dan Zone ID anda Contoh: 1234567 (1234)</li>
-                    <li>Pilih Nominal Diamond yang kamu inginkan</li>
-                    <li>Selesaikan Pembayaran</li>
-                    <li>Diamond akan di tambahkan ke akun Mobile Legends Kamu</li>
-                </ol> */}
-            </div>
+            <div className="mt-4 text-sm" dangerouslySetInnerHTML={{ __html: products.description || "" }}></div>
         </div>
     );
 };

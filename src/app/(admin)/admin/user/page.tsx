@@ -1,16 +1,44 @@
+"use client";
+
 import Header from "@/components/admin/Header";
 import TableUser from "@/components/admin/User/TableUser";
-import sendRequest from "@/lib/baseApi";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import Loading from "./loading";
 
-const User = async () => {
-    const users = await sendRequest<IUserPagination>("/api/v1/user", { cache: "no-cache" });
+const User = () => {
+    const [data, setData] = useState<IUserPagination>();
+    const [loading, setLoading] = useState(true);
+    const getData = async () => {
+        const req = await fetch(process.env.NEXT_PUBLIC_BASE_URL + "/v1/user", {
+            cache: "no-cache",
+            method: "GET",
+            credentials: "include",
+            headers: {
+                "ngrok-skip-browser-warning": "true",
+            },
+        });
+
+        const res = await req.json();
+        if (req.ok) {
+            setData({ ...data, ...res });
+        }
+
+        setLoading(false);
+    };
+
+    useEffect(() => {
+        getData();
+    }, []);
+
     return (
         <>
-            <Header title="User" />
-            <div className="w-full p-5 bg-white rounded-lg shadow-lg">
-                <TableUser user={users.data} />
-            </div>
+            {loading && <Loading />}
+            {!loading && (
+                <>
+                    {/* <Header title="User" /> */}
+                    {data && <TableUser user={data} />}
+                </>
+            )}
         </>
     );
 };

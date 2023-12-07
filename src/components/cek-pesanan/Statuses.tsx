@@ -9,20 +9,24 @@ const Statuses: React.FC<IStatusesProps> = ({ status }) => {
                 Belum Dibayar
             </div>
         );
-    } else if (status === "2") {
+    } else if (status === "2" || status === "6") {
+        return (
+            <div className="bg-blue-500 text-blue-50 lg:text-sm text-xs h-fit w-fit py-2 px-5 rounded-md">
+                Sedang Diproses
+            </div>
+        );
+    } else if (status === "3") {
         return (
             <div className="bg-green-500 text-green-50 lg:text-sm text-xs h-fit w-fit py-2 px-5 rounded-md">
                 Sudah Dibayar
             </div>
         );
-    } else if (status === "3" || status === "4") {
+    } else if (status === "4") {
+        return <div className="bg-red-500 text-red-50 lg:text-sm text-xs h-fit w-fit py-2 px-5 rounded-md">Failed</div>;
+    } else if (status === "5") {
         return (
-            <div className="bg-red-500 text-red-50 lg:text-sm text-xs h-fit w-fit py-2 px-5 rounded-md">
-                {status === "3" ? "Expired" : "Failed"}
-            </div>
+            <div className="bg-red-500 text-red-50 lg:text-sm text-xs h-fit w-fit py-2 px-5 rounded-md">Expired</div>
         );
-    } else {
-        return <div className="bg-blue-500 text-blue-50 lg:text-sm text-xs h-fit w-fit py-2 px-5 rounded-md">N/A</div>;
     }
 };
 

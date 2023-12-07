@@ -14,8 +14,11 @@ interface IGame {
     voucherType: string;
     createdAt: Date | string;
     updatedAt: Date | string;
-
+    description: string;
     categoryName?: string;
+
+    listServer?: IServer[];
+    keywords?: string;
 }
 
 interface ListGameProps {

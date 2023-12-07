@@ -1,12 +1,19 @@
+import Maintenance from "@/components/maintenance/Maintenance";
 import FormRegister from "@/components/register/FormRegister";
+import sendRequest from "@/lib/baseApi";
 import { Metadata } from "next";
 import Link from "next/link";
 
-const Register = () => {
+const Register = async () => {
+    const statusWebsite = await sendRequest<{ value: string }[]>("/v1/config?type=website_status");
+    if (statusWebsite.data[0].value === "maintenance") {
+        return <Maintenance />;
+    }
+    const bg = await sendRequest<{ value: string }[]>("/v1/config?type=bg_register");
     return (
         <div
             style={{
-                // backgroundImage: `url('https://via.placeholder.com/1000x1000')`,
+                backgroundImage: `url('${bg.data[0].value}')`,
                 backgroundColor: "black",
                 backgroundSize: "cover",
                 backgroundRepeat: "no-repeat",
@@ -31,10 +38,75 @@ const Register = () => {
     );
 };
 
-export const generateMetadata = () => {
+export const generateMetadata = async () => {
+    const meta = await sendRequest<IMeta>("/v1/meta?path=/register", {}, 3600);
     return {
-        title: "Daftar Akun Baru - Gasskeun Topup: Nikmati Kemudahan Topup Game",
-        description: undefined,
+        metadataBase: new URL(process.env.NEXT_PUBLIC_HOST || "https://gasskeuntopup.com"),
+        title: meta.data.title + " - Gasskeun Topup",
+        icons: {
+            icon: {
+                sizes: "32x32",
+                url: meta.data.icon,
+                type: "image/png",
+            },
+            shortcut: {
+                sizes: "64x64",
+                url: meta.data.icon,
+                type: "image/png",
+            },
+            apple: {
+                sizes: "120x120",
+                url: meta.data.icon,
+                type: "image/png",
+            },
+            other: [
+                {
+                    rel: "apple-touch-icon-precomposed",
+                    url: meta.data.icon,
+                    sizes: "152x152",
+                },
+                {
+                    rel: "apple-touch-icon-120x120",
+                    url: meta.data.icon,
+                    sizes: "120x120",
+                },
+                {
+                    rel: "apple-touch-icon-120x120-precomposed",
+                    url: meta.data.icon,
+                    sizes: "120x120",
+                },
+            ],
+        },
+        description: meta.data.description,
+        keywords: JSON.parse(meta.data.keywords).join(","),
+        authors: [
+            {
+                name: "gasskeuntopup",
+                url: new URL(process.env.NEXT_PUBLIC_HOST || "https://gasskeuntopup.com"),
+            },
+        ],
+        alternates: {
+            canonical: meta.data.path,
+        },
+        openGraph: {
+            title: meta.data.title + " - Gasskeun Topup",
+            url: process.env.NEXT_PUBLIC_HOST + meta.data.path,
+            type: "website",
+            siteName: "Gasskeun Topup",
+            images: meta.data.image,
+            description: meta.data.description,
+        },
+        twitter: {
+            card: "summary_large_image",
+            images: meta.data.image,
+            title: meta.data.title + " - Gasskeun Topup",
+            description: meta.data.description,
+        },
+        robots: {
+            index: true,
+            follow: false,
+            nocache: false,
+        },
     } as Metadata;
 };
 export default Register;

@@ -17,15 +17,41 @@ interface IOrder {
 }
 
 interface IOrderHistory extends IOrder {
+    custName?: string;
+    mobileNumber?: string;
+    productId?: string;
     logoUrl: string;
     quantity: number;
-    status: string;
+    username?: string;
 }
 
-interface IOrderHistoryState extends IPagination {
+interface IOrderHistoryWithDetail extends IOrderHistory {
+    detail: IOrderDetail;
+}
+
+interface IOrderWithAnalitycs {
+    revenue: number;
+    fee: number;
+    discount: number;
+    orders: number;
+    countPaid: number;
+    countUnpaid: number;
+}
+
+interface IOrderWithAnalitycsPagination extends IPagination {
     data: IOrderHistory[];
+    analytics: IOrderWithAnalitycs;
 }
 
-interface ICheckOrder extends IOrderHistoryState {
+interface IOrderWithAnalitycsPaginationWithSearch extends IOrderWithAnalitycsPagination {
+    keySearch: string;
+}
+
+interface IOrderWithAnalitycsPaginationWithDetail extends IPagination {
+    data: IOrderHistoryWithDetail[];
+    analytics: IOrderWithAnalitycs;
+}
+
+interface IOrderWithAnalitycsPaginationWithDetailWithSearch extends IOrderWithAnalitycsPaginationWithDetail {
     keySearch: string;
 }

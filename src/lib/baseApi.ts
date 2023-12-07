@@ -3,6 +3,7 @@ import * as crypto from "crypto";
 const sendRequest = async <T>(
     url: string,
     options: RequestInit = { cache: "no-cache" },
+    revalidate?: number,
 ): Promise<{ data: T; ok: boolean; status: number }> => {
     try {
         const baseUrl = process.env.BASE_URL;
@@ -16,6 +17,11 @@ const sendRequest = async <T>(
                 "x-gasskeun-sign": signGasskeun,
                 "ngrok-skip-browser-warning": "true",
             },
+            ...(revalidate && {
+                next: {
+                    revalidate,
+                },
+            }),
         };
         const response = await fetch(baseUrl + url, opt);
         const data = await response.json();

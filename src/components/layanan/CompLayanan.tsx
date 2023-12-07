@@ -11,6 +11,10 @@ interface ICompLayananProps {
 }
 
 const CompLayanan: React.FC<ICompLayananProps> = ({ gameCategories, games, defaultCategory }) => {
+    const filterPopular = games.filter((item) => item.isPopular);
+    if (filterPopular.length === 0) {
+        defaultCategory = defaultCategory.filter((item) => item.id !== "popular");
+    }
     return (
         <>
             <FormSearch />

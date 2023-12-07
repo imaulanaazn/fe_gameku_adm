@@ -14,18 +14,19 @@ const Pagination: React.FC<IPaginationProp> = ({ page, limit, total, totalPage, 
     const handleChange = ({ selected }: { selected: number }) => {
         onPageChange({ selected });
     };
+    const showingFrom = page === 1 ? 1 : (page - 1) * (limit + 1);
 
     return (
-        <div className="flex items-center justify-between mt-3 px-5">
+        <div className="flex items-center justify-between p-5">
             <p className="text-sm font-montserrat">
-                Showing {(page - 1) * limit + 1} to {Math.min(page * limit, total)} of {total} Results
+                Showing {showingFrom} to {Math.min(page * limit, total)} of {total} results per page {limit}
             </p>
+
             <ReactPaginate
-                key={1}
                 previousLabel={"<"}
                 nextLabel={">"}
                 breakLabel={"..."}
-                pageCount={totalPage ? totalPage : 1}
+                pageCount={totalPage ? parseInt(totalPage.toString()) : 1}
                 marginPagesDisplayed={3}
                 pageRangeDisplayed={3}
                 onPageChange={handleChange}

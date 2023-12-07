@@ -33,4 +33,6 @@ interface IInvoice {
     category: string;
     createdAt: string | Date;
     cd: string;
+
+    detail?: IOrderDetail;
 }

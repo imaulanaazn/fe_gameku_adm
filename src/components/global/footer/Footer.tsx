@@ -5,8 +5,9 @@ import * as brandsIcon from "@fortawesome/free-brands-svg-icons";
 import styles from "./Footer.module.css";
 import Link from "next/link";
 import Image from "next/image";
-import sendRequest from "@/lib/baseApi";
 import { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
+import { imageAtom } from "@/atom/logo";
 
 interface DisplaySocialMedia {
     title: string;
@@ -16,33 +17,12 @@ interface DisplaySocialMedia {
 
 type BrandsIconType = Record<string, any>;
 
-const socialMedia = [
-    {
-        title: "Whatsapp",
-        icon: brandsIcon.faWhatsapp,
-        to: "https://api.whatsapp.com/send?phone=628123456789",
-    },
-    {
-        title: "Instagram",
-        icon: brandsIcon.faInstagram,
-        to: "https://instagram.com/",
-    },
-    {
-        title: "Tiktok",
-        icon: brandsIcon.faTiktok,
-        to: "https://tiktok.com/",
-    },
-    {
-        title: "Youtube",
-        icon: brandsIcon.faYoutube,
-        to: "https://youtube.com",
-    },
-];
-
 const Footer = () => {
     const [socialMedia, setSocialMedia] = useState<DisplaySocialMedia[]>([]);
+    const [logo, setLogo] = useRecoilState(imageAtom);
+    const [linkWhatsapp, setLinkWhatsapp] = useState("#");
     const getSocialMedia = async () => {
-        const request = await fetch(process.env.NEXT_PUBLIC_BASE_URL + "/api/v1/social-media", {
+        const request = await fetch(process.env.NEXT_PUBLIC_BASE_URL + "/v1/social-media", {
             cache: "no-cache",
             method: "GET",
             credentials: "include",
@@ -53,11 +33,36 @@ const Footer = () => {
 
         const res = await request.json();
         if (request.ok) {
+            const whatsappButton = res.find((item: any) => new RegExp("whatsapp", "i").test(item.title));
+            if (whatsappButton) {
+                setLinkWhatsapp(whatsappButton.to);
+            }
             setSocialMedia(res);
         }
     };
 
+    const getLogo = async () => {
+        const req = await fetch(process.env.NEXT_PUBLIC_BASE_URL + "/v1/config?type=logo_footer", {
+            method: "GET",
+            credentials: "include",
+            headers: {
+                "ngrok-skip-browser-warning": "true",
+            },
+        });
+
+        const res = await req.json();
+        if (req.ok) {
+            setLogo((prev) => ({
+                ...prev,
+                logo_footer: res[0].value,
+            }));
+        }
+    };
+
     useEffect(() => {
+        if (!logo.logo_footer) {
+            getLogo();
+        }
         getSocialMedia();
     }, []);
 
@@ -81,14 +86,15 @@ const Footer = () => {
                 </div>
             </div>
             <div className="flex flex-col px-5 sm:px-10 md:flex-row justify-center items-start gap-10 bg-[#B72025] mx-auto py-10 text-white font-montserrat text-sm flex-wrap">
-                <Link href="/" className="h-24 w-24">
+                <Link href="/" className="h-36 w-36">
                     <Image
-                        src="/images/logo_gasskeun.jpg"
-                        alt="Logo Jokiku gasskeun"
+                        src={logo.logo_footer}
+                        alt="Logo Gasskeun Topup"
                         width="0"
                         height="0"
                         sizes="100vw"
                         style={{ width: "100%", height: "100%" }}
+                        className="object-contain"
                     />
                 </Link>
                 <div className=" max-w-xs">
@@ -102,18 +108,12 @@ const Footer = () => {
                 </div>
                 <div className="lg:h-36 lg:w-px md:w-full md:bg-white md:border-1 md:h-px"></div>
                 <div className="max-w-sm">
-                    <p className="pb-2 font-bold text-lg">Kategori</p>
-                    <ul className={`${styles["custom-list"]} font-semibold text-sm`}>
-                        <li>Mobile Legend(Fast) - Diamond Fast 1-15 Menit</li>
-                        <li>Free Fire via Login</li>
-                        <li>PUBG Mobile INDO - Uknown Cash (UC)</li>
-                    </ul>
                     <div className="flex pt-10 justify-center items-center gap-5 font-bold text-lg">
                         <p>
                             MAU JOIN <br></br>RESELLER?
                         </p>
                         <Link
-                            href="https://api.whatsapp.com/send?phone=628123456789"
+                            href={linkWhatsapp}
                             className="sm:py-4 sm:px-8 py-2 px-3 bg-white text-[#B72025] rounded-lg"
                         >
                             GABUNG SEKARANG!
@@ -121,9 +121,13 @@ const Footer = () => {
                     </div>
                 </div>
             </div>
-            <div className="bg-black text-sm text-white font-pulse text-center">
-                <p className="p-2">Gasskeun Topup 2021</p>
-            </div>
+            <footer className="bg-black text-white py-4">
+                <div className="container mx-auto">
+                    <div className="text-center">
+                        <p>&copy; {new Date().getFullYear()} Gasskeun Topup</p>
+                    </div>
+                </div>
+            </footer>
         </div>
     );
 };

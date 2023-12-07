@@ -20,7 +20,7 @@ const DetailPembelian: React.FC<IDetailPembelianProps> = ({ invoice }) => {
                 <div className="w-20 h-20">
                     <Image
                         src={invoice.logoGame}
-                        alt="Logo Jokiku gasskeun"
+                        alt="Logo Gasskeun Topup"
                         width="0"
                         height="0"
                         sizes="100vw"
@@ -49,6 +49,27 @@ const DetailPembelian: React.FC<IDetailPembelianProps> = ({ invoice }) => {
                             <td className="py-1">:</td>
                             <td className="py-1 font-bold">{invoice.quantity}</td>
                         </tr>
+                        {invoice.detail?.userId && (
+                            <tr>
+                                <td className="py-1">User ID</td>
+                                <td className="py-1">:</td>
+                                <td className="py-1 font-bold">{invoice.detail.userId}</td>
+                            </tr>
+                        )}
+                        {invoice.detail?.serverId && (
+                            <tr>
+                                <td className="py-1">Server ID</td>
+                                <td className="py-1">:</td>
+                                <td className="py-1 font-bold">{invoice.detail.serverId}</td>
+                            </tr>
+                        )}
+                        {invoice.detail?.username && (
+                            <tr>
+                                <td className="py-1">Username</td>
+                                <td className="py-1">:</td>
+                                <td className="py-1 font-bold">{invoice.detail.username}</td>
+                            </tr>
+                        )}
                         <tr>
                             <td className="text-base font-extrabold py-1">Total Pembayaran</td>
                             <td className="text-base font-extrabold py-1">:</td>

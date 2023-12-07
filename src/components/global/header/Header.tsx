@@ -1,6 +1,6 @@
 "use client";
 
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
@@ -10,6 +10,8 @@ import SideMenu from "./SideMenu";
 import Image from "next/image";
 import { userState } from "@/atom/userState";
 import { useRecoilState } from "recoil";
+import { imageAtom } from "@/atom/logo";
+import { toast } from "react-toastify";
 
 const links = [
     {
@@ -30,6 +32,7 @@ const links = [
 ];
 
 const Header = () => {
+    const { push } = useRouter();
     const sizeWidth = typeof window !== "undefined" ? window.innerWidth : 0;
     const pathname = usePathname();
     const [currentPath, setCurrentPath] = useState("");
@@ -39,6 +42,8 @@ const Header = () => {
     const [isLogged, setIsLogged] = useState(false);
     const [user, setUser] = useRecoilState(userState);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+    const [logo, setLogo] = useRecoilState(imageAtom);
 
     const handleScroll = () => {
         if (window.scrollY > 0) {
@@ -52,8 +57,27 @@ const Header = () => {
         setIsDropdownOpen(!isDropdownOpen);
     };
 
+    const getLogo = async () => {
+        const req = await fetch(process.env.NEXT_PUBLIC_BASE_URL + "/v1/config?type=logo", {
+            method: "GET",
+            credentials: "include",
+            headers: {
+                "ngrok-skip-browser-warning": "true",
+            },
+        });
+
+        const res = await req.json();
+        if (req.ok) {
+            setLogo((prev) => ({
+                ...prev,
+                logo: res[0].value,
+            }));
+        }
+    };
+
     const handleLogout = async () => {
-        const responseCustomer = await fetch(process.env.NEXT_PUBLIC_BASE_URL + "/api/v1/customer/logout", {
+        const toastId = toast.loading("Memproses logout...");
+        const responseCustomer = await fetch(process.env.NEXT_PUBLIC_BASE_URL + "/v1/customer/logout", {
             method: "DELETE",
             credentials: "include",
             headers: {
@@ -66,6 +90,23 @@ const Header = () => {
             localStorage.setItem("auth", JSON.stringify({ login: false }));
             localStorage.removeItem("user");
             setIsLogged(false);
+            toast.update(toastId, {
+                render: "Berhasil logout",
+                type: "success",
+                isLoading: false,
+                position: "top-right",
+                autoClose: 3000,
+            });
+            push("/login");
+        } else {
+            const res = await responseCustomer.json();
+            toast.update(toastId, {
+                render: res.message,
+                type: "error",
+                isLoading: false,
+                position: "top-right",
+                autoClose: 3000,
+            });
         }
     };
 
@@ -86,6 +127,9 @@ const Header = () => {
     }, [sizeWidth, width]);
 
     useEffect(() => {
+        if (!logo.logo) {
+            getLogo();
+        }
         window.addEventListener("scroll", handleScroll);
         return () => {
             window.removeEventListener("scroll", handleScroll);
@@ -104,7 +148,11 @@ const Header = () => {
             } ease-in-out sticky top-0 z-40 bg-[#B72025] box-border text-sm duration-500`}
         >
             {activeSideMenu && (
-                <SideMenu onClose={() => setActiveSideMenu(!activeSideMenu)} currentPath={currentPath} />
+                <SideMenu
+                    onClose={() => setActiveSideMenu(!activeSideMenu)}
+                    currentPath={currentPath}
+                    logo={logo.logo}
+                />
             )}
             <div className="container mx-auto flex justify-between sm:p-4 p-4 items-center">
                 <div className="flex items-center gap-2">
@@ -117,14 +165,17 @@ const Header = () => {
                         />
                     )}
                     <Link href="/" className="flex items-center w-12 h-12">
-                        <Image
-                            src="/images/logo_gasskeun.jpg"
-                            alt="Logo Gasskeun Topup"
-                            width="0"
-                            height="0"
-                            sizes="100vw"
-                            style={{ width: "100%", height: "100%" }}
-                        />
+                        {logo && logo.logo && (
+                            <Image
+                                src={logo.logo}
+                                alt="Logo Gasskeun Topup"
+                                width="0"
+                                height="0"
+                                sizes="100vw"
+                                style={{ width: "100%", height: "100%" }}
+                                className="object-contain"
+                            />
+                        )}
                     </Link>
                 </div>
                 <div className="flex items-center font-pulse font-bold">
@@ -146,7 +197,7 @@ const Header = () => {
                     )}
                     {isLogged ? (
                         <div
-                            className="flex justify-center items-center mx-4 relative cursor-pointer"
+                            className="flex justify-center items-center px-4 relative cursor-pointer"
                             onMouseEnter={handleDropdownToggle}
                             onMouseLeave={handleDropdownToggle}
                         >
@@ -155,7 +206,7 @@ const Header = () => {
                             </div>
                             <p className="text-white">Profile</p>
                             {isDropdownOpen && (
-                                <div className="absolute top-full right-0 mt-2 bg-white border rounded shadow-lg">
+                                <div className="absolute top-8 right-0 mt-2 bg-white border rounded shadow-lg">
                                     <p className="px-4 py-2 cursor-default">Sign in as us {user.email}</p>
                                     <Link
                                         href={"/profile"}

@@ -1,10 +1,10 @@
 "use client";
 
-import { msgState } from "@/atom/msgState";
-import { orderHistoryState } from "@/atom/orderHistory";
+import { userOrderHistoryState } from "@/atom/userOrderHistory";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import validator from "validator";
 
@@ -13,13 +13,13 @@ const FormCekPesanan = () => {
     const [loading, setLoading] = useState(false);
     const [allowed, setAllowed] = useState(false);
     const [isMobileNo, setIsMobileNo] = useState(false);
-    const [orderHistory, setOrderHistory] = useRecoilState(orderHistoryState);
-    const setMessage = useSetRecoilState(msgState);
+    const [orderHistory, setOrderHistory] = useRecoilState(userOrderHistoryState);
 
     const getOrderHistory = async () => {
         setLoading(true);
+        const toastId = toast.loading("Mengecek riwayat transaksi");
         const querySearch = (isMobileNo ? "mobileNumber=" : "invoice=") + trxNo;
-        const result = await fetch(process.env.NEXT_PUBLIC_BASE_URL + "/api/v1/order-history?" + querySearch, {
+        const result = await fetch(process.env.NEXT_PUBLIC_BASE_URL + "/v1/order-history?" + querySearch, {
             method: "GET",
             cache: "no-cache",
             headers: {
@@ -31,11 +31,20 @@ const FormCekPesanan = () => {
         const res = await result.json();
         if (result.ok) {
             setOrderHistory({ keySearch: querySearch, ...res });
+            toast.update(toastId, {
+                render: "Berhasil mendapatkan riwayat transaksi",
+                type: "success",
+                isLoading: false,
+                position: "top-right",
+                autoClose: 3000,
+            });
         } else {
-            setMessage({
+            toast.update(toastId, {
+                render: "Kesalahan dalam mengambil riwayat transaksi, silahkan coba lagi",
                 type: "error",
-                time: 3,
-                msg: "Kesalahan dalam mengambil riwayat transaksi, silahkan coba lagi",
+                isLoading: false,
+                position: "top-right",
+                autoClose: 3000,
             });
         }
         setLoading(false);

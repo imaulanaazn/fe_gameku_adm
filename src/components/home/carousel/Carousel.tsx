@@ -22,9 +22,7 @@ const Carousel = ({ slides }: { slides: IImageCarousel[] }) => {
 
     useEffect(() => {
         const handleSlidePerView = () => {
-            if (slides.length < 3) {
-                setSlidePerView(slides.length);
-            } else if (width > 1024) {
+            if (width > 1024) {
                 setSlidePerView(2);
             } else if (width >= 768) {
                 setSlidePerView(2);
@@ -47,7 +45,6 @@ const Carousel = ({ slides }: { slides: IImageCarousel[] }) => {
     useEffect(() => {
         if (!slides || !slides.length) {
             setLoading(true);
-            console.log(slides);
         } else {
             setLoading(false);
         }
@@ -91,7 +88,7 @@ const Carousel = ({ slides }: { slides: IImageCarousel[] }) => {
                                     >
                                         <img
                                             src={slide.imageUrl}
-                                            alt="Slide Image"
+                                            alt="Slide Image Banner Promo Gasskeun Topup"
                                             loading="lazy"
                                             className="h-full w-full rounded-lg"
                                         />

@@ -11,7 +11,6 @@ interface IMsgProps {
 }
 
 const Msg: React.FC<IMsgProps> = ({ icon, msg, divClasses, fontAwesomeclass, time }) => {
-    console.log(time);
     return (
         time !== 0 && (
             <div

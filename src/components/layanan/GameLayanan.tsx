@@ -30,11 +30,11 @@ const GameLayanan: React.FC<{ games: IGame[] }> = ({ games }) => {
     useEffect(() => {
         const searchKey = category.search ? `search=${category.search}` : undefined;
         if (category.id === "all") {
-            requestGame(`/api/v1/games${searchKey ? "?" + searchKey : ""}`);
+            requestGame(`/v1/games${searchKey ? "?" + searchKey : ""}`);
         } else if (category.id === "popular") {
-            requestGame(`/api/v1/games?isPopular=true${searchKey ? "&" + searchKey : ""}`);
+            requestGame(`/v1/games?isPopular=true${searchKey ? "&" + searchKey : ""}`);
         } else {
-            requestGame(`/api/v1/games?categoryId=${category.id}${searchKey ? "&" + searchKey : ""}`);
+            requestGame(`/v1/games?categoryId=${category.id}${searchKey ? "&" + searchKey : ""}`);
         }
     }, [category.id, category.search]);
 

@@ -7,6 +7,8 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { userState } from "@/atom/userState";
+import { toast } from "react-toastify";
+import dayjs from "dayjs";
 
 const FormRegister = () => {
     const router = useRouter();
@@ -16,7 +18,9 @@ const FormRegister = () => {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [loading, setLoading] = useState(false);
-
+    const [timeRemaining, setTimeRemaining] = useState<number | null>(null);
+    const [otp, setOtp] = useState("");
+    const [disableBtnReqOtp, setDisableBtnReqOtp] = useState(true);
     const [user, setUser] = useRecoilState(userState);
 
     const [allowed, setAllowed] = useState(false);
@@ -26,8 +30,9 @@ const FormRegister = () => {
     const handleSubmit = async (e: any) => {
         e.preventDefault();
         if (allowed) {
+            const toastId = toast.loading("Memproses pendaftaran...");
             setLoading(true);
-            const registration = await fetch(process.env.NEXT_PUBLIC_BASE_URL + `/api/v1/customer/registration`, {
+            const registration = await fetch(process.env.NEXT_PUBLIC_BASE_URL + `/v1/customer/registration`, {
                 method: "POST",
                 credentials: "include",
                 headers: {
@@ -39,12 +44,19 @@ const FormRegister = () => {
                     name,
                     mobileNumber,
                     password,
+                    otp,
                 }),
             });
 
             const res = await registration.json();
             if (!registration.ok) {
-                setErrorMessage(res.message);
+                toast.update(toastId, {
+                    render: res.message,
+                    type: "error",
+                    isLoading: false,
+                    position: "top-right",
+                    autoClose: 3000,
+                });
                 setConfirmPassword("");
                 setPassword("");
             } else {
@@ -52,13 +64,21 @@ const FormRegister = () => {
                 localStorage.setItem("auth", JSON.stringify({ login: true }));
                 localStorage.setItem("user", JSON.stringify(res));
                 setUser(res);
+
+                toast.update(toastId, {
+                    render: "Berhasil melakukan pendaftaran",
+                    type: "success",
+                    isLoading: false,
+                    position: "top-right",
+                    autoClose: 3000,
+                });
             }
             setLoading(false);
         }
     };
 
     const getMe = async () => {
-        const responseCustomer = await fetch(process.env.NEXT_PUBLIC_BASE_URL + "/api/v1/customer", {
+        const responseCustomer = await fetch(process.env.NEXT_PUBLIC_BASE_URL + "/v1/customer", {
             method: "GET",
             credentials: "include",
             headers: {
@@ -80,13 +100,84 @@ const FormRegister = () => {
         }
     };
 
+    const requestOtp = async () => {
+        const queryParams = new URLSearchParams();
+        queryParams.append("type", "register");
+        queryParams.append("mobileNumber", mobileNumber);
+
+        const toastId = toast.loading("Request Otp...");
+        const req = await fetch(process.env.NEXT_PUBLIC_BASE_URL + "/v1/otp?" + queryParams, {
+            method: "GET",
+            credentials: "include",
+            headers: {
+                "content-type": "application/json",
+                "ngrok-skip-browser-warning": "true",
+            },
+        });
+
+        const res = await req.json();
+        if (req.ok) {
+            toast.update(toastId, {
+                render: "Berhasil Request Otp",
+                type: "success",
+                isLoading: false,
+                position: "top-right",
+                autoClose: 3000,
+            });
+        } else {
+            toast.update(toastId, {
+                render: res.message,
+                type: "error",
+                isLoading: false,
+                position: "top-right",
+                autoClose: 3000,
+            });
+        }
+
+        const waitingDate = dayjs(res?.waitingDate || dayjs().add(60, "second")).diff(dayjs(), "second");
+        setTimeRemaining(waitingDate);
+    };
+
+    const handleRequestOTP = () => {
+        if (!mobileNumber) {
+            return toast.warn("Silahkan isi terlebih dahulu nomor whatsapp", {
+                isLoading: false,
+                position: "top-right",
+                autoClose: 3000,
+            });
+        }
+
+        requestOtp();
+    };
     useEffect(() => {
-        if (email && name && mobileNumber && password && confirmPassword && password === confirmPassword) {
+        const phoneRegex = /^(\+62|0)[0-9]{9,12}$/;
+
+        setDisableBtnReqOtp(!phoneRegex.test(mobileNumber));
+    }, [mobileNumber]);
+
+    useEffect(() => {
+        let interval: NodeJS.Timeout | undefined;
+
+        if (timeRemaining && timeRemaining > 0) {
+            interval = setInterval(() => {
+                setTimeRemaining((prevTime) => (prevTime ? prevTime - 1 : null));
+            }, 1000);
+        }
+
+        return () => {
+            if (interval !== undefined) {
+                clearInterval(interval);
+            }
+        };
+    }, [timeRemaining]);
+
+    useEffect(() => {
+        if (email && name && mobileNumber && password && confirmPassword && password === confirmPassword && otp) {
             setAllowed(true);
         } else {
             setAllowed(false);
         }
-    }, [email, name, mobileNumber, password, confirmPassword]);
+    }, [email, name, mobileNumber, password, confirmPassword, otp]);
 
     useEffect(() => {
         if (password && confirmPassword) {
@@ -170,7 +261,7 @@ const FormRegister = () => {
                     placeholder="Password"
                 />
             </div>
-            <div className={differentPassword ? "mb-2" : "mb-6"}>
+            <div className="mb-4">
                 <input
                     type="password"
                     id="confirmPassword"
@@ -180,6 +271,39 @@ const FormRegister = () => {
                     required
                     placeholder="Konfirmasi Password"
                 />
+            </div>
+            <div className={`${differentPassword ? "mb-4" : "mb-6"} flex`}>
+                <div className="w-full">
+                    <input
+                        type="text"
+                        id="otp"
+                        className="w-full p-4 border"
+                        value={otp}
+                        onChange={(e) => setOtp(e.target.value)}
+                        required
+                        placeholder="Kode OTP"
+                    />
+                </div>
+                <div className="w-40">
+                    {timeRemaining && timeRemaining > 0 ? (
+                        <div className="w-full h-full bg-gray-400 text-black flex items-center justify-center cursor-not-allowed">
+                            {timeRemaining}
+                        </div>
+                    ) : (
+                        <button
+                            type="button"
+                            disabled={disableBtnReqOtp}
+                            onClick={() => handleRequestOTP()}
+                            className={`w-full h-full ${
+                                disableBtnReqOtp
+                                    ? "bg-gray-400 text-black cursor-not-allowed"
+                                    : "text-white bg-[#B72025] cursor-pointer"
+                            }`}
+                        >
+                            Request OTP
+                        </button>
+                    )}
+                </div>
             </div>
             {differentPassword && (
                 <p className="text-white text-start mb-2">* Password dan Konfirmasi Password tidak cocok</p>

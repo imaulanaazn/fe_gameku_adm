@@ -1,5 +1,8 @@
 interface ITemplateMessage {
-    label: string;
-    value: string;
-    content?: string;
+    id: string;
+    title: string;
+    content: string;
+    template: string;
+    createdAt: Date | string;
+    updatedAt: Date | string;
 }

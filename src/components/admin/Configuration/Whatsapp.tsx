@@ -32,17 +32,19 @@ const Whatsapp = () => {
     };
 
     useEffect(() => {
-        const socket = io(process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3001");
+        const socket = io(process.env.NEXT_PUBLIC_SOCKET_BASE_URL || "http://localhost:3001", {
+            extraHeaders: {
+                "ngrok-skip-browser-warning": "true",
+            },
+        });
         socket?.emit("qrcode:check");
         setSocket(socket);
 
         socket?.on("qrcode:get", (qr: string) => {
-            console.log(qr);
             setQrCode(qr);
         });
 
         socket?.on("qrcode:status", (data: IWhatsappCheckStatus) => {
-            console.log(data);
             setStatuses(data);
             if (data.status !== "SCANQR") {
                 setQrCode("");
@@ -78,9 +80,6 @@ const Whatsapp = () => {
         }
     }, [statuses.args, statuses.status]);
 
-    useEffect(() => {
-        console.log(qrCode);
-    }, [qrCode]);
     return (
         <>
             {showForm && <FormTestWhatsapp handleShowForm={(value: boolean) => setShowForm(value)} />}
@@ -97,7 +96,7 @@ const Whatsapp = () => {
                         {statuses.status === "CONNECTED" && (
                             <div className="h-full w-[200px]">
                                 <Image
-                                    src="https://png.pngtree.com/png-vector/20221018/ourmid/pngtree-whatsapp-icon-png-image_6315990.png"
+                                    src="https://firebasestorage.googleapis.com/v0/b/gasskeun-topup.appspot.com/o/assets%2Fconfig%2Fwhatsapp.png?alt=media&token=86744128-86e2-4c2c-9bf4-2d1d3334d612&_gl=1*1red0dx*_ga*NDI2MzY2MjI3LjE2OTg3NTc4MDc.*_ga_CW55HF8NVT*MTY5OTAwODgyNS4yLjEuMTY5OTAwODg4NS42MC4wLjA."
                                     alt={`Banner Carousel`}
                                     width="0"
                                     height="0"
@@ -120,16 +119,16 @@ const Whatsapp = () => {
                             </div>
                         </div>
                         {statuses.status === "CONNECTED" && (
-                            <div className="flex w-full space-x-3 text-xs">
+                            <div className="flex flex-col w-1/6 gap-2 text-xs">
                                 <button
                                     onClick={() => setShowForm(true)}
-                                    className="w-1/2 bg-gray-600 text-white px-4 py-4 rounded-md shadow-lg hover:bg-gray-400"
+                                    className="bg-gray-600 text-white p-4 rounded-md shadow-lg hover:bg-gray-400"
                                 >
                                     Test Whatsapp
                                 </button>
                                 <button
                                     onClick={handleLogoutWhatsapp}
-                                    className="w-1/2 bg-red-600 text-white px-4 py-2 rounded-md shadow-lg hover:bg-red-400"
+                                    className="bg-red-600 text-white p-4 rounded-md shadow-lg hover:bg-red-400"
                                 >
                                     Logout
                                 </button>

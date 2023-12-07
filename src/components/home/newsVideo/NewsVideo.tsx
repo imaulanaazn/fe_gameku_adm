@@ -6,6 +6,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import Image from "next/image";
+import { NewsVideoProps } from "@/interfaces/newsVideo";
 
 const NewsVideo: React.FC<NewsVideoProps> = ({ videos }) => {
     const [videoId, setVideoId] = useState<string>("");
@@ -40,7 +41,7 @@ const NewsVideo: React.FC<NewsVideoProps> = ({ videos }) => {
                                 <SwiperSlide key={video.id} onClick={() => setVideoId(video.videoId)}>
                                     <Image
                                         src={`https://img.youtube.com/vi/${video.videoId}/mqdefault.jpg`}
-                                        alt="Youtube Thumbnail"
+                                        alt={video.title}
                                         className="mx-auto w-full"
                                         width="0"
                                         height="0"

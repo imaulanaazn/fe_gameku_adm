@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { invoiceState } from "@/atom/invoice";
 import { msgState } from "@/atom/msgState";
+import { toast } from "react-toastify";
 
 interface IInvoicesProps {
     invoice: IInvoice;
@@ -19,7 +20,6 @@ const Invoices: React.FC<IInvoicesProps> = ({ invoice }) => {
     const [payment, setPayment] = useRecoilState(invoiceState);
     const [data, setData] = useState(invoice);
     const [num, setNum] = useState(0);
-    const setMessage = useSetRecoilState(msgState);
 
     useEffect(() => {
         if (invoice.status === "3") {
@@ -30,7 +30,7 @@ const Invoices: React.FC<IInvoicesProps> = ({ invoice }) => {
     }, []);
 
     const getInvoice = async () => {
-        const request = await fetch(process.env.NEXT_PUBLIC_BASE_URL + "/api/v1/order-detail/" + invoice.invoiceId, {
+        const request = await fetch(process.env.NEXT_PUBLIC_BASE_URL + "/v1/order-detail/" + invoice.invoiceId, {
             method: "GET",
             cache: "no-cache",
             headers: {
@@ -43,7 +43,10 @@ const Invoices: React.FC<IInvoicesProps> = ({ invoice }) => {
         if (request.ok) {
             setData(res);
         } else {
-            setMessage({ msg: res.message, time: 3, type: "error" });
+            toast.error(res.message, {
+                position: "top-right",
+                autoClose: 3000,
+            });
         }
     };
 

@@ -18,7 +18,7 @@ const ListPosts: React.FC<{ blogs: { data: INewsPost[]; totalData: number }; lim
     const getArticles = async () => {
         setLoading(true);
         const request = await fetch(
-            `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/newest-articles?limit=${limit}&page=${page}`,
+            `${process.env.NEXT_PUBLIC_BASE_URL}/v1/newest-articles?limit=${limit}&page=${page}`,
             {
                 method: "GET",
                 credentials: "include",
@@ -57,7 +57,7 @@ const ListPosts: React.FC<{ blogs: { data: INewsPost[]; totalData: number }; lim
                     <div className=" w-1/4">
                         <Image
                             src={blog.img}
-                            alt="Logo Jokiku gasskeun"
+                            alt="Logo Gasskeun Topup"
                             width="0"
                             height="0"
                             sizes="100vw"

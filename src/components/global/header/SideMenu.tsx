@@ -9,6 +9,7 @@ import Image from "next/image";
 interface SideMenuProps {
     onClose: () => void;
     currentPath: string;
+    logo: string;
 }
 
 const links = [
@@ -29,15 +30,15 @@ const links = [
     },
 ];
 
-const SideMenu: React.FC<SideMenuProps> = ({ onClose, currentPath }) => {
+const SideMenu: React.FC<SideMenuProps> = ({ onClose, currentPath, logo }) => {
     return (
         <div className={`absolute top-0 left-0 h-screen w-52 bg-[#B72025] z-50 shadow-lg shadow-gray-600`}>
             <div className="mt-5 flex items-center flex-col relative">
                 <div className="w-28 h-28 rounded-lg">
                     <Image
-                        src="/images/logo_gasskeun.jpg"
+                        src={logo}
                         alt="Logo Gasskeun Topup"
-                        className="rounded-lg"
+                        className="rounded-lg object-contain"
                         width="0"
                         height="0"
                         sizes="100vw"

@@ -1,18 +1,19 @@
 "use client";
 
-import { carouselAdminState } from "@/atom/carouselAdminState";
+import { IImageCarousel } from "@/interfaces/carousels";
 import { faSpinner, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { DragEvent, DragEventHandler, FormEvent, MouseEventHandler, useRef, useState } from "react";
+import { DragEvent, FormEvent, useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
-import { useRecoilValue } from "recoil";
 
 interface IFormAddBanner {
     handleShowForm: (value: boolean) => void;
     getBanners: () => void;
+    type?: string;
+    dataBanner?: IImageCarousel;
 }
 
-const FormAddBanner: React.FC<IFormAddBanner> = ({ handleShowForm, getBanners }) => {
+const FormAddBanner: React.FC<IFormAddBanner> = ({ handleShowForm, getBanners, type, dataBanner }) => {
     const inputFileRef = useRef<HTMLInputElement | null>(null);
     const [dragging, setDragging] = useState(false);
     const [data, setData] = useState({
@@ -23,7 +24,9 @@ const FormAddBanner: React.FC<IFormAddBanner> = ({ handleShowForm, getBanners })
         fileImage: {} as any,
     });
     const [hoverImage, setHoverImage] = useState(false);
+    const [typeForm, setTypeForm] = useState("");
     const [loading, setLoading] = useState(false);
+    const [disabledButton, setDisabledButton] = useState(true);
 
     const handleClick = () => {
         if (inputFileRef.current) {
@@ -79,16 +82,22 @@ const FormAddBanner: React.FC<IFormAddBanner> = ({ handleShowForm, getBanners })
         }
     };
 
-    const postBanner = async () => {
+    const saveBanner = async (method: "PUT" | "POST") => {
         setLoading(true);
         const id = toast.loading("Sedang menyimpan data...");
         const formData = new FormData();
-        formData.append("bannerImage", data.fileImage);
+        if (typeForm === "edit" && dataBanner) {
+            formData.append("id", dataBanner.id);
+        }
+
+        if ((typeForm === "edit" && data.selectedImage !== dataBanner?.imageUrl) || typeForm === "add") {
+            formData.append("bannerImage", data.fileImage);
+        }
         formData.append("name", data.name);
         formData.append("eventUrl", data.eventUrl);
 
-        const req = await fetch(process.env.NEXT_PUBLIC_BASE_URL + "/api/v1/banner", {
-            method: "POST",
+        const req = await fetch(process.env.NEXT_PUBLIC_BASE_URL + "/v1/banner", {
+            method,
             credentials: "include",
             headers: {
                 "ngrok-skip-browser-warning": "true",
@@ -100,7 +109,7 @@ const FormAddBanner: React.FC<IFormAddBanner> = ({ handleShowForm, getBanners })
         if (req.ok) {
             getBanners();
             toast.update(id, {
-                render: "Berhasil Menambahkan Data Banner",
+                render: `Berhasil ${typeForm === "add" ? "Menambahkan" : "Mengubah"} Data Banner`,
                 type: "success",
                 isLoading: false,
                 position: "top-right",
@@ -122,8 +131,50 @@ const FormAddBanner: React.FC<IFormAddBanner> = ({ handleShowForm, getBanners })
 
     const handleAddBanner = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        postBanner();
+        saveBanner(typeForm === "add" ? "POST" : "PUT");
     };
+
+    useEffect(() => {
+        if (type !== "add" && dataBanner) {
+            setData({
+                selectedImage: dataBanner.imageUrl,
+                name: dataBanner.name,
+                eventUrl: dataBanner.eventUrl,
+                external: "",
+                fileImage: {} as any,
+            });
+        }
+
+        setTypeForm(type || "");
+    }, []);
+
+    useEffect(() => {
+        if (typeForm === "edit") {
+            if (
+                !data.selectedImage ||
+                !data.name ||
+                (data.selectedImage === dataBanner?.imageUrl &&
+                    data.eventUrl === dataBanner.eventUrl &&
+                    data.name === dataBanner.name)
+            ) {
+                setDisabledButton(true);
+            } else {
+                setDisabledButton(false);
+            }
+
+            return;
+        }
+
+        if (typeForm === "add") {
+            if (!data.selectedImage || !data.name) {
+                setDisabledButton(true);
+            } else {
+                setDisabledButton(false);
+            }
+
+            return;
+        }
+    }, [data.selectedImage, data.eventUrl, data.name, typeForm]);
 
     return (
         <div
@@ -131,121 +182,184 @@ const FormAddBanner: React.FC<IFormAddBanner> = ({ handleShowForm, getBanners })
             onDragOver={(e) => e.preventDefault()}
             className="w-full h-screen bg-gray-800 bg-opacity-30 absolute top-0 left-0 flex items-center justify-center z-[10] font-montserrat"
         >
-            <div className="md:w-1/2 md:max-h-screen w-full bg-white shadow-lg p-4 rounded-lg">
-                <div className="flex justify-between border-b-2 py-2 border-gray-600 items-center">
-                    <h1 className="text-xl">Tambah Banner Baru</h1>
-                    <FontAwesomeIcon icon={faTimes} className="cursor-pointer" onClick={() => handleShowForm(false)} />
+            <div className="md:w-3/4 md:max-h-screen w-full bg-white shadow p-4 rounded">
+                <div className="flex justify-between border-b-2 py-2 border-gray-300 items-center">
+                    <h1 className="text-xl">
+                        {typeForm === "add"
+                            ? "Tambah Banner Baru"
+                            : typeForm === "edit"
+                            ? `Ubah Banner ${dataBanner?.name}`
+                            : `Detail Banner ${dataBanner?.name}`}
+                    </h1>
+                    <div
+                        className="w-8 h-8 flex items-center justify-center cursor-pointer hover:bg-gray-400 rounded-full"
+                        onClick={() => handleShowForm(false)}
+                    >
+                        <FontAwesomeIcon icon={faTimes} />
+                    </div>
                 </div>
                 <form onSubmit={handleAddBanner}>
-                    <div className="flex flex-col gap-2 mt-3">
-                        <label htmlFor="image">
-                            Pilih Gambar <span className="text-red-800 font-bold">*</span>{" "}
-                        </label>
-                        {data.selectedImage ? (
-                            <div
-                                onMouseEnter={() => setHoverImage(true)}
-                                onMouseLeave={() => setHoverImage(false)}
-                                className="w-full h-36 flex items-center justify-center relative"
+                    <div className="flex gap-4 py-3">
+                        <div className="flex flex-col gap-2 w-1/2">
+                            <label htmlFor="image">
+                                Pilih Gambar <span className="text-red-800 font-bold">*</span>{" "}
+                            </label>
+                            {data.selectedImage ? (
+                                <div
+                                    onMouseEnter={() => setHoverImage(true)}
+                                    onMouseLeave={() => setHoverImage(false)}
+                                    className="w-full h-52 flex items-center justify-center relative"
+                                >
+                                    {hoverImage && typeForm !== "detail" && (
+                                        <div className="w-full h-full absolute bg-gray-800 bg-opacity-30 flex flex-col gap-2 items-center justify-center">
+                                            <button
+                                                onClick={() => {
+                                                    setData({ ...data, selectedImage: "" });
+                                                    setHoverImage(false);
+                                                }}
+                                                className="bg-white px-4 py-3 rounded-md"
+                                            >
+                                                Remove This Image
+                                            </button>
+                                            {type === "detail" &&
+                                                dataBanner &&
+                                                dataBanner?.imageUrl !== data.selectedImage && (
+                                                    <button
+                                                        onClick={() => {
+                                                            setData({ ...data, selectedImage: dataBanner?.imageUrl });
+                                                            setHoverImage(false);
+                                                        }}
+                                                        className="bg-white px-4 py-3 rounded-md"
+                                                    >
+                                                        Set Default
+                                                    </button>
+                                                )}
+                                        </div>
+                                    )}
+                                    <img
+                                        src={data.selectedImage}
+                                        alt="Preview Image Banner Gasskeun Topup"
+                                        className="max-h-full max-w-full"
+                                    />
+                                </div>
+                            ) : (
+                                <div
+                                    onClick={handleClick}
+                                    onDragEnter={handleDragEnter}
+                                    onDragOver={handleDragOver}
+                                    onDragLeave={handleDragLeave}
+                                    onDrop={handleDrop}
+                                    className={`${
+                                        dragging ? "bg-gray-100" : "bg-white"
+                                    } w-full border-dashed h-52 border-2 border-gray-800 flex items-center justify-center rounded-md`}
+                                >
+                                    <input
+                                        type="file"
+                                        name="image"
+                                        id="image"
+                                        accept=".png, .jpg, .jpeg"
+                                        hidden
+                                        readOnly={typeForm === "detail"}
+                                        ref={inputFileRef}
+                                        onChange={handleFileInputChange}
+                                    />
+                                    <p className="text-gray-400 font-bold">
+                                        Drag and Drop Banner or click here to upload
+                                    </p>
+                                </div>
+                            )}
+                        </div>
+                        <div className="w-1/2">
+                            <div>
+                                <label htmlFor="name">
+                                    Nama <span className="text-red-800 font-bold">*</span>{" "}
+                                </label>
+                                <div className="w-full">
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        id="name"
+                                        placeholder="Nama"
+                                        autoComplete="off"
+                                        value={data.name}
+                                        readOnly={typeForm === "detail"}
+                                        onChange={(e) => setData((prev) => ({ ...prev, name: e.target.value }))}
+                                        className={`${
+                                            typeForm === "detail"
+                                                ? "cursor-not-allowed bg-gray-100"
+                                                : "bg-white bg-opacity-100"
+                                        } py-3 px-2 w-full border mt-2 rounded-md border-gray-200 focus:outline-none focus:border-blue-600`}
+                                    />
+                                </div>
+                            </div>
+                            <div className="mt-3">
+                                <label htmlFor="name">Artikel Url</label>
+                                <div className="w-full">
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        id="name"
+                                        placeholder="Nama"
+                                        autoComplete="off"
+                                        value={data.eventUrl}
+                                        readOnly={typeForm === "detail"}
+                                        onChange={(e) => setData((prev) => ({ ...prev, eventUrl: e.target.value }))}
+                                        className={`${
+                                            typeForm === "detail"
+                                                ? "cursor-not-allowed bg-gray-100"
+                                                : "bg-white bg-opacity-100"
+                                        } py-3 px-2 w-full border mt-2 rounded-md border-gray-200 focus:outline-none focus:border-blue-600`}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {typeForm === "detail" && (
+                        <div className="mt-3 flex justify-end space-x-2">
+                            <button
+                                onClick={() => setTypeForm("edit")}
+                                type="button"
+                                className="bg-green-600 hover:bg-green-400 text-white font-semibold w-24 py-3 rounded-md"
                             >
-                                {hoverImage && (
-                                    <div className="w-full h-full absolute bg-gray-800 bg-opacity-30 flex items-center justify-center">
-                                        <button
-                                            onClick={() => {
-                                                setData({ ...data, selectedImage: "" });
-                                                setHoverImage(false);
-                                            }}
-                                            className="bg-white px-4 py-3 rounded-md"
-                                        >
-                                            Remove This Image
-                                        </button>
+                                Edit
+                            </button>
+                        </div>
+                    )}
+                    {typeForm !== "detail" && (
+                        <div className="mt-3 flex justify-end space-x-2">
+                            {loading ? (
+                                <>
+                                    <div className="bg-gray-300 text-gray-800 font-semibold w-24 text-center py-3 rounded-md cursor-not-allowed">
+                                        <FontAwesomeIcon icon={faSpinner} spin />
                                     </div>
-                                )}
-                                <img src={data.selectedImage} alt="Preview Image" className="max-h-full max-w-full" />
-                            </div>
-                        ) : (
-                            <div
-                                onClick={handleClick}
-                                onDragEnter={handleDragEnter}
-                                onDragOver={handleDragOver}
-                                onDragLeave={handleDragLeave}
-                                onDrop={handleDrop}
-                                className={`${
-                                    dragging ? "bg-gray-100" : "bg-white"
-                                } w-full border-dashed h-36 border-2 border-gray-800 flex items-center justify-center rounded-md`}
-                            >
-                                <input
-                                    type="file"
-                                    name="image"
-                                    id="image"
-                                    accept=".png, .jpg, .jpeg"
-                                    hidden
-                                    ref={inputFileRef}
-                                    onChange={handleFileInputChange}
-                                />
-                                <p className="text-gray-400 font-bold">Drag and Drop Banner or click here to upload</p>
-                            </div>
-                        )}
-                    </div>
-                    <div className="mt-3">
-                        <label htmlFor="name">
-                            Nama <span className="text-red-800 font-bold">*</span>{" "}
-                        </label>
-                        <div className="w-full">
-                            <input
-                                type="text"
-                                name="name"
-                                id="name"
-                                placeholder="Nama"
-                                autoComplete="off"
-                                value={data.name}
-                                onChange={(e) => setData((prev) => ({ ...prev, name: e.target.value }))}
-                                className="py-3 px-2 w-full border-2 mt-2 rounded-md border-gray-600 focus:outline-none focus:border-blue-600"
-                            />
+                                    <div className="bg-gray-300 text-gray-800 font-semibold w-24 text-center py-3 rounded-md cursor-not-allowed">
+                                        <FontAwesomeIcon icon={faSpinner} spin />
+                                    </div>
+                                </>
+                            ) : (
+                                <>
+                                    <button
+                                        onClick={() => handleShowForm(false)}
+                                        type="button"
+                                        className="bg-gray-600 hover:bg-gray-400 text-white font-semibold w-24 py-3 rounded-md"
+                                    >
+                                        Batalkan
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        disabled={disabledButton}
+                                        className={`${
+                                            disabledButton
+                                                ? "bg-opacity-50 cursor"
+                                                : "bg-opacity-100 hover:bg-green-400"
+                                        } bg-green-600  text-white font-semibold w-24 py-3 rounded-md`}
+                                    >
+                                        Simpan
+                                    </button>
+                                </>
+                            )}
                         </div>
-                    </div>
-                    <div className="mt-3">
-                        <label htmlFor="name">Artikel Url</label>
-                        <div className="w-full">
-                            <input
-                                type="text"
-                                name="name"
-                                id="name"
-                                placeholder="Nama"
-                                autoComplete="off"
-                                value={data.eventUrl}
-                                onChange={(e) => setData((prev) => ({ ...prev, eventUrl: e.target.value }))}
-                                className="py-3 px-2 w-full border-2 mt-2 rounded-md border-gray-600 focus:outline-none focus:border-blue-600"
-                            />
-                        </div>
-                    </div>
-                    <div className="mt-3 flex justify-end space-x-2">
-                        {loading ? (
-                            <>
-                                <div className="bg-gray-300 text-gray-800 font-semibold w-24 text-center py-3 rounded-md cursor-not-allowed">
-                                    <FontAwesomeIcon icon={faSpinner} spin />
-                                </div>
-                                <div className="bg-gray-300 text-gray-800 font-semibold w-24 text-center py-3 rounded-md cursor-not-allowed">
-                                    <FontAwesomeIcon icon={faSpinner} spin />
-                                </div>
-                            </>
-                        ) : (
-                            <>
-                                <button
-                                    onClick={() => handleShowForm(false)}
-                                    type="button"
-                                    className="bg-gray-600 hover:bg-gray-400 text-white font-semibold w-24 py-3 rounded-md"
-                                >
-                                    Batalkan
-                                </button>
-                                <button
-                                    type="submit"
-                                    className="bg-green-600 hover:bg-green-400 text-white font-semibold w-24 py-3 rounded-md"
-                                >
-                                    Simpan
-                                </button>
-                            </>
-                        )}
-                    </div>
+                    )}
                 </form>
             </div>
         </div>

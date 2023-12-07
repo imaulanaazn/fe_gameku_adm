@@ -8,15 +8,16 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useRecoilState, useSetRecoilState } from "recoil";
 
-const CodePromo = () => {
+const CodePromo: React.FC<{ products: IGameDetail }> = ({ products }) => {
     const [cart, setCart] = useRecoilState(cartState);
     const [allowed, setAllowed] = useState(false);
     const [loading, setLoading] = useState(false);
 
     const checkPromoCode = async () => {
+        const user = localStorage.getItem("user");
         const toastId = toast.loading("Mengecek kode promo...");
         setLoading(true);
-        const request = await fetch(process.env.NEXT_PUBLIC_BASE_URL + "/api/v1/check-promotion", {
+        const request = await fetch(process.env.NEXT_PUBLIC_BASE_URL + "/v1/check-promotion", {
             method: "POST",
             headers: {
                 "content-type": "application/json",
@@ -28,6 +29,10 @@ const CodePromo = () => {
                 gameId: cart.gameId,
                 quantity: cart.quantity,
                 productId: cart.product.id,
+                mobileNumber: cart.mobileNumber,
+                ...(products.type === "topup" && { userId: cart.detailAccount?.userId }),
+                ...(products.type === "topup" && products.needServerId && { serverId: cart.detailAccount?.serverId }),
+                ...(user && { customerId: JSON.parse(user).id }),
             }),
         });
 
@@ -60,12 +65,26 @@ const CodePromo = () => {
     };
 
     useEffect(() => {
-        if (!cart.promoCode || !cart.product || !cart.quantity) {
+        if (
+            !cart.promoCode ||
+            !cart.product ||
+            !cart.quantity ||
+            !cart.mobileNumber ||
+            (products.type === "topup" && !cart.detailAccount?.userId) ||
+            (products.type === "topup" && products.needServerId && !cart.detailAccount?.serverId)
+        ) {
             setAllowed(false);
         } else {
             setAllowed(true);
         }
-    }, [cart.promoCode, cart.product, cart.quantity]);
+    }, [
+        cart.promoCode,
+        cart.product,
+        cart.quantity,
+        cart.detailAccount?.serverId,
+        cart.detailAccount?.userId,
+        cart.mobileNumber,
+    ]);
 
     return (
         <div className="bg-slate-200 shadow-md rounded-lg lg:p-7 p-4 mb-4">

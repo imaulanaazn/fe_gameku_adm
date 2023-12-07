@@ -20,9 +20,7 @@ const Message = () => {
                 }, lastMsg.time * 1000);
             }
         }
-        console.log(timeoutId);
         return () => {
-            // Membersihkan timeout jika komponen unmount
             if (timeoutId) {
                 clearTimeout(timeoutId);
             }

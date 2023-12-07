@@ -4,7 +4,7 @@ import { IPromotion, IPromotionPaginationWithSearch } from "@/interfaces/promoti
 import { atom } from "recoil";
 
 export const promoCodeAdminState = atom({
-    key: "payment-method-admin-atom",
+    key: "promo-code-admin-atom",
     default: {
         data: [] as IPromotion[],
         keySearch: "",

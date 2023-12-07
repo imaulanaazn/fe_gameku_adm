@@ -142,28 +142,16 @@ const DATA_FROM_API = {
     ],
 };
 
-const ChartOrderHistory = () => {
-    const [percentage, setPercentage] = useState(0);
-    const [data, setData] = useState<any[]>([]);
-    const getDataLastWeek = () => {};
-
-    useEffect(() => {
-        const percent =
-            (((DATA_FROM_API.totalOrdersLastWeek - DATA_FROM_API.totalOrders7daysBefore) /
-                DATA_FROM_API.totalOrders7daysBefore) *
-                100) /
-            100;
-        console.log(percent);
-    }, []);
-
-    // Development only
-    useEffect(() => {
-        const newData = DATA_FROM_API.lastWeek.map((data) => ({
-            name: data.date,
-            Pesanan: data.total,
-        }));
-        setData(newData);
-    }, []);
+const ChartOrderHistory: React.FC<{ data: IDataAnalythicsChartLine[] }> = ({ data }) => {
+    const newData = data.map((item) => {
+        return {
+            name: item.date,
+            ["Total Pesanan"]: item.totalOrders,
+            ["Total Pesanan Berhasil"]: item.paid,
+            ["Total Pesanan Gagal"]: item.failed + item.expired,
+            ["Total Pesanan Pending"]: item.pending,
+        };
+    });
     return (
         <>
             <h1 className="mb-5 font-semibold text-xl">
@@ -173,7 +161,7 @@ const ChartOrderHistory = () => {
                 <AreaChart
                     width={500}
                     height={300}
-                    data={data}
+                    data={newData}
                     margin={{
                         top: 10,
                         right: 20,
@@ -193,12 +181,36 @@ const ChartOrderHistory = () => {
                     <Tooltip />
                     <Area
                         type="monotone"
-                        dataKey="Pesanan"
+                        dataKey="Total Pesanan"
                         stackId="1"
                         stroke="#16a34a"
                         fill="url(#colorPesanan)"
                         strokeWidth={3}
                     />
+                    {/* <Area
+                        type="monotone"
+                        dataKey="Total Pesanan Berhasil"
+                        stackId="1"
+                        stroke="#16a34a"
+                        fill="url(#colorPesanan)"
+                        strokeWidth={3}
+                    />
+                    <Area
+                        type="monotone"
+                        dataKey="Total Pesanan Gagal"
+                        stackId="1"
+                        stroke="#16a34a"
+                        fill="url(#colorPesanan)"
+                        strokeWidth={3}
+                    />
+                    <Area
+                        type="monotone"
+                        dataKey="Total Pesanan Pending"
+                        stackId="1"
+                        stroke="#16a34a"
+                        fill="url(#colorPesanan)"
+                        strokeWidth={3}
+                    /> */}
                 </AreaChart>
             </ResponsiveContainer>
         </>

@@ -42,7 +42,10 @@ const Payment: React.FC<IPaymentProps> = ({ payment }) => {
     };
 
     useEffect(() => {
-        const valueFee = payment.feeType === FeeType.PERCENTAGE ? (payment.fee / 100) * cart.prices : payment.fee;
+        const valueFee =
+            payment.feeType === FeeType.PERCENTAGE
+                ? Math.ceil((payment.fee / 100) * cart.prices * cart.quantity)
+                : payment.fee;
         setFee(valueFee);
         let prices = 0;
         if (cart.pricesAfterDiscount !== 0) {
@@ -114,7 +117,7 @@ const Payment: React.FC<IPaymentProps> = ({ payment }) => {
             <div className="p-1 w-20 h-10 bg-white shadow-sm shadow-slate-700 rounded-md flex justify-center items-center overflow-hidden">
                 <Image
                     src={payment.logo}
-                    alt={payment.name}
+                    alt={`Logo Pembayaran Gasskeun Topup ${payment.name}`}
                     className="object-contain"
                     width="0"
                     height="0"

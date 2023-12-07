@@ -48,7 +48,7 @@ const FormTopup: React.FC<IFormProps> = ({ products, paymentsMethod }) => {
             <div className="relative">
                 <div className="pt-5">
                     <div className="lg:px-10 px-5 container mx-auto">
-                        <p className="font-semibold text-sm lg:text-base">
+                        <p className="font-semibold text-sm">
                             <Link href="/" className="text-blue-800">
                                 Home
                             </Link>{" "}
@@ -63,7 +63,7 @@ const FormTopup: React.FC<IFormProps> = ({ products, paymentsMethod }) => {
                                 {products.type === "topup" && <DetailAccount products={products} />}
                                 <NomorWhatsapp />
                                 {cashtag && <CashTag />}
-                                <CodePromo />
+                                <CodePromo products={products} />
                             </div>
                         </div>
                     </div>

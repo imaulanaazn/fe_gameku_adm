@@ -1,26 +1,26 @@
 "use client";
 
-import { msgState } from "@/atom/msgState";
-import { orderHistoryState } from "@/atom/orderHistory";
-import { faArrowLeft, faArrowRight, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import Statuses from "./Statuses";
+import { toast } from "react-toastify";
+import { userOrderHistoryState } from "@/atom/userOrderHistory";
 
 const ResultCheckPesanan = () => {
-    const [orderHistory, setOrderHistory] = useRecoilState(orderHistoryState);
+    const [orderHistory, setOrderHistory] = useRecoilState(userOrderHistoryState);
     const [page, setPage] = useState(1);
     const [disablePrevious, setDisablePrevious] = useState(true);
     const [disableContinues, setDisableContinues] = useState(true);
-    const setMessage = useSetRecoilState(msgState);
     const [haveData, setHaveData] = useState(false);
 
     const getOrderHistory = async (p: number) => {
+        const toastId = toast.loading("Mengecek pesanan...");
         const querySearch = orderHistory.keySearch + "&page=" + p;
-        const result = await fetch(process.env.NEXT_PUBLIC_BASE_URL + "/api/v1/order-history?" + querySearch, {
+        const result = await fetch(process.env.NEXT_PUBLIC_BASE_URL + "/v1/order-history?" + querySearch, {
             method: "GET",
             cache: "no-cache",
             headers: {
@@ -31,19 +31,34 @@ const ResultCheckPesanan = () => {
 
         const res = await result.json();
         if (result.ok) {
-            setOrderHistory({ ...orderHistory, ...res });
+            setOrderHistory((prev) => {
+                const data = {
+                    ...prev,
+                    ...res,
+                };
+
+                return data;
+            });
+            toast.update(toastId, {
+                render: "Berhasil mendapatkan riwayat transaksi",
+                type: "success",
+                isLoading: false,
+                position: "top-right",
+                autoClose: 3000,
+            });
         } else {
-            setMessage({
+            toast.update(toastId, {
+                render: res.message || "Kesalahan dalam mengambil riwayat transaksi, silahkan coba lagi",
                 type: "error",
-                time: 3,
-                msg: "Kesalahan dalam mengambil riwayat transaksi, silahkan coba lagi",
+                isLoading: false,
+                position: "top-right",
+                autoClose: 3000,
             });
         }
     };
 
     const handleClick = (type: "continues" | "previous") => {
         if ((type === "previous" && disablePrevious) || (type === "continues" && disableContinues)) {
-            console.log("Masuk sini");
             return;
         }
 
@@ -72,7 +87,7 @@ const ResultCheckPesanan = () => {
         } else {
             setHaveData(false);
         }
-    }, [orderHistory.data]);
+    }, [JSON.stringify(orderHistory)]);
 
     useEffect(() => {
         setOrderHistory({
@@ -82,7 +97,7 @@ const ResultCheckPesanan = () => {
             order: "DESC",
             sort: "createdAt",
             page: 1,
-        } as ICheckOrder);
+        } as IOrderWithAnalitycsPaginationWithSearch);
     }, []);
 
     if (!haveData && orderHistory.keySearch) {
@@ -106,7 +121,7 @@ const ResultCheckPesanan = () => {
                             <div className="w-16 h-16">
                                 <Image
                                     src={data.logoUrl}
-                                    alt="Logo Jokiku gasskeun"
+                                    alt="Logo gasskeun Topup"
                                     width="0"
                                     height="0"
                                     sizes="100vw"

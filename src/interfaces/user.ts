@@ -3,6 +3,7 @@ interface IUser {
     email: string;
     mobileNumber: string;
     name: string;
+    image: string;
     roleId: string;
     isActive: boolean;
     isRegistered: boolean;

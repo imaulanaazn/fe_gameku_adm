@@ -91,7 +91,9 @@ const ConfirmDelete: React.FC<IConfirmDeleteProps> = ({ path, method, field, get
                     />
                 </div>
                 <p className="mt-2">Apakah kamu yakin ingin menghapus ini? Jika kamu yakin ketik teks dibawah ini!</p>
-                <div className="w-full py-4 bg-gray-300 px-2 rounded-md font-bold mt-3">{textConfirmDelete}</div>
+                <div className="w-full py-4 bg-gray-300 px-2 rounded-md font-bold mt-3 select-none">
+                    {textConfirmDelete}
+                </div>
                 <form onSubmit={handleDeleteBulk}>
                     <input
                         type="text"

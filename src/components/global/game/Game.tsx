@@ -11,17 +11,17 @@ const Game: React.FC<IGameProps> = ({ data }) => {
         <Link
             key={data.id}
             href={data.slug}
-            className="flex flex-col w-36 h-52 bg-white shadow-lg transform transition-transform hover:scale-105 rounded-md hover:shadow-gray-600"
+            className="flex flex-col w-24 h-44 lg:w-36 lg:h-52 bg-white shadow-lg transform transition-transform hover:scale-105 rounded-md hover:shadow-gray-600 overflow-hidden"
         >
-            <div className="w-36 h-36 mx-auto rounded-md">
+            <div className="h-24 lg:h-36 aspect-square flex items-center">
                 <Image
                     src={data.logoUrl}
-                    alt={data.name}
-                    className="w-full lg:h-24 h-16 object-cover rounded-md"
+                    alt={`Logo Game Gasskeun Topup ${data.name}`}
                     width="0"
                     height="0"
-                    sizes="100vw"
+                    sizes="100vh"
                     style={{ width: "100%", height: "100%" }}
+                    className="rounded-lg object-cover"
                 />
             </div>
             <div className="py-2 px-1">

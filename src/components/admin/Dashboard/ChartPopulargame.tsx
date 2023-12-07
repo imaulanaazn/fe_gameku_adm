@@ -4,28 +4,6 @@ import { useEffect, useState } from "react";
 import { PieChart, Pie, Sector, Cell, ResponsiveContainer, Legend } from "recharts";
 import { Props } from "recharts/types/component/DefaultLegendContent";
 
-const data = [
-    { name: "Mobile Legend", value: 100 },
-    { name: "Point Blank", value: 300 },
-    { name: "Arena of Valor", value: 300 },
-    { name: "Genshin Impact", value: 200 },
-    { name: "Genshin Impact", value: 200 },
-    { name: "Genshin Impact", value: 200 },
-    { name: "Genshin Impact", value: 200 },
-];
-
-interface CustomizedLabelProps {
-    cx: number;
-    cy: number;
-    midAngle: number;
-    innerRadius: number;
-    outerRadius: number;
-    percent: number;
-    index: number;
-}
-
-const COLORS = generateColors(data.length);
-
 function generateColors(length: number) {
     const colors = [];
     for (let i = 0; i < length; i++) {
@@ -36,21 +14,9 @@ function generateColors(length: number) {
     return colors;
 }
 
-const RADIAN = Math.PI / 180;
-const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }: CustomizedLabelProps) => {
-    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-    const x = cx + radius * Math.cos(-midAngle * RADIAN);
-    const y = cy + radius * Math.sin(-midAngle * RADIAN);
-
-    return (
-        <text x={x} y={y} fill="white" textAnchor={x > cx ? "start" : "end"} dominantBaseline="central">
-            {`${(percent * 100).toFixed(0)}%`}
-        </text>
-    );
-};
-
-const ChartPopulargame = () => {
+const ChartPopulargame: React.FC<{ data: { name: string; value: number }[] }> = ({ data }) => {
     const [dataChart, setDataChart] = useState<any[]>([]);
+    const COLORS = generateColors(data.length);
 
     const renderLegend = (props: Props) => {
         const { payload } = props;
@@ -70,7 +36,7 @@ const ChartPopulargame = () => {
 
     useEffect(() => {
         const sortingData = data.sort((a, b) => b.value - a.value);
-        setDataChart(sortingData);
+        setDataChart(sortingData.slice(0, 10));
     }, []);
 
     return (

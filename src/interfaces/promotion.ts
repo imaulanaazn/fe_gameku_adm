@@ -8,10 +8,15 @@ export interface IPromotion {
     discountType: DiscountType;
     discountValue: number;
     minPurchase: number;
+    maxDiscount: number;
+    stock: number;
     description: string;
-    startAt: Date;
-    endAt: Date;
+    startAt: string;
+    endAt: string;
     deleted: boolean;
+
+    used: number;
+    remain: number;
 }
 
 export interface IPromotionPagination extends IPagination {

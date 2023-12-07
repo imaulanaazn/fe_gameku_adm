@@ -1,9 +1,15 @@
+import Maintenance from "@/components/maintenance/Maintenance";
 import ListPosts from "@/components/posts/ListPosts";
 import sendRequest from "@/lib/baseApi";
+import { redirect } from "next/navigation";
 
 const Posts = async () => {
+    const statusWebsite = await sendRequest<{ value: string }[]>("/v1/config?type=website_status");
+    if (statusWebsite.data[0].value === "maintenance") {
+        return <Maintenance />;
+    }
     const limit = 3;
-    const blogs = await sendRequest<{ data: INewsPost[]; totalData: number }>("/api/v1/newest-articles?limit=" + limit);
+    const blogs = await sendRequest<{ data: INewsPost[]; totalData: number }>("/v1/newest-articles?limit=" + limit);
 
     return (
         <div className="mx-auto font-monstserrat">

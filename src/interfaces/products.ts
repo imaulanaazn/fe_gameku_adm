@@ -14,6 +14,7 @@ interface IProductsGame {
     gameName?: string;
     totalSold?: number;
     logoUrl?: string;
+    isActive: boolean;
 }
 
 interface IProductDetail extends IGame {

@@ -6,12 +6,14 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faAngleDown,
+    faArchive,
     faArrowDown,
     faArrowUp,
     faInfo,
     faInfoCircle,
     faPencil,
     faPlus,
+    faRecycle,
     faSearch,
     faTimes,
     faTrash,
@@ -26,6 +28,7 @@ import formatter from "@/lib/formatter";
 import Select from "react-select";
 import ConfirmDelete from "../ConfirmDelete";
 import FormDenom from "./FormDenom";
+import { toast } from "react-toastify";
 
 const column = [
     {
@@ -177,6 +180,47 @@ const TableDenom: React.FC<{ denom: IProductPagination }> = ({ denom }) => {
                     value: item.id,
                 })),
             );
+        }
+
+        setLoading(false);
+    };
+
+    const setArchive = async (status: "active" | "archive") => {
+        setLoading(true);
+
+        const toastId = toast.loading(
+            `Sedang  ${status === "active" ? "Menghapus dari arsip" : "Menambahkan ke arsip"} ...`,
+        );
+        const req = await fetch(process.env.NEXT_PUBLIC_BASE_URL + "/v1/denom/archive", {
+            cache: "no-cache",
+            method: "PUT",
+            credentials: "include",
+            headers: {
+                "content-type": "application/json",
+                "ngrok-skip-browser-warning": "true",
+            },
+            body: JSON.stringify({
+                productId: selected,
+                status,
+            }),
+        });
+
+        if (req.ok) {
+            setSelected([]);
+            getDenoms();
+            toast.update(toastId, {
+                render: `Berhasil ${status === "active" ? "Menghapus dari arsip" : "Menambahkan ke arsip"}`,
+                type: "success",
+                isLoading: false,
+                position: "top-right",
+                autoClose: 3000,
+            });
+        } else {
+            const res = await req.json();
+            toast.error(`[${res.errorCode}] ${res.message}`, {
+                position: "top-right",
+                autoClose: 3000,
+            });
         }
 
         setLoading(false);
@@ -463,6 +507,40 @@ const TableDenom: React.FC<{ denom: IProductPagination }> = ({ denom }) => {
                                 <div className="flex gap-3">
                                     <div className="relative">
                                         <div
+                                            onClick={() => setArchive("archive")}
+                                            className="bg-blue-800 hover:bg-blue-600 w-10 h-10 rounded-full cursor-pointer grid place-content-center shadow"
+                                            data-tooltip-id="tooltip-delete"
+                                            data-tooltip-content="Tambahkan ke arsip"
+                                        >
+                                            <FontAwesomeIcon icon={faArchive} size="xl" className="text-white" />
+                                        </div>
+                                        <ReactTooltip
+                                            id="tooltip-delete"
+                                            style={{
+                                                fontSize: "12px",
+                                                padding: "10px",
+                                            }}
+                                        />
+                                    </div>
+                                    <div className="relative">
+                                        <div
+                                            onClick={() => setArchive("active")}
+                                            className="bg-blue-800 hover:bg-blue-600 w-10 h-10 rounded-full cursor-pointer grid place-content-center shadow"
+                                            data-tooltip-id="tooltip-delete"
+                                            data-tooltip-content="Hapus dari arsip"
+                                        >
+                                            <FontAwesomeIcon icon={faRecycle} size="xl" className="text-white" />
+                                        </div>
+                                        <ReactTooltip
+                                            id="tooltip-delete"
+                                            style={{
+                                                fontSize: "12px",
+                                                padding: "10px",
+                                            }}
+                                        />
+                                    </div>
+                                    <div className="relative">
+                                        <div
                                             onClick={() => setShowDelete(true)}
                                             className="bg-red-800 hover:bg-red-600 w-10 h-10 rounded-full cursor-pointer grid place-content-center shadow"
                                             data-tooltip-id="tooltip-delete"
@@ -550,6 +628,12 @@ const TableDenom: React.FC<{ denom: IProductPagination }> = ({ denom }) => {
                                                 </th>
                                                 <th
                                                     scope="col"
+                                                    className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase "
+                                                >
+                                                    Status
+                                                </th>
+                                                <th
+                                                    scope="col"
                                                     className="px-6 py-3 text-xs font-bold text-right text-gray-500 uppercase "
                                                 >
                                                     Aksi
@@ -614,6 +698,9 @@ const TableDenom: React.FC<{ denom: IProductPagination }> = ({ denom }) => {
                                                     </td>
                                                     <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
                                                         {denom.totalSold}
+                                                    </td>
+                                                    <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
+                                                        {denom.isActive ? "Dipublikasikan" : "Diarsipkan"}
                                                     </td>
                                                     <td className="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">
                                                         <div className="flex justify-end w-full">

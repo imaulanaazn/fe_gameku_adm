@@ -44,7 +44,8 @@ const FormDenom: React.FC<IForm> = ({ handleShowForm, getNewData, type, data, hi
         value: string;
     } | null>(null);
 
-    const [disableButtonSubmit, setDisableButtonSubmit] = useState(true);
+    const [disableButtonSubmit, setDisableButtonSubmit] = useState(false);
+    const [typeSubmit, setTypeSubmit] = useState<"active" | "archive">("active");
 
     const saveData = async () => {
         setLoading(true);
@@ -65,6 +66,7 @@ const FormDenom: React.FC<IForm> = ({ handleShowForm, getNewData, type, data, hi
         formData.append("name", newData.name);
         formData.append("price", newData.price.toString());
         formData.append("gameId", newData.gameId);
+        formData.append("status", typeSubmit === "active" ? "active" : "archive");
 
         const req = await fetch(process.env.NEXT_PUBLIC_BASE_URL + "/v1/denom", {
             cache: "no-cache",
@@ -123,27 +125,27 @@ const FormDenom: React.FC<IForm> = ({ handleShowForm, getNewData, type, data, hi
         setLoading(false);
     };
 
-    useEffect(() => {
-        if (
-            (typeForm === "add" || typeForm === "edit") &&
-            (!priceBuy ||
-                !newData.name ||
-                !newData.code ||
-                !price ||
-                !newData.gameId ||
-                (typeForm === "edit" &&
-                    newData.name === data?.name &&
-                    newData.code === data?.code &&
-                    price === data?.price.toString() &&
-                    priceBuy === data?.priceBuy?.toString() &&
-                    newData.gameId === data?.gameId &&
-                    newData.logoDenom === data?.logoDenom))
-        ) {
-            setDisableButtonSubmit(true);
-        } else {
-            setDisableButtonSubmit(false);
-        }
-    }, [newData.name, newData.code, price, priceBuy, newData.logoDenom, newData.gameId, newData.logoDenom, typeForm]);
+    // useEffect(() => {
+    //     if (
+    //         (typeForm === "add" || typeForm === "edit") &&
+    //         (!priceBuy ||
+    //             !newData.name ||
+    //             !newData.code ||
+    //             !price ||
+    //             !newData.gameId ||
+    //             (typeForm === "edit" &&
+    //                 newData.name === data?.name &&
+    //                 newData.code === data?.code &&
+    //                 price === data?.price.toString() &&
+    //                 priceBuy === data?.priceBuy?.toString() &&
+    //                 newData.gameId === data?.gameId &&
+    //                 newData.logoDenom === data?.logoDenom))
+    //     ) {
+    //         setDisableButtonSubmit(true);
+    //     } else {
+    //         setDisableButtonSubmit(false);
+    //     }
+    // }, [newData.name, newData.code, price, priceBuy, newData.logoDenom, newData.gameId, newData.logoDenom, typeForm]);
 
     useEffect(() => {
         getGames();
@@ -593,6 +595,9 @@ const FormDenom: React.FC<IForm> = ({ handleShowForm, getNewData, type, data, hi
                                     <div className="bg-gray-300 text-gray-800 font-semibold w-24 text-center py-3 rounded-md cursor-not-allowed">
                                         <FontAwesomeIcon icon={faSpinner} spin />
                                     </div>
+                                    <div className="bg-gray-300 text-gray-800 font-semibold w-24 text-center py-3 rounded-md cursor-not-allowed">
+                                        <FontAwesomeIcon icon={faSpinner} spin />
+                                    </div>
                                 </>
                             ) : (
                                 <>
@@ -605,6 +610,8 @@ const FormDenom: React.FC<IForm> = ({ handleShowForm, getNewData, type, data, hi
                                     </button>
                                     <button
                                         type="submit"
+                                        id="save"
+                                        onClick={() => setTypeSubmit("active")}
                                         disabled={disableButtonSubmit}
                                         className={`${
                                             disableButtonSubmit
@@ -613,6 +620,19 @@ const FormDenom: React.FC<IForm> = ({ handleShowForm, getNewData, type, data, hi
                                         } bg-green-600  text-white font-semibold w-24 py-3 rounded-md`}
                                     >
                                         Simpan
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        id="archive"
+                                        onClick={() => setTypeSubmit("archive")}
+                                        disabled={disableButtonSubmit}
+                                        className={`${
+                                            disableButtonSubmit
+                                                ? "bg-opacity-50 cursor-not-allowed"
+                                                : "bg-opacity-100 hover:bg-yellow-400"
+                                        } bg-yellow-600  text-white font-semibold px-3 py-3 rounded-md`}
+                                    >
+                                        Simpan sebagai arsip
                                     </button>
                                 </>
                             )}

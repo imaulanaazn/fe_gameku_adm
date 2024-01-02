@@ -10,7 +10,7 @@ import dayjs from "dayjs";
 import formatter from "@/lib/formatter";
 import { toast } from "react-toastify";
 registerLocale("id", id);
-
+import { Tooltip as ReactTooltip } from "react-tooltip";
 interface IForm {
     handleShowForm: (defaultValue: boolean) => void;
     getNewData: () => void;
@@ -145,6 +145,14 @@ const FormOrders: React.FC<IForm> = ({ handleShowForm, getNewData, type, data })
         }
         setLoading(false);
         handleShowForm(false);
+    };
+
+    const handleClickCopyTrx: any = () => {
+        navigator.clipboard.writeText(
+            `${data?.invoiceId}${data?.username ? `\n${data.username}` : ""}${
+                data?.detail.userId ? `\n${data.detail.userId}` : ""
+            }${data?.detail.serverId ? ` ${data.detail.serverId}` : ""}\n${data?.productName}\n${data?.game}`,
+        );
     };
 
     return (
@@ -413,16 +421,43 @@ const FormOrders: React.FC<IForm> = ({ handleShowForm, getNewData, type, data })
                             />
                         </div>
                     </div>
-                    {newData.status === "2" && (
-                        <div className="flex justify-end space-x-2 sticky -bottom-4 bg-white py-5">
-                            {loading ? (
-                                <>
+                    <div className="flex justify-end space-x-2 sticky -bottom-4 bg-white py-5">
+                        <div className="relative">
+                            <button
+                                type="button"
+                                onClick={handleClickCopyTrx}
+                                className="hover:bg-green-400 bg-green-600 text-white font-semibold py-3 px-5 rounded-md"
+                                data-tooltip-id="tooltip-unpopular"
+                                data-tooltip-content="Berhasil dicopy"
+                            >
+                                Copy Data Trx
+                                <ReactTooltip
+                                    id="tooltip-unpopular"
+                                    style={{
+                                        fontSize: "12px",
+                                        padding: "10px",
+                                    }}
+                                    openOnClick
+                                    delayHide={1000}
+                                />
+                            </button>
+                            {/* {true && <p className="absolute -top-5">Disalin</p>}
+                        <button
+                            type="button"
+                            disabled={false}
+                            onClick={handleClickCopyTrx}
+                            className={`hover:bg-green-400 bg-green-600 text-white font-semibold py-3 px-5 rounded-md`}
+                        >
+                            Copy Data Trx
+                        </button> */}
+                        </div>
+                        {newData.status === "2" && (
+                            <>
+                                {loading ? (
                                     <div className="bg-gray-300 text-gray-800 font-semibold w-24 text-center py-3 rounded-md cursor-not-allowed">
                                         <FontAwesomeIcon icon={faSpinner} spin />
                                     </div>
-                                </>
-                            ) : (
-                                <>
+                                ) : (
                                     <button
                                         type="button"
                                         disabled={false}
@@ -431,14 +466,14 @@ const FormOrders: React.FC<IForm> = ({ handleShowForm, getNewData, type, data })
                                             false
                                                 ? "bg-opacity-50 cursor-not-allowed"
                                                 : "bg-opacity-100 hover:bg-green-400"
-                                        } bg-green-600  text-white font-semibold w-24 py-3 rounded-md`}
+                                        } bg-green-600 text-white font-semibold py-3 px-5 rounded-md`}
                                     >
                                         Selesaikan
                                     </button>
-                                </>
-                            )}
-                        </div>
-                    )}
+                                )}
+                            </>
+                        )}
+                    </div>
                 </form>
             </div>
         </div>

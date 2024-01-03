@@ -151,7 +151,9 @@ const FormOrders: React.FC<IForm> = ({ handleShowForm, getNewData, type, data })
         navigator.clipboard.writeText(
             `${data?.invoiceId}${data?.username ? `\n${data.username}` : ""}${
                 data?.detail.userId ? `\n${data.detail.userId}` : ""
-            }${data?.detail.serverId ? ` ${data.detail.serverId}` : ""}\n${data?.productName}\n${data?.game}`,
+            }${data?.detail.serverId ? ` ${data.detail.serverId}` : ""}\n${data?.productName} (${data?.quantity}x)\n${
+                data?.game
+            }`,
         );
     };
 

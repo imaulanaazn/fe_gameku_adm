@@ -101,8 +101,8 @@ const Footer = () => {
                     <p className="pb-2 font-bold text-lg">About us</p>
                     <p className="font-semibold text-sm">
                         Gasskeun Top Up adalah sebuah website topup game online terpercaya di Indonesia mulai dari
-                        Mobile Legends, PUBG Mobile, Free Fire, dan masih banyak lainnya. untuk mempermudah pembayaran
-                        anda disini kami juga menyediokan metode pembayaran Alfamart, Bank BCA, Bank Mandiri, Bank BNI
+                        Mobile Legends, PUBG Mobile, Free Fire, dan masih banyak lainnya. Untuk mempermudah pembayaran
+                        anda disini kami juga menyediakan metode pembayaran Alfamart, Bank BCA, Bank Mandiri, Bank BNI
                         DANA, OVO, dll
                     </p>
                 </div>
@@ -113,11 +113,17 @@ const Footer = () => {
                             MAU JOIN <br></br>RESELLER?
                         </p>
                         <Link
-                            href={linkWhatsapp}
+                            href={process.env.NEXT_PUBLIC_HOST_RESELLER || "#"}
                             className="sm:py-4 sm:px-8 py-2 px-3 bg-white text-[#B72025] rounded-lg"
                         >
                             GABUNG SEKARANG!
                         </Link>
+                        {/* <Link
+                            href={linkWhatsapp}
+                            className="sm:py-4 sm:px-8 py-2 px-3 bg-white text-[#B72025] rounded-lg"
+                        >
+                            GABUNG SEKARANG!
+                        </Link> */}
                     </div>
                 </div>
             </div>

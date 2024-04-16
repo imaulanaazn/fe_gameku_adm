@@ -68,6 +68,11 @@ const MENU = [
         icon: faCube,
         link: "/admin/denom",
     },
+    // {
+    //     name: "Kategori Denom",
+    //     icon: faCube,
+    //     link: "/admin/product-category",
+    // },
     {
         name: "Voucher Game",
         icon: faGamepad,
@@ -98,6 +103,11 @@ const MENU = [
         icon: faHistory,
         link: "/admin/orders",
     },
+    {
+        name: "Riwayat Deposit",
+        icon: faHistory,
+        link: "/admin/deposit-history",
+    },
 ];
 const SideBarAdmin = () => {
     const pathname = usePathname();
@@ -119,7 +129,6 @@ const SideBarAdmin = () => {
 
         const res = await req.json();
         if (req.ok) {
-            console.log(res);
             setLogo((prev) => ({
                 ...prev,
                 logo: res[0].value,
@@ -175,10 +184,6 @@ const SideBarAdmin = () => {
             getLogo();
         }
     }, []);
-
-    useEffect(() => {
-        console.log(logo);
-    }, [JSON.stringify(logo)]);
 
     return (
         <div className="w-full max-w-[16rem] font-montserrat flex flex-col items-center bg-gray-100 p-4 gap-3 overflow-y-scroll h-screen">

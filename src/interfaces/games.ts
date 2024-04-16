@@ -30,6 +30,8 @@ interface ListGameProps {
 interface IGameDetail extends IGame {
     products: IProductsGame[];
     servers?: IServer[];
+    isGrouped: boolean;
+    groupedDenoms: IProductCategoryWithDenoms[];
 }
 
 interface IGamePagination extends IPagination {

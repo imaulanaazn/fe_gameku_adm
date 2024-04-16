@@ -578,7 +578,7 @@ const TableOrders: React.FC<{ data: IOrderWithAnalitycsPaginationWithDetail }> =
                 {loading ? (
                     <Loading />
                 ) : (
-                    <div className="w-full bg-white rounded shadow overflow-x-scroll md:overflow-x-auto overflow-y-hidden mt-5">
+                    <div className="w-full bg-white rounded shadow overflow-y-hidden mt-5">
                         <div className={`p-5 bg-white`}>
                             <div className="flex items-center justify-between">
                                 <p className="text-xl font-semibold">Pesanan</p>

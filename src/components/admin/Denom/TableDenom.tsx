@@ -549,16 +549,6 @@ const TableDenom: React.FC<{ denom: IProductPagination }> = ({ denom }) => {
                         {selected.length === 0 && (
                             <div className="flex items-center justify-between">
                                 <p className="text-xl font-semibold">Denom</p>
-                                <div
-                                    onClick={() => {
-                                        setShowForm(!showForm);
-                                        setTypeForm("add");
-                                    }}
-                                    className="flex justify-between py-3 px-4 gap-5 items-center bg-green-600 hover:bg-green-500 text-white rounded-md cursor-pointer"
-                                >
-                                    <p>Denom Baru</p>
-                                    <FontAwesomeIcon icon={faPlus} size="lg" />
-                                </div>
                             </div>
                         )}
                         {selected.length > 0 && (

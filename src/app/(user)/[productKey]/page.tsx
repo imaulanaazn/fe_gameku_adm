@@ -3,7 +3,8 @@ import { Metadata } from "next";
 import NotFound from "./not-found";
 import sendRequest from "@/lib/baseApi";
 import Maintenance from "@/components/maintenance/Maintenance";
-
+import NewFormTopup from "@/components/pageProduct/NewFormTopup";
+import { Container } from "@/lib/mui";
 interface IParams {
     params: {
         productKey: string;
@@ -19,11 +20,15 @@ const page = async ({ params }: IParams) => {
     if (!gameDetail.ok) {
         return <NotFound />;
     }
-    const paymentsMethod = await sendRequest<IPaymentMethod[]>("/v1/payments-method");
+    const paymentsMethod = await sendRequest<IPaymentMethod[]>("/v1/payments-method?query=9");
+
     return (
-        <div className="mx-auto font-pulse">
-            <FormTopup products={gameDetail.data} paymentsMethod={paymentsMethod.data} />
-        </div>
+        <Container maxWidth={false} sx={{ backgroundColor: "#eaeaea", paddingBottom: 4 }}>
+            {/* <div className="mx-auto font-pulse"> */}
+            <NewFormTopup products={gameDetail.data} paymentsMethod={paymentsMethod.data} />
+            {/* <FormTopup products={gameDetail.data} paymentsMethod={paymentsMethod.data} /> */}
+            {/* </div> */}
+        </Container>
     );
 };
 

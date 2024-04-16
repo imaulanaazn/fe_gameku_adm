@@ -9,6 +9,7 @@ import { msgState } from "@/atom/msgState";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
+import { Box, Container } from "@/lib/mui";
 
 const TotalPayments = () => {
     const router = useRouter();
@@ -130,7 +131,8 @@ const TotalPayments = () => {
     }, [cart.product.id, cart.totalAmount, cart.paymentMethod.id, cart.mobileNumber, cashtag, cart.cashtag]);
 
     return (
-        <div className="bg-black text-white w-full sticky bottom-0 lg:px-20 lg:py-5 flex justify-end items-center gap-5 font-montserrat p-5">
+        <Container maxWidth={false} sx={{ bgcolor: "gray", position: "sticky", bottom: 0 }}>
+            {/* <div className="bg-black text-white w-full sticky bottom-0 lg:px-20 lg:py-5 flex justify-end items-center gap-5 font-montserrat p-5"> */}
             <div className="text-sm">
                 {allowed ? (
                     <>
@@ -168,7 +170,8 @@ const TotalPayments = () => {
                     Beli Sekarang!
                 </div>
             )}
-        </div>
+            {/* </div> */}
+        </Container>
     );
 };
 

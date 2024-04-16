@@ -3,6 +3,7 @@ import sendRequest from "@/lib/baseApi";
 import NotFound from "./not-found";
 import Invoices from "@/components/payment/Invoices";
 import Maintenance from "@/components/maintenance/Maintenance";
+import { Container } from "@/lib/mui";
 
 interface IParams {
     params: {
@@ -21,9 +22,9 @@ const Payment = async ({ params }: IParams) => {
     }
 
     return (
-        <div className="mx-auto font-pulse mt-10">
+        <Container maxWidth="lg" sx={{ paddingBottom: 4 }}>
             <Invoices invoice={invoice.data} />
-        </div>
+        </Container>
     );
 };
 

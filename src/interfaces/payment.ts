@@ -10,6 +10,7 @@ interface IPaymentDetail {
     accountNumber: string;
     bankCode: string;
     merchantCode: string;
+    mobileNumber: string;
 }
 
 interface IInvoice {
@@ -33,6 +34,9 @@ interface IInvoice {
     category: string;
     createdAt: string | Date;
     cd: string;
+    cashtag: string;
+    type: string;
 
+    paymentMethods?: IPaymentMethod;
     detail?: IOrderDetail;
 }

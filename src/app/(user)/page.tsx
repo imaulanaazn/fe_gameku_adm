@@ -16,7 +16,7 @@ const Home = async () => {
 
     const slides = await sendRequest<IImageCarousel[]>("/v1/banners");
     const popularGames = await sendRequest<IGame[]>("/v1/games?isPopular=true");
-    const gameCategories = await sendRequest<IGameCategoryWithGame[]>("/v1/games-category?limit=3&withGame=true");
+    const gameCategories = await sendRequest<IGameCategoryWithGame[]>("/v1/games-category?withGame=true");
     const posts = await sendRequest<{ data: INewsPost[]; totalData: number }>("/v1/newest-articles?limit=3");
     const youtubeVideo = await sendRequest<INewsVideos[]>("/v1/videos");
 

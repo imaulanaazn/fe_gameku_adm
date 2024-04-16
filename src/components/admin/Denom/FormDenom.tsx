@@ -403,7 +403,7 @@ const FormDenom: React.FC<IForm> = ({ handleShowForm, getNewData, type, data, hi
                             <label htmlFor="code">Kode Denom</label>
                             <div className="w-full mt-2">
                                 <input
-                                    disabled={typeForm === "detail"}
+                                    disabled={true}
                                     required
                                     type="text"
                                     name="code"
@@ -412,11 +412,7 @@ const FormDenom: React.FC<IForm> = ({ handleShowForm, getNewData, type, data, hi
                                     autoComplete="off"
                                     value={newData.code}
                                     onChange={(e) => setNewData((prev) => ({ ...prev, code: e.target.value }))}
-                                    className={`${
-                                        typeForm === "detail"
-                                            ? "cursor-not-allowed bg-gray-100"
-                                            : "bg-white bg-opacity-100"
-                                    } border border-gray-200 focus:ring-2 focus:ring-gray-600 focus:outline-none rounded-md py-3 px-2 w-full`}
+                                    className={`cursor-not-allowed bg-gray-100 border border-gray-200 focus:ring-2 focus:ring-gray-600 focus:outline-none rounded-md py-3 px-2 w-full`}
                                 />
                             </div>
                         </div>
@@ -428,7 +424,7 @@ const FormDenom: React.FC<IForm> = ({ handleShowForm, getNewData, type, data, hi
                             </label>
                             <div className="w-full mt-2">
                                 <input
-                                    disabled={typeForm === "detail"}
+                                    disabled={true}
                                     required
                                     type="text"
                                     name="priceBuy"
@@ -444,11 +440,7 @@ const FormDenom: React.FC<IForm> = ({ handleShowForm, getNewData, type, data, hi
                                             priceBuy: parseInt(value),
                                         }));
                                     }}
-                                    className={`${
-                                        typeForm === "detail"
-                                            ? "cursor-not-allowed bg-gray-100"
-                                            : "bg-white bg-opacity-100"
-                                    } border border-gray-200 focus:ring-2 focus:ring-gray-600 focus:outline-none rounded-md py-3 px-2 w-full`}
+                                    className={`cursor-not-allowed bg-gray-100 border border-gray-200 focus:ring-2 focus:ring-gray-600 focus:outline-none rounded-md py-3 px-2 w-full`}
                                 />
                             </div>
                         </div>

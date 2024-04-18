@@ -1,0 +1,60 @@
+"use client";
+
+import Container from "@/components/global/Container/Container";
+import Game from "@/components/global/game/Game";
+import { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
+
+interface IPopularGamesProps {
+  popularGames: IGame[];
+}
+
+const PopularGames: React.FC<IPopularGamesProps> = ({ popularGames }) => {
+  const [limit, setLimit] = useState(6);
+  const limitedPopularGames = popularGames.slice(0, limit);
+
+  const handleClickExpandGame = () => {
+    if (limit > popularGames.length) {
+      setLimit(6);
+    } else {
+      setLimit((prevLimit) => prevLimit + 6);
+    }
+  };
+  return (
+    <Container className="mt-14 md:mt-16 lg:mt-24">
+      <div>
+        <h1 className="text-neutral-900 text-4xl lg:text-5xl font-bold text-center">
+          Sedang Populer
+        </h1>
+        <p className="text-neutral-800 lg:text-lg md:w-3/4 lg:w-2/3 mx-auto text-center mt-4">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo repellat
+          quibusdam ad officiis, saepe modi consequuntur quae hic fugiat
+          incidunt?
+        </p>
+
+        <div className="flex flex-col items-center">
+          <div className="mt-10 flex justify-center items-center gap-4 lg:gap-5 flex-wrap">
+            {limitedPopularGames.map((data) => (
+              <>
+                <Game data={data} key={data.id} />
+              </>
+            ))}
+          </div>
+        </div>
+
+        {limit < popularGames.length && (
+          <button
+            onClick={handleClickExpandGame}
+            className="mx-auto flex items-center gap-2 bg-white mt-8 lg:text-sm text-primary-900 rounded-md py-2 px-4 font-semibold lg:font-medium hover:bg-primary-100"
+          >
+            Muat lebih banyak
+            <FontAwesomeIcon icon={faChevronDown} />
+          </button>
+        )}
+      </div>
+    </Container>
+  );
+};
+
+export default PopularGames;

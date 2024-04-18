@@ -3,32 +3,36 @@ import Image from "next/image";
 import Link from "next/link";
 
 interface IGameProps {
-    data: IGame;
+  data: IGame;
 }
 
 const Game: React.FC<IGameProps> = ({ data }) => {
-    return (
-        <Link
-            key={data.id}
-            href={data.slug}
-            className="flex flex-col w-24 h-44 lg:w-36 lg:h-52 bg-white shadow-lg transform transition-transform hover:scale-105 rounded-md hover:shadow-gray-600 overflow-hidden"
-        >
-            <div className="h-24 lg:h-36 aspect-square flex items-center">
-                <Image
-                    src={data.logoUrl}
-                    alt={`Logo Game Gasskeun Topup ${data.name}`}
-                    width="0"
-                    height="0"
-                    sizes="100vh"
-                    style={{ width: "100%", height: "100%" }}
-                    className="rounded-lg object-cover"
-                />
-            </div>
-            <div className="py-2 px-1">
-                <div className="font-bold text-sm ">{data.name}</div>
-            </div>
-        </Link>
-    );
+  return (
+    <Link
+      key={data.id}
+      href={data.slug}
+      className="flex flex-col bg-white shadow-lg transform transition-transform hover:scale-105 rounded-md hover:shadow-gray-200 overflow-hidden"
+    >
+      <div className="h-36 lg:h-44 xl:lg:h-48 aspect-square flex items-center relative">
+        <Image
+          src={data.logoUrl}
+          alt={`Logo Game Gasskeun Topup ${data.name}`}
+          width="0"
+          height="0"
+          sizes="100vh"
+          style={{ width: "100%", height: "100%" }}
+          className="rounded-lg object-cover"
+        />
+        <div className="w-full py-2 px-2 lg:py-3 lg:px-3 absolute bottom-0 left-0">
+          <div className="w-full py-2 px-2 bg-white rounded-md">
+            <p className="font-semibold text-sm text-neutral-700">
+              {data.name}
+            </p>
+          </div>
+        </div>
+      </div>
+    </Link>
+  );
 };
 
 export default Game;

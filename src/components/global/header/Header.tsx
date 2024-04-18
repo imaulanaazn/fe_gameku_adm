@@ -56,23 +56,14 @@ const Header = () => {
   const [currentPath, setCurrentPath] = useState("");
   const [width, setWidth] = useState(0);
   const [activeSideMenu, setActiveSideMenu] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
   const [isLogged, setIsLogged] = useState(false);
   const [user, setUser] = useRecoilState(userState);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const [logo, setLogo] = useRecoilState(imageAtom);
 
-  const handleScroll = () => {
-    if (window.scrollY > 0) {
-      setIsScrolled(true);
-    } else {
-      setIsScrolled(false);
-    }
-  };
-
   const handleDropdownToggle = () => {
-    setIsDropdownOpen(!isDropdownOpen);
+    setIsDropdownOpen((prevVal) => !prevVal);
   };
 
   const getLogo = async () => {
@@ -154,10 +145,6 @@ const Header = () => {
     if (!logo.logo) {
       getLogo();
     }
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
   }, []);
 
   useEffect(() => {
@@ -216,12 +203,8 @@ const Header = () => {
               {isLogged ? (
                 <div
                   className="relative hidden md:block"
-                  onMouseEnter={() => {
-                    setIsDropdownOpen((prevVal) => !prevVal);
-                  }}
-                  onMouseLeave={() => {
-                    setIsDropdownOpen((prevVal) => !prevVal);
-                  }}
+                  onMouseEnter={handleDropdownToggle}
+                  onMouseLeave={handleDropdownToggle}
                 >
                   <button className="h-full rounded-full px-3 border border-slate-400 border-solid lg:ml-6">
                     <FontAwesomeIcon icon={faUser} className="" />

@@ -45,7 +45,7 @@ const Carousel = ({ slides }: { slides: IImageCarousel[] }) => {
               slidesPerView: 2,
             },
             1440: {
-              slidesPerView: 3,
+              slidesPerView: 2,
             },
           }}
           freeMode={true}

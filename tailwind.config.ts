@@ -14,7 +14,7 @@ const config: Config = {
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
       fontFamily: {
-        inter: ["Inter", "sans-serif"], // The name 'roboto' is arbitrary and can be whatever you want
+        inter: ["Inter", "sans-serif"],
       },
       colors: {
         "primary-900": "#B72025",
@@ -35,6 +35,6 @@ const config: Config = {
       },
     },
   },
-  lugins: [require("@tailwindcss/forms")],
+  plugins: [require("@tailwindcss/forms")],
 };
 export default config;

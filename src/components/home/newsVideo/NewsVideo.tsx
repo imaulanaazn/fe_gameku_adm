@@ -7,6 +7,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import Image from "next/image";
 import { NewsVideoProps } from "@/interfaces/newsVideo";
+import Container from "@/components/global/Container/Container";
 
 const NewsVideo: React.FC<NewsVideoProps> = ({ videos }) => {
   const [videoId, setVideoId] = useState<string>("");
@@ -16,20 +17,20 @@ const NewsVideo: React.FC<NewsVideoProps> = ({ videos }) => {
   }, []);
 
   return (
-    <div className="py-20 bg-black text-white">
-      <div className="container mx-auto sm:px-0 px-5">
+    <div className="py-20 bg-black text-white mt-14 md:mt-16 lg:mt-24">
+      <Container>
         <div className="flex flex-col items-center gap-3 text-center">
-          <p className="font-montserrat font-light text-xs tracking-widest">
-            YOUTUBE CHANNEL
-          </p>
-          <h1 className=" font-semibold text-3xl">News Video on this week</h1>
+          <p className="tracking-widest text-sm">YOUTUBE CHANNEL</p>
+          <h1 className="white text-2xl lg:text-4xl font-bold lg:mt-4">
+            News Video on this week
+          </h1>
           <div className="h-px bg-[#B72025] w-10"></div>
         </div>
-        <div className="py-20 ">
+        <div className="pt-20 ">
           <div className=" max-w-4xl mx-auto ">
             <iframe
               src={`https://www.youtube.com/embed/${videoId}`}
-              className="w-full h-96 mx-auto shadow-lg shadow-slate-600"
+              className="w-full h-96 mx-auto"
             ></iframe>
             <Swiper
               slidesPerView={3}
@@ -37,7 +38,7 @@ const NewsVideo: React.FC<NewsVideoProps> = ({ videos }) => {
               loop={false}
               centeredSlides={true}
               spaceBetween={20}
-              className="mt-10 shadow-md shadow-slate-600"
+              className="mt-10 border-b border-primary-900 border-solid"
             >
               {videos.map((video) => (
                 <SwiperSlide
@@ -58,7 +59,7 @@ const NewsVideo: React.FC<NewsVideoProps> = ({ videos }) => {
             </Swiper>
           </div>
         </div>
-      </div>
+      </Container>
     </div>
   );
 };

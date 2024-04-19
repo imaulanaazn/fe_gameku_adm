@@ -8,6 +8,36 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { imageAtom } from "@/atom/logo";
+import Container from "../Container/Container";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+const linkCepat = [
+  {
+    id: 1,
+    name: "Beranda",
+    url: "#beranda",
+  },
+  {
+    id: 2,
+    name: "Masuk",
+    url: "/login",
+  },
+  {
+    id: 3,
+    name: "Daftar",
+    url: "/register",
+  },
+  {
+    id: 4,
+    name: "Cek pesanan",
+    url: "/cek-pesanan",
+  },
+  {
+    id: 5,
+    name: "Reseller",
+    url: "https://reseller.gasskeuntopup.com/",
+  },
+];
 
 interface DisplaySocialMedia {
   title: string;
@@ -75,77 +105,126 @@ const Footer = () => {
   }, []);
 
   return (
-    <div className="mx-auto">
-      <div className="flex px-5 lg:px-0 justify-center items-center gap-10 py-10 bg-white flex-wrap">
-        <div className="flex flex-col items-center gap-3 lg:items-start">
-          <p className="font-montserrat font-light text-xs tracking-widest">
-            OFFICIAL
-          </p>
-          <h1 className=" font-semibold text-xl">Social Media</h1>
-          <div className="h-px bg-[#B72025] w-10"></div>
-        </div>
-        <div className="flex items-start gap-3 flex-wrap justify-between">
-          {socialMedia.map((value, i) => (
-            <ButtonSocialMedia
-              title={value.title}
-              icon={(brandsIcon as BrandsIconType)[value.icon]}
-              to={value.to || "#"}
-              key={i}
-            />
-          ))}
-        </div>
-      </div>
-      <div className="flex flex-col px-5 sm:px-10 md:flex-row justify-center items-start gap-10 bg-[#B72025] mx-auto py-10 text-white font-montserrat text-sm flex-wrap">
-        <Link href="/" className="h-36 w-36">
-          <Image
-            src={logo.logo_footer}
-            alt="Logo Gasskeun Topup"
-            width="0"
-            height="0"
-            sizes="100vw"
-            style={{ width: "100%", height: "100%" }}
-            className="object-contain"
-          />
-        </Link>
-        <div className=" max-w-xs">
-          <p className="pb-2 font-bold text-lg">About us</p>
-          <p className="font-semibold text-sm">
-            Gasskeun Top Up adalah sebuah website topup game online terpercaya
-            di Indonesia mulai dari Mobile Legends, PUBG Mobile, Free Fire, dan
-            masih banyak lainnya. Untuk mempermudah pembayaran anda disini kami
-            juga menyediakan metode pembayaran Alfamart, Bank BCA, Bank Mandiri,
-            Bank BNI DANA, OVO, dll
-          </p>
-        </div>
-        <div className="lg:h-36 lg:w-px md:w-full md:bg-white md:border-1 md:h-px"></div>
-        <div className="max-w-sm">
-          <div className="flex pt-10 justify-center items-center gap-5 font-bold text-lg">
-            <p>
-              MAU JOIN <br></br>RESELLER?
-            </p>
-            <Link
-              href={process.env.NEXT_PUBLIC_HOST_RESELLER || "#"}
-              className="sm:py-4 sm:px-8 py-2 px-3 bg-white text-[#B72025] rounded-lg"
+    <footer className="bg-black py-14 lg:py-20">
+      <Container>
+        <div>
+          {/* UPPER FOOTER */}
+          <div className="md:flex justify-between items-end">
+            <h1 className="flex-1 text-white text-2xl lg:text-3xl font-bold">
+              Top-up Lebih Mudah Di Gasskeun Top-up
+            </h1>
+            <a
+              href="/#"
+              className="hidden lg:block flex-1 flex items-center justify-center"
             >
-              GABUNG SEKARANG!
-            </Link>
-            {/* <Link
-                            href={linkWhatsapp}
-                            className="sm:py-4 sm:px-8 py-2 px-3 bg-white text-[#B72025] rounded-lg"
-                        >
-                            GABUNG SEKARANG!
-                        </Link> */}
+              <Link href="/">
+                <Image
+                  src={logo.logo_footer}
+                  alt="Logo Gasskeun Topup"
+                  width="160"
+                  height="160"
+                  className="object-contain mx-auto"
+                />
+              </Link>
+            </a>
+            <div className="flex-1 flex justify-end mt-8">
+              <button className="w-full md:w-max bg-primary-900 py-3 px-5 text-white rounded-full font-semibold hover:bg-white hover:text-black">
+                Join reseller
+              </button>
+            </div>
+          </div>
+
+          <div className="border-b border-neutral-400 border-solid my-8 md:my-12 lg:my-16"></div>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 justify-between gap-y-14 gap-x-5 md:gap-y-8 lg:gap-x-16">
+            {/* GASSKEUN TOP UP EXPLANATION FOOTER SECTION */}
+            <div className="col-start-1 col-end-3 md:col-end-4 lg:col-end-3">
+              <h2 className="text-white font-bold text-lg uppercase">
+                Tentang Gasskeun Top-up
+              </h2>
+              <p className="text-white mt-4 lg:mt-6">
+                Gasskeun Top Up adalah sebuah website topup game online
+                terpercaya di Indonesia mulai dari Mobile Legends, PUBG Mobile,
+                Free Fire, dan masih banyak lainnya. untuk mempermudah
+                pembayaran anda disini kami juga menyediokan metode pembayaran
+                Alfamart, Bank BCA, Bank Mandiri, Bank BNI DANA, OVO, dll
+              </p>
+              <div className="flex flex-wrap mt-4">
+                {socialMedia.map((value) => (
+                  <Link
+                    key={value.title}
+                    href={value.to}
+                    target="_blank"
+                    className="text-white text-sm px-4"
+                  >
+                    <FontAwesomeIcon
+                      icon={(brandsIcon as BrandsIconType)[value.icon]}
+                      size="xl"
+                    />
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* LINK CEPAT GRID ITEM */}
+            <div>
+              <p className="text-white font-bold uppercase mb-2 lg:mb-4">
+                Link Cepat
+              </p>
+              <ul>
+                {linkCepat.map((link) => (
+                  <li className="text-neutral-400 mt-3" key={link.id}>
+                    <Link
+                      className="border-b border-solid border-black hover:border-white hover:text-white"
+                      href={link.url}
+                    >
+                      {link.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* SOCIAL MEDIA GRID ITEM */}
+            <div>
+              <p className="text-white font-bold uppercase mb-2 lg:mb-4">
+                Ikuti Kami
+              </p>
+              <ul>
+                {socialMedia.map((item) => (
+                  <li className="text-neutral-400 mt-3" key={item.title}>
+                    <Link
+                      className="border-b border-solid border-black hover:border-white hover:text-white"
+                      target="_blank"
+                      href={item.to}
+                    >
+                      {item.title}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* LEGAL GRID ITEM */}
+            <div>
+              <p className="text-white font-bold uppercase">Legal</p>
+              <Link
+                className="text-neutral-400 inline-block mt-3 border-b border-solid border-black hover:border-white hover:text-white"
+                href="#"
+              >
+                Privacy Policy
+              </Link>
+              <Link
+                className="text-neutral-400 inline-block mt-3 border-b border-solid border-black hover:border-white hover:text-white"
+                href="#"
+              >
+                Terms & Conditions
+              </Link>
+            </div>
           </div>
         </div>
-      </div>
-      <footer className="bg-black text-white py-4">
-        <div className="container mx-auto">
-          <div className="text-center">
-            <p>&copy; {new Date().getFullYear()} Gasskeun Topup</p>
-          </div>
-        </div>
-      </footer>
-    </div>
+      </Container>
+    </footer>
   );
 };
 

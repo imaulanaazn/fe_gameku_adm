@@ -11,6 +11,7 @@ import { Metadata } from "next";
 import CompLayanan from "@/components/layanan/CompLayanan";
 import Container from "@/components/global/Container/Container";
 import Image from "next/image";
+import Footer from "@/components/global/footer/Footer";
 
 const defaultCategory = [
   {

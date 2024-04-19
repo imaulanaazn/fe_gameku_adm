@@ -41,6 +41,9 @@ const FormOrders: React.FC<IForm> = ({ handleShowForm, getNewData, type, data })
         logoUrl: "",
         quantity: 0,
         custName: "",
+        isError: false,
+        isCanResend: false,
+        remark: "",
         detail: {
             id: "",
             orderId: "",
@@ -79,6 +82,9 @@ const FormOrders: React.FC<IForm> = ({ handleShowForm, getNewData, type, data })
                 logoUrl: data.logoUrl,
                 quantity: data.quantity,
                 custName: data.custName,
+                isError: data.isError,
+                isCanResend: data.isCanResend,
+                remark: data.remark,
                 detail: {
                     id: data.detail.id,
                     orderId: data.detail.orderId,
@@ -155,6 +161,44 @@ const FormOrders: React.FC<IForm> = ({ handleShowForm, getNewData, type, data })
                 data?.game
             }`,
         );
+    };
+
+    const handleResendOrder = async () => {
+        setLoading(true);
+        const toastId = toast.loading("Sedang mengirim ulang transaksi...");
+        const req = await fetch(process.env.NEXT_PUBLIC_BASE_URL + "/v1/order/resend", {
+            cache: "no-cache",
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "content-type": "application/json",
+            },
+            body: JSON.stringify({
+                orderId: newData.id,
+            }),
+        });
+
+        if (req.ok) {
+            getNewData();
+            toast.update(toastId, {
+                render: "Berhasil mengirim ulang transaksi",
+                type: "success",
+                isLoading: false,
+                position: "top-right",
+                autoClose: 3000,
+            });
+        } else {
+            const res = await req.json();
+            toast.update(toastId, {
+                render: res.message,
+                type: "error",
+                isLoading: false,
+                position: "top-right",
+                autoClose: 3000,
+            });
+        }
+        setLoading(false);
+        handleShowForm(false);
     };
 
     return (
@@ -423,8 +467,36 @@ const FormOrders: React.FC<IForm> = ({ handleShowForm, getNewData, type, data })
                             />
                         </div>
                     </div>
+                    {newData.status === "6" && newData.isError && (
+                        <div className="mt-3 w-full">
+                            <label htmlFor="serverId">Error</label>
+                            <div className="w-full mt-2">
+                                <input
+                                    disabled={typeForm === "detail"}
+                                    required
+                                    type="text"
+                                    name="serverId"
+                                    id="serverId"
+                                    autoComplete="off"
+                                    defaultValue={newData.remark}
+                                    className={`cursor-not-allowed bg-gray-100 border border-gray-200 focus:ring-2 focus:ring-gray-600 focus:outline-none rounded-md py-3 px-2 w-full`}
+                                />
+                            </div>
+                        </div>
+                    )}
+
                     <div className="flex justify-end space-x-2 sticky -bottom-4 bg-white py-5">
-                        <div className="relative">
+                        <div className="relative flex gap-2">
+                            {newData.status === "6" && newData.isError && newData.isCanResend && (
+                                <button
+                                    type="button"
+                                    disabled={false}
+                                    onClick={handleResendOrder}
+                                    className={`hover:bg-green-400 bg-green-600 text-white font-semibold py-3 px-5 rounded-md`}
+                                >
+                                    Resend Order
+                                </button>
+                            )}
                             <button
                                 type="button"
                                 onClick={handleClickCopyTrx}
@@ -443,15 +515,6 @@ const FormOrders: React.FC<IForm> = ({ handleShowForm, getNewData, type, data })
                                     delayHide={1000}
                                 />
                             </button>
-                            {/* {true && <p className="absolute -top-5">Disalin</p>}
-                        <button
-                            type="button"
-                            disabled={false}
-                            onClick={handleClickCopyTrx}
-                            className={`hover:bg-green-400 bg-green-600 text-white font-semibold py-3 px-5 rounded-md`}
-                        >
-                            Copy Data Trx
-                        </button> */}
                         </div>
                         {newData.status === "2" && (
                             <>

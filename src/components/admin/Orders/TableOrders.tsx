@@ -24,6 +24,9 @@ import dayjs from "dayjs";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import FormOrders from "./FormOrders";
+import { RefreshCircle } from "mdi-material-ui";
+import { Box } from "@mui/system";
+import { Button } from "@mui/material";
 const column = [
     {
         id: "game",
@@ -579,10 +582,18 @@ const TableOrders: React.FC<{ data: IOrderWithAnalitycsPaginationWithDetail }> =
                     <Loading />
                 ) : (
                     <div className="w-full bg-white rounded shadow overflow-y-hidden mt-5">
-                        <div className={`p-5 bg-white`}>
+                        <div className={`p-5 bg-white flex justify-between items-center`}>
                             <div className="flex items-center justify-between">
                                 <p className="text-xl font-semibold">Pesanan</p>
                             </div>
+                            <Box
+                                onClick={() => getNewData()}
+                                sx={{
+                                    cursor: "pointer",
+                                }}
+                            >
+                                <RefreshCircle sx={{ width: 35, height: 35, marginRight: 4, color: "#333" }} />
+                            </Box>
                         </div>
                         <div className="flex flex-col">
                             <div className="overflow-x-auto">

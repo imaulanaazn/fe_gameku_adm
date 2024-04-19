@@ -11,6 +11,9 @@ interface IOrder {
     discAmt: number;
     promoCd: string;
     status: string;
+    remark?: string;
+    isError?: boolean;
+    isCanResend?: boolean;
     completedAt?: Date | string;
     createdAt: string | Date;
     updatedAt: string | Date;

@@ -86,8 +86,13 @@ const NoGameFound = () => {
               saranmu kepada gasskeun top up agar kami bisa melayani pelanggan
               lebih baik lagi.
             </p>
-            <button className="bg-white text-primary-900 mt-8 lg:text-sm rounded-md py-2 px-4 lg:py-3 lg:px-5 font-semibold lg:font-medium">
-              Hubungi sekarang
+            <button className="bg-white text-primary-900 mt-8 lg:text-sm rounded-md py-2 px-4 lg:py-3 lg:px-5 font-semibold lg:font-medium hover:bg-black hover:text-white">
+              <a
+                href="https://api.whatsapp.com/send?phone=628112065672"
+                target="_blank"
+              >
+                Hubungi sekarang
+              </a>
             </button>
           </div>
           <div className="hidden lg:block right-side flex-1">

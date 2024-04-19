@@ -152,6 +152,7 @@ const Header = () => {
       setIsLogged(true);
     }
   }, [user]);
+
   return (
     <>
       <header className="relative bg-white">
@@ -176,7 +177,14 @@ const Header = () => {
               <nav className="hidden lg:block">
                 <ul className="flex text-sm xl:text-base font-medium text-primary-900 flex gap-4 xl:gap-6 items-center">
                   {links.map((link) => (
-                    <li key={link.id}>
+                    <li
+                      key={link.id}
+                      className={`border-b ${
+                        currentPath === link.url
+                          ? "border-primary-900"
+                          : "border-white"
+                      } border-solid py-3`}
+                    >
                       <Link href={link.url}>{link.name}</Link>
                     </li>
                   ))}
@@ -237,10 +245,10 @@ const Header = () => {
                 <>
                   {/* Show authentication button when user not authenticated */}
                   <button className="hidden lg:inline bg-white lg:text-sm text-primary-900 rounded-md py-2 px-4 font-semibold lg:font-medium">
-                    Masuk
+                    <Link href="/login">Masuk</Link>
                   </button>
-                  <button className="hidden lg:inline bg-primary-900 lg:text-sm text-white rounded-md py-2 px-4 font-semibold lg:font-medium">
-                    Daftar
+                  <button className="hidden lg:inline bg-primary-900 lg:text-sm text-white rounded-md py-2 px-4 font-semibold lg:font-medium hover:bg-black hover:text-white">
+                    <Link href="/register">Daftar</Link>
                   </button>
                 </>
               )}
@@ -302,10 +310,10 @@ const Header = () => {
           {!isLogged && (
             <div className="auth-buttons flex gap-2 mt-6 md:hidden">
               <button className="text-primary-900 flex-1 w-full font-semibold">
-                Masuk
+                <Link href="/login">Masuk</Link>
               </button>
-              <button className="bg-primary-900 text-white rounded-md py-2 flex-1 w-full font-semibold">
-                Mendaftar
+              <button className="bg-primary-900 text-white rounded-md py-2 flex-1 w-full font-semibold hover:bg-black hover:text-white">
+                <Link href="/login">Daftar</Link>
               </button>
             </div>
           )}

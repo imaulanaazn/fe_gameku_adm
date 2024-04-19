@@ -27,8 +27,7 @@ const Layanan = async () => {
   const games = await sendRequest<IGame[]>("/v1/games");
 
   return (
-    <div className="container mx-auto mt-10 px-5 lg:px-0">
-      <h1 className=" text-2xl">Daftar Layanan</h1>
+    <div className="container mx-auto mt-10 px-5 lg:px-0 pb-20">
       <CompLayanan
         defaultCategory={defaultCategory}
         gameCategories={gameCategories.data}

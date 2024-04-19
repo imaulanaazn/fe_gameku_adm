@@ -7,7 +7,7 @@ const ListGames: React.FC<ListGameProps> = ({
 }) => {
   return (
     <div
-      className={`${backgroundColor} font-pulse px-5 py-20 text-center w-full flex items-center justify-center`}
+      className={`${backgroundColor}  px-5 py-20 text-center w-full flex items-center justify-center`}
     >
       <div className="container max-w-screen-xl flex flex-col items-center">
         <div className="w-full flex justify-center items-center">

@@ -8,6 +8,15 @@ import { IImageCarousel } from "@/interfaces/carousels";
 import { INewsVideos } from "@/interfaces/newsVideo";
 import sendRequest from "@/lib/baseApi";
 import { Metadata } from "next";
+import CompLayanan from "@/components/layanan/CompLayanan";
+
+const defaultCategory = [
+  {
+    id: "all",
+    name: "Semua Game",
+  },
+  { id: "popular", name: "Game Popular" },
+];
 
 const Home = async () => {
   const statusWebsite = await sendRequest<{ value: string }[]>(
@@ -19,9 +28,13 @@ const Home = async () => {
 
   const slides = await sendRequest<IImageCarousel[]>("/v1/banners");
   const popularGames = await sendRequest<IGame[]>("/v1/games?isPopular=true");
-  const gameCategories = await sendRequest<IGameCategoryWithGame[]>(
+  const categoriesAndGames = await sendRequest<IGameCategoryWithGame[]>(
     "/v1/games-category?withGame=true"
   );
+  const gameCategories = await sendRequest<IGameCategory[]>(
+    "/v1/games-category"
+  );
+  const games = await sendRequest<IGame[]>("/v1/games");
   const posts = await sendRequest<{ data: INewsPost[]; totalData: number }>(
     "/v1/newest-articles?limit=3"
   );
@@ -35,7 +48,13 @@ const Home = async () => {
         <PopularGames popularGames={popularGames.data} />
       )}
 
-      {gameCategories.data.map((data, index) => (
+      <CompLayanan
+        defaultCategory={defaultCategory}
+        games={games.data}
+        gameCategories={gameCategories.data}
+      />
+
+      {categoriesAndGames.data.map((data, index) => (
         <ListGames
           key={index}
           backgroundColor={index % 2 === 0 ? "bg-white" : "bg-[#F4F4F4]"}

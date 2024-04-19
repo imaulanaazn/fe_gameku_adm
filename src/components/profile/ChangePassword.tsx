@@ -8,102 +8,112 @@ import { toast } from "react-toastify";
 import { useRecoilState } from "recoil";
 
 const ChangePassword = () => {
-    const [loading, setLoading] = useState(false);
-    const [data, setData] = useState({
-        oldPassword: "",
-        newPassword: "",
-    });
-    const [user, setUser] = useRecoilState(userState);
-    const handleSubmitChangeEmail = async (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState({
+    oldPassword: "",
+    newPassword: "",
+  });
+  const [user, setUser] = useRecoilState(userState);
+  const handleSubmitChangeEmail = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-        const toastId = toast.loading("Sedang mengubah password...");
-        const req = await fetch(process.env.NEXT_PUBLIC_BASE_URL + "/v1/customer/update?type=password", {
-            method: "PUT",
-            credentials: "include",
-            headers: {
-                "content-type": "application/json",
-                "ngrok-skip-browser-warning": "true",
-            },
-            body: JSON.stringify({
-                ...data,
-                id: user.id,
-            }),
-        });
-
-        const res = await req.json();
-        if (!req.ok) {
-            toast.update(toastId, {
-                render: res.message,
-                type: "error",
-                isLoading: false,
-                position: "top-right",
-                autoClose: 3000,
-            });
-        } else {
-            toast.update(toastId, {
-                render: "Berhasil mengubah password",
-                type: "success",
-                isLoading: false,
-                position: "top-right",
-                autoClose: 3000,
-            });
-        }
-
-        setData({
-            oldPassword: "",
-            newPassword: "",
-        });
-        setLoading(false);
-    };
-    return (
-        <>
-            <div className="flex flex-col items-center gap-3 my-10">
-                <h1 className="font-pulse font-semibold text-2xl">Ganti Password</h1>
-            </div>
-            <form onSubmit={handleSubmitChangeEmail} className="w-full max-w-md text-xs text-black">
-                <div className="mb-4">
-                    <input
-                        type="password"
-                        id="oldPassword"
-                        className="w-full p-4 border"
-                        value={data.oldPassword}
-                        onChange={(e) => setData((prev) => ({ ...prev, oldPassword: e.target.value }))}
-                        required
-                        placeholder="Password Lama"
-                    />
-                </div>
-                <div className="mb-4">
-                    <input
-                        type="password"
-                        id="newPassword"
-                        className="w-full p-4 border"
-                        value={data.newPassword}
-                        onChange={(e) => setData((prev) => ({ ...prev, newPassword: e.target.value }))}
-                        required
-                        placeholder="Password Baru"
-                    />
-                </div>
-                {loading ? (
-                    <div className="w-full py-5 bg-gray-400 text-black cursor-wait">
-                        <FontAwesomeIcon icon={faSpinner} size="2x" spinPulse />
-                    </div>
-                ) : (
-                    <button
-                        type="submit"
-                        disabled={!data.newPassword || !data.oldPassword}
-                        className={`${
-                            !data.newPassword || !data.oldPassword
-                                ? "bg-gray-400 text-black cursor-not-allowed"
-                                : "bg-[#B72025] text-white hover:bg-[#c5474c] cursor-pointer"
-                        } w-full py-5`}
-                    >
-                        Update
-                    </button>
-                )}
-            </form>
-        </>
+    const toastId = toast.loading("Sedang mengubah password...");
+    const req = await fetch(
+      process.env.NEXT_PUBLIC_BASE_URL + "/v1/customer/update?type=password",
+      {
+        method: "PUT",
+        credentials: "include",
+        headers: {
+          "content-type": "application/json",
+          "ngrok-skip-browser-warning": "true",
+        },
+        body: JSON.stringify({
+          ...data,
+          id: user.id,
+        }),
+      }
     );
+
+    const res = await req.json();
+    if (!req.ok) {
+      toast.update(toastId, {
+        render: res.message,
+        type: "error",
+        isLoading: false,
+        position: "top-right",
+        autoClose: 3000,
+      });
+    } else {
+      toast.update(toastId, {
+        render: "Berhasil mengubah password",
+        type: "success",
+        isLoading: false,
+        position: "top-right",
+        autoClose: 3000,
+      });
+    }
+
+    setData({
+      oldPassword: "",
+      newPassword: "",
+    });
+    setLoading(false);
+  };
+  return (
+    <>
+      <div className="flex flex-col items-center gap-3 my-10">
+        <h1 className=" font-semibold text-2xl">Ganti Password</h1>
+      </div>
+      <form
+        onSubmit={handleSubmitChangeEmail}
+        className="w-full max-w-md text-xs text-black"
+      >
+        <div className="mb-4">
+          <input
+            type="password"
+            id="oldPassword"
+            className="w-full p-4 border"
+            value={data.oldPassword}
+            onChange={(e) =>
+              setData((prev) => ({ ...prev, oldPassword: e.target.value }))
+            }
+            required
+            placeholder="Password Lama"
+          />
+        </div>
+        <div className="mb-4">
+          <input
+            type="password"
+            id="newPassword"
+            className="w-full p-4 border"
+            value={data.newPassword}
+            onChange={(e) =>
+              setData((prev) => ({ ...prev, newPassword: e.target.value }))
+            }
+            required
+            placeholder="Password Baru"
+          />
+        </div>
+        {loading ? (
+          <div className="w-full py-5 bg-gray-400 text-black cursor-wait">
+            <FontAwesomeIcon icon={faSpinner} size="2x" spinPulse />
+          </div>
+        ) : (
+          <button
+            type="submit"
+            disabled={!data.newPassword || !data.oldPassword}
+            className={`${
+              !data.newPassword || !data.oldPassword
+                ? "bg-gray-400 text-black cursor-not-allowed"
+                : "bg-[#B72025] text-white hover:bg-[#c5474c] cursor-pointer"
+            } w-full py-5`}
+          >
+            Update
+          </button>
+        )}
+      </form>
+    </>
+  );
 };
 
 export default ChangePassword;

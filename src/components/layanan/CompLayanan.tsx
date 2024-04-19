@@ -1,35 +1,52 @@
 "use state";
-
+import Container from "@/components/global/Container/Container";
 import FormSearch from "./FormSearch";
 import GameLayanan from "./GameLayanan";
 import ListCategory from "./ListCategory";
 
 interface ICompLayananProps {
-    defaultCategory: IGameCategory[];
-    gameCategories: IGameCategory[];
-    games: IGame[];
+  defaultCategory: IGameCategory[];
+  gameCategories: IGameCategory[];
+  games: IGame[];
 }
 
-const CompLayanan: React.FC<ICompLayananProps> = ({ gameCategories, games, defaultCategory }) => {
-    const filterPopular = games.filter((item) => item.isPopular);
-    if (filterPopular.length === 0) {
-        defaultCategory = defaultCategory.filter((item) => item.id !== "popular");
-    }
-    return (
-        <>
+const CompLayanan: React.FC<ICompLayananProps> = ({
+  gameCategories,
+  games,
+  defaultCategory,
+}) => {
+  const filterPopular = games.filter((item) => item.isPopular);
+  if (filterPopular.length === 0) {
+    defaultCategory = defaultCategory.filter((item) => item.id !== "popular");
+  }
+  return (
+    <Container className="mt-14 md:mt-16 lg:mt-24">
+      <div>
+        <h1 className="text-neutral-900 text-4xl lg:text-5xl font-bold text-center">
+          Layanan
+        </h1>
+        <p className="text-neutral-800 lg:text-lg md:w-3/4 lg:w-2/3 mx-auto text-center mt-4">
+          Kami menyediakan berbagai layanan untuk memenuhi segala kebutuhan
+          digitalmu hanya dengan satu platform yang terintegrasi
+        </p>
+        <div className="mt-8 flex items-center justify-between flex-col-reverse lg:flex-row items-center">
+          <div className="w-10/12 flex gap-3 mt-3 w-full lg:w-auto overflow-x-scroll sm:overflow-x-auto">
+            {defaultCategory.map((data) => (
+              <ListCategory data={data} key={data.id} />
+            ))}
+            {gameCategories.map((data) => (
+              <ListCategory data={data} key={data.id} />
+            ))}
+          </div>
+          <div className="w-full lg:w-2/12">
             <FormSearch />
-            <div className="flex gap-3 mt-3 w-full overflow-x-scroll sm:overflow-x-auto">
-                {defaultCategory.map((data) => (
-                    <ListCategory data={data} key={data.id} />
-                ))}
-                {gameCategories.map((data) => (
-                    <ListCategory data={data} key={data.id} />
-                ))}
-            </div>
+          </div>
+        </div>
 
-            <GameLayanan games={games} />
-        </>
-    );
+        <GameLayanan games={games} />
+      </div>
+    </Container>
+  );
 };
 
 export default CompLayanan;

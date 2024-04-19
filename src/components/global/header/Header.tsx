@@ -21,6 +21,7 @@ import { useRecoilState } from "recoil";
 import { imageAtom } from "@/atom/logo";
 import { toast } from "react-toastify";
 import Container from "../Container/Container";
+import SearchResultModal from "./SearchResultModal";
 
 const links = [
   {
@@ -59,6 +60,7 @@ const Header = () => {
   const [isLogged, setIsLogged] = useState(false);
   const [user, setUser] = useRecoilState(userState);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [showSearchModal, setShowSearchModal] = useState(false);
 
   const [logo, setLogo] = useRecoilState(imageAtom);
 
@@ -157,7 +159,7 @@ const Header = () => {
     <>
       <header className="relative bg-white">
         <Container>
-          <div className="flex justify-between items-center gap-6 h-20">
+          <div className="flex justify-between items-center md:gap-6 h-20">
             <div className="left-side flex items-center gap-6 xl:gap-8">
               <div className="logo">
                 <Link href="/" className="flex items-center w-12 h-12">
@@ -193,12 +195,18 @@ const Header = () => {
             </div>
 
             <div className="right-side flex gap-6 lg:gap-2">
-              <div className="search-bar w-full  relative">
-                <input
-                  type="text"
+              <div
+                className="search-bar w-full relative"
+                onClick={() => {
+                  setShowSearchModal(true);
+                }}
+              >
+                <button
                   placeholder="Cari game"
-                  className="w-full py-2 px-3 lg:text-sm border border-solid border-slate-400 rounded-md"
-                />
+                  className="py-2 px-8 border border-solid border-slate-400 rounded-md hover:cursor-pointer w-56 md:w-60 text-start"
+                >
+                  Search games
+                </button>
                 <button>
                   <FontAwesomeIcon
                     icon={faMagnifyingGlass}
@@ -318,6 +326,11 @@ const Header = () => {
             </div>
           )}
         </div>
+
+        <SearchResultModal
+          showSearchModal={showSearchModal}
+          setShowSearchModal={setShowSearchModal}
+        />
       </header>
     </>
   );

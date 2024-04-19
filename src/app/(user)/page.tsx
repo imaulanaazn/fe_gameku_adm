@@ -9,6 +9,7 @@ import { INewsVideos } from "@/interfaces/newsVideo";
 import sendRequest from "@/lib/baseApi";
 import { Metadata } from "next";
 import CompLayanan from "@/components/layanan/CompLayanan";
+import Container from "@/components/global/Container/Container";
 
 const defaultCategory = [
   {
@@ -55,13 +56,9 @@ const Home = async () => {
       />
 
       {categoriesAndGames.data.map((data, index) => (
-        <ListGames
-          key={index}
-          backgroundColor={index % 2 === 0 ? "bg-white" : "bg-[#F4F4F4]"}
-          title={data.name}
-          data={data.games}
-        />
+        <ListGames key={index} title={data.name} data={data.games} />
       ))}
+
       {posts.data.data.length > 0 && <NewsPost posts={posts.data.data} />}
       {youtubeVideo.data.length > 0 && <NewsVideo videos={youtubeVideo.data} />}
     </div>

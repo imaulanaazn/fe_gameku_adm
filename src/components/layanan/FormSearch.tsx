@@ -23,7 +23,7 @@ const FormSearch = () => {
             type="text"
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Cari game"
-            className="w-full py-2 px-3 text-sm border border-solid border-slate-400 rounded-md focus:border-primary-900"
+            className="w-full py-2 px-3 text-sm border border-solid border-slate-400 rounded-md"
           />
           <button onClick={handleClickSearch} type="submit">
             <FontAwesomeIcon

@@ -205,7 +205,7 @@ const Header = () => {
                   placeholder="Cari game"
                   className="py-2 px-8 border border-solid border-slate-400 rounded-md hover:cursor-pointer w-56 md:w-60 text-start"
                 >
-                  Search games
+                  Cari game
                 </button>
                 <button>
                   <FontAwesomeIcon

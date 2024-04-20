@@ -252,45 +252,47 @@ const FormLogin = () => {
           placeholder="Password"
         />
       </div>
-      <label
-        htmlFor="otp"
-        className="font-medium text-base text-neutral-900 inline-block mb-1.5"
-      >
-        OTP
-      </label>
-      <div className="mb-6 flex justify-between gap-4">
-        <div className="w-full">
-          <input
-            type="text"
-            id="otp"
-            className="w-full py-3 px-4 bg-slate-200 rounded-md text-sm placeholder:text-sm overflow-hidden border border-solid border-white focus:bg-white focus:ring-0 focus:border-primary-900"
-            value={data.otp}
-            onChange={(e) =>
-              setData((prev) => ({ ...prev, otp: e.target.value }))
-            }
-            required
-            placeholder="Kode OTP"
-          />
-        </div>
-        <div>
-          {timeRemaining && timeRemaining > 0 ? (
-            <div className="h-full w-12 text-black flex items-center justify-center cursor-not-allowed rounded-md bg-slate-200">
-              {timeRemaining}
-            </div>
-          ) : (
-            <button
-              type="button"
-              disabled={disableBtnReqOtp}
-              onClick={() => handleRequestOTP()}
-              className={`shrink-0 h-full w-max ${
-                disableBtnReqOtp
-                  ? "bg-gray-400 text-slate-500 cursor-not-allowed px-4 bg-slate-200 border-0 rounded-md text-sm"
-                  : "text-white bg-[#B72025] cursor-pointer py-3 px-4 border-0 rounded-md text-sm hover:bg-black hover:text-white transition-all"
-              }`}
-            >
-              Request OTP
-            </button>
-          )}
+      <div>
+        <label
+          htmlFor="otp"
+          className="font-medium text-base text-neutral-900 inline-block mb-1.5"
+        >
+          OTP
+        </label>
+        <div className="mb-6 flex justify-between gap-4">
+          <div className="w-full">
+            <input
+              type="text"
+              id="otp"
+              className="w-full py-3 px-4 bg-slate-200 rounded-md text-sm placeholder:text-sm overflow-hidden border border-solid border-white focus:bg-white focus:ring-0 focus:border-primary-900"
+              value={data.otp}
+              onChange={(e) =>
+                setData((prev) => ({ ...prev, otp: e.target.value }))
+              }
+              required
+              placeholder="Kode OTP"
+            />
+          </div>
+          <div>
+            {timeRemaining && timeRemaining > 0 ? (
+              <div className="h-full w-12 text-black flex items-center justify-center cursor-not-allowed rounded-md bg-slate-200">
+                {timeRemaining}
+              </div>
+            ) : (
+              <button
+                type="button"
+                disabled={disableBtnReqOtp}
+                onClick={() => handleRequestOTP()}
+                className={`shrink-0 h-full w-max ${
+                  disableBtnReqOtp
+                    ? "bg-primary-300 text-white cursor-not-allowed px-4 border-0 rounded-md text-sm"
+                    : "text-white bg-primary-900 cursor-pointer py-3 px-4 border-0 rounded-md text-sm hover:bg-black hover:text-white transition-all"
+                }`}
+              >
+                Request OTP
+              </button>
+            )}
+          </div>
         </div>
       </div>
       {loading ? (

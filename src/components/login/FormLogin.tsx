@@ -24,7 +24,7 @@ const FormLogin = () => {
   const [loading, setLoading] = useState(false);
   const [isPhoneNumber, setIsPhoneNumber] = useState(false);
   const [isEmail, setIsEmail] = useState(false);
-  const [timeRemaining, setTimeRemaining] = useState<number | null>(null);
+  const [timeRemaining, setTimeRemaining] = useState<number | null>();
   const [disableBtnReqOtp, setDisableBtnReqOtp] = useState(true);
 
   const handleSubmit = async (e: any) => {
@@ -205,7 +205,7 @@ const FormLogin = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="w-full max-w-md text-xs text-black"
+      className="w-full max-w-lg text-xs text-black text-left"
     >
       {errorMessage && (
         <Alert
@@ -215,10 +215,16 @@ const FormLogin = () => {
         />
       )}
       <div className="mb-4">
+        <label
+          htmlFor="username"
+          className="font-medium text-base text-neutral-900 inline-block mb-1.5"
+        >
+          Username
+        </label>
         <input
           type="text"
           id="username"
-          className="w-full p-4 border"
+          className="w-full py-3 px-4 bg-slate-200 rounded-md text-sm placeholder:text-sm overflow-hidden border border-solid border-white focus:bg-white focus:ring-0 focus:border-primary-900"
           value={data.username}
           onChange={(e) =>
             setData((prev) => ({ ...prev, username: e.target.value }))
@@ -228,10 +234,16 @@ const FormLogin = () => {
         />
       </div>
       <div className="mb-4">
+        <label
+          htmlFor="password"
+          className="font-medium text-base text-neutral-900 inline-block mb-1.5"
+        >
+          Password
+        </label>
         <input
           type="password"
           id="password"
-          className="w-full p-4 border"
+          className="w-full py-3 px-4 bg-slate-200 rounded-md text-sm placeholder:text-sm overflow-hidden border border-solid border-white focus:bg-white focus:ring-0 focus:border-primary-900"
           value={data.password}
           onChange={(e) =>
             setData((prev) => ({ ...prev, password: e.target.value }))
@@ -240,12 +252,18 @@ const FormLogin = () => {
           placeholder="Password"
         />
       </div>
-      <div className="mb-6 flex">
+      <label
+        htmlFor="otp"
+        className="font-medium text-base text-neutral-900 inline-block mb-1.5"
+      >
+        OTP
+      </label>
+      <div className="mb-6 flex justify-between gap-4">
         <div className="w-full">
           <input
             type="text"
             id="otp"
-            className="w-full p-4 border"
+            className="w-full py-3 px-4 bg-slate-200 rounded-md text-sm placeholder:text-sm overflow-hidden border border-solid border-white focus:bg-white focus:ring-0 focus:border-primary-900"
             value={data.otp}
             onChange={(e) =>
               setData((prev) => ({ ...prev, otp: e.target.value }))
@@ -254,9 +272,9 @@ const FormLogin = () => {
             placeholder="Kode OTP"
           />
         </div>
-        <div className="w-40">
+        <div>
           {timeRemaining && timeRemaining > 0 ? (
-            <div className="w-full h-full bg-gray-400 text-black flex items-center justify-center cursor-not-allowed">
+            <div className="h-full w-12 text-black flex items-center justify-center cursor-not-allowed rounded-md bg-slate-200">
               {timeRemaining}
             </div>
           ) : (
@@ -264,10 +282,10 @@ const FormLogin = () => {
               type="button"
               disabled={disableBtnReqOtp}
               onClick={() => handleRequestOTP()}
-              className={`w-full h-full ${
+              className={`shrink-0 h-full w-max ${
                 disableBtnReqOtp
-                  ? "bg-gray-400 text-black cursor-not-allowed"
-                  : "text-white bg-[#B72025] cursor-pointer"
+                  ? "bg-gray-400 text-slate-500 cursor-not-allowed px-4 bg-slate-200 border-0 rounded-md text-sm"
+                  : "text-white bg-[#B72025] cursor-pointer py-3 px-4 border-0 rounded-md text-sm hover:bg-black hover:text-white transition-all"
               }`}
             >
               Request OTP
@@ -276,18 +294,18 @@ const FormLogin = () => {
         </div>
       </div>
       {loading ? (
-        <div className="w-full py-5 bg-gray-400 text-black cursor-wait">
-          <FontAwesomeIcon icon={faSpinner} size="2x" spinPulse />
+        <div className="w-full bg-slate-200 text-center py-3 px-4 rounded-md text-base font-semibold cursor-wait">
+          <FontAwesomeIcon icon={faSpinner} size="1x" spinPulse />
         </div>
       ) : allowed ? (
         <button
           type="submit"
-          className={`w-full py-5 bg-[#B72025] text-white hover:bg-[#c5474c] cursor-pointer`}
+          className="text-center bg-primary-900 text-white w-full py-3 px-4 rounded-md text-base font-semibold hover:bg-black hover:text-white transition-all"
         >
           Masuk
         </button>
       ) : (
-        <div className="bg-gray-400 text-black cursor-not-allowed w-full py-5">
+        <div className="text-center bg-primary-300 text-slate-100 cursor-not-allowed w-full py-3 px-4 rounded-md text-base font-semibold">
           Masuk
         </div>
       )}

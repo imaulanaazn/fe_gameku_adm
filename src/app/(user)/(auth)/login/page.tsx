@@ -18,7 +18,6 @@ const Login = async () => {
     return <Maintenance />;
   }
 
-  console.log(gasskeunLogo);
   return (
     <div
       style={{
@@ -28,20 +27,49 @@ const Login = async () => {
         backgroundRepeat: "no-repeat",
         backgroundPosition: "center",
       }}
-      className="w-full h-fit mx-auto flex"
+      className="w-full h-screen mx-auto flex items-center"
     >
-      <div className="mx-auto pt-10 h-fit min-h-screen text-center w-full p-5  text-white flex flex-col items-center">
-        <div className="flex flex-col items-center gap-3 mb-10">
-          <p className=" font-light text-xs tracking-widest">GASSKEUN TOPUP</p>
-          <h1 className=" font-semibold text-3xl">Masuk</h1>
+      <div className="mx-auto text-center w-full h-full lg:h-max flex items-center lg:items-stretch justify-center overflow-hidden">
+        <div className="left-side bg-white w-96 md:w-[25rem] lg:w-96 xl:w-[30rem] h-full md:h-max px-10 py-10 xl:px-16 xl:py-16 flex flex-col justify-center">
+          <div className="flex flex-col items-center gap-3 mb-8 xl:mb-10">
+            <p className="xl:hidden font-light text-xs tracking-widest">
+              GASSKEUN TOPUP
+            </p>
+            <h1 className="text-center text-neutral-900 text-3xl font-bold">
+              Masuk
+            </h1>
+            <p className="hidden xl:block text-left">
+              Selamat datang kembali. segera login agar bisa mengakses fitur
+              gasskeun top up
+            </p>
+          </div>
+          <FormLogin />
+          <p className=" text-sm mt-5">
+            Belum punya akun? Silahkan untuk{" "}
+            <Link href="/register" className=" underline text-primary-900">
+              Daftar
+            </Link>
+          </p>
         </div>
-        <FormLogin />
-        <p className=" text-sm mt-5">
-          Belum punya akun? Silahkan untuk{" "}
-          <Link href="/register" className=" underline">
-            Daftar
-          </Link>
-        </p>
+
+        <div className="right-side hidden lg:flex w-96 xl:w-[30rem] h-auto px-10 py-10 xl:px-16 xl:py-16 bg-primary-900 items-center justify-center">
+          <div className="h-max w-max">
+            <Image
+              src={gasskeunLogo.data[0].value}
+              width={120}
+              height={120}
+              alt="gasskeun top up logo"
+              className="mx-auto"
+            />
+            <p className="text-xs text-white text-left mt-16 mb-4">
+              GASKEUN TOP UP
+            </p>
+            <h4 className="text-white text-left xl:text-lg">
+              Top up berbagai kebutuhan digital mu lebih mudah menggunakan
+              gasskeun top up
+            </h4>
+          </div>
+        </div>
       </div>
     </div>
   );

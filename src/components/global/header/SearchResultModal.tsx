@@ -19,7 +19,8 @@ const SearchResultModal = ({
   // Define the debounce function
   const debounce = (func: Function, delay: number) => {
     let timeout: ReturnType<typeof setTimeout>;
-    return function (...args: any[]) {
+    return function (this: any, ...args: any[]) {
+      // Add type annotation for 'this'
       clearTimeout(timeout);
       timeout = setTimeout(() => func.apply(this, args), delay);
     };
@@ -118,7 +119,7 @@ const SearchResultModal = ({
             </h1>
           )}
           <h1></h1>
-          <div className="pt-4 md:pt-6 pb-8 md:pb-0 flex justify-center items-center gap-4 lg:gap-5 flex-wrap">
+          <div className="pt-4 md:pt-6 pb-8 md:pb-0 grid grid-cols-auto-sm md:grid-cols-auto-md lg:grid-cols-auto-lg gap-3 lg:gap-6">
             {games.map((game) => (
               <>
                 <Game data={game} />

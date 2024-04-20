@@ -50,8 +50,6 @@ export default function RootLayout({
     getWebsiteStatus();
   }, []);
 
-  console.log(currentPath);
-
   return (
     <html lang="en">
       <Script

@@ -2,6 +2,7 @@ import Maintenance from "@/components/maintenance/Maintenance";
 import FormRegister from "@/components/register/FormRegister";
 import sendRequest from "@/lib/baseApi";
 import { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 
 const Register = async () => {
@@ -11,6 +12,9 @@ const Register = async () => {
   if (statusWebsite.data[0].value === "maintenance") {
     return <Maintenance />;
   }
+  const gasskeunLogo = await sendRequest<{ value: string }[]>(
+    "/v1/config?type=logo"
+  );
   const bg = await sendRequest<{ value: string }[]>(
     "/v1/config?type=bg_register"
   );
@@ -23,20 +27,48 @@ const Register = async () => {
         backgroundRepeat: "no-repeat",
         backgroundPosition: "center",
       }}
-      className="w-full h-fit mx-auto grid align-middle"
+      className="w-full md:h-screen mx-auto flex items-center"
     >
-      <div className="mx-auto pt-10 h-fit min-h-screen text-center w-full p-5  text-white flex flex-col items-center">
-        <div className="flex flex-col items-center gap-3 mb-10">
-          <p className=" font-light text-xs tracking-widest">GASSKEUN TOPUP</p>
-          <h1 className=" font-semibold text-3xl">Daftar</h1>
+      <div className="mx-auto text-center w-full h-full lg:h-max flex items-center lg:items-stretch justify-center overflow-hidden">
+        <div className="left-side bg-white w-96 md:w-[25rem] lg:w-96 xl:w-[30rem] h-full md:h-max md:h-[30rem] xl:h-[40rem] overflow-scroll px-10 py-10 xl:px-16 xl:py-16 flex flex-col">
+          <div className="flex flex-col items-center gap-3 mb-8 xl:mb-10">
+            <p className="xl:hidden font-light text-xs tracking-widest">
+              GASSKEUN TOPUP
+            </p>
+            <h1 className="text-center text-neutral-900 text-3xl font-bold">
+              Daftar Akun
+            </h1>
+            <p className="hidden xl:block text-left">
+              Nggak susah kok, kamu cuma tinggal masukin beberapa data aja terus
+              langsung jadi deh!
+            </p>
+          </div>
+          <FormRegister />
+          <p className=" text-sm mt-5">
+            Belum punya akun? Silahkan untuk{" "}
+            <Link href="/login" className="underline text-primary-900">
+              Masuk
+            </Link>
+          </p>
         </div>
-        <FormRegister />
-        <p className=" text-sm mt-5">
-          Belum punya akun? Silahkan untuk{" "}
-          <Link href="/login" className=" underline">
-            Masuk
-          </Link>
-        </p>
+        <div className="right-side hidden lg:flex w-96 xl:w-[30rem] h-auto px-10 py-10 xl:px-16 xl:py-16 bg-primary-900 items-center justify-center">
+          <div className="h-max w-max">
+            <Image
+              src={gasskeunLogo.data[0].value}
+              width={120}
+              height={120}
+              alt="gasskeun top up logo"
+              className="mx-auto"
+            />
+            <p className="text-xs text-white text-left mt-16 mb-4">
+              GASKEUN TOP UP
+            </p>
+            <h4 className="text-white text-left xl:text-lg">
+              Top up berbagai kebutuhan digital mu lebih mudah menggunakan
+              gasskeun top up
+            </h4>
+          </div>
+        </div>
       </div>
     </div>
   );

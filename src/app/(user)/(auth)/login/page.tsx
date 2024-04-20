@@ -43,9 +43,6 @@ const Login = async () => {
           </Link>
         </p>
       </div>
-      <div className="right-side bg-primary-900 w-80">
-        <Image src={gasskeunLogo} alt="Logo gaskkeun topup" />
-      </div>
     </div>
   );
 };

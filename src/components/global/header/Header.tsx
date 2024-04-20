@@ -201,10 +201,7 @@ const Header = () => {
                   setShowSearchModal(true);
                 }}
               >
-                <button
-                  placeholder="Cari game"
-                  className="py-2 px-8 border border-solid placeholder:text-primary-900 rounded-md hover:cursor-pointer w-56 md:w-60 text-start border-primary-900"
-                >
+                <button className="py-2 px-8 border border-solid text-primary-900 rounded-md hover:cursor-pointer w-56 md:w-60 text-start border-primary-900">
                   Cari game
                 </button>
                 <button>

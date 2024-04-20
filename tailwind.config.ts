@@ -33,6 +33,11 @@ const config: Config = {
         "neutral-100": "#F3F4F6",
         "neutral-50": "#F9FAFB",
       },
+      gridTemplateColumns: {
+        "auto-lg": "repeat(auto-fill, minmax(170px, 1fr))",
+        "auto-md": "repeat(auto-fill, minmax(140px, 1fr))",
+        "auto-sm": "repeat(auto-fill, minmax(90px, 1fr))",
+      },
     },
   },
   plugins: [require("@tailwindcss/forms")],

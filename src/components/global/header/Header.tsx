@@ -181,7 +181,7 @@ const Header = () => {
                   {links.map((link) => (
                     <li
                       key={link.id}
-                      className={`border-b ${
+                      className={`border-b-2 ${
                         currentPath === link.url
                           ? "border-primary-900"
                           : "border-white"
@@ -203,14 +203,14 @@ const Header = () => {
               >
                 <button
                   placeholder="Cari game"
-                  className="py-2 px-8 border border-solid border-slate-400 rounded-md hover:cursor-pointer w-56 md:w-60 text-start"
+                  className="py-2 px-8 border border-solid placeholder:text-primary-900 rounded-md hover:cursor-pointer w-56 md:w-60 text-start border-primary-900"
                 >
                   Cari game
                 </button>
                 <button>
                   <FontAwesomeIcon
                     icon={faMagnifyingGlass}
-                    className="absolute top-1/2 right-4 -translate-y-1/2 text-lg text-slate-400"
+                    className="absolute top-1/2 right-4 -translate-y-1/2 text-lg text-primary-900"
                   />
                 </button>
               </div>

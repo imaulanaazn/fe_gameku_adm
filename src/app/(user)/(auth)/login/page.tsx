@@ -2,16 +2,23 @@ import FormLogin from "@/components/login/FormLogin";
 import Maintenance from "@/components/maintenance/Maintenance";
 import sendRequest from "@/lib/baseApi";
 import { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
+import { useEffect } from "react";
 
 const Login = async () => {
   const statusWebsite = await sendRequest<{ value: string }[]>(
     "/v1/config?type=website_status"
   );
+  const gasskeunLogo = await sendRequest<{ value: string }[]>(
+    "/v1/config?type=logo"
+  );
+  const bg = await sendRequest<{ value: string }[]>("/v1/config?type=bg_login");
   if (statusWebsite.data[0].value === "maintenance") {
     return <Maintenance />;
   }
-  const bg = await sendRequest<{ value: string }[]>("/v1/config?type=bg_login");
+
+  console.log(gasskeunLogo);
   return (
     <div
       style={{
@@ -21,7 +28,7 @@ const Login = async () => {
         backgroundRepeat: "no-repeat",
         backgroundPosition: "center",
       }}
-      className="w-full h-fit mx-auto grid align-middle"
+      className="w-full h-fit mx-auto flex"
     >
       <div className="mx-auto pt-10 h-fit min-h-screen text-center w-full p-5  text-white flex flex-col items-center">
         <div className="flex flex-col items-center gap-3 mb-10">
@@ -35,6 +42,9 @@ const Login = async () => {
             Daftar
           </Link>
         </p>
+      </div>
+      <div className="right-side bg-primary-900 w-80">
+        <Image src={gasskeunLogo} alt="Logo gaskkeun topup" />
       </div>
     </div>
   );

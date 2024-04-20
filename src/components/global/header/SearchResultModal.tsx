@@ -98,7 +98,7 @@ const SearchResultModal = ({
             type="text"
             onChange={handleInputChange}
             placeholder="Cari game"
-            className="w-full py-4 px-6 lg:py-6 lg:px-8 xl:py-4 xl:px-6 text-sm border-b border-solid border-slate-400 text-lg md:text-xl"
+            className="w-full py-4 px-6 lg:py-6 lg:px-8 xl:py-4 xl:px-6 text-sm border-0 border-b-2 border-solid border-slate-400 text-lg md:text-xl focus:ring-transparent focus:border-primary-900"
           />
           <button onClick={() => setShowSearchModal(false)}>
             <FontAwesomeIcon

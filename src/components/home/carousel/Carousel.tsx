@@ -77,18 +77,16 @@ const Carousel = ({ slides }: { slides: IImageCarousel[] }) => {
                   className="flex justify-center items-center relative"
                 >
                   <div
-                    className={`rounded-lg lg:h-80 md:h-60 sm:h-60 h-40 ${
-                      slides.length > 1 && "w-full"
-                    }`}
+                    className={`rounded-lg ${slides.length > 1 && "w-full"}`}
                   >
                     <Image
                       src={slide.imageUrl}
                       alt="Slide Image Banner Promo Gasskeun Topup"
                       loading="lazy"
                       width={375}
-                      height={200}
-                      objectFit="cover"
-                      className="h-full w-full rounded-lg"
+                      height={150}
+                      objectFit="contain"
+                      className="w-full h-auto rounded-lg"
                     />
                   </div>
                 </Link>

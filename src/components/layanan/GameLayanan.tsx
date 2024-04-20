@@ -10,16 +10,6 @@ import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 const GameLayanan: React.FC<{ games: IGame[] }> = ({ games }) => {
   const category = useRecoilValue(layananState);
   const [filteredGames, setFilteredGames] = useState<IGame[] | []>(games);
-  const [limit, setLimit] = useState(6);
-  const slicedGames = filteredGames.slice(0, limit);
-
-  const handleClickExpandGame = () => {
-    if (limit > filteredGames.length) {
-      setLimit(6);
-    } else {
-      setLimit((prevLimit) => prevLimit + 24);
-    }
-  };
 
   const requestGame = async (path: string) => {
     const request = await fetch(process.env.NEXT_PUBLIC_BASE_URL + path, {
@@ -40,8 +30,6 @@ const GameLayanan: React.FC<{ games: IGame[] }> = ({ games }) => {
   };
 
   useEffect(() => {
-    setLimit(24);
-
     const searchKey = category.search ? `search=${category.search}` : undefined;
     if (category.id === "all") {
       requestGame(`/v1/games${searchKey ? "?" + searchKey : ""}`);
@@ -58,19 +46,12 @@ const GameLayanan: React.FC<{ games: IGame[] }> = ({ games }) => {
 
   return (
     <>
-      <div className="container flex gap-5 mt-10 flex-wrap justify-center">
-        {slicedGames &&
-          slicedGames.map((data) => <Game data={data} key={data.id} />)}
+      <div className="h-screen overflow-y-scroll overflow-x-hidden pb-4 pr-4">
+        <div className="grid grid-cols-auto-sm md:grid-cols-auto-md lg:grid-cols-auto-lg gap-3 lg:gap-6">
+          {filteredGames &&
+            filteredGames.map((data) => <Game data={data} key={data.id} />)}
+        </div>
       </div>
-      {limit < filteredGames.length && (
-        <button
-          onClick={handleClickExpandGame}
-          className="mx-auto flex items-center gap-2 bg-white mt-8 lg:text-sm text-primary-900 rounded-md py-2 px-4 font-semibold lg:font-medium hover:bg-primary-100"
-        >
-          Muat lebih banyak
-          <FontAwesomeIcon icon={faChevronDown} />
-        </button>
-      )}
     </>
   );
 };

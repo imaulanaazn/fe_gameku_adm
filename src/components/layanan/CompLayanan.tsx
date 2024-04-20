@@ -29,8 +29,8 @@ const CompLayanan: React.FC<ICompLayananProps> = ({
           Kami menyediakan berbagai layanan untuk memenuhi segala kebutuhan
           digitalmu hanya dengan satu platform yang terintegrasi
         </p>
-        <div className="mt-8 flex items-center justify-between flex-col-reverse lg:flex-row items-center">
-          <div className="w-10/12 flex gap-3 mt-3 w-full lg:w-auto overflow-x-scroll sm:overflow-x-auto">
+        <div className="mt-8 flex items-center justify-between flex-col-reverse lg:flex-row items-center sticky">
+          <div className="max-w-screen-md w-10/12 flex flex-wrap md:flex-nowrap gap-3 lg:gap-4 my-4 w-full lg:w-auto overflow-x-scroll lg:overflow-x-hidden">
             {defaultCategory.map((data) => (
               <ListCategory data={data} key={data.id} />
             ))}

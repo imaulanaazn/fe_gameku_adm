@@ -44,7 +44,13 @@ const Home = async () => {
   const youtubeVideo = await sendRequest<INewsVideos[]>("/v1/videos");
 
   return (
-    <div>
+    <div
+      style={{
+        backgroundImage: "url(/images/red-pattern.png)",
+        backgroundRepeat: "repeat-y",
+        backgroundSize: "100% auto",
+      }}
+    >
       {slides.data.length > 0 && <Carousel slides={slides.data} />}
 
       {popularGames.data.length > 0 && (

@@ -19,18 +19,14 @@ const ListGames: React.FC<ListGameProps> = ({ title, data }) => {
   return (
     <Container>
       <section className="mt-16 lg:mt-24">
-        <h2 className="text-neutral-900 text-2xl lg:text-4xl font-bold">
+        <h2 className="text-center text-neutral-900 text-2xl lg:text-4xl font-bold">
           {title}
         </h2>
-        <div className="pb-8 text-center w-full flex items-center justify-center">
-          <div className="flex flex-col items-center">
-            <div className="w-full flex justify-center items-center">
-              <div className="mt-10 flex justify-center items-center gap-4 flex-wrap">
-                {slicedGames.map((game) => (
-                  <Game data={game} key={game.id} />
-                ))}
-              </div>
-            </div>
+        <div className="pb-8 text-center w-full">
+          <div className="mt-10 grid grid-cols-auto-sm md:grid-cols-auto-md lg:grid-cols-auto-lg gap-3 lg:gap-6">
+            {slicedGames.map((game) => (
+              <Game data={game} key={game.id} />
+            ))}
           </div>
         </div>
         {limit < data.length && (

@@ -33,14 +33,10 @@ const PopularGames: React.FC<IPopularGamesProps> = ({ popularGames }) => {
           incidunt?
         </p>
 
-        <div className="flex flex-col items-center">
-          <div className="mt-10 flex justify-center items-center gap-4 lg:gap-5 flex-wrap">
-            {limitedPopularGames.map((data) => (
-              <>
-                <Game data={data} key={data.id} />
-              </>
-            ))}
-          </div>
+        <div className="mt-10 grid grid-cols-auto-sm md:grid-cols-auto-md lg:grid-cols-auto-lg gap-3 lg:gap-6">
+          {limitedPopularGames.map((data) => (
+            <Game data={data} key={data.id} />
+          ))}
         </div>
 
         {limit < popularGames.length && (

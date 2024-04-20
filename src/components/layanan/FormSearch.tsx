@@ -7,28 +7,24 @@ import { useState } from "react";
 import { useRecoilState } from "recoil";
 
 const FormSearch = () => {
-  const [search, setSearch] = useState("");
   const [category, setCategory] = useRecoilState(layananState);
-
-  const handleClickSearch = (e: any) => {
-    e.preventDefault();
-    setCategory({ ...category, search });
-  };
 
   return (
     <form className="my-2 lg:my-5 w-full">
       <div>
-        <div className="search-bar w-full relative">
+        <div className="search-bar w-full relative group">
           <input
             type="text"
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) =>
+              setCategory({ ...category, search: e.target.value })
+            }
             placeholder="Cari game"
-            className="w-full py-2 px-3 text-sm border border-solid border-slate-400 rounded-md"
+            className="w-full py-2 px-3 text-sm text-primary-900 placeholder:text-primary-900 border border-solid rounded-md focus:ring-0 focus:border-primary-900 border-primary-900 bg-transparent"
           />
-          <button onClick={handleClickSearch} type="submit">
+          <button type="submit">
             <FontAwesomeIcon
               icon={faMagnifyingGlass}
-              className="absolute bg-white p-2 top-1/2 right-2 -translate-y-1/2 text-lg text-slate-400 hover:text-primary-900"
+              className="absolute bg-[#eaeaeea]] p-2 pr-4 top-1/2 right-1 -translate-y-1/2 text-lg text-primary-900"
             />
           </button>
         </div>

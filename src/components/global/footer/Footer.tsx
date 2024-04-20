@@ -167,7 +167,7 @@ const Footer = () => {
             </div>
 
             {/* LINK CEPAT GRID ITEM */}
-            <div>
+            <div className="flex flex-col">
               <p className="text-white font-bold uppercase mb-2 lg:mb-4">
                 Link Cepat
               </p>
@@ -186,7 +186,7 @@ const Footer = () => {
             </div>
 
             {/* SOCIAL MEDIA GRID ITEM */}
-            <div>
+            <div className="flex flex-col">
               <p className="text-white font-bold uppercase mb-2 lg:mb-4">
                 Ikuti Kami
               </p>
@@ -206,7 +206,7 @@ const Footer = () => {
             </div>
 
             {/* LEGAL GRID ITEM */}
-            <div>
+            <div className="flex flex-col">
               <p className="text-white font-bold uppercase">Legal</p>
               <Link
                 className="text-neutral-400 inline-block mt-3 border-b border-solid border-black hover:border-white hover:text-white"

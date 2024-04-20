@@ -11,24 +11,21 @@ const Game: React.FC<IGameProps> = ({ data }) => {
     <Link
       key={data.id}
       href={data.slug}
-      className="flex flex-col bg-white shadow-md transform transition-transform hover:scale-105 rounded-md hover:shadow-gray-200 overflow-hidden"
+      className="w-full h-full flex flex-col bg-white shadow-sm lg:shadow-md transform transition-transform hover:scale-105 rounded-lg lg:rounded-2xl hover:shadow-gray-200 overflow-hidden"
     >
-      <div className="h-36 lg:h-40 xl:h-48 aspect-square flex items-center relative">
+      <div className="h-full w-full relative p-1 pb-2 lg:p-3">
         <Image
           src={data.logoUrl}
           alt={`Logo Game Gasskeun Topup ${data.name}`}
-          width="0"
-          height="0"
+          width="100"
+          height="100"
           sizes="100vh"
-          style={{ width: "100%", height: "100%" }}
-          className="rounded-lg object-cover"
+          className="w-full rounded-lg object-cover aspect-square"
         />
-        <div className="w-full py-2 px-2 lg:py-3 lg:px-3 absolute bottom-0 left-0">
-          <div className="w-full py-2 px-2 bg-white rounded-md">
-            <p className="font-semibold text-sm text-neutral-700">
-              {data.name}
-            </p>
-          </div>
+        <div className="pt-2 lg:pt-3 text-center">
+          <h3 className="md:font-semibold text-xs md:text-sm text-neutral-800">
+            {data.name}
+          </h3>
         </div>
       </div>
     </Link>

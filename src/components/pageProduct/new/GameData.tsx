@@ -39,7 +39,12 @@ const GameData = ({ data, onChange, value, position }: any) => {
             },
           }}
         />
-        <CardContent sx={{ pt: (theme) => `${theme.spacing(3)} !important` }}>
+        <CardContent
+          sx={{
+            pt: (theme) => `${theme.spacing(3)} !important`,
+            paddingX: "1.25rem",
+          }}
+        >
           <Grid container spacing={4}>
             <Grid item xs={12} md={data.needServerId ? 6 : 12}>
               <TextField

@@ -2,7 +2,7 @@ import { CardContent, Avatar, Typography, Card, Box } from "@mui/material";
 
 const ProfileGame = ({ denoms }: { denoms: IGameDetail }) => {
   return (
-    <Card sx={{ position: "relative" }}>
+    <Card sx={{ position: "relative", borderRadius: "0.75rem", }}>
       <CardContent>
         <Box sx={{ display: "flex", gap: 2 }}>
           <Avatar

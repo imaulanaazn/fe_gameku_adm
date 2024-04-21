@@ -24,7 +24,12 @@ const AdditionalData = ({ data, value, onChange, position }: any) => {
             },
           }}
         />
-        <CardContent sx={{ pt: (theme) => `${theme.spacing(3)} !important` }}>
+        <CardContent
+          sx={{
+            pt: (theme) => `${theme.spacing(3)} !important`,
+            paddingX: "1.25rem",
+          }}
+        >
           <TextField
             value={value.cashtag}
             autoFocus

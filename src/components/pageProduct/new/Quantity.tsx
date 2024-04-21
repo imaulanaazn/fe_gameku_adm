@@ -34,6 +34,7 @@ const Quantity = ({ data, value, onChange, position }: any) => {
           pt: (theme) => `${theme.spacing(3)} !important`,
           display: "flex",
           gap: "1rem",
+          paddingX: "1.25rem",
         }}
       >
         <TextField

@@ -119,7 +119,12 @@ const PromoCode = ({ data, value, onChange, position }: any) => {
           },
         }}
       />
-      <CardContent sx={{ pt: (theme) => `${theme.spacing(3)} !important` }}>
+      <CardContent
+        sx={{
+          pt: (theme) => `${theme.spacing(3)} !important`,
+          paddingX: "1.25rem",
+        }}
+      >
         <FormControl
           fullWidth
           sx={{

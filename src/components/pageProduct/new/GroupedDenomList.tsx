@@ -17,7 +17,15 @@ import React from "react";
 const GroupedDenomList = ({ position, data, onChange, value }: any) => {
   const { titleCardHeader } = getTitleByGamesCategory(data);
   return (
-    <Card sx={{ marginTop: data.type === "topup" && position > 1 ? 4 : 0 }}>
+    <Card
+      sx={{
+        marginTop: data.type === "topup" && position > 1 ? 4 : 0,
+        borderRadius: "0.75rem",
+        background:
+          "#ffffff url(/images/topup-form-step-2.svg) no-repeat right top",
+        backgroundSize: "150px",
+      }}
+    >
       <CardHeader
         title={titleCardHeader}
         titleTypographyProps={{
@@ -25,15 +33,17 @@ const GroupedDenomList = ({ position, data, onChange, value }: any) => {
             mb: 2.5,
             lineHeight: "2rem !important",
             letterSpacing: "0.15px !important",
+            color: "#1F2937",
+            fontWeight: "800",
           },
         }}
       />
       <CardContent
         sx={{
           pt: (theme) => `${theme.spacing(3)} !important`,
-          pb: 0,
-          pr: 0,
-          pl: 0,
+          pb: "1.25rem",
+          pr: "1.25rem",
+          pl: "1.25rem",
         }}
       >
         <TabContext value={value.tabActive}>
@@ -72,11 +82,13 @@ const GroupedDenomList = ({ position, data, onChange, value }: any) => {
                         sx={{
                           display: "flex",
                           alignItems: "center",
-                          height: 108,
+                          height: { xs: "auto", md: 108 },
                           position: "relative",
                           cursor: "pointer",
+                          outline: "1px solid #B72025",
                           ...(item.id === value.productId && {
                             outline: "2px solid #B72025",
+                            backgroundColor: "#FFE4E5",
                           }),
                         }}
                         onClick={(e) => {
@@ -97,11 +109,22 @@ const GroupedDenomList = ({ position, data, onChange, value }: any) => {
                           }}
                         >
                           <Box
-                            sx={{ display: "flex", flexDirection: "column" }}
+                            sx={{
+                              display: "flex",
+                              flexDirection: "column",
+                              gap: "0.25rem",
+                            }}
                           >
                             <Typography
                               variant="caption"
-                              sx={{ letterSpacing: "0.25px", fontWeight: 800 }}
+                              sx={{
+                                letterSpacing: "0.25px",
+                                fontWeight: 600,
+                                color: "#B72025",
+                                ...(item.id === value.productId && {
+                                  fontWeight: 800,
+                                }),
+                              }}
                             >
                               {item.name}
                             </Typography>
@@ -109,8 +132,11 @@ const GroupedDenomList = ({ position, data, onChange, value }: any) => {
                               variant="caption"
                               sx={{
                                 letterSpacing: "0.25px",
-                                fontWeight: 600,
-                                color: "GrayText",
+                                fontWeight: 400,
+                                color: "#1F2937",
+                                ...(item.id === value.productId && {
+                                  fontWeight: 600,
+                                }),
                               }}
                             >
                               {currencyConverter(item.price)}

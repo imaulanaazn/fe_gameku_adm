@@ -29,217 +29,227 @@ import { Container } from "@mui/system";
 import useDevice from "@/@core/hooks/useDevice";
 
 interface IFormProps {
-    products: IGameDetail;
-    paymentsMethod: IPaymentMethod[];
+  products: IGameDetail;
+  paymentsMethod: IPaymentMethod[];
 }
 
 const NewFormTopup: React.FC<IFormProps> = ({ products, paymentsMethod }) => {
-    const [cart, setCart] = useRecoilState(cartState);
-    const cashtag = useRecoilValue(formCashtag);
-    useEffect(() => {
-        setCart({
-            gameId: products.id,
-            product: {},
-            quantity: 0,
-            paymentMethod: {},
-            detailAccount: {
-                userId: "",
-                serverId: "",
-            },
-            mobileNumber: "",
-            promoCode: "",
-            prices: 0,
-            pricesAfterDiscount: 0,
-            totalAmount: 0,
-            discount: 0,
-            fee: 0,
-            cashtag: "",
-        });
-    }, []);
-
-    const router = useRouter();
-    const [balance, setBalance] = useState(0);
-    const [modalOpen, setModalOpen] = useState(false);
-    const [groupedDenoms, setGroupedDenoms] = useState<any>(null);
-    const [data, setData] = useState({
-        productId: "",
-        paymentMethodId: "",
-        quantity: 1,
-        promoCode: "",
-        paymentMethodCd: "",
-        mobileNumber: "",
-        cashtag: "",
-        amount: 0,
-        feeAmount: 0,
-        totalAmount: 0,
-        totalAmountBeforeFee: 0,
+  const [cart, setCart] = useRecoilState(cartState);
+  const cashtag = useRecoilValue(formCashtag);
+  useEffect(() => {
+    setCart({
+      gameId: products.id,
+      product: {},
+      quantity: 0,
+      paymentMethod: {},
+      detailAccount: {
         userId: "",
         serverId: "",
-        selectedCategory: "",
-        paymentMethod: "" as any,
-        product: "" as any,
-        promoAmount: 0,
-        promo: "" as any,
-        tabActive: "",
-        gameId: products.id,
+      },
+      mobileNumber: "",
+      promoCode: "",
+      prices: 0,
+      pricesAfterDiscount: 0,
+      totalAmount: 0,
+      discount: 0,
+      fee: 0,
+      cashtag: "",
     });
-    const [isDisabled, setIsDisabled] = useState(true);
-    const device = useDevice();
+  }, []);
 
-    const handleChange = (key: keyof typeof data, value: any) => {
-        setData((prev) => ({
-            ...prev,
-            [key]: value,
-        }));
-    };
+  const router = useRouter();
+  const [balance, setBalance] = useState(0);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [groupedDenoms, setGroupedDenoms] = useState<any>(null);
+  const [data, setData] = useState({
+    productId: "",
+    paymentMethodId: "",
+    quantity: 1,
+    promoCode: "",
+    paymentMethodCd: "",
+    mobileNumber: "",
+    cashtag: "",
+    amount: 0,
+    feeAmount: 0,
+    totalAmount: 0,
+    totalAmountBeforeFee: 0,
+    userId: "",
+    serverId: "",
+    selectedCategory: "",
+    paymentMethod: "" as any,
+    product: "" as any,
+    promoAmount: 0,
+    promo: "" as any,
+    tabActive: "",
+    gameId: products.id,
+  });
+  const [isDisabled, setIsDisabled] = useState(true);
+  const device = useDevice();
 
-    useEffect(() => {
-        if (
-            data.totalAmountBeforeFee > data.paymentMethod.maxAmount ||
-            data.totalAmountBeforeFee < data.paymentMethod.minAmount
-        ) {
-            setData((prev) => ({
-                ...prev,
-                paymentMethod: "",
-                paymentMethodCd: "",
-                paymentMethodId: "",
-            }));
-        }
-    }, [data.totalAmountBeforeFee, data.paymentMethod]);
+  const handleChange = (key: keyof typeof data, value: any) => {
+    setData((prev) => ({
+      ...prev,
+      [key]: value,
+    }));
+  };
 
-    useEffect(() => {
-        setData((prev) => ({
-            ...prev,
-            totalAmountBeforeFee: data.amount * data.quantity,
-        }));
-    }, [data.amount, data.quantity]);
+  useEffect(() => {
+    if (
+      data.totalAmountBeforeFee > data.paymentMethod.maxAmount ||
+      data.totalAmountBeforeFee < data.paymentMethod.minAmount
+    ) {
+      setData((prev) => ({
+        ...prev,
+        paymentMethod: "",
+        paymentMethodCd: "",
+        paymentMethodId: "",
+      }));
+    }
+  }, [data.totalAmountBeforeFee, data.paymentMethod]);
 
-    useEffect(() => {
-        if (
-            !data.mobileNumber ||
-            !data.productId ||
-            !data.paymentMethodId ||
-            data.quantity <= 0 ||
-            (products && products.type === "topup" && !data.userId) ||
-            (products && products.needServerId && !data.serverId) ||
-            (data.paymentMethod.cd === "ID_JENIUSPAY" && !data.cashtag)
-        ) {
-            setIsDisabled(true);
-        } else {
-            setIsDisabled(false);
-        }
-    }, [
-        data.productId,
-        data.paymentMethodId,
-        data.quantity,
-        data.promoCode,
-        data.mobileNumber,
-        data.cashtag,
-        data.userId,
-        data.serverId,
-        products,
-    ]);
+  useEffect(() => {
+    setData((prev) => ({
+      ...prev,
+      totalAmountBeforeFee: data.amount * data.quantity,
+    }));
+  }, [data.amount, data.quantity]);
 
-    useEffect(() => {
-        if (products?.isGrouped) {
-            const firstCategory = products.groupedDenoms[0];
-            handleChange("tabActive", firstCategory.id);
-        }
-    }, [products]);
-    return (
-        products && (
-            <Container maxWidth="lg" disableGutters={device}>
-                <Box sx={{ position: "relative" }}>
-                    <Box sx={{ py: 5 }}>
-                        <Breadcrumbs aria-label="breadcrumb">
-                            <Link href="/" className=" text-blue-800">
-                                Home
-                            </Link>
-                            <Typography color="text.primary">{products.name}</Typography>
-                        </Breadcrumbs>
-                    </Box>
-                    <Grid container spacing={6}>
-                        <Grid item xs={12} md={4}>
-                            <ProfileGame denoms={products} />
-                        </Grid>
-                        <Grid item xs={12} md={8}>
-                            <GameData
-                                position={1}
-                                value={data}
-                                data={products}
-                                onChange={(key: any, value: any) => handleChange(key, value)}
-                            />
-                            {!products.isGrouped && (
-                                <DenomList
-                                    position={2}
-                                    value={data}
-                                    data={products}
-                                    onChange={(key: any, value: any) => handleChange(key, value)}
-                                />
-                            )}
-                            {products.isGrouped && (
-                                <GroupedDenomList
-                                    position={3}
-                                    value={data}
-                                    data={products}
-                                    onChange={(key: any, value: any) => handleChange(key, value)}
-                                />
-                            )}
-                            <Quantity
-                                position={3}
-                                value={data}
-                                data={products}
-                                onChange={(key: any, value: any) => handleChange(key, value)}
-                            />
-                            <PaymentMethod
-                                position={4}
-                                value={data}
-                                data={paymentsMethod.length > 0 && paymentsMethod}
-                                onChange={(key: any, value: any) => handleChange(key, value)}
-                            />
-                            <MobileNumber
-                                position={5}
-                                value={data}
-                                data={products}
-                                onChange={(key: any, value: any) => handleChange(key, value)}
-                            />
-                            <AdditionalData
-                                position={5}
-                                value={data}
-                                data={products}
-                                onChange={(key: any, value: any) => handleChange(key, value)}
-                            />
-                            <PromoCode
-                                position={3}
-                                value={data}
-                                data={products}
-                                onChange={(key: any, value: any) => handleChange(key, value)}
-                            />
-                            <Button
-                                fullWidth
-                                variant="contained"
-                                size="large"
-                                sx={{ marginTop: 4 }}
-                                onClick={() => setModalOpen(true)}
-                                disabled={isDisabled}
-                            >
-                                Beli Sekarang
-                            </Button>
-                            <ConfirmCheckout
-                                isOpen={modalOpen}
-                                onClose={() => setModalOpen(false)}
-                                dataCheckout={{
-                                    ...data,
-                                    products,
-                                }}
-                                balance={balance}
-                            />
-                        </Grid>
-                    </Grid>
-                </Box>
-            </Container>
-        )
-    );
+  useEffect(() => {
+    if (
+      !data.mobileNumber ||
+      !data.productId ||
+      !data.paymentMethodId ||
+      data.quantity <= 0 ||
+      (products && products.type === "topup" && !data.userId) ||
+      (products && products.needServerId && !data.serverId) ||
+      (data.paymentMethod.cd === "ID_JENIUSPAY" && !data.cashtag)
+    ) {
+      setIsDisabled(true);
+    } else {
+      setIsDisabled(false);
+    }
+  }, [
+    data.productId,
+    data.paymentMethodId,
+    data.quantity,
+    data.promoCode,
+    data.mobileNumber,
+    data.cashtag,
+    data.userId,
+    data.serverId,
+    products,
+  ]);
+
+  useEffect(() => {
+    if (products?.isGrouped) {
+      const firstCategory = products.groupedDenoms[0];
+      handleChange("tabActive", firstCategory.id);
+    }
+  }, [products]);
+  return (
+    products && (
+      <Container maxWidth="lg" disableGutters={device}>
+        <Box sx={{ position: "relative" }}>
+          <Box sx={{ py: 5 }}>
+            <Breadcrumbs aria-label="breadcrumb">
+              <Link href="/" className="text-primary-900">
+                Home
+              </Link>
+              <Typography color="text.primary">{products.name}</Typography>
+            </Breadcrumbs>
+          </Box>
+          <Grid container spacing={6}>
+            <Grid item xs={12} md={4}>
+              <ProfileGame denoms={products} />
+            </Grid>
+            <Grid item xs={12} md={8}>
+              <GameData
+                position={1}
+                value={data}
+                data={products}
+                onChange={(key: any, value: any) => handleChange(key, value)}
+              />
+              {!products.isGrouped && (
+                <DenomList
+                  position={2}
+                  value={data}
+                  data={products}
+                  onChange={(key: any, value: any) => handleChange(key, value)}
+                />
+              )}
+              {products.isGrouped && (
+                <GroupedDenomList
+                  position={3}
+                  value={data}
+                  data={products}
+                  onChange={(key: any, value: any) => handleChange(key, value)}
+                />
+              )}
+              <Quantity
+                position={3}
+                value={data}
+                data={products}
+                onChange={(key: any, value: any) => handleChange(key, value)}
+              />
+              <PaymentMethod
+                position={4}
+                value={data}
+                data={paymentsMethod.length > 0 && paymentsMethod}
+                onChange={(key: any, value: any) => handleChange(key, value)}
+              />
+              <AdditionalData
+                position={5}
+                value={data}
+                data={products}
+                onChange={(key: any, value: any) => handleChange(key, value)}
+              />
+              <Grid container spacing={{ xs: 0, md: 4 }}>
+                <Grid item xs={12} md={6}>
+                  <MobileNumber
+                    position={5}
+                    value={data}
+                    data={products}
+                    onChange={(key: any, value: any) =>
+                      handleChange(key, value)
+                    }
+                  />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <PromoCode
+                    position={3}
+                    value={data}
+                    data={products}
+                    onChange={(key: any, value: any) =>
+                      handleChange(key, value)
+                    }
+                  />
+                </Grid>
+              </Grid>
+              <Button
+                fullWidth
+                variant="contained"
+                size="large"
+                sx={{ marginTop: 4 }}
+                onClick={() => setModalOpen(true)}
+                disabled={isDisabled}
+              >
+                Beli Sekarang
+              </Button>
+              <ConfirmCheckout
+                isOpen={modalOpen}
+                onClose={() => setModalOpen(false)}
+                dataCheckout={{
+                  ...data,
+                  products,
+                }}
+                balance={balance}
+              />
+            </Grid>
+          </Grid>
+        </Box>
+      </Container>
+    )
+  );
 };
 
 export default NewFormTopup;

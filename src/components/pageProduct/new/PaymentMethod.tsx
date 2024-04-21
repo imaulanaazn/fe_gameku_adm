@@ -55,7 +55,9 @@ function TabPanel(props: TabPanelProps) {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+      {value === index && (
+        <Box sx={{ paddingX: 0, paddingY: "1rem" }}>{children}</Box>
+      )}
     </div>
   );
 }
@@ -118,7 +120,7 @@ const PaymentMethod = ({ value, data, onChange, position }: any) => {
                 justifyContent: "center",
                 alignItems: "center",
                 gap: 2,
-                p: 2,
+                padding: 2,
                 borderRadius: "0.4rem",
                 flexWrap: "wrap",
                 border: "1px solid #B72025",

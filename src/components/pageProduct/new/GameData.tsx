@@ -45,7 +45,7 @@ const GameData = ({ data, onChange, value, position }: any) => {
             paddingX: "1.25rem",
           }}
         >
-          <Grid container spacing={4}>
+          <Grid container spacing={{ xs: 2, md: 4 }}>
             <Grid item xs={12} md={data.needServerId ? 6 : 12}>
               <TextField
                 value={value.userId}

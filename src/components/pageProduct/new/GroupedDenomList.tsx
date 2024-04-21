@@ -73,7 +73,7 @@ const GroupedDenomList = ({ position, data, onChange, value }: any) => {
                 id={category.id}
                 value={category.id}
                 key={category.id}
-                sx={{ marginTop: 4 }}
+                sx={{ marginTop: 4, padding: "0px" }}
               >
                 <Grid container spacing={4}>
                   {category.denoms.map((item: any) => (
@@ -82,7 +82,7 @@ const GroupedDenomList = ({ position, data, onChange, value }: any) => {
                         sx={{
                           display: "flex",
                           alignItems: "center",
-                          height: { xs: "auto", md: 108 },
+                          height: "100%",
                           position: "relative",
                           cursor: "pointer",
                           outline: "1px solid #B72025",

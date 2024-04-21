@@ -49,7 +49,7 @@ const DenomList = ({ position, data, onChange, value }: any) => {
                 sx={{
                   display: "flex",
                   alignItems: "center",
-                  height: { xs: "auto", md: 96 },
+                  height: "100%",
                   position: "relative",
                   cursor: "pointer",
                   outline: "1px solid #B72025",

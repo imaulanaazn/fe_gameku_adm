@@ -285,6 +285,9 @@ const Header = () => {
               {links.map((link) => (
                 <li
                   key={link.id}
+                  onClick={() => {
+                    setActiveSideMenu((prevVal) => !prevVal);
+                  }}
                   className="font-semibold text-primary-900 text-base my-8 flex gap-4 items-center"
                 >
                   <FontAwesomeIcon icon={link.icon} />

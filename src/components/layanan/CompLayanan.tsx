@@ -30,7 +30,7 @@ const CompLayanan: React.FC<ICompLayananProps> = ({
           digitalmu hanya dengan satu platform yang terintegrasi
         </p>
         <div className="mt-8 flex items-center justify-between flex-col-reverse lg:flex-row items-center sticky">
-          <div className="max-w-screen-md w-10/12 flex flex-wrap md:flex-nowrap gap-3 lg:gap-4 my-4 w-full lg:w-auto overflow-x-scroll lg:overflow-x-hidden">
+          <div className="lg:max-w-[60%] w-10/12 flex flex-nowrap lg:flex-wrap gap-3 lg:gap-4 my-4 w-full lg:w-auto overflow-x-scroll lg:overflow-x-hidden">
             {defaultCategory.map((data) => (
               <ListCategory data={data} key={data.id} />
             ))}

@@ -21,7 +21,7 @@ const ListCategory: React.FC<IDataProps> = ({ data }) => {
         category.id === data.id
           ? "bg-primary-900 text-white"
           : "bg-white text-neutral-700"
-      } px-5 py-2 rounded-md md:text-sm cursor-pointer text-xs font-medium w-max`}
+      } px-5 py-2 rounded-md md:text-sm cursor-pointer text-xs font-medium w-max shrink-0`}
     >
       {data.name}
     </div>

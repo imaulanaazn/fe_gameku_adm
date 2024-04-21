@@ -31,7 +31,13 @@ const page = async ({ params }: IParams) => {
   return (
     <Container
       maxWidth={false}
-      sx={{ backgroundColor: "#eaeaea", paddingBottom: 4 }}
+      sx={{
+        backgroundColor: "#eaeaea",
+        paddingBottom: 4,
+        backgroundImage: 'url("/images/red-pattern.png")',
+        backgroundRepeat: "repeat-y",
+        backgroundSize: "100% 100%",
+      }}
     >
       {/* <div className="mx-auto "> */}
       <NewFormTopup

@@ -57,8 +57,6 @@ const NewFormTopup: React.FC<IFormProps> = ({ products, paymentsMethod }) => {
     });
   }, []);
 
-  console.log(cart);
-
   const router = useRouter();
   const [balance, setBalance] = useState(0);
   const [modalOpen, setModalOpen] = useState(false);

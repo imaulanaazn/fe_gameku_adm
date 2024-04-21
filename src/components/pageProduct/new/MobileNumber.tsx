@@ -7,6 +7,7 @@ const MobileNumber = ({ data, value, onChange, position }: any) => {
     <Card
       sx={{
         marginTop: position > 1 ? 4 : 0,
+        borderRadius: "0.75rem",
         background: `#ffffff url(/images/topup-form-step-${5}.svg) no-repeat right top`,
         ...(value.paymentMethodCd === "ID_JENIUSPAY" && {
           background: `#ffffff url(/images/topup-form-step-${6}.svg) no-repeat right top`,
@@ -42,7 +43,6 @@ const MobileNumber = ({ data, value, onChange, position }: any) => {
           id="mobileNumber"
           label="Nomor WhatsApp"
           sx={{
-            marginBottom: 2.5,
             "& .MuiFormLabel-root": { color: "#B72025" },
             "& input": {
               border: "1px solid #B72025",

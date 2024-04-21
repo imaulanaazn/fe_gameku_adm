@@ -121,9 +121,9 @@ const SearchResultModal = ({
           <h1></h1>
           <div className="pt-4 md:pt-6 pb-8 md:pb-0 grid grid-cols-auto-sm md:grid-cols-auto-md lg:grid-cols-auto-lg gap-3 lg:gap-6">
             {games.map((game) => (
-              <>
+              <div onClick={() => setShowSearchModal(false)}>
                 <Game data={game} />
-              </>
+              </div>
             ))}
           </div>
         </div>

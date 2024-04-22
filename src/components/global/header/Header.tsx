@@ -61,11 +61,27 @@ const Header = () => {
   const [user, setUser] = useRecoilState(userState);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [showSearchModal, setShowSearchModal] = useState(false);
+  const [searchKeyword, setSearchKeyword] = useState("");
 
   const [logo, setLogo] = useRecoilState(imageAtom);
 
   const handleDropdownToggle = () => {
     setIsDropdownOpen((prevVal) => !prevVal);
+  };
+
+  const debounce = (func: Function, delay: number) => {
+    let timeout: ReturnType<typeof setTimeout>;
+    return function (this: any, ...args: any[]) {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func.apply(this, args), delay);
+    };
+  };
+
+  // Debounced function for search query
+  const debouncedSetSearchKeyword = debounce(setSearchKeyword, 500);
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    debouncedSetSearchKeyword(e.target.value);
   };
 
   const getLogo = async () => {
@@ -157,9 +173,9 @@ const Header = () => {
 
   return (
     <>
-      <header className="relative bg-white">
+      <header className="fixed top-0 left-0 w-full z-50 bg-white">
         <Container>
-          <div className="flex justify-between items-center md:gap-6 h-20">
+          <div className="flex justify-between items-center gap-4 md:gap-6 h-20">
             <div className="left-side flex items-center gap-6 xl:gap-8">
               <div className="logo">
                 <Link href="/" className="flex items-center w-12 h-12">
@@ -194,22 +210,22 @@ const Header = () => {
               </nav>
             </div>
 
-            <div className="right-side flex gap-6 lg:gap-2">
-              <div
-                className="search-bar w-full relative"
-                onClick={() => {
-                  setShowSearchModal(true);
-                }}
-              >
-                <button className="py-2 px-8 border border-solid text-primary-900 rounded-md hover:cursor-pointer w-56 md:w-60 text-start border-primary-900">
-                  Cari game
-                </button>
+            <div className="right-side flex gap-6 lg:gap-2 relative">
+              <div className="search-bar w-full relative">
+                <input
+                  type="text"
+                  onChange={handleSearchChange}
+                  placeholder="Cari game"
+                  className="peer py-2 px-4 border border-solid text-primary-900 rounded-md w-full md:w-80 lg:w-60 xl:w-80 text-start border-primary-900 focus:border-primary-900 focus:border-2"
+                />
                 <button>
                   <FontAwesomeIcon
                     icon={faMagnifyingGlass}
                     className="absolute top-1/2 right-4 -translate-y-1/2 text-lg text-primary-900"
                   />
                 </button>
+
+                <SearchResultModal searchKeyword={searchKeyword} />
               </div>
 
               {/* Show profile icon when user is logged in */}
@@ -326,11 +342,6 @@ const Header = () => {
             </div>
           )}
         </div>
-
-        <SearchResultModal
-          showSearchModal={showSearchModal}
-          setShowSearchModal={setShowSearchModal}
-        />
       </header>
     </>
   );

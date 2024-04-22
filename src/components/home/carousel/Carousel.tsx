@@ -25,7 +25,7 @@ const Carousel = ({ slides }: { slides: IImageCarousel[] }) => {
     }
   }, [slides]);
   return (
-    <div className="py-5 px-4 md:px-0 mx-auto">
+    <div className="py-5 px-4 md:px-0 mx-auto mt-20">
       {loading && (
         <Skeleton classes="lg:h-60 sm:h-52 h-40 lg:mx-20 mx-5 rounded-md" />
       )}

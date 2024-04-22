@@ -56,7 +56,7 @@ const GameLayanan: React.FC<{ games: IGame[] }> = ({ games }) => {
 
   return (
     <>
-      <div className="overflow-x-hidden pb-4 pr-4">
+      <div className="overflow-x-hidden pb-6 md:pb-10">
         <div className="grid grid-cols-auto-sm md:grid-cols-auto-md lg:grid-cols-auto-lg gap-3 lg:gap-6">
           {slicedGames &&
             slicedGames.map((data) => <Game data={data} key={data.id} />)}
@@ -66,10 +66,10 @@ const GameLayanan: React.FC<{ games: IGame[] }> = ({ games }) => {
         {limit < filteredGames.length && (
           <button
             onClick={handleClickExpandGame}
-            className="flex items-center gap-2 bg-white lg:text-sm text-primary-900 rounded-md py-2 px-4 font-semibold lg:font-medium hover:bg-primary-100"
+            className="flex items-center gap-2 bg-white text-sm text-primary-900 rounded-md py-2 px-4 font-medium hover:bg-primary-100"
           >
             Muat lebih banyak
-            <FontAwesomeIcon icon={faChevronDown} />
+            <FontAwesomeIcon icon={faChevronDown} className="text-sm" />
           </button>
         )}
       </div>

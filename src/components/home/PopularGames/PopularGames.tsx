@@ -31,9 +31,11 @@ const PopularGames: React.FC<IPopularGamesProps> = ({ popularGames }) => {
           mainkan game terpopuler saat ini dan segera top up di gasskeun top up
         </p> */}
 
-        <div className="mt-10 grid grid-cols-auto-sm md:grid-cols-auto-md lg:grid-cols-auto-lg gap-3 lg:gap-6">
+        <div className="mt-10 grid grid-cols-auto-sm md:grid-cols-auto-md lg:grid-cols-auto-lg gap-3 lg:gap-6 pb-6 md:pb-10">
           {limitedPopularGames.map((data) => (
-            <Game data={data} key={data.id} />
+            <>
+              <Game data={data} />
+            </>
           ))}
         </div>
 
@@ -41,10 +43,10 @@ const PopularGames: React.FC<IPopularGamesProps> = ({ popularGames }) => {
           {limit < popularGames.length && (
             <button
               onClick={handleClickExpandGame}
-              className="flex items-center gap-2 bg-white lg:text-sm text-primary-900 rounded-md py-2 px-4 font-semibold lg:font-medium hover:bg-primary-100"
+              className="flex items-center gap-2 bg-white text-sm text-primary-900 rounded-md py-2 px-4 font-medium hover:bg-primary-100"
             >
               Muat lebih banyak
-              <FontAwesomeIcon icon={faChevronDown} />
+              <FontAwesomeIcon icon={faChevronDown} className="text-sm" />
             </button>
           )}
         </div>

@@ -267,7 +267,7 @@ const Header = () => {
               >
                 <FontAwesomeIcon
                   icon={activeSideMenu ? faXmark : faBars}
-                  className="text-2xl text-slate-900"
+                  className="text-2xl text-primary-900"
                 />
               </button>
             </div>
@@ -321,7 +321,7 @@ const Header = () => {
                 <Link href="/login">Masuk</Link>
               </button>
               <button className="bg-primary-900 text-white rounded-md py-2 flex-1 w-full font-semibold hover:bg-black hover:text-white">
-                <Link href="/login">Daftar</Link>
+                <Link href="/register">Daftar</Link>
               </button>
             </div>
           )}

@@ -6,6 +6,7 @@ import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import Game from "../game/Game";
 import PopularGames from "@/components/home/PopularGames/PopularGames";
 import GameListItem from "../game/GameListItem";
+import Link from "next/link";
 
 const SearchResultModal = ({ searchKeyword }: { searchKeyword: string }) => {
   const [games, setgames] = useState<IGame[] | []>([]);
@@ -71,6 +72,19 @@ const SearchResultModal = ({ searchKeyword }: { searchKeyword: string }) => {
               Popular Games
             </h1>
           )}
+
+          {searchKeyword && games.length < 1 && (
+            <div className="not-found">
+              <p className="text-sm">produk yang dicari tidak tersedia </p>
+              <Link
+                className="text-sm text-primary-900"
+                href="https://api.whatsapp.com/send?phone=628112065672"
+              >
+                Beri kami saran produk
+              </Link>
+            </div>
+          )}
+
           <h1></h1>
           <div className="max-h-96 overflow-y-auto">
             {games.map((game) => (

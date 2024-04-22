@@ -10,6 +10,16 @@ import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 const GameLayanan: React.FC<{ games: IGame[] }> = ({ games }) => {
   const category = useRecoilValue(layananState);
   const [filteredGames, setFilteredGames] = useState<IGame[] | []>(games);
+  const [limit, setLimit] = useState(24);
+  const slicedGames = filteredGames.slice(0, limit);
+
+  const handleClickExpandGame = () => {
+    if (limit > games.length) {
+      setLimit(24);
+    } else {
+      setLimit((prevLimit) => prevLimit + 24);
+    }
+  };
 
   const requestGame = async (path: string) => {
     const request = await fetch(process.env.NEXT_PUBLIC_BASE_URL + path, {
@@ -46,11 +56,22 @@ const GameLayanan: React.FC<{ games: IGame[] }> = ({ games }) => {
 
   return (
     <>
-      <div className="h-screen overflow-y-scroll overflow-x-hidden pb-4 pr-4">
+      <div className="overflow-x-hidden pb-4 pr-4">
         <div className="grid grid-cols-auto-sm md:grid-cols-auto-md lg:grid-cols-auto-lg gap-3 lg:gap-6">
-          {filteredGames &&
-            filteredGames.map((data) => <Game data={data} key={data.id} />)}
+          {slicedGames &&
+            slicedGames.map((data) => <Game data={data} key={data.id} />)}
         </div>
+      </div>
+      <div className="show-more-btn w-full flex justify-center">
+        {limit < filteredGames.length && (
+          <button
+            onClick={handleClickExpandGame}
+            className="flex items-center gap-2 bg-white lg:text-sm text-primary-900 rounded-md py-2 px-4 font-semibold lg:font-medium hover:bg-primary-100"
+          >
+            Muat lebih banyak
+            <FontAwesomeIcon icon={faChevronDown} />
+          </button>
+        )}
       </div>
     </>
   );

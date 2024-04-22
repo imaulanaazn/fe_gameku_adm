@@ -20,8 +20,8 @@ const CompLayanan: React.FC<ICompLayananProps> = ({
     defaultCategory = defaultCategory.filter((item) => item.id !== "popular");
   }
   return (
-    <Container className="mt-14 md:mt-16 lg:mt-24">
-      <div>
+    <>
+      <div className="mt-14 md:mt-16 lg:mt-24" id="layanan">
         <h1 className="text-neutral-900 text-4xl lg:text-5xl font-bold text-center">
           Layanan
         </h1>
@@ -29,8 +29,10 @@ const CompLayanan: React.FC<ICompLayananProps> = ({
           Kami menyediakan berbagai layanan untuk memenuhi segala kebutuhan
           digitalmu hanya dengan satu platform yang terintegrasi
         </p>
-        <div className="mt-8 flex items-center justify-between flex-col-reverse lg:flex-row items-center sticky">
-          <div className="lg:max-w-[60%] w-10/12 flex flex-nowrap lg:flex-wrap gap-3 lg:gap-4 my-4 w-full lg:w-auto overflow-x-scroll lg:overflow-x-hidden">
+      </div>
+      <Container className="sticky top-20 z-40 bg-[rgba(255,255,255,0.2)] backdrop-blur-3xl my-4">
+        <div className="mt-8 py-1 md:py-2 flex items-center justify-between flex-col-reverse lg:flex-row items-center">
+          <div className="lg:max-w-[60%] w-full lg:w-auto flex flex-nowrap lg:flex-wrap gap-3 lg:gap-4 mb-3 md:my-3 overflow-x-scroll lg:overflow-x-hidden">
             {defaultCategory.map((data) => (
               <ListCategory data={data} key={data.id} />
             ))}
@@ -42,10 +44,11 @@ const CompLayanan: React.FC<ICompLayananProps> = ({
             <FormSearch />
           </div>
         </div>
-
+      </Container>
+      <Container>
         <GameLayanan games={games} />
-      </div>
-    </Container>
+      </Container>
+    </>
   );
 };
 

@@ -173,7 +173,7 @@ const Header = () => {
 
   return (
     <>
-      <header className="fixed top-0 left-0 w-full z-50 bg-white">
+      <header className="sticky top-0 w-full z-50 bg-white">
         <Container>
           <div className="flex justify-between items-center gap-4 md:gap-6 h-20">
             <div className="left-side flex items-center gap-6 xl:gap-8">

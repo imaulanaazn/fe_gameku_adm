@@ -29,15 +29,17 @@ const ListGames: React.FC<ListGameProps> = ({ title, data }) => {
             ))}
           </div>
         </div>
-        {limit < data.length && (
-          <button
-            onClick={handleClickExpandGame}
-            className="mx-auto flex items-center gap-2 bg-white lg:text-sm text-primary-900 rounded-md py-2 px-4 font-semibold lg:font-medium hover:bg-primary-100"
-          >
-            Muat lebih banyak
-            <FontAwesomeIcon icon={faChevronDown} />
-          </button>
-        )}
+        <div className="show-more-btn w-full flex justify-center">
+          {limit < data.length && (
+            <button
+              onClick={handleClickExpandGame}
+              className="flex items-center gap-2 bg-white lg:text-sm text-primary-900 rounded-md py-2 px-4 font-semibold lg:font-medium hover:bg-primary-100"
+            >
+              Muat lebih banyak
+              <FontAwesomeIcon icon={faChevronDown} />
+            </button>
+          )}
+        </div>
       </section>
     </Container>
   );

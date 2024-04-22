@@ -46,7 +46,7 @@ const Home = async () => {
   return (
     <div
       style={{
-        backgroundImage: "url(/images/red-pattern.png)",
+        backgroundImage: "url(/images/red-blurry.png)",
         backgroundRepeat: "repeat-y",
         backgroundSize: "100% auto",
       }}

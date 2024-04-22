@@ -34,7 +34,7 @@ const page = async ({ params }: IParams) => {
       sx={{
         backgroundColor: "#eaeaea",
         paddingBottom: 20,
-        backgroundImage: 'url("/images/red-pattern.png")',
+        backgroundImage: 'url("/images/red-blurry.png")',
         backgroundRepeat: "repeat-y",
         backgroundSize: "100% 100%",
       }}

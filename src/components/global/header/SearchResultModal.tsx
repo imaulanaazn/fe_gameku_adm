@@ -8,7 +8,13 @@ import PopularGames from "@/components/home/PopularGames/PopularGames";
 import GameListItem from "../game/GameListItem";
 import Link from "next/link";
 
-const SearchResultModal = ({ searchKeyword }: { searchKeyword: string }) => {
+const SearchResultModal = ({
+  searchKeyword,
+  isModalOpen,
+}: {
+  searchKeyword: string;
+  isModalOpen: boolean;
+}) => {
   const [games, setgames] = useState<IGame[] | []>([]);
 
   useEffect(() => {
@@ -63,7 +69,9 @@ const SearchResultModal = ({ searchKeyword }: { searchKeyword: string }) => {
 
   return (
     <div
-      className={`hidden peer-focus:block absolute top-14 left-0 w-full h-auto z-50`}
+      className={`${
+        isModalOpen ? "block" : "hidden"
+      } absolute top-14 left-0 w-full h-auto z-50`}
     >
       <div className="result-container bg-white w-full mx-auto shadow-md rounded-lg overflow-hidden">
         <div className="result p-3 h-max">

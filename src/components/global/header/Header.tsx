@@ -3,7 +3,7 @@
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   faBars,
   faMagnifyingGlass,
@@ -60,7 +60,8 @@ const Header = () => {
   const [isLogged, setIsLogged] = useState(false);
   const [user, setUser] = useRecoilState(userState);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [showSearchModal, setShowSearchModal] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const modalContainerRef = useRef<HTMLDivElement>(null);
   const [searchKeyword, setSearchKeyword] = useState("");
 
   const [logo, setLogo] = useRecoilState(imageAtom);
@@ -82,6 +83,20 @@ const Header = () => {
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     debouncedSetSearchKeyword(e.target.value);
+  };
+
+  const handleFocus = () => {
+    setIsModalOpen(true);
+  };
+
+  // Function to close the dropdown
+  const handleBlur = (e: { relatedTarget: Node | null }) => {
+    if (
+      modalContainerRef.current &&
+      !modalContainerRef.current.contains(e.relatedTarget)
+    ) {
+      setIsModalOpen(false);
+    }
   };
 
   const getLogo = async () => {
@@ -171,6 +186,22 @@ const Header = () => {
     }
   }, [user]);
 
+  useEffect(() => {
+    const handleClickOutside = (event: { target: any }) => {
+      if (
+        modalContainerRef.current &&
+        !modalContainerRef.current.contains(event.target)
+      ) {
+        setIsModalOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <>
       <header className="sticky top-0 w-full z-50 bg-white">
@@ -211,7 +242,13 @@ const Header = () => {
             </div>
 
             <div className="right-side flex gap-6 lg:gap-2 relative">
-              <div className="search-bar w-full relative">
+              <div
+                className="search-bar w-full relative"
+                ref={modalContainerRef}
+                tabIndex={0}
+                onFocus={handleFocus}
+                onBlur={handleBlur}
+              >
                 <input
                   type="text"
                   onChange={handleSearchChange}
@@ -225,7 +262,10 @@ const Header = () => {
                   />
                 </button>
 
-                <SearchResultModal searchKeyword={searchKeyword} />
+                <SearchResultModal
+                  searchKeyword={searchKeyword}
+                  isModalOpen={isModalOpen}
+                />
               </div>
 
               {/* Show profile icon when user is logged in */}

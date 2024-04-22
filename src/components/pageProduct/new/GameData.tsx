@@ -99,7 +99,10 @@ const GameData = ({ data, onChange, value, position }: any) => {
               data.typeServerId === ServerIdType.LIST && (
                 <Grid item xs={12} md={6}>
                   <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">
+                    <InputLabel
+                      id="demo-simple-select-label"
+                      sx={{ background: "white" }}
+                    >
                       Server ID
                     </InputLabel>
                     <Select
@@ -107,6 +110,7 @@ const GameData = ({ data, onChange, value, position }: any) => {
                       id="demo-simple-select"
                       value={value.serverId}
                       label="Age"
+                      sx={{ border: "1px solid #B72025" }}
                       onChange={(e) => onChange("serverId", e.target.value)}
                     >
                       {data.listServer.map((item: any) => (

@@ -29,8 +29,8 @@ const Login = async () => {
       }}
       className="w-full h-screen mx-auto flex items-center"
     >
-      <div className="mx-auto text-center w-full h-full lg:h-max flex items-center lg:items-stretch justify-center overflow-hidden">
-        <div className="left-side bg-white w-96 md:w-[25rem] lg:w-96 xl:w-[30rem] h-full md:h-max px-10 py-10 xl:px-16 xl:py-16 flex flex-col justify-center">
+      <div className="mx-auto text-center w-full h-screen lg:h-max flex items-center lg:items-stretch justify-center overflow-hidden">
+        <div className="left-side bg-white w-full md:w-[25rem] lg:w-96 xl:w-[30rem] h-full md:h-max px-10 py-10 xl:px-16 xl:py-16 flex flex-col justify-center">
           <div className="flex flex-col items-center gap-3 mb-8 xl:mb-10">
             <p className="xl:hidden font-light text-xs tracking-widest">
               GASSKEUN TOPUP

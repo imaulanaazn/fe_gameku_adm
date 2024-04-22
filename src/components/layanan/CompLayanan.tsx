@@ -31,8 +31,8 @@ const CompLayanan: React.FC<ICompLayananProps> = ({
         </p>
       </div>
       <Container className="sticky top-20 z-40 bg-[rgba(255,255,255,0.2)] backdrop-blur-3xl my-4">
-        <div className="mt-8 py-1 md:py-2 flex items-center justify-between flex-col-reverse lg:flex-row items-center">
-          <div className="lg:max-w-[60%] w-full lg:w-auto flex flex-nowrap lg:flex-wrap gap-3 lg:gap-4 mb-3 md:my-3 overflow-x-scroll lg:overflow-x-hidden">
+        <div className="mt-8 flex items-center justify-between flex-col-reverse lg:flex-row items-center">
+          <div className="w-full flex flex-no-wrap lg:flex-wrap gap-3 lg:gap-3 overflow-x-scroll lg:overflow-x-hidden py-2 md:py-3">
             {defaultCategory.map((data) => (
               <ListCategory data={data} key={data.id} />
             ))}
@@ -40,9 +40,9 @@ const CompLayanan: React.FC<ICompLayananProps> = ({
               <ListCategory data={data} key={data.id} />
             ))}
           </div>
-          <div className="w-full lg:w-2/12">
+          {/* <div className="w-full lg:w-2/12">
             <FormSearch />
-          </div>
+          </div> */}
         </div>
       </Container>
       <Container>

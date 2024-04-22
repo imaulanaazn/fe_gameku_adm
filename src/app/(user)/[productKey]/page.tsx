@@ -4,7 +4,7 @@ import NotFound from "./not-found";
 import sendRequest from "@/lib/baseApi";
 import Maintenance from "@/components/maintenance/Maintenance";
 import NewFormTopup from "@/components/pageProduct/NewFormTopup";
-import { Container } from "@/lib/mui";
+import Container from "@/components/global/Container/Container";
 interface IParams {
   params: {
     productKey: string;
@@ -29,9 +29,8 @@ const page = async ({ params }: IParams) => {
   );
 
   return (
-    <Container
-      maxWidth={false}
-      sx={{
+    <div
+      style={{
         backgroundColor: "#eaeaea",
         paddingBottom: 20,
         backgroundImage: 'url("/images/red-blurry.png")',
@@ -39,14 +38,16 @@ const page = async ({ params }: IParams) => {
         backgroundSize: "100% 100%",
       }}
     >
-      {/* <div className="mx-auto "> */}
-      <NewFormTopup
-        products={gameDetail.data}
-        paymentsMethod={paymentsMethod.data}
-      />
-      {/* <FormTopup products={gameDetail.data} paymentsMethod={paymentsMethod.data} /> */}
-      {/* </div> */}
-    </Container>
+      <Container>
+        {/* <div className="mx-auto "> */}
+        <NewFormTopup
+          products={gameDetail.data}
+          paymentsMethod={paymentsMethod.data}
+        />
+        {/* <FormTopup products={gameDetail.data} paymentsMethod={paymentsMethod.data} /> */}
+        {/* </div> */}
+      </Container>
+    </div>
   );
 };
 

@@ -148,106 +148,100 @@ const NewFormTopup: React.FC<IFormProps> = ({ products, paymentsMethod }) => {
   }, [products]);
   return (
     products && (
-      <Container maxWidth="lg" disableGutters={device}>
-        <Box sx={{ position: "relative" }}>
-          <Box sx={{ py: 5 }}>
-            <Breadcrumbs aria-label="breadcrumb">
-              <Link href="/" className="text-primary-900">
-                Home
-              </Link>
-              <Typography color="text.primary">{products.name}</Typography>
-            </Breadcrumbs>
-          </Box>
-          <Grid container spacing={6}>
-            <Grid item xs={12} md={4}>
-              <ProfileGame denoms={products} />
-            </Grid>
-            <Grid item xs={12} md={8}>
-              <GameData
-                position={1}
+      <Box sx={{ position: "relative", pb: { xs: 12, md: 14 } }}>
+        <Box sx={{ py: 5 }}>
+          <Breadcrumbs aria-label="breadcrumb">
+            <Link href="/" className="text-primary-900">
+              Home
+            </Link>
+            <Typography color="text.primary">{products.name}</Typography>
+          </Breadcrumbs>
+        </Box>
+        <Grid container spacing={4}>
+          <Grid item xs={12} md={4}>
+            <ProfileGame denoms={products} />
+          </Grid>
+          <Grid item xs={12} md={8}>
+            <GameData
+              position={1}
+              value={data}
+              data={products}
+              onChange={(key: any, value: any) => handleChange(key, value)}
+            />
+            {!products.isGrouped && (
+              <DenomList
+                position={2}
                 value={data}
                 data={products}
                 onChange={(key: any, value: any) => handleChange(key, value)}
               />
-              {!products.isGrouped && (
-                <DenomList
-                  position={2}
-                  value={data}
-                  data={products}
-                  onChange={(key: any, value: any) => handleChange(key, value)}
-                />
-              )}
-              {products.isGrouped && (
-                <GroupedDenomList
-                  position={3}
-                  value={data}
-                  data={products}
-                  onChange={(key: any, value: any) => handleChange(key, value)}
-                />
-              )}
-              <Quantity
+            )}
+            {products.isGrouped && (
+              <GroupedDenomList
                 position={3}
                 value={data}
                 data={products}
                 onChange={(key: any, value: any) => handleChange(key, value)}
               />
-              <PaymentMethod
-                position={4}
-                value={data}
-                data={paymentsMethod.length > 0 && paymentsMethod}
-                onChange={(key: any, value: any) => handleChange(key, value)}
-              />
-              <AdditionalData
-                position={5}
-                value={data}
-                data={products}
-                onChange={(key: any, value: any) => handleChange(key, value)}
-              />
-              <Grid container spacing={{ xs: 0, md: 4 }}>
-                <Grid item xs={12} md={6}>
-                  <MobileNumber
-                    position={5}
-                    value={data}
-                    data={products}
-                    onChange={(key: any, value: any) =>
-                      handleChange(key, value)
-                    }
-                  />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <PromoCode
-                    position={3}
-                    value={data}
-                    data={products}
-                    onChange={(key: any, value: any) =>
-                      handleChange(key, value)
-                    }
-                  />
-                </Grid>
+            )}
+            <Quantity
+              position={3}
+              value={data}
+              data={products}
+              onChange={(key: any, value: any) => handleChange(key, value)}
+            />
+            <PaymentMethod
+              position={4}
+              value={data}
+              data={paymentsMethod.length > 0 && paymentsMethod}
+              onChange={(key: any, value: any) => handleChange(key, value)}
+            />
+            <AdditionalData
+              position={5}
+              value={data}
+              data={products}
+              onChange={(key: any, value: any) => handleChange(key, value)}
+            />
+            <Grid container spacing={{ xs: 0, md: 4 }}>
+              <Grid item xs={12} md={6}>
+                <MobileNumber
+                  position={5}
+                  value={data}
+                  data={products}
+                  onChange={(key: any, value: any) => handleChange(key, value)}
+                />
               </Grid>
-              <Button
-                fullWidth
-                variant="contained"
-                size="large"
-                sx={{ marginTop: 4 }}
-                onClick={() => setModalOpen(true)}
-                disabled={isDisabled}
-              >
-                Beli Sekarang
-              </Button>
-              <ConfirmCheckout
-                isOpen={modalOpen}
-                onClose={() => setModalOpen(false)}
-                dataCheckout={{
-                  ...data,
-                  products,
-                }}
-                balance={balance}
-              />
+              <Grid item xs={12} md={6}>
+                <PromoCode
+                  position={3}
+                  value={data}
+                  data={products}
+                  onChange={(key: any, value: any) => handleChange(key, value)}
+                />
+              </Grid>
             </Grid>
+            <Button
+              fullWidth
+              variant="contained"
+              size="large"
+              sx={{ marginTop: 4 }}
+              onClick={() => setModalOpen(true)}
+              disabled={isDisabled}
+            >
+              Beli Sekarang
+            </Button>
+            <ConfirmCheckout
+              isOpen={modalOpen}
+              onClose={() => setModalOpen(false)}
+              dataCheckout={{
+                ...data,
+                products,
+              }}
+              balance={balance}
+            />
           </Grid>
-        </Box>
-      </Container>
+        </Grid>
+      </Box>
     )
   );
 };

@@ -101,7 +101,7 @@ const GameData = ({ data, onChange, value, position }: any) => {
                   <FormControl fullWidth>
                     <InputLabel
                       id="demo-simple-select-label"
-                      sx={{ background: "white" }}
+                      sx={{ background: "white", color: "#B72025" }}
                     >
                       Server ID
                     </InputLabel>

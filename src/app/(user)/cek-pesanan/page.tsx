@@ -1,8 +1,10 @@
 import FormCekPesanan from "@/components/cek-pesanan/FormCekPesanan";
 import ResultCheckPesanan from "@/components/cek-pesanan/ResultCheckPesanan";
+import Container from "@/components/global/Container/Container";
 import Maintenance from "@/components/maintenance/Maintenance";
 import sendRequest from "@/lib/baseApi";
 import { Metadata } from "next";
+import Image from "next/image";
 
 const CekPesanan = async () => {
   const statusWebsite = await sendRequest<{ value: string }[]>(
@@ -16,25 +18,44 @@ const CekPesanan = async () => {
     "/v1/config?type=bg_checkorder"
   );
   return (
-    <div
-      style={{
-        backgroundImage: `url('${bg.data[0].value}')`,
-        backgroundColor: "black",
-        backgroundSize: "cover",
-        backgroundRepeat: "no-repeat",
-        backgroundPosition: "center",
-      }}
-      className="w-full h-fit mx-auto grid align-middle"
-    >
-      <div className="mx-auto pt-10 h-fit min-h-screen text-center w-full p-5  text-white flex flex-col items-center">
-        <div className="flex flex-col items-center gap-3 mb-10">
-          <p className=" font-light text-xs tracking-widest">SILAHKAN</p>
-          <h1 className=" font-semibold text-3xl">Cek Pesanan</h1>
+    <section>
+      <Container className="py-24 lg:py-0 lg:my-24 bg-primary-900 lg:bg-white">
+        <div className="flex flex-col-reverse lg:flex-row items-center gap-20 md:gap-16 xl:gap-36 lg:rounded-3xl lg:py-24 lg:px-20 lg:bg-primary-900">
+          <div className="left-side w-full lg:w-2/3">
+            <h1 className="font-bold text-white text-4xl lg:text-5xl">
+              Cek Detail Transaksimu Dengan Mudah
+            </h1>
+            <p className="mt-3 lg:mt4 text-white max-w-lg">
+              Mencari detail transaksi sekarang lebih mudah dengan hanya
+              menggunakan no whatsapp / kode transaksi dari transaksi yang telah
+              kamu lakukan
+            </p>
+            <div className="flex flex-col gap-3">
+              <FormCekPesanan />
+            </div>
+            <p className="text-sm font-light text-white mt-4">
+              jika pesananmu tidak muncul dalam 2 jam, hubungi kami{" "}
+              <a
+                href="https://api.whatsapp.com/send?phone=628112065672"
+                className="underline decoration-solid font-medium"
+              >
+                disini
+              </a>
+            </p>
+          </div>
+          <div className="right-side lg:w-1/3 hidden lg:block">
+            <Image
+              src="/images/valorant-agent.png"
+              width={300}
+              height={400}
+              sizes="40vh"
+              alt="no game found"
+              className="max-h-96 object-contain"
+            />
+          </div>
         </div>
-        <FormCekPesanan />
-        <ResultCheckPesanan />
-      </div>
-    </div>
+      </Container>
+    </section>
   );
 };
 

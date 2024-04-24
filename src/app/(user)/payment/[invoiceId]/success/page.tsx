@@ -19,6 +19,7 @@ import Link from "next/link";
 import { currencyConverter } from "@/@core/utils/currencyConverter";
 import dayjs from "dayjs";
 import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
+import { OrderStatuses } from "@/enum";
 
 interface IParams {
   params: {
@@ -31,7 +32,7 @@ export default async function PaymentSuccess({ params }: IParams) {
     "/v1/order-detail/" + params.invoiceId,
     { cache: "no-cache" }
   );
-  if (!invoice.ok) {
+  if (!invoice.ok || invoice.status.toString() !== OrderStatuses.SUCCESS) {
     return <NotFound />;
   }
 
@@ -48,7 +49,7 @@ export default async function PaymentSuccess({ params }: IParams) {
               padding: "1.5rem",
               display: { xs: "none", md: "flex" },
             }}
-            gap={4}
+            gap={{ xs: 6, md: 8 }}
           >
             <FontAwesomeIcon
               icon={faCircleCheck}
@@ -256,7 +257,7 @@ export default async function PaymentSuccess({ params }: IParams) {
               <Typography variant="h4" color="white">
                 Terimakasih
               </Typography>
-              <Typography color="white" marginTop="0.5rem">
+              <Typography color="white" marginY="1rem">
                 Yaaay{" "}
                 <Typography component="span" fontWeight={800} color="white">
                   {" "}
@@ -275,7 +276,6 @@ export default async function PaymentSuccess({ params }: IParams) {
                   sx={{
                     backgroundColor: "white",
                     color: "#38e08b",
-                    marginTop: "1rem",
                     "&:hover": {
                       backgroundColor: "aquamarine",
                       color: "white",

@@ -90,59 +90,6 @@ export default function ResultCekPesananTable({
                     </td>
                   </tr>
                 ))}
-                {orderHistory.map((order) => (
-                  <tr
-                    key={order.id}
-                    className="border-b border-dashed last:border-b-0"
-                  >
-                    <td className="p-3 pl-0">
-                      <div className="flex items-center">
-                        <div className="relative inline-block shrink-0 rounded-2xl me-3">
-                          <Image
-                            src={order.logoUrl}
-                            className="w-[50px] h-[50px] inline-block shrink-0 rounded-2xl"
-                            alt={""}
-                            width={50}
-                            height={50}
-                            sizes={"50"}
-                          />
-                        </div>
-                        <div className="flex flex-col justify-start">
-                          <p className="mb-1 font-medium lg:font-semibold transition-colors duration-200 ease-in-out text-sm md:text-base text-secondary-inverse hover:text-primary">
-                            {" "}
-                            {order.productName}
-                          </p>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="p-3 text-center">
-                      <p className="mb-1 font-medium lg:font-semibold transition-colors duration-200 ease-in-out text-sm md:text-base text-secondary-inverse hover:text-primary">
-                        {order.invoiceId}
-                      </p>
-                    </td>
-                    <td className="p-3 text-center">
-                      <span className="align-baseline inline-flex px-4 py-3 mr-auto items-center font-semibold text-[.95rem] leading-none text-primary bg-primary-light rounded-lg">
-                        {" "}
-                        <Statuses status={order.status} />
-                      </span>
-                    </td>
-                    <td className="p-3 hidden lg:table-cell">
-                      <p className="text-center mb-1 font-medium lg:font-semibold transition-colors duration-200 ease-in-out text-sm md:text-base text-secondary-inverse hover:text-primary">
-                        {dayjs(order.createdAt).format("DD MMM YYYY")}
-                      </p>
-                    </td>
-                    <td className="p-3 pr-0">
-                      <Link href={`/payment/${order.invoiceId}`}>
-                        <span className="flex items-center justify-end shrink-0 mx-auto">
-                          <FontAwesomeIcon
-                            icon={faChevronCircleRight}
-                            className="text-xl lg:text-2xl"
-                          />
-                        </span>
-                      </Link>
-                    </td>
-                  </tr>
-                ))}
               </tbody>
             </table>
           </div>

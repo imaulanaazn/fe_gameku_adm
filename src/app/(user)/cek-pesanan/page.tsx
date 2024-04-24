@@ -20,40 +20,43 @@ const CekPesanan = async () => {
   return (
     <section>
       <Container className="py-24 lg:py-0 lg:my-24 bg-primary-900 lg:bg-white">
-        <div className="flex flex-col-reverse lg:flex-row items-center gap-20 md:gap-16 xl:gap-36 lg:rounded-3xl lg:py-24 lg:px-20 lg:bg-primary-900">
-          <div className="left-side w-full lg:w-2/3">
-            <h1 className="font-bold text-white text-4xl lg:text-5xl">
-              Cek Detail Transaksimu Dengan Mudah
-            </h1>
-            <p className="mt-3 lg:mt4 text-white max-w-lg">
-              Mencari detail transaksi sekarang lebih mudah dengan hanya
-              menggunakan no whatsapp / kode transaksi dari transaksi yang telah
-              kamu lakukan
-            </p>
-            <div className="flex flex-col gap-3">
-              <FormCekPesanan />
+        <>
+          <div className="flex flex-col-reverse lg:flex-row items-center gap-20 md:gap-16 xl:gap-36 lg:rounded-3xl  lg:p-20 lg:bg-primary-900">
+            <div className="left-side w-full lg:w-2/3">
+              <h1 className="font-bold text-white text-4xl lg:text-5xl">
+                Cek Detail Transaksimu Dengan Mudah
+              </h1>
+              <p className="mt-3 lg:mt4 text-white max-w-lg">
+                Mencari detail transaksi sekarang lebih mudah dengan hanya
+                menggunakan no whatsapp / kode transaksi dari transaksi yang
+                telah kamu lakukan
+              </p>
+              <div className="flex flex-col gap-3">
+                <FormCekPesanan />
+              </div>
+              <p className="text-sm font-light text-white mt-4">
+                jika pesananmu tidak muncul dalam 2 jam, hubungi kami{" "}
+                <a
+                  href="https://api.whatsapp.com/send?phone=628112065672"
+                  className="underline decoration-solid font-medium"
+                >
+                  disini
+                </a>
+              </p>
             </div>
-            <p className="text-sm font-light text-white mt-4">
-              jika pesananmu tidak muncul dalam 2 jam, hubungi kami{" "}
-              <a
-                href="https://api.whatsapp.com/send?phone=628112065672"
-                className="underline decoration-solid font-medium"
-              >
-                disini
-              </a>
-            </p>
+            <div className="right-side lg:w-1/3 hidden lg:block">
+              <Image
+                src="/images/valorant-agent.png"
+                width={300}
+                height={400}
+                sizes="40vh"
+                alt="no game found"
+                className="max-h-96 object-contain"
+              />
+            </div>
           </div>
-          <div className="right-side lg:w-1/3 hidden lg:block">
-            <Image
-              src="/images/valorant-agent.png"
-              width={300}
-              height={400}
-              sizes="40vh"
-              alt="no game found"
-              className="max-h-96 object-contain"
-            />
-          </div>
-        </div>
+          <ResultCheckPesanan />
+        </>
       </Container>
     </section>
   );

@@ -18,15 +18,15 @@ const CekPesanan = async () => {
     "/v1/config?type=bg_checkorder"
   );
   return (
-    <section>
-      <Container className="py-24 lg:py-0 lg:my-24 bg-primary-900 lg:bg-white">
-        <>
+    <>
+      <section>
+        <Container className="py-24 lg:py-0 lg:my-24 bg-primary-900 lg:bg-white">
           <div className="flex flex-col-reverse lg:flex-row items-center gap-20 md:gap-16 xl:gap-36 lg:rounded-3xl  lg:p-20 lg:bg-primary-900">
             <div className="left-side w-full lg:w-2/3">
               <h1 className="font-bold text-white text-4xl lg:text-5xl">
                 Cek Detail Transaksimu Dengan Mudah
               </h1>
-              <p className="mt-3 lg:mt4 text-white max-w-lg">
+              <p className="mt-4 lg:mt-5 text-white max-w-lg">
                 Mencari detail transaksi sekarang lebih mudah dengan hanya
                 menggunakan no whatsapp / kode transaksi dari transaksi yang
                 telah kamu lakukan
@@ -55,10 +55,14 @@ const CekPesanan = async () => {
               />
             </div>
           </div>
+        </Container>
+      </section>
+      <section>
+        <Container>
           <ResultCheckPesanan />
-        </>
-      </Container>
-    </section>
+        </Container>
+      </section>
+    </>
   );
 };
 

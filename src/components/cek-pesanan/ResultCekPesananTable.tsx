@@ -1,4 +1,10 @@
+import Image from "next/image";
 import React from "react";
+import Statuses from "./Statuses";
+import dayjs from "dayjs";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronCircleRight } from "@fortawesome/free-solid-svg-icons";
+import Link from "next/link";
 
 export default function ResultCekPesananTable({
   orderHistory,
@@ -6,292 +12,142 @@ export default function ResultCekPesananTable({
   orderHistory: IOrderHistory[];
 }) {
   return (
-    <>
-      <div className="flex flex-wrap -mx-3 mb-5">
-        <div className="w-full max-w-full px-3 mb-6  mx-auto">
-          <div className="relative flex-[1_auto] flex flex-col break-words min-w-0 bg-clip-border rounded-[.95rem] bg-white m-5">
-            <div className="relative flex flex-col min-w-0 break-words border border-dashed bg-clip-border rounded-2xl border-stone-200 bg-light/30">
-              {/* <!-- card header --> */}
-              <div className="px-9 pt-5 flex justify-between items-stretch flex-wrap min-h-[70px] pb-0 bg-transparent">
-                <h3 className="flex flex-col items-start justify-center m-2 ml-0 font-medium text-xl/tight text-dark">
-                  <span className="mr-3 font-semibold text-dark">
-                    Projects Deliveries
-                  </span>
-                  <span className="mt-1 font-medium text-secondary-dark text-lg/normal">
-                    All projects from the Loopple team
-                  </span>
-                </h3>
-                <div className="relative flex flex-wrap items-center my-2">
-                  <a
-                    href="javascript:void(0)"
-                    className="inline-block text-[.925rem] font-medium leading-normal text-center align-middle cursor-pointer rounded-2xl transition-colors duration-150 ease-in-out text-light-inverse bg-light-dark border-light shadow-none border-0 py-2 px-5 hover:bg-secondary active:bg-light focus:bg-light"
+    <div className="w-full max-w-full mx-auto">
+      <div className="relative flex-[1_auto] flex flex-col break-words min-w-0 bg-clip-border  bg-white">
+        <div className="flex-auto block mt-16 mb-8 lg:mt-20">
+          <div className="overflow-x-auto">
+            <table className="w-full my-0 align-middle text-dark border-neutral-200">
+              <thead className="align-bottom">
+                <tr className="font-semibold text-[0.95rem] text-secondary-dark">
+                  <th className="pb-3 text-start min-w-[175px] text-sm lg:text-base text-neutral-700">
+                    GAME
+                  </th>
+                  <th className="pb-3 px-3 text-center min-w-[100px] text-sm lg:text-base text-neutral-700">
+                    INVOICE ID
+                  </th>
+                  <th className="pb-3 px-3 text-center min-w-[175px] text-sm lg:text-base text-neutral-700">
+                    STATUS
+                  </th>
+                  <th className="hidden px-3 lg:block pb-3 text-center min-w-[100px] text-sm lg:text-base text-neutral-700">
+                    TANGGAL
+                  </th>
+                  <th className="pb-3 text-end min-w-[50px] text-sm lg:text-base text-neutral-700">
+                    DETAILS
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {orderHistory.map((order) => (
+                  <tr
+                    key={order.id}
+                    className="border-b border-dashed last:border-b-0"
                   >
-                    {" "}
-                    See other projects{" "}
-                  </a>
-                </div>
-              </div>
-              {/* <!-- end card header --> */}
-              {/* <!-- card body  --> */}
-              <div className="flex-auto block py-8 pt-6 px-9">
-                <div className="overflow-x-auto">
-                  <table className="w-full my-0 align-middle text-dark border-neutral-200">
-                    <thead className="align-bottom">
-                      <tr className="font-semibold text-[0.95rem] text-secondary-dark">
-                        <th className="pb-3 text-start min-w-[175px]">TASK</th>
-                        <th className="pb-3 text-end min-w-[100px]">OWNER</th>
-                        <th className="pb-3 text-end min-w-[100px]">
-                          PROGRESS
-                        </th>
-                        <th className="pb-3 pr-12 text-end min-w-[175px]">
-                          STATUS
-                        </th>
-                        <th className="pb-3 pr-12 text-end min-w-[100px]">
-                          DEADLINE
-                        </th>
-                        <th className="pb-3 text-end min-w-[50px]">DETAILS</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr className="border-b border-dashed last:border-b-0">
-                        <td className="p-3 pl-0">
-                          <div className="flex items-center">
-                            <div className="relative inline-block shrink-0 rounded-2xl me-3">
-                              <img
-                                src="https://raw.githubusercontent.com/Loopple/loopple-public-assets/main/riva-dashboard-tailwind/img/img-49-new.jpg"
-                                className="w-[50px] h-[50px] inline-block shrink-0 rounded-2xl"
-                                alt=""
-                              />
-                            </div>
-                            <div className="flex flex-col justify-start">
-                              <a
-                                href="javascript:void(0)"
-                                className="mb-1 font-semibold transition-colors duration-200 ease-in-out text-lg/normal text-secondary-inverse hover:text-primary"
-                              >
-                                {" "}
-                                Social Media API{" "}
-                              </a>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="p-3 pr-0 text-end">
-                          <span className="font-semibold text-light-inverse text-md/normal">
-                            Olivia Cambell
-                          </span>
-                        </td>
-                        <td className="p-3 pr-0 text-end">
-                          <span className="text-center align-baseline inline-flex px-2 py-1 mr-auto items-center font-semibold text-base/none text-success bg-success-light rounded-lg">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke-width="1.5"
-                              stroke="currentColor"
-                              className="w-5 h-5 mr-1"
-                            >
-                              <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941"
-                              />
-                            </svg>{" "}
-                            6.5%{" "}
-                          </span>
-                        </td>
-                        <td className="p-3 pr-12 text-end">
-                          <span className="text-center align-baseline inline-flex px-4 py-3 mr-auto items-center font-semibold text-[.95rem] leading-none text-primary bg-primary-light rounded-lg">
+                    <td className="p-3 pl-0">
+                      <div className="flex items-center">
+                        <div className="relative inline-block shrink-0 rounded-2xl me-3">
+                          <Image
+                            src={order.logoUrl}
+                            className="w-[50px] h-[50px] inline-block shrink-0 rounded-2xl"
+                            alt={order.game}
+                            width={50}
+                            height={50}
+                            sizes={"50"}
+                          />
+                        </div>
+                        <div className="flex flex-col justify-start">
+                          <p className="mb-1 font-medium xl:font-semibold transition-colors duration-200 ease-in-out text-sm md:text-base text-secondary-inverse hover:text-primary">
                             {" "}
-                            In Progress{" "}
-                          </span>
-                        </td>
-                        <td className="pr-0 text-start">
-                          <span className="font-semibold text-light-inverse text-md/normal">
-                            2023-08-23
-                          </span>
-                        </td>
-                        <td className="p-3 pr-0 text-end">
-                          <button className="ml-auto relative text-secondary-dark bg-light-dark hover:text-primary flex items-center h-[25px] w-[25px] text-base font-medium leading-normal text-center align-middle cursor-pointer rounded-2xl transition-colors duration-200 ease-in-out shadow-none border-0 justify-center">
-                            <span className="flex items-center justify-center p-0 m-0 leading-none shrink-0 ">
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke-width="1.5"
-                                stroke="currentColor"
-                                className="w-4 h-4"
-                              >
-                                <path
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                  d="M8.25 4.5l7.5 7.5-7.5 7.5"
-                                />
-                              </svg>
-                            </span>
-                          </button>
-                        </td>
-                      </tr>
-                      <tr className="border-b border-dashed last:border-b-0">
-                        <td className="p-3 pl-0">
-                          <div className="flex items-center">
-                            <div className="relative inline-block shrink-0 rounded-2xl me-3">
-                              <img
-                                src="https://raw.githubusercontent.com/Loopple/loopple-public-assets/main/riva-dashboard-tailwind/img/img-49-new.jpg"
-                                className="w-[50px] h-[50px] inline-block shrink-0 rounded-2xl"
-                                alt=""
-                              />
-                            </div>
-                            <div className="flex flex-col justify-start">
-                              <a
-                                href="javascript:void(0)"
-                                className="mb-1 font-semibold transition-colors duration-200 ease-in-out text-lg/normal text-secondary-inverse hover:text-primary"
-                              >
-                                {" "}
-                                Social Media API{" "}
-                              </a>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="p-3 pr-0 text-end">
-                          <span className="font-semibold text-light-inverse text-md/normal">
-                            Olivia Cambell
-                          </span>
-                        </td>
-                        <td className="p-3 pr-0 text-end">
-                          <span className="text-center align-baseline inline-flex px-2 py-1 mr-auto items-center font-semibold text-base/none text-success bg-success-light rounded-lg">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke-width="1.5"
-                              stroke="currentColor"
-                              className="w-5 h-5 mr-1"
-                            >
-                              <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941"
-                              />
-                            </svg>{" "}
-                            6.5%{" "}
-                          </span>
-                        </td>
-                        <td className="p-3 pr-12 text-end">
-                          <span className="text-center align-baseline inline-flex px-4 py-3 mr-auto items-center font-semibold text-[.95rem] leading-none text-primary bg-primary-light rounded-lg">
+                            {order.productName}
+                          </p>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="p-3 text-center">
+                      <p className="mb-1 font-medium xl:font-semibold transition-colors duration-200 ease-in-out text-sm md:text-base text-secondary-inverse hover:text-primary">
+                        {order.invoiceId}
+                      </p>
+                    </td>
+                    <td className="p-3 text-center">
+                      <span className="align-baseline inline-flex px-4 py-3 mr-auto items-center font-semibold text-[.95rem] leading-none text-primary bg-primary-light rounded-lg">
+                        {" "}
+                        <Statuses status={order.status} />
+                      </span>
+                    </td>
+                    <td className="p-3 hidden lg:table-cell">
+                      <p className="text-center mb-1 font-medium xl:font-semibold transition-colors duration-200 ease-in-out text-sm md:text-base text-secondary-inverse hover:text-primary">
+                        {dayjs(order.createdAt).format("DD MMM YYYY")}
+                      </p>
+                    </td>
+                    <td className="p-3 pr-0">
+                      <Link href={`/payment/${order.invoiceId}`}>
+                        <span className="flex items-center justify-center lg:justify-end shrink-0 mx-auto">
+                          <FontAwesomeIcon
+                            icon={faChevronCircleRight}
+                            className="text-xl lg:text-2xl"
+                          />
+                        </span>
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+                {orderHistory.map((order) => (
+                  <tr
+                    key={order.id}
+                    className="border-b border-dashed last:border-b-0"
+                  >
+                    <td className="p-3 pl-0">
+                      <div className="flex items-center">
+                        <div className="relative inline-block shrink-0 rounded-2xl me-3">
+                          <Image
+                            src={order.logoUrl}
+                            className="w-[50px] h-[50px] inline-block shrink-0 rounded-2xl"
+                            alt={""}
+                            width={50}
+                            height={50}
+                            sizes={"50"}
+                          />
+                        </div>
+                        <div className="flex flex-col justify-start">
+                          <p className="mb-1 font-medium lg:font-semibold transition-colors duration-200 ease-in-out text-sm md:text-base text-secondary-inverse hover:text-primary">
                             {" "}
-                            In Progress{" "}
-                          </span>
-                        </td>
-                        <td className="pr-0 text-start">
-                          <span className="font-semibold text-light-inverse text-md/normal">
-                            2023-08-23
-                          </span>
-                        </td>
-                        <td className="p-3 pr-0 text-end">
-                          <button className="ml-auto relative text-secondary-dark bg-light-dark hover:text-primary flex items-center h-[25px] w-[25px] text-base font-medium leading-normal text-center align-middle cursor-pointer rounded-2xl transition-colors duration-200 ease-in-out shadow-none border-0 justify-center">
-                            <span className="flex items-center justify-center p-0 m-0 leading-none shrink-0 ">
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke-width="1.5"
-                                stroke="currentColor"
-                                className="w-4 h-4"
-                              >
-                                <path
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                  d="M8.25 4.5l7.5 7.5-7.5 7.5"
-                                />
-                              </svg>
-                            </span>
-                          </button>
-                        </td>
-                      </tr>
-                      <tr className="border-b border-dashed last:border-b-0">
-                        <td className="p-3 pl-0">
-                          <div className="flex items-center">
-                            <div className="relative inline-block shrink-0 rounded-2xl me-3">
-                              <img
-                                src="https://raw.githubusercontent.com/Loopple/loopple-public-assets/main/riva-dashboard-tailwind/img/img-49-new.jpg"
-                                className="w-[50px] h-[50px] inline-block shrink-0 rounded-2xl"
-                                alt=""
-                              />
-                            </div>
-                            <div className="flex flex-col justify-start">
-                              <a
-                                href="javascript:void(0)"
-                                className="mb-1 font-semibold transition-colors duration-200 ease-in-out text-lg/normal text-secondary-inverse hover:text-primary"
-                              >
-                                {" "}
-                                Social Media API{" "}
-                              </a>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="p-3 pr-0 text-end">
-                          <span className="font-semibold text-light-inverse text-md/normal">
-                            Olivia Cambell
-                          </span>
-                        </td>
-                        <td className="p-3 pr-0 text-end">
-                          <span className="text-center align-baseline inline-flex px-2 py-1 mr-auto items-center font-semibold text-base/none text-success bg-success-light rounded-lg">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke-width="1.5"
-                              stroke="currentColor"
-                              className="w-5 h-5 mr-1"
-                            >
-                              <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941"
-                              />
-                            </svg>{" "}
-                            6.5%{" "}
-                          </span>
-                        </td>
-                        <td className="p-3 pr-12 text-end">
-                          <span className="text-center align-baseline inline-flex px-4 py-3 mr-auto items-center font-semibold text-[.95rem] leading-none text-primary bg-primary-light rounded-lg">
-                            {" "}
-                            In Progress{" "}
-                          </span>
-                        </td>
-                        <td className="pr-0 text-start">
-                          <span className="font-semibold text-light-inverse text-md/normal">
-                            2023-08-23
-                          </span>
-                        </td>
-                        <td className="p-3 pr-0 text-end">
-                          <button className="ml-auto relative text-secondary-dark bg-light-dark hover:text-primary flex items-center h-[25px] w-[25px] text-base font-medium leading-normal text-center align-middle cursor-pointer rounded-2xl transition-colors duration-200 ease-in-out shadow-none border-0 justify-center">
-                            <span className="flex items-center justify-center p-0 m-0 leading-none shrink-0 ">
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke-width="1.5"
-                                stroke="currentColor"
-                                className="w-4 h-4"
-                              >
-                                <path
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                  d="M8.25 4.5l7.5 7.5-7.5 7.5"
-                                />
-                              </svg>
-                            </span>
-                          </button>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
+                            {order.productName}
+                          </p>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="p-3 text-center">
+                      <p className="mb-1 font-medium lg:font-semibold transition-colors duration-200 ease-in-out text-sm md:text-base text-secondary-inverse hover:text-primary">
+                        {order.invoiceId}
+                      </p>
+                    </td>
+                    <td className="p-3 text-center">
+                      <span className="align-baseline inline-flex px-4 py-3 mr-auto items-center font-semibold text-[.95rem] leading-none text-primary bg-primary-light rounded-lg">
+                        {" "}
+                        <Statuses status={order.status} />
+                      </span>
+                    </td>
+                    <td className="p-3 hidden lg:table-cell">
+                      <p className="text-center mb-1 font-medium lg:font-semibold transition-colors duration-200 ease-in-out text-sm md:text-base text-secondary-inverse hover:text-primary">
+                        {dayjs(order.createdAt).format("DD MMM YYYY")}
+                      </p>
+                    </td>
+                    <td className="p-3 pr-0">
+                      <Link href={`/payment/${order.invoiceId}`}>
+                        <span className="flex items-center justify-end shrink-0 mx-auto">
+                          <FontAwesomeIcon
+                            icon={faChevronCircleRight}
+                            className="text-xl lg:text-2xl"
+                          />
+                        </span>
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }

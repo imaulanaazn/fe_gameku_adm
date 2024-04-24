@@ -2,13 +2,11 @@
 
 import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Image from "next/image";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
-import Statuses from "./Statuses";
 import { toast } from "react-toastify";
 import { userOrderHistoryState } from "@/atom/userOrderHistory";
+import ResultCekPesananTable from "./ResultCekPesananTable";
 
 const ResultCheckPesanan = () => {
   const [orderHistory, setOrderHistory] = useRecoilState(userOrderHistoryState);
@@ -110,7 +108,7 @@ const ResultCheckPesanan = () => {
 
   if (!haveData && orderHistory.keySearch) {
     return (
-      <div className="w-full bg-white mt-5 max-w-lg rounded-lg  py-10">
+      <div className="w-full bg-white my-20 max-w-lg rounded-lg  py-10">
         <h1 className="text-slate-600 text-xl font-bold">
           Tidak Ada Transaksi
         </h1>
@@ -121,39 +119,12 @@ const ResultCheckPesanan = () => {
     );
   } else if (haveData) {
     return (
-      <div className="w-full bg-white mt-5 rounded-lg p-3">
-        <h1 className="text-black text-base font-bold mb-5">
+      <div className="w-full bg-white my-20 lg:my-24">
+        <h1 className="text-neutral-800 text-2xl lg:text-3xl font-bold text-center">
           Riwayat Transaksi
         </h1>
-        {orderHistory.data.map((data) => (
-          <Link
-            href={`/payment/${data.invoiceId}`}
-            className="w-full border-2 p-3 flex justify-between items-center mb-3 border-black rounded-lg text-black hover:bg-slate-200"
-            key={data.id}
-          >
-            <div className="flex gap-3 items-center">
-              <div className="w-16 h-16">
-                <Image
-                  src={data.logoUrl}
-                  alt="Logo gasskeun Topup"
-                  width="0"
-                  height="0"
-                  sizes="100vw"
-                  style={{ width: "100%", height: "100%" }}
-                  className="rounded-lg"
-                />
-              </div>
-              <div className="text-start lg:text-sm text-xs flex flex-col">
-                <p>
-                  {data.productName} <span>x</span> {data.quantity}
-                </p>
-                <p>{data.game}</p>
-                <p>{data.paymentMethod}</p>
-              </div>
-            </div>
-            <Statuses status={data.status} />
-          </Link>
-        ))}
+
+        <ResultCekPesananTable orderHistory={orderHistory.data} />
 
         {/* Pagination */}
 

@@ -472,7 +472,6 @@ const TablePaymentMethod: React.FC<{ data: IPaymentMethodPagination }> = ({ data
             {showForm && detailData && (
                 <FormPaymentMethod
                     handleShowForm={(value: boolean) => setShowForm(value)}
-                    getNewData={() => console.log()}
                     data={detailData}
                     type={typeForm}
                 />

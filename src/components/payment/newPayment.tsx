@@ -96,8 +96,11 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
   const [order, setOrder] = useState<IInvoice | null>(invoices);
   const [isFinished, setIsFinished] = useState(false);
 
-  if (invoices.status === OrderStatuses.SUCCESS) {
-    router.push(`/payment/${invoices.invoiceId}/success`);
+  if (
+    invoices.status === OrderStatuses.SUCCESS ||
+    order?.status === OrderStatuses.SUCCESS
+  ) {
+    router.push(`/payment-success/${invoices.invoiceId}`);
   }
 
   const handleTooltipClose = () => {
@@ -161,6 +164,7 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
 
     return () => clearInterval(interval);
   }, [order?.status, isFinished]);
+
   return (
     <Grid container spacing={6}>
       {order && (

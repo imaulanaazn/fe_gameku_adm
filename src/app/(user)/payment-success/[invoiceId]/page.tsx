@@ -20,6 +20,7 @@ import { currencyConverter } from "@/@core/utils/currencyConverter";
 import dayjs from "dayjs";
 import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
 import { OrderStatuses } from "@/enum";
+import Orders from "@/app/(admin)/admin/deposit-history/page";
 
 interface IParams {
   params: {
@@ -32,10 +33,12 @@ export default async function PaymentSuccess({ params }: IParams) {
     "/v1/order-detail/" + params.invoiceId,
     { cache: "no-cache" }
   );
-  if (!invoice.ok || invoice.status.toString() !== OrderStatuses.SUCCESS) {
+
+  if (!invoice.ok) {
     return <NotFound />;
   }
 
+  if (invoice.data.status !== OrderStatuses.SUCCESS) return <></>;
   return (
     <>
       <Container className="lg:my-20 bg-[#38e08b] lg:bg-white">
@@ -73,7 +76,10 @@ export default async function PaymentSuccess({ params }: IParams) {
             }}
           >
             <Stack
-              sx={{ textAlign: "center", display: { xs: "flex", md: "none" } }}
+              sx={{
+                textAlign: "center",
+                display: { xs: "flex", md: "none" },
+              }}
               gap={4}
             >
               <FontAwesomeIcon
@@ -313,7 +319,11 @@ export default async function PaymentSuccess({ params }: IParams) {
                         }}
                       >
                         <Box
-                          sx={{ display: "flex", gap: 2, alignItems: "center" }}
+                          sx={{
+                            display: "flex",
+                            gap: 2,
+                            alignItems: "center",
+                          }}
                         >
                           <Avatar
                             src={invoice.data.logoGame}

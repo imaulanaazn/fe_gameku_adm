@@ -96,74 +96,80 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
   const [order, setOrder] = useState<IInvoice | null>(invoices);
   const [isFinished, setIsFinished] = useState(false);
 
-  if (
-    invoices.status === OrderStatuses.SUCCESS ||
-    order?.status === OrderStatuses.SUCCESS
-  ) {
-    router.push(`/payment-success/${invoices.invoiceId}`);
-  }
-
-  const handleTooltipClose = () => {
-    setOpen(false);
-  };
-
-  const handleTooltipOpen = () => {
-    setOpen(true);
-  };
-
-  const getLogo = async () => {
-    const req = await fetch(
-      process.env.NEXT_PUBLIC_BASE_URL + "/v1/config?type=logo",
-      {
-        method: "GET",
-        credentials: "include",
-        headers: {
-          "ngrok-skip-browser-warning": "true",
-        },
-      }
-    );
-
-    const res = await req.json();
-    if (req.ok) {
-      setLogoGasskeun(res[0].value);
+  useEffect(() => {
+    // Handle navigation based on payment status
+    if (
+      invoices.status === OrderStatuses.SUCCESS ||
+      order?.status === OrderStatuses.SUCCESS
+    ) {
+      router.push(`/payment-success/${invoices.invoiceId}`);
     }
-  };
+  }, [invoices.status, order?.status, invoices.invoiceId, router]);
 
-  const getOrder = async (fromInterval: boolean) => {
-    const req = await fetch(
-      process.env.NEXT_PUBLIC_BASE_URL +
-        "/v1/order-detail/" +
-        invoices.invoiceId,
-      {
-        headers: {
-          "ngrok-skip-browser-warning": "true",
-        },
-        credentials: "include",
-      }
-    );
-    const res = await req.json();
-    setOrder(res);
-    setIsFinished(fromInterval);
+  const handleTooltip = (bool: boolean) => {
+    setOpen(bool);
   };
 
   useEffect(() => {
+    const getLogo = async () => {
+      const req = await fetch(
+        process.env.NEXT_PUBLIC_BASE_URL + "/v1/config?type=logo",
+        {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            "ngrok-skip-browser-warning": "true",
+          },
+        }
+      );
+
+      const res = await req.json();
+      if (req.ok) {
+        setLogoGasskeun(res[0].value);
+      }
+    };
     getLogo();
   }, []);
 
   useEffect(() => {
-    const interval = setInterval(async () => {
-      if (isFinished && ["3", "4", "5", "6"].includes(order?.status || "")) {
-        clearInterval(interval);
-        return;
-      }
+    const getOrder = async (fromInterval: boolean) => {
+      try {
+        const req = await fetch(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/v1/order-detail/${invoices.invoiceId}`,
+          {
+            headers: {
+              "ngrok-skip-browser-warning": "true",
+            },
+            credentials: "include",
+          }
+        );
 
+        const res = await req.json();
+        setOrder(res);
+
+        // Stop interval if needed
+        if (
+          fromInterval &&
+          ["3", "4", "5", "6"].includes(order?.status || "")
+        ) {
+          setIsFinished(true);
+        }
+      } catch (error) {
+        console.error("Error fetching order:", error);
+      }
+    };
+
+    const interval = setInterval(async () => {
       if (!isFinished) {
         await getOrder(true);
       }
     }, 5000);
 
+    // Clean up interval
     return () => clearInterval(interval);
-  }, [order?.status, isFinished]);
+  }, [order?.status, isFinished, invoices.invoiceId]);
+
+  console.log(order);
 
   return (
     <Grid container spacing={6}>
@@ -624,13 +630,19 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                       {(order.category === PaymentsCategory.RETAIL ||
                         order.category ===
                           PaymentsCategory.VIRTUAL_ACCOUNT) && (
-                        <ClickAwayListener onClickAway={handleTooltipClose}>
+                        <ClickAwayListener
+                          onClickAway={() => {
+                            handleTooltip(false);
+                          }}
+                        >
                           <div>
                             <Tooltip
                               PopperProps={{
                                 disablePortal: true,
                               }}
-                              onClose={handleTooltipClose}
+                              onClose={() => {
+                                handleTooltip(false);
+                              }}
                               open={open}
                               disableFocusListener
                               disableHoverListener
@@ -645,7 +657,7 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                                     order.payment?.accountNumber ||
                                       order.payment?.paymentCode
                                   );
-                                  handleTooltipOpen();
+                                  handleTooltip(true);
                                 }}
                               >
                                 {order.payment?.accountNumber ||

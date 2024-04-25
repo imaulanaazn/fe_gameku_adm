@@ -55,7 +55,6 @@ const TableUser: React.FC<{ user: IUserPagination }> = ({ user }) => {
 
       const res = await req.json();
 
-      console.log(res);
       if (req.ok) {
         setCustomer({ ...customer, ...res, keySearch: searchQuery });
       } else {

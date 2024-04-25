@@ -169,8 +169,6 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
     return () => clearInterval(interval);
   }, [order?.status, isFinished, invoices.invoiceId]);
 
-  console.log(order);
-
   return (
     <Grid container spacing={6}>
       {order && (

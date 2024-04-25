@@ -26,6 +26,7 @@ import { toast } from "react-toastify";
 import { faYoutube } from "@fortawesome/free-brands-svg-icons";
 import { useRecoilState } from "recoil";
 import { imageAtom } from "@/atom/logo";
+import { faDiagramProject } from "@fortawesome/free-solid-svg-icons";
 
 const MENU = [
     {
@@ -57,6 +58,11 @@ const MENU = [
         name: "User",
         icon: faUser,
         link: "/admin/user",
+    },
+    {
+        name: "Reseller",
+        icon: faDiagramProject,
+        link: "/admin/reseller",
     },
     {
         name: "Game",

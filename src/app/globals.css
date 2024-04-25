@@ -21,7 +21,7 @@
   [multiple]:focus,
   textarea:focus,
   select:focus {
-    --tw-ring-color: #00000000;
+    --tw-ring-color: #b72025;
     border-color: var(--tw-ring-color);
   }
 

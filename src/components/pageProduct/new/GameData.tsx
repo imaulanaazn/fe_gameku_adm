@@ -19,7 +19,7 @@ const GameData = ({ data, onChange, value, position }: any) => {
     return (
       <Card
         sx={{
-          marginTop: position > 1 ? 4 : 0,
+          marginTop: position > 1 ? { xs: 6, md: 8 } : 0,
           borderRadius: "0.75rem",
           background:
             "#ffffff url(/images/topup-form-step-1.svg) no-repeat right top",

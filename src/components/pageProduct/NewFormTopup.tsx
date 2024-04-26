@@ -27,6 +27,7 @@ import Link from "next/link";
 import MobileNumber from "./new/MobileNumber";
 import { Container } from "@mui/system";
 import useDevice from "@/@core/hooks/useDevice";
+import ProductReview from "./ProductReview/ProductReview";
 
 interface IFormProps {
   products: IGameDetail;
@@ -157,11 +158,14 @@ const NewFormTopup: React.FC<IFormProps> = ({ products, paymentsMethod }) => {
             <Typography color="text.primary">{products.name}</Typography>
           </Breadcrumbs>
         </Box>
-        <Grid container spacing={4}>
-          <Grid item xs={12} md={4}>
+        <Grid container spacing={6}>
+          <Grid item xs={12} sm={4}>
             <ProfileGame denoms={products} />
+            <Box sx={{ display: { xs: "none", sm: "block" } }}>
+              <ProductReview />
+            </Box>
           </Grid>
-          <Grid item xs={12} md={8}>
+          <Grid item xs={12} sm={8}>
             <GameData
               position={1}
               value={data}
@@ -202,7 +206,7 @@ const NewFormTopup: React.FC<IFormProps> = ({ products, paymentsMethod }) => {
               data={products}
               onChange={(key: any, value: any) => handleChange(key, value)}
             />
-            <Grid container spacing={{ xs: 0, md: 4 }}>
+            <Grid container spacing={{ xs: 0, md: 6 }}>
               <Grid item xs={12} md={6}>
                 <MobileNumber
                   position={5}
@@ -239,6 +243,11 @@ const NewFormTopup: React.FC<IFormProps> = ({ products, paymentsMethod }) => {
               }}
               balance={balance}
             />
+          </Grid>
+          <Grid item xs={12} md={8}>
+            <Box sx={{ display: { xs: "block", sm: "none" } }}>
+              <ProductReview />
+            </Box>
           </Grid>
         </Grid>
       </Box>

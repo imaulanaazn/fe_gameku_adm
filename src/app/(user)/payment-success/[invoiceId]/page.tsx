@@ -1,3 +1,5 @@
+"use client";
+
 import NotFound from "@/app/(user)/[productKey]/not-found";
 import Container from "@/components/global/Container/Container";
 import sendRequest from "@/lib/baseApi";
@@ -10,9 +12,10 @@ import {
   Card,
   CardContent,
   Avatar,
+  Modal,
   Chip,
 } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Divider from "@mui/material/Divider";
 import Link from "next/link";
@@ -20,7 +23,8 @@ import { currencyConverter } from "@/@core/utils/currencyConverter";
 import dayjs from "dayjs";
 import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
 import { OrderStatuses } from "@/enum";
-import Orders from "@/app/(admin)/admin/deposit-history/page";
+import FeedbackModal from "@/components/PaymentSuccessPage/FeedbackModal";
+import Loading from "./loading";
 
 interface IParams {
   params: {
@@ -28,19 +32,61 @@ interface IParams {
   };
 }
 
-export default async function PaymentSuccess({ params }: IParams) {
-  const invoice = await sendRequest<IInvoice>(
-    "/v1/order-detail/" + params.invoiceId,
-    { cache: "no-cache" }
-  );
+export default function PaymentSuccess({ params }: IParams) {
+  const [invoice, setInvoice] = useState<IInvoice | null>();
+  const [isLoading, setIsLoading] = useState(true);
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
-  if (!invoice.ok) {
+  useEffect(() => {
+    const getInvoice = async () => {
+      setIsLoading(true);
+      try {
+        const req = await fetch(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/v1/order-detail/${params.invoiceId}`,
+          {
+            headers: {
+              "ngrok-skip-browser-warning": "true",
+            },
+            credentials: "include",
+          }
+        );
+
+        if (req.status === 404) {
+          setInvoice(null);
+        } else {
+          const res = await req.json();
+          setInvoice(res);
+        }
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Error fetching order:", error);
+        setIsLoading(false);
+      }
+    };
+    getInvoice();
+  }, []);
+
+  if (isLoading) {
+    return <Loading />;
+  } else if (!isLoading && !invoice) {
+    return <NotFound />;
+  } else if (!isLoading && invoice?.status !== OrderStatuses.SUCCESS) {
     return <NotFound />;
   }
 
-  if (invoice.data.status !== OrderStatuses.SUCCESS) return <></>;
   return (
     <>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <FeedbackModal handleClose={handleClose} orderId={invoice?.id} />
+      </Modal>
+
       <Container className="lg:my-20 bg-[#38e08b] lg:bg-white">
         <>
           <Stack
@@ -106,14 +152,14 @@ export default async function PaymentSuccess({ params }: IParams) {
                   variant="h6"
                   sx={{ marginBottom: "2rem", textAlign: "center" }}
                 >
-                  Top Up {invoice.data.game}
+                  Top Up {invoice?.game}
                 </Typography>
 
                 <Box>
                   <Typography variant="body1" fontWeight="500">
                     Item Detail
                   </Typography>
-                  {invoice.data.detail?.userId && (
+                  {invoice?.detail?.userId && (
                     <Stack
                       direction="row"
                       margin="0.25rem 0"
@@ -122,14 +168,14 @@ export default async function PaymentSuccess({ params }: IParams) {
                       <Typography variant="body2" sx={{ fontWeight: 400 }}>
                         User ID
                       </Typography>
-                      {invoice.data.detail?.userId && (
+                      {invoice?.detail?.userId && (
                         <Typography variant="body2" sx={{ fontWeight: 400 }}>
-                          {invoice.data.detail?.userId}
+                          {invoice?.detail?.userId}
                         </Typography>
                       )}
                     </Stack>
                   )}
-                  {invoice.data.detail?.serverId && (
+                  {invoice?.detail?.serverId && (
                     <Stack
                       direction="row"
                       margin="0.25rem 0"
@@ -138,14 +184,14 @@ export default async function PaymentSuccess({ params }: IParams) {
                       <Typography variant="body2" sx={{ fontWeight: 400 }}>
                         Server ID
                       </Typography>
-                      {invoice.data.detail?.serverId && (
+                      {invoice?.detail?.serverId && (
                         <Typography variant="body2" sx={{ fontWeight: 400 }}>
-                          {invoice.data.detail?.serverId}
+                          {invoice?.detail?.serverId}
                         </Typography>
                       )}
                     </Stack>
                   )}
-                  {invoice.data.detail?.username && (
+                  {invoice?.detail?.username && (
                     <Stack
                       direction="row"
                       margin="0.25rem 0"
@@ -154,9 +200,9 @@ export default async function PaymentSuccess({ params }: IParams) {
                       <Typography variant="body2" sx={{ fontWeight: 400 }}>
                         Username
                       </Typography>
-                      {invoice.data.detail?.username && (
+                      {invoice?.detail?.username && (
                         <Typography variant="body2" sx={{ fontWeight: 400 }}>
-                          {invoice.data.detail?.username}
+                          {invoice?.detail?.username}
                         </Typography>
                       )}
                     </Stack>
@@ -175,7 +221,7 @@ export default async function PaymentSuccess({ params }: IParams) {
                   >
                     <Typography variant="body2">Nomor Invoice</Typography>
                     <Typography variant="body2">
-                      {invoice.data.invoiceId}
+                      {invoice?.invoiceId}
                     </Typography>
                   </Stack>
                   <Stack
@@ -185,7 +231,7 @@ export default async function PaymentSuccess({ params }: IParams) {
                   >
                     <Typography variant="body2">Tanggal Order</Typography>
                     <Typography variant="body2">
-                      {dayjs(invoice.data.createdAt).format("DD MMM YYYY")}
+                      {dayjs(invoice?.createdAt).format("DD MMM YYYY")}
                     </Typography>
                   </Stack>
                   <Stack
@@ -195,7 +241,7 @@ export default async function PaymentSuccess({ params }: IParams) {
                   >
                     <Typography variant="body2">Product</Typography>
                     <Typography variant="body2">
-                      {invoice.data.productName}
+                      {invoice?.productName}
                     </Typography>
                   </Stack>
                   <Stack
@@ -204,9 +250,7 @@ export default async function PaymentSuccess({ params }: IParams) {
                     margin="0.25rem 0"
                   >
                     <Typography variant="body2">Kuantitas</Typography>
-                    <Typography variant="body2">
-                      {invoice.data.quantity}
-                    </Typography>
+                    <Typography variant="body2">{invoice?.quantity}</Typography>
                   </Stack>
                   <Stack
                     direction="row"
@@ -215,11 +259,9 @@ export default async function PaymentSuccess({ params }: IParams) {
                   >
                     <Typography variant="body2">Sub Total</Typography>
                     <Typography variant="body2">
-                      {invoice.data.detail?.amount &&
-                      invoice.data.detail?.quantity
+                      {invoice?.detail?.amount && invoice?.detail?.quantity
                         ? currencyConverter(
-                            invoice.data.detail.amount *
-                              invoice.data.detail.quantity
+                            invoice?.detail.amount * invoice?.detail.quantity
                           )
                         : "N/A"}
                     </Typography>
@@ -231,7 +273,7 @@ export default async function PaymentSuccess({ params }: IParams) {
                   >
                     <Typography variant="body2">Biaya Admin</Typography>
                     <Typography variant="body2">
-                      {currencyConverter(invoice.data.feeAmt)}
+                      {invoice?.feeAmt && currencyConverter(invoice?.feeAmt)}
                     </Typography>
                   </Stack>
                   <Stack
@@ -241,7 +283,7 @@ export default async function PaymentSuccess({ params }: IParams) {
                   >
                     <Typography variant="body2">Diskon</Typography>
                     <Typography variant="body2">
-                      {currencyConverter(invoice.data.discAmt)}
+                      {invoice?.discAmt && currencyConverter(invoice?.discAmt)}
                     </Typography>
                   </Stack>
                 </Box>
@@ -253,7 +295,7 @@ export default async function PaymentSuccess({ params }: IParams) {
                     Total
                   </Typography>
                   <Typography variant="body1" fontWeight="500">
-                    {currencyConverter(invoice.data.totalAmt)}
+                    {invoice?.totalAmt && currencyConverter(invoice?.totalAmt)}
                   </Typography>
                 </Stack>
               </Stack>
@@ -267,18 +309,19 @@ export default async function PaymentSuccess({ params }: IParams) {
                 Yaaay{" "}
                 <Typography component="span" fontWeight={800} color="white">
                   {" "}
-                  {invoice.data.productName}{" "}
+                  {invoice?.productName}{" "}
                 </Typography>{" "}
                 berhasil dikirim ke akun{" "}
                 <Typography component="span" fontWeight={800} color="white">
                   {" "}
-                  {invoice.data.game}{" "}
+                  {invoice?.game}{" "}
                 </Typography>{" "}
                 anda Terimakasih telah menggunakan layanan gasskeun top up. kami
                 harap anda puas dengan pelayanan kami
               </Typography>
-              <Link href="/layanan">
+              <Stack direction="row" gap={4} justifyContent={"center"}>
                 <Button
+                  onClick={handleOpen}
                   sx={{
                     backgroundColor: "white",
                     color: "#38e08b",
@@ -288,9 +331,9 @@ export default async function PaymentSuccess({ params }: IParams) {
                     },
                   }}
                 >
-                  Topup Lagi
+                  Beri Ulasan
                 </Button>
-              </Link>
+              </Stack>
             </Box>
           </Stack>
         </>
@@ -306,7 +349,7 @@ export default async function PaymentSuccess({ params }: IParams) {
             Invoice
           </Typography>
           <Grid container spacing={6}>
-            {invoice.ok && (
+            {invoice && (
               <>
                 <Grid item xs={12} md={7}>
                   <Card sx={{ position: "relative" }}>
@@ -326,7 +369,7 @@ export default async function PaymentSuccess({ params }: IParams) {
                           }}
                         >
                           <Avatar
-                            src={invoice.data.logoGame}
+                            src={invoice?.logoGame}
                             variant="rounded"
                             sx={{ width: 50, height: 50 }}
                           />
@@ -345,7 +388,7 @@ export default async function PaymentSuccess({ params }: IParams) {
                                 marginTop: 1.5,
                               }}
                             >
-                              {invoice.data.productName}
+                              {invoice?.productName}
                             </Typography>
                             <Typography
                               variant="body2"
@@ -355,7 +398,7 @@ export default async function PaymentSuccess({ params }: IParams) {
                                 marginTop: 1.5,
                               }}
                             >
-                              {invoice.data.game}
+                              {invoice?.game}
                             </Typography>
                           </Box>
                         </Box>
@@ -374,21 +417,21 @@ export default async function PaymentSuccess({ params }: IParams) {
                             variant="body2"
                             sx={{ fontWeight: 600, marginTop: 1.5 }}
                           >
-                            {currencyConverter(invoice.data.totalAmt)}
+                            {currencyConverter(invoice?.totalAmt)}
                           </Typography>
                         </Box>
                       </Box>
                       <Box sx={{ marginTop: 4 }}>
-                        {(invoice.data.detail?.userId ||
-                          invoice.data.detail?.serverId ||
-                          invoice.data.detail?.username) && (
+                        {(invoice?.detail?.userId ||
+                          invoice?.detail?.serverId ||
+                          invoice?.detail?.username) && (
                           <Typography variant="body1" sx={{ fontWeight: 600 }}>
                             Data game :
                           </Typography>
                         )}
                       </Box>
                       <Box>
-                        {invoice.data.detail?.userId && (
+                        {invoice?.detail?.userId && (
                           <Stack direction="row" justifyContent="space-between">
                             <Typography
                               variant="body2"
@@ -396,17 +439,17 @@ export default async function PaymentSuccess({ params }: IParams) {
                             >
                               User ID
                             </Typography>
-                            {invoice.data.detail?.userId && (
+                            {invoice?.detail?.userId && (
                               <Typography
                                 variant="body2"
                                 sx={{ fontWeight: 600, marginTop: 2 }}
                               >
-                                {invoice.data.detail?.userId}
+                                {invoice?.detail?.userId}
                               </Typography>
                             )}
                           </Stack>
                         )}
-                        {invoice.data.detail?.serverId && (
+                        {invoice?.detail?.serverId && (
                           <Stack direction="row" justifyContent="space-between">
                             <Typography
                               variant="body2"
@@ -414,17 +457,17 @@ export default async function PaymentSuccess({ params }: IParams) {
                             >
                               Server ID
                             </Typography>
-                            {invoice.data.detail?.serverId && (
+                            {invoice?.detail?.serverId && (
                               <Typography
                                 variant="body2"
                                 sx={{ fontWeight: 600, marginTop: 2 }}
                               >
-                                {invoice.data.detail?.serverId}
+                                {invoice?.detail?.serverId}
                               </Typography>
                             )}
                           </Stack>
                         )}
-                        {invoice.data.detail?.username && (
+                        {invoice?.detail?.username && (
                           <Stack direction="row" justifyContent="space-between">
                             <Typography
                               variant="body2"
@@ -432,12 +475,12 @@ export default async function PaymentSuccess({ params }: IParams) {
                             >
                               Username
                             </Typography>
-                            {invoice.data.detail?.username && (
+                            {invoice?.detail?.username && (
                               <Typography
                                 variant="body2"
                                 sx={{ fontWeight: 600, marginTop: 2 }}
                               >
-                                {invoice.data.detail?.username}
+                                {invoice?.detail?.username}
                               </Typography>
                             )}
                           </Stack>
@@ -465,11 +508,11 @@ export default async function PaymentSuccess({ params }: IParams) {
                         }}
                       >
                         <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                          {invoice.data.productName}
+                          {invoice?.productName}
                         </Typography>
                         <Typography variant="body2">
                           {currencyConverter(
-                            invoice.data.detail ? invoice.data.detail.amount : 0
+                            invoice?.detail ? invoice?.detail.amount : 0
                           )}
                         </Typography>
                       </Box>
@@ -484,7 +527,7 @@ export default async function PaymentSuccess({ params }: IParams) {
                       >
                         <Typography variant="body2">Kuantitas</Typography>
                         <Typography variant="body2">
-                          {invoice.data.detail?.quantity}
+                          {invoice?.detail?.quantity}
                         </Typography>
                       </Box>
                       <Box
@@ -500,11 +543,10 @@ export default async function PaymentSuccess({ params }: IParams) {
                           Subtotal
                         </Typography>
                         <Typography variant="body2">
-                          {invoice.data.detail?.amount &&
-                          invoice.data.detail?.quantity
+                          {invoice?.detail?.amount && invoice?.detail?.quantity
                             ? currencyConverter(
-                                invoice.data.detail.amount *
-                                  invoice.data.detail.quantity
+                                invoice?.detail.amount *
+                                  invoice?.detail.quantity
                               )
                             : "N/A"}
                         </Typography>
@@ -522,7 +564,7 @@ export default async function PaymentSuccess({ params }: IParams) {
                           Biaya Admin
                         </Typography>
                         <Typography variant="body2">
-                          {currencyConverter(invoice.data.feeAmt)}
+                          {currencyConverter(invoice?.feeAmt)}
                         </Typography>
                       </Box>
                       <Box
@@ -538,7 +580,7 @@ export default async function PaymentSuccess({ params }: IParams) {
                           Diskon
                         </Typography>
                         <Typography variant="body2">
-                          {currencyConverter(invoice.data.discAmt)}
+                          {currencyConverter(invoice?.discAmt)}
                         </Typography>
                       </Box>
                       <Divider />
@@ -555,7 +597,7 @@ export default async function PaymentSuccess({ params }: IParams) {
                           Total
                         </Typography>
                         <Typography variant="body1" sx={{ fontWeight: 600 }}>
-                          {currencyConverter(invoice.data.totalAmt)}
+                          {currencyConverter(invoice?.totalAmt)}
                         </Typography>
                       </Box>
                     </CardContent>
@@ -602,7 +644,7 @@ export default async function PaymentSuccess({ params }: IParams) {
                             variant="body2"
                             sx={{ fontWeight: 400 }}
                           >
-                            {invoice.data.invoiceId}
+                            {invoice?.invoiceId}
                           </Typography>
                         </Stack>
                         <Stack
@@ -618,7 +660,7 @@ export default async function PaymentSuccess({ params }: IParams) {
                             variant="body2"
                             sx={{ fontWeight: 400 }}
                           >
-                            {dayjs(invoice.data.createdAt).format(
+                            {dayjs(invoice?.createdAt).format(
                               "DD MMM YYYY HH:mm:ss"
                             )}
                           </Typography>
@@ -636,10 +678,10 @@ export default async function PaymentSuccess({ params }: IParams) {
                             variant="body2"
                             sx={{ fontWeight: 400 }}
                           >
-                            {invoice.data.paymentMethods?.name}
+                            {invoice?.paymentMethods?.name}
                           </Typography>
                         </Stack>
-                        {invoice.data.cd === "ID_OVO" && (
+                        {invoice?.cd === "ID_OVO" && (
                           <Stack
                             direction="row"
                             justifyContent="space-between"
@@ -655,14 +697,14 @@ export default async function PaymentSuccess({ params }: IParams) {
                               variant="body2"
                               sx={{ fontWeight: 400 }}
                             >
-                              {invoice.data.payment?.mobileNumber.replace(
+                              {invoice?.payment?.mobileNumber.replace(
                                 "+62",
                                 "0"
                               )}
                             </Typography>
                           </Stack>
                         )}
-                        {invoice.data.cd === "ID_JENIUSPAY" && (
+                        {invoice?.cd === "ID_JENIUSPAY" && (
                           <Stack
                             direction="row"
                             justifyContent="space-between"
@@ -678,7 +720,7 @@ export default async function PaymentSuccess({ params }: IParams) {
                               variant="body2"
                               sx={{ fontWeight: 400 }}
                             >
-                              {invoice.data.cashtag}
+                              {invoice?.cashtag}
                             </Typography>
                           </Stack>
                         )}
@@ -694,47 +736,3 @@ export default async function PaymentSuccess({ params }: IParams) {
     </>
   );
 }
-
-// {
-//     data: {
-//       id: '990dba58-e558-45b9-936f-f33e4f0aa2cc',
-//       invoiceId: 'INV1713878150244',
-//       game: 'PUBG Mobile',
-//       paymentMethod: 'Bank Syariah Indonesia (BSI)',
-//       paymentMethodId: '0b2905ed-9010-4caa-ba7d-ed17f779e42c',
-//       productName: '30 UC',
-//       totalAmt: 10137,
-//       feeAmt: 4000,
-//       discAmt: 0,
-//       promoCd: '',
-//       status: '1',
-//       createdAt: '2024-04-23T13:15:50.000Z',
-//       amt: 6137,
-//       quantity: 1,
-//       logoGame: 'https://firebasestorage.googleapis.com/v0/b/gasskeun-topup.appspot.com/o/assets%2Fgame%2F61db1a5d-f34c-472a-9266-d39993d12f44.png?alt=media&token=5a291742-1094-427e-8cbf-4d680ac22e5b',
-//       logoPaymentMethod: 'https://firebasestorage.googleapis.com/v0/b/gasskeun-topup.appspot.com/o/assets%2Fpayments_method%2Fbsi.png?alt=media&token=ff51d83e-35d3-4df5-b16a-aedfffa5055c',
-//       payment: {
-//         accountNumber: '934799996940373',
-//         bankCode: 'BSI',
-//         merchantCode: '9347',
-//         name: 'Mahbul Apparel'
-//       },
-//       expiredAt: '2024-04-23T20:15:50.000Z',
-//       category: '3',
-//       cd: 'BSI',
-//       detail: {
-//         id: 'e7b86bfd-4698-4463-9cec-be993395fb93',
-//         orderId: '990dba58-e558-45b9-936f-f33e4f0aa2cc',
-//         productId: '5565edbc-2c89-418b-8a02-1e437f759f40',
-//         userId: '123',
-//         serverId: '',
-//         gameVoucher: null,
-//         amount: 6137,
-//         quantity: 1,
-//         webhookCount: 0,
-//         username: null
-//       }
-//     },
-//     ok: true,
-//     status: 200
-//   }

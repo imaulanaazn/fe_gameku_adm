@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Container,
   Box,
@@ -14,7 +14,58 @@ import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ProductCommentCard from "./ProductCommentCard";
 
-function ProductReview() {
+export interface IReview {
+  message: string;
+  rating: string;
+  mobileNumber: string;
+  product: string;
+  createdAt: string;
+}
+
+export interface IRatingSummary {
+  rating: string;
+  totalRating: number;
+}
+
+export interface IReviewsResponse {
+  reviews: IReview[];
+  ratings: IRatingSummary[];
+  averageRating: number;
+  totalRating: number;
+}
+
+const initialState: IReviewsResponse = {
+  reviews: [],
+  ratings: [],
+  averageRating: 0,
+  totalRating: 0,
+};
+
+function ProductReview({ gameId }: { gameId: string }) {
+  const [reviews, setReviews] = useState<IReviewsResponse>(initialState);
+
+  useEffect(() => {
+    async function getReviews() {
+      try {
+        const req = await fetch(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/v1/order-review?gameId=${gameId}`,
+          {
+            headers: {
+              "ngrok-skip-browser-warning": "true",
+            },
+          }
+        );
+
+        const response = await req.json();
+        setReviews(response);
+      } catch (error) {
+        console.error("Error fetching order:", error);
+      }
+    }
+
+    getReviews();
+  }, [gameId]);
+
   return (
     <Container
       maxWidth="sm"
@@ -56,75 +107,67 @@ function ProductReview() {
               sx={{ fontWeight: "bold", ml: 2, fontSize: "2rem" }}
               color="#B72025"
             >
-              3.9/5
+              {reviews.averageRating}/5
             </Typography>
           </Stack>
-          <Rating value={3.9} precision={0.1} readOnly />
+          <Rating value={reviews.averageRating} precision={0.1} readOnly />
         </Box>
         <Typography variant="body2" sx={{ mt: 1 }}>
-          40 ulasan pelanggan
+          {reviews.reviews.length}
         </Typography>
         <Stack pt={6}>
           <ul style={{ width: "100%", listStyle: "none", padding: 0 }}>
-            {[
-              { rating: 5, percentage: 40, color: "green" },
-              { rating: 4, percentage: 30, color: "green" },
-              { rating: 3, percentage: 15, color: "yellow" },
-              { rating: 2, percentage: 10, color: "yellow" },
-              { rating: 1, percentage: 5, color: "red" },
-            ].map((item) => (
-              <li
-                key={item.rating}
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  gap: "0.75rem",
-                  padding: "8px",
-                }}
-              >
-                <Stack
-                  direction="row"
-                  justifyContent="center"
-                  alignItems="center"
+            {reviews &&
+              reviews.ratings.map((item: IRatingSummary) => (
+                <li
+                  key={item.rating}
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    gap: "0.75rem",
+                    padding: "8px",
+                  }}
                 >
-                  <Typography variant="body2" sx={{ flexGrow: 0, mr: 1 }}>
-                    {item.rating}
-                  </Typography>
-                  <Rating
-                    value={1}
-                    precision={1}
-                    readOnly
-                    max={1}
-                    size="small"
-                  />
-                </Stack>
-                <Box sx={{ width: { xs: "70%", sm: "80%", md: "60%" } }}>
-                  <Box
-                    sx={{
-                      height: "8px",
-                      bgcolor: `${item.color}.500`,
-                      borderRadius: "4px",
-                    }}
+                  <Stack
+                    direction="row"
+                    justifyContent="center"
+                    alignItems="center"
                   >
-                    <LinearProgress
-                      variant="determinate"
-                      value={item.percentage}
+                    <Typography variant="body2" sx={{ flexGrow: 0, mr: 1 }}>
+                      {item.rating}
+                    </Typography>
+                    <Rating
+                      value={1}
+                      precision={1}
+                      readOnly
+                      max={1}
+                      size="small"
                     />
+                  </Stack>
+                  <Box sx={{ width: { xs: "70%", sm: "80%", md: "60%" } }}>
+                    <Box
+                      sx={{
+                        height: "8px",
+                        borderRadius: "4px",
+                      }}
+                    >
+                      <LinearProgress
+                        variant="determinate"
+                        value={(item.totalRating / reviews.totalRating) * 100}
+                      />
+                    </Box>
                   </Box>
-                </Box>
-                <Typography variant="body2">{item.percentage}%</Typography>
-              </li>
-            ))}
+                  <Typography variant="body2">{item.totalRating}</Typography>
+                </li>
+              ))}
           </ul>
         </Stack>
 
-        <ProductCommentCard />
-        <ProductCommentCard />
-        <ProductCommentCard />
-        <ProductCommentCard />
-        <ProductCommentCard />
-        <ProductCommentCard />
+        {reviews.reviews.length > 0 &&
+          reviews.reviews.map((review: IReview) => (
+            <ProductCommentCard review={review} key={review.createdAt} />
+          ))}
 
         <Link href="/reviews">
           <Stack

@@ -147,6 +147,7 @@ const NewFormTopup: React.FC<IFormProps> = ({ products, paymentsMethod }) => {
       handleChange("tabActive", firstCategory.id);
     }
   }, [products]);
+
   return (
     products && (
       <Box sx={{ position: "relative", pb: { xs: 12, md: 14 } }}>
@@ -162,7 +163,7 @@ const NewFormTopup: React.FC<IFormProps> = ({ products, paymentsMethod }) => {
           <Grid item xs={12} sm={4}>
             <ProfileGame denoms={products} />
             <Box sx={{ display: { xs: "none", sm: "block" } }}>
-              <ProductReview />
+              <ProductReview gameId={products.id} />
             </Box>
           </Grid>
           <Grid item xs={12} sm={8}>
@@ -246,7 +247,7 @@ const NewFormTopup: React.FC<IFormProps> = ({ products, paymentsMethod }) => {
           </Grid>
           <Grid item xs={12} md={8}>
             <Box sx={{ display: { xs: "block", sm: "none" } }}>
-              <ProductReview />
+              <ProductReview gameId={products.id} />
             </Box>
           </Grid>
         </Grid>

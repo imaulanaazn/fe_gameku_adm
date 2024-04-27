@@ -1,6 +1,8 @@
 import { Box, Typography, Rating, Button, Divider, Stack } from "@mui/material";
+import dayjs from "dayjs";
+import { IReview } from "./ProductReview";
 
-function ProductCommentCard() {
+function ProductCommentCard({ review }: { review: IReview }) {
   return (
     <>
       <Divider />
@@ -11,15 +13,19 @@ function ProductCommentCard() {
             fontSize={{ xs: "0.9rem", lg: "0.95rem" }}
             fontWeight="600"
           >
-            088******234
+            {review.mobileNumber}
           </Typography>
-          <Rating value={4.5} precision={0.5} readOnly size="small" />
+          <Rating
+            value={Number(review.rating)}
+            precision={0.5}
+            readOnly
+            size="small"
+          />
         </Stack>
 
         {/* Comment */}
         <Typography fontSize={{ xs: "0.85rem", lg: "0.9rem" }} textAlign="left">
-          Gorgeous design! Even more responsive than the previous version. A
-          pleasure to use!
+          {review.message}
         </Typography>
 
         {/* Date and Share Button */}
@@ -33,10 +39,10 @@ function ProductCommentCard() {
             fontSize={{ xs: "0.75rem", lg: "0.8rem" }}
             textAlign="left"
           >
-            Pool Coda Bundle By 8 ball pool
+            {review.product}
           </Typography>
           <Typography fontSize={{ xs: "0.75rem", lg: "0.8rem" }}>
-            Feb 13, 2021
+            {dayjs(review.createdAt).format("YYYY-MM-DD")}
           </Typography>
         </Stack>
       </Box>

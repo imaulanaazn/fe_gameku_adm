@@ -13,7 +13,7 @@ import {
 import { toast } from "react-toastify";
 
 const templateComments = [
-  "Pilihannya denomnya banyak",
+  "Pilihan denomnya banyak",
   "Harganya Murah Banget",
   "Prosesnya Cepat Banget",
   "Pelayanannya terbaik",

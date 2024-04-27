@@ -10,34 +10,13 @@ import Link from "next/link";
 
 export default function TopUpSuccessCard(invoice: any) {
   return (
-    <Container className="lg:my-20 bg-[#38e08b] lg:bg-white">
+    <Container className="lg:mb-20 bg-[#38e08b] lg:bg-white">
       <>
-        <Stack
-          sx={{
-            width: "100%",
-            textAlign: "center",
-            marginBottom: "2rem",
-            borderRadius: { xs: 0, md: "1rem" },
-            padding: "1.5rem",
-            display: { xs: "none", md: "flex" },
-          }}
-          gap={{ xs: 6, md: 8 }}
-        >
-          <FontAwesomeIcon
-            icon={faCircleCheck}
-            fontSize="6rem"
-            className="text-[#38e08b] text-center"
-          />
-          <Typography variant="h4" color="#38e08b" fontWeight="600">
-            TOP UP BERHASIL
-          </Typography>
-        </Stack>
-
         <Stack
           direction={{ xs: "column", md: "row" }}
           justifyContent="space-between"
           alignItems="center"
-          padding={{ xs: "4rem 0", sm: "8rem 4rem", md: "4rem" }}
+          padding={{ xs: "4rem 0", sm: "8rem 4rem", md: "5rem 4rem" }}
           borderRadius="1rem"
           gap={{ xs: 12, md: 6 }}
           sx={{

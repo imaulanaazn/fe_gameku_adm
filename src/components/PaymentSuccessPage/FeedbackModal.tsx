@@ -32,6 +32,8 @@ export default function FeedbackModal({
   const [inputValue, setInputValue] = useState("");
   const [isReadOnly, setIsReadOnly] = useState(false);
 
+  const isReviewValid = !!rating && !!inputValue;
+
   // Handle template comment selection
   const handleChipClick = (comment: string, readOnly: boolean) => {
     setInputValue(comment);
@@ -46,8 +48,6 @@ export default function FeedbackModal({
       setInputValue(event.target.value);
     }
   };
-
-  const isReviewValid = !!rating && !!inputValue;
 
   async function handleReviewSubmit() {
     const data = {
@@ -79,18 +79,19 @@ export default function FeedbackModal({
 
   return (
     <Stack
-      maxWidth="30rem"
-      margin={{ xs: "1rem", sm: "auto" }}
+      width={{ xs: "90vw", sm: "28rem" }}
+      margin="auto"
       height="max-content"
       justifyContent="center"
       alignItems="center"
-      borderRadius={{ xs: 10, md: 10 }}
-      sx={{ backgroundColor: "white" }}
     >
       <Paper
         elevation={0}
         sx={{
-          padding: { xs: "2rem", sm: "4rem" },
+          width: "100%",
+          padding: { xs: "3rem 2rem", sm: "3rem", md: "3rem" },
+          backgroundColor: "white",
+          borderRadius: { xs: "0.75rem", md: "1rem" },
         }}
       >
         <Typography variant="h5" color="textPrimary" fontWeight="bold">
@@ -105,12 +106,13 @@ export default function FeedbackModal({
           display="flex"
           flexDirection="column"
           alignItems="center"
+          width="100%"
         >
           {/* Rating */}
           <Box py={6} display="flex" flexDirection="column" alignItems="center">
             <Rating
               value={rating}
-              precision={0.5}
+              precision={1}
               max={5}
               name="unique-rating"
               onChange={(event, newValue) => {
@@ -120,39 +122,44 @@ export default function FeedbackModal({
             />
           </Box>
 
-          <Box display="flex" flexDirection="column" gap={2}>
-            {/* Template comments as chips */}
-            <Stack
-              direction="row"
-              flexWrap="wrap"
-              gap={2}
-              justifyContent="center"
-            >
-              <Chip
-                label="isi sendiri"
-                clickable
-                onClick={() => handleChipClick("", false)}
-                color={
-                  templateComments.includes(inputValue) ? "default" : "primary"
-                }
-              />
-              {templateComments.map((comment, index) => (
+          <Box display="flex" flexDirection="column" width="100%">
+            <Box width="100%" overflow="auto" paddingBottom={2}>
+              {/* Template comments as chips */}
+              <Stack
+                direction="row"
+                flexWrap={{ xs: "nowrap", sm: "wrap" }}
+                gap={2}
+                justifyContent={{ xs: "flex-start", md: "center" }}
+              >
                 <Chip
-                  key={index}
-                  label={comment}
+                  label="isi sendiri"
                   clickable
-                  onClick={() => handleChipClick(comment, true)}
-                  color={inputValue === comment ? "primary" : "default"}
+                  onClick={() => handleChipClick("", false)}
+                  color={
+                    templateComments.includes(inputValue)
+                      ? "default"
+                      : "primary"
+                  }
                 />
-              ))}
-            </Stack>
+                {templateComments.map((comment, index) => (
+                  <Chip
+                    key={index}
+                    label={comment}
+                    clickable
+                    onClick={() => handleChipClick(comment, true)}
+                    color={inputValue === comment ? "primary" : "default"}
+                    sx={{ fontSize: "0.75rem" }}
+                  />
+                ))}
+              </Stack>
+            </Box>
 
             {/* Input field */}
             <TextField
               id="outlined-multiline-flexible"
               label="Message"
               multiline
-              maxRows={4}
+              maxRows={3}
               value={inputValue}
               minRows={3}
               onChange={handleInputChange}

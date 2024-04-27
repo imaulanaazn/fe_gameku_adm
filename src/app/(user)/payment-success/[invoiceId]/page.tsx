@@ -83,6 +83,7 @@ export default function PaymentSuccess({ params }: IParams) {
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
+        sx={{ display: "flex" }}
       >
         <FeedbackModal handleClose={handleClose} orderId={invoice?.id} />
       </Modal>

@@ -88,12 +88,18 @@ export default function PaymentSuccess({ params }: IParams) {
         <FeedbackModal handleClose={handleClose} orderId={invoice?.id} />
       </Modal>
 
-      <Container className="lg:my-20 bg-[#38e08b] lg:bg-white">
+      <Container className="lg:mb-20 lg:mt-6 bg-[#38e08b] lg:bg-white">
         <Stack
           direction={{ xs: "column-reverse", md: "row" }}
           justifyContent="space-between"
           alignItems="center"
-          padding={{ xs: "4rem 0", sm: "8rem 4rem", md: "4rem" }}
+          padding={{
+            xs: "4rem 0",
+            sm: "4rem",
+            md: "4rem",
+            lg: "2rem 4rem",
+            xl: "6rem 4rem",
+          }}
           borderRadius="1rem"
           gap={{ xs: 12, md: 6 }}
           sx={{

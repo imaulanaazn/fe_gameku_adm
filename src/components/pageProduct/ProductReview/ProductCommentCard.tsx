@@ -25,7 +25,7 @@ function ProductCommentCard({ review }: { review: IReview }) {
 
         {/* Comment */}
         <Typography fontSize={{ xs: "0.85rem", lg: "0.9rem" }} textAlign="left">
-          {review.message}
+          <i>&quot;{review.message}&quot;</i>
         </Typography>
 
         {/* Date and Share Button */}
@@ -36,7 +36,7 @@ function ProductCommentCard({ review }: { review: IReview }) {
           gap={2}
         >
           <Typography
-            fontSize={{ xs: "0.75rem", lg: "0.8rem" }}
+            fontSize={{ xs: "0.7rem", lg: "0.75rem" }}
             textAlign="left"
           >
             {review.product}

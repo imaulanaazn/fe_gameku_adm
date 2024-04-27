@@ -41,8 +41,35 @@ const initialState: IReviewsResponse = {
   totalRating: 0,
 };
 
+type IRatingForm = {
+  [key: number]: number;
+};
+
+function convertRatings(ratings: IRatingSummary[]) {
+  const ratingsMap: IRatingForm = {
+    5: 0,
+    4: 0,
+    3: 0,
+    2: 0,
+    1: 0,
+  };
+
+  ratings.forEach((item) => {
+    const rating = Math.floor(parseFloat(item.rating));
+    ratingsMap[rating] += item.totalRating;
+  });
+
+  return Object.entries(ratingsMap)
+    .map(([rating, totalRating]) => ({
+      rating,
+      totalRating,
+    }))
+    .reverse();
+}
+
 function ProductReview({ gameId }: { gameId: string }) {
   const [reviews, setReviews] = useState<IReviewsResponse>(initialState);
+  const totalRatings = convertRatings(reviews.ratings);
 
   useEffect(() => {
     async function getReviews() {
@@ -88,7 +115,7 @@ function ProductReview({ gameId }: { gameId: string }) {
             color: "#1F2937",
           }}
         >
-          Ulasan Produk
+          Ulasan Pengguna
         </Typography>
         <Box sx={{ mt: 4 }}>
           <Stack
@@ -113,12 +140,12 @@ function ProductReview({ gameId }: { gameId: string }) {
           <Rating value={reviews.averageRating} precision={0.1} readOnly />
         </Box>
         <Typography variant="body2" sx={{ mt: 1 }}>
-          {reviews.reviews.length}
+          {reviews.reviews.length} Ulasan
         </Typography>
         <Stack pt={6}>
           <ul style={{ width: "100%", listStyle: "none", padding: 0 }}>
-            {reviews &&
-              reviews.ratings.map((item: IRatingSummary) => (
+            {totalRatings.map(
+              (item: { rating: string; totalRating: number }) => (
                 <li
                   key={item.rating}
                   style={{
@@ -160,7 +187,8 @@ function ProductReview({ gameId }: { gameId: string }) {
                   </Box>
                   <Typography variant="body2">{item.totalRating}</Typography>
                 </li>
-              ))}
+              )
+            )}
           </ul>
         </Stack>
 

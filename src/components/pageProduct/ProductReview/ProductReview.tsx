@@ -134,14 +134,20 @@ function ProductReview({ gameId }: { gameId: string }) {
               sx={{ fontWeight: "bold", ml: 2, fontSize: "2rem" }}
               color="#B72025"
             >
-              {reviews.averageRating}/5
+              {reviews.averageRating || 0}/5
             </Typography>
           </Stack>
           <Rating value={reviews.averageRating} precision={0.1} readOnly />
         </Box>
-        <Typography variant="body2" sx={{ mt: 1 }}>
-          {reviews.reviews.length} Ulasan
-        </Typography>
+        {reviews.reviews.length > 0 ? (
+          <Typography variant="body2" sx={{ mt: 1 }}>
+            {reviews.reviews.length} Ulasan
+          </Typography>
+        ) : (
+          <Typography variant="body1" sx={{ mt: 1 }}>
+            Belum ada ulasan
+          </Typography>
+        )}
         <Stack pt={6}>
           <ul style={{ width: "100%", listStyle: "none", padding: 0 }}>
             {totalRatings.map(
@@ -197,22 +203,24 @@ function ProductReview({ gameId }: { gameId: string }) {
             <ProductCommentCard review={review} key={review.createdAt} />
           ))}
 
-        <Link href="/reviews">
-          <Stack
-            direction="row"
-            alignItems="center"
-            justifyContent="center"
-            gap={4}
-            width="max-content"
-            margin="auto"
-            color="#B72025"
-            flexWrap="wrap"
-            sx={{ mt: 3 }}
-          >
-            <Typography>Lihat semua</Typography>
-            <FontAwesomeIcon icon={faArrowRight} />
-          </Stack>
-        </Link>
+        {reviews.reviews.length > 0 && (
+          <Link href="/reviews">
+            <Stack
+              direction="row"
+              alignItems="center"
+              justifyContent="center"
+              gap={4}
+              width="max-content"
+              margin="auto"
+              color="#B72025"
+              flexWrap="wrap"
+              sx={{ mt: 3 }}
+            >
+              <Typography>Lihat semua</Typography>
+              <FontAwesomeIcon icon={faArrowRight} />
+            </Stack>
+          </Link>
+        )}
       </Box>
     </Container>
   );

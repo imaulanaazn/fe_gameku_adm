@@ -14,26 +14,6 @@ import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ProductCommentCard from "./ProductCommentCard";
 
-export interface IReview {
-  message: string;
-  rating: string;
-  mobileNumber: string;
-  product: string;
-  createdAt: string;
-}
-
-export interface IRatingSummary {
-  rating: string;
-  totalRating: number;
-}
-
-export interface IReviewsResponse {
-  reviews: IReview[];
-  ratings: IRatingSummary[];
-  averageRating: number;
-  totalRating: number;
-}
-
 const initialState: IReviewsResponse = {
   reviews: [],
   ratings: [],
@@ -134,7 +114,7 @@ function ProductReview({ gameId }: { gameId: string }) {
               sx={{ fontWeight: "bold", ml: 2, fontSize: "2rem" }}
               color="#B72025"
             >
-              {reviews.averageRating || 0}/5
+              {reviews.averageRating.toFixed(1) || 0}/5
             </Typography>
           </Stack>
           <Rating value={reviews.averageRating} precision={0.1} readOnly />
@@ -204,7 +184,7 @@ function ProductReview({ gameId }: { gameId: string }) {
           ))}
 
         {reviews.reviews.length > 0 && (
-          <Link href="/reviews">
+          <Link href="/testimoni">
             <Stack
               direction="row"
               alignItems="center"

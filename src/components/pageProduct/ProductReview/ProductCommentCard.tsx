@@ -1,6 +1,5 @@
 import { Box, Typography, Rating, Button, Divider, Stack } from "@mui/material";
 import dayjs from "dayjs";
-import { IReview } from "./ProductReview";
 
 function ProductCommentCard({ review }: { review: IReview }) {
   return (

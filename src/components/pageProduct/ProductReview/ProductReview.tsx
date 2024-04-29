@@ -113,7 +113,7 @@ function ProductReview({ gameId }: { gameId: string }) {
               sx={{ fontWeight: "bold", ml: 2, fontSize: "2rem" }}
               color="#B72025"
             >
-              {reviews.averageRating.toFixed(1) || 0}/5
+              {reviews.averageRating?.toFixed(1) || 0}/5
             </Typography>
           </Stack>
           <Rating value={reviews.averageRating} precision={0.1} readOnly />

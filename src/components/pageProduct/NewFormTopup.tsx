@@ -37,7 +37,6 @@ interface IFormProps {
 const NewFormTopup: React.FC<IFormProps> = ({ products, paymentsMethod }) => {
   const [cart, setCart] = useRecoilState(cartState);
   const cashtag = useRecoilValue(formCashtag);
-  console.log({ products, paymentsMethod });
   useEffect(() => {
     setCart({
       gameId: products.id,

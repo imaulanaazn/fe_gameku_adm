@@ -7,7 +7,6 @@ interface IGameProps {
 }
 
 const GameListItem: React.FC<IGameProps> = ({ data }) => {
-  console.log(data);
   return (
     <Link
       key={data.id}

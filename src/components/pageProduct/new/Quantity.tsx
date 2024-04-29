@@ -12,8 +12,7 @@ const Quantity = ({ data, value, onChange, position }: any) => {
     <Card
       sx={{
         borderRadius: "0.75rem",
-        background:
-          "#ffffff url(/images/topup-form-step-3.svg) no-repeat right top",
+        background: `#ffffff url(/images/topup-form-step-${position}.svg) no-repeat right top`,
         backgroundSize: "150px",
       }}
     >

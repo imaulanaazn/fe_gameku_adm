@@ -171,14 +171,14 @@ const NewFormTopup: React.FC<IFormProps> = ({ products, paymentsMethod }) => {
           <Grid item xs={12} sm={8}>
             <Stack gap={6}>
               <GameData
-                position={1}
+                position={products.type === "topup" ? 1 : 0}
                 value={data}
                 data={products}
                 onChange={(key: any, value: any) => handleChange(key, value)}
               />
               {!products.isGrouped && (
                 <DenomList
-                  position={2}
+                  position={products.type === "topup" ? 2 : 1}
                   value={data}
                   data={products}
                   onChange={(key: any, value: any) => handleChange(key, value)}
@@ -186,26 +186,26 @@ const NewFormTopup: React.FC<IFormProps> = ({ products, paymentsMethod }) => {
               )}
               {products.isGrouped && (
                 <GroupedDenomList
-                  position={3}
+                  position={products.type === "topup" ? 2 : 1}
                   value={data}
                   data={products}
                   onChange={(key: any, value: any) => handleChange(key, value)}
                 />
               )}
               <Quantity
-                position={3}
+                position={products.type === "topup" ? 3 : 2}
                 value={data}
                 data={products}
                 onChange={(key: any, value: any) => handleChange(key, value)}
               />
               <PaymentMethod
-                position={4}
+                position={products.type === "topup" ? 4 : 3}
                 value={data}
                 data={paymentsMethod.length > 0 && paymentsMethod}
                 onChange={(key: any, value: any) => handleChange(key, value)}
               />
               <AdditionalData
-                position={5}
+                position={products.type === "topup" ? 5 : 4}
                 value={data}
                 data={products}
                 onChange={(key: any, value: any) => handleChange(key, value)}
@@ -213,7 +213,15 @@ const NewFormTopup: React.FC<IFormProps> = ({ products, paymentsMethod }) => {
               <Grid container spacing={{ xs: 0, md: 6 }}>
                 <Grid item xs={12} md={6}>
                   <MobileNumber
-                    position={5}
+                    position={
+                      products.type === "topup" &&
+                      data.paymentMethodCd === "ID_JENIUSPAY"
+                        ? 6
+                        : products.type === "topup" ||
+                          data.paymentMethodCd === "ID_JENIUSPAY"
+                        ? 5
+                        : 4
+                    }
                     value={data}
                     data={products}
                     onChange={(key: any, value: any) =>
@@ -223,7 +231,15 @@ const NewFormTopup: React.FC<IFormProps> = ({ products, paymentsMethod }) => {
                 </Grid>
                 <Grid item xs={12} md={6}>
                   <PromoCode
-                    position={3}
+                    position={
+                      products.type === "topup" &&
+                      data.paymentMethodCd === "ID_JENIUSPAY"
+                        ? 7
+                        : products.type === "topup" ||
+                          data.paymentMethodCd === "ID_JENIUSPAY"
+                        ? 6
+                        : 5
+                    }
                     value={data}
                     data={products}
                     onChange={(key: any, value: any) =>

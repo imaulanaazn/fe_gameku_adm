@@ -6,9 +6,7 @@ const AdditionalData = ({ data, value, onChange, position }: any) => {
     return (
       <Card
         sx={{
-          background:
-            "#ffffff url(/images/topup-form-step-5.svg) no-repeat right top",
-          backgroundSize: "150px",
+          background: `#ffffff url(/images/topup-form-step-${position}.svg) no-repeat right top`,
         }}
       >
         <CardHeader

@@ -99,10 +99,7 @@ const PromoCode = ({ data, value, onChange, position }: any) => {
     <Card
       sx={{
         borderRadius: "0.75rem",
-        background: `#ffffff url(/images/topup-form-step-${6}.svg) no-repeat right top`,
-        ...(value.paymentMethodCd === "ID_JENIUSPAY" && {
-          background: `#ffffff url(/images/topup-form-step-${7}.svg) no-repeat right top`,
-        }),
+        background: `#ffffff url(/images/topup-form-step-${position}.svg) no-repeat right top`,
         backgroundSize: "150px",
       }}
     >

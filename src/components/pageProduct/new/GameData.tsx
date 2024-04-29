@@ -20,8 +20,7 @@ const GameData = ({ data, onChange, value, position }: any) => {
       <Card
         sx={{
           borderRadius: "0.75rem",
-          background:
-            "#ffffff url(/images/topup-form-step-1.svg) no-repeat right top",
+          background: `#ffffff url(/images/topup-form-step-${position}.svg) no-repeat right top`,
           backgroundSize: "150px",
         }}
         elevation={1}

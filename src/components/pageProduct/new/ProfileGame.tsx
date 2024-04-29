@@ -24,7 +24,7 @@ const ProfileGame = ({ denoms }: { denoms: IGameDetail }) => {
             <Avatar
               src={denoms.logoUrl}
               variant="rounded"
-              sx={{ width: 80, height: 80, borderRadius: 2 }}
+              sx={{ width: 100, height: 100, borderRadius: 2 }}
             />
           </Box>
           <Typography

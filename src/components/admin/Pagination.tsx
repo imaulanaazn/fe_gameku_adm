@@ -28,7 +28,7 @@ const Pagination: React.FC<IPaginationProp> = ({
     onPageChange({ selected });
     setActivePageIndex(selected);
   };
-  const showingFrom = page === 1 ? 1 : (page - 1) * (limit + 1);
+  const showingFrom = activePageIndex * limit + 1;
 
   const prevPaginationBtn =
     activePageIndex + 1 === 1
@@ -42,8 +42,8 @@ const Pagination: React.FC<IPaginationProp> = ({
   return (
     <div className="flex flex-col-reverse items-center justify-between p-5 gap-4">
       <p className="text-sm font-montserrat">
-        Showing {showingFrom} to {Math.min(page * limit, total)} of {total}{" "}
-        results
+        Showing {showingFrom} to{" "}
+        {Math.min((activePageIndex + 1) * limit, total)} of {total} results
       </p>
 
       <ReactPaginate

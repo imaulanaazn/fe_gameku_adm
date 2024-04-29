@@ -58,98 +58,108 @@ const TableUser: React.FC<{ user: IUserPagination }> = ({ user }) => {
   }, []);
 
   return (
-    <div className="w-full bg-white rounded shadow overflow-x-scroll md:overflow-x-auto overflow-y-hidden">
-      <div className={`p-5 bg-white`}>
-        <div className="flex items-center justify-between">
-          <p className="text-xl font-semibold">User</p>
-        </div>
-      </div>
-      {loading && <Loading />}
-      {!loading && (
-        <div className="flex flex-col">
-          <div className="overflow-x-auto">
-            <div className="w-full inline-block align-middle">
-              <div className="overflow-hidden overflow-x-auto px-5">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase "
-                      ></th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase "
-                      >
-                        Nama
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase "
-                      >
-                        Email
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase "
-                      >
-                        No Whatsapp
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase "
-                      >
-                        Tanggal Pendaftaran
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-200">
-                    {customer.data.map((data) => (
-                      <tr
-                        key={data.id}
-                        className={`bg-white hover:bg-gray-100`}
-                      >
-                        <td className="py-3 pl-4">
-                          <div className="w-12 h-12 object-cover">
-                            <Image
-                              src="/images/IconUser.png"
-                              alt={`Logo User`}
-                              width="0"
-                              height="0"
-                              sizes="100vw"
-                              style={{ width: "100%", height: "100%" }}
-                              className="rounded-lg object-cover"
-                            />
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">
-                          {data.name}
-                        </td>
-                        <td className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">
-                          {data.email}
-                        </td>
-                        <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
-                          {data.mobileNumber}
-                        </td>
-                        <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
-                          {dayjs(data.createdAt).format("YYYY-MM-DD HH:mm:ss")}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+    <div className="xl:p-10">
+      <div className="w-full overflow-x-scroll md:overflow-x-auto overflow-y-hidden bg-white shadow rounded-2xl px-8 py-10">
+        <div>
+          <p className="text-2xl font-semibold text-neutral-800 w-full">User</p>
+          {loading && <Loading />}
+          {!loading && (
+            <div className="flex flex-col mt-6">
+              <div className="overflow-x-auto">
+                <div className="w-max xl:w-full inline-block align-middle">
+                  <div className="overflow-hidden overflow-x-auto">
+                    <table className="min-w-full divide-y divide-gray-200">
+                      <thead className="bg-slate-100">
+                        <tr>
+                          <th
+                            scope="col"
+                            className="px-6 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase "
+                          ></th>
+                          <th
+                            scope="col"
+                            className="px-6 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-left"
+                          >
+                            Nama
+                          </th>
+                          <th
+                            scope="col"
+                            className="px-6 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-center"
+                          >
+                            Email
+                          </th>
+                          <th
+                            scope="col"
+                            className="px-6 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-center"
+                          >
+                            No Whatsapp
+                          </th>
+                          <th
+                            scope="col"
+                            className="px-6 lg:py-4 lg:py-5 text-xs font-bold text-right text-neutral-600 uppercase text-right"
+                          >
+                            Tanggal Pendaftaran
+                          </th>
+                        </tr>
+                      </thead>
+                      {customer.data.length > 0 && (
+                        <tbody className="divide-y divide-gray-200">
+                          {customer.data.map((data) => (
+                            <tr
+                              key={data.id}
+                              className={`bg-white hover:bg-gray-100`}
+                            >
+                              <td className="py-4 pl-8">
+                                <div className="w-10 h-10 object-cover">
+                                  <Image
+                                    src={data.image || "/images/IconUser.png"}
+                                    alt={`Logo User`}
+                                    width="0"
+                                    height="0"
+                                    sizes="100vw"
+                                    style={{ width: "100%", height: "100%" }}
+                                    className="rounded-lg object-cover"
+                                  />
+                                </div>
+                              </td>
+                              <td className="px-4 py-4 text-base text-gray-800  whitespace-nowrap text-left">
+                                {data.name}
+                              </td>
+                              <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap text-center">
+                                {data.email}
+                              </td>
+                              <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap text-center">
+                                {data.mobileNumber}
+                              </td>
+                              <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap text-right">
+                                {dayjs(data.createdAt).format(
+                                  "YYYY-MM-DD HH:mm:ss"
+                                )}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      )}
+                    </table>
+                    {customer.data.length < 0 && (
+                      <h1 className="text-center text-lg font-medium text-slate-600 mx-auto my-12">
+                        No Data Found
+                      </h1>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
+          )}
+
+          <Pagination
+            onPageChange={handlePageClick}
+            page={user.page}
+            limit={user.limit}
+            total={user.total}
+            totalPage={user.totalPage}
+          />
         </div>
-      )}
-      <Pagination
-        onPageChange={handlePageClick}
-        page={user.page}
-        limit={user.limit}
-        total={user.total}
-        totalPage={user.totalPage}
-      />
+      </div>
     </div>
   );
 };

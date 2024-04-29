@@ -98,7 +98,6 @@ const PromoCode = ({ data, value, onChange, position }: any) => {
   return (
     <Card
       sx={{
-        marginTop: position > 1 ? { xs: 6, md: 8 } : 0,
         borderRadius: "0.75rem",
         background: `#ffffff url(/images/topup-form-step-${6}.svg) no-repeat right top`,
         ...(value.paymentMethodCd === "ID_JENIUSPAY" && {

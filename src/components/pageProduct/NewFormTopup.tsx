@@ -12,7 +12,7 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { cartState } from "@/atom/cartState";
 import CashTag from "./inputCashTag/CashTag";
 import { formCashtag } from "@/atom/formCashtag";
-import { Box, Breadcrumbs, Button, Grid, Typography } from "@/lib/mui";
+import { Box, Breadcrumbs, Button, Grid, Typography, Stack } from "@/lib/mui";
 import AdditionalData from "./new/AdditionalData";
 import ConfirmCheckout from "./new/ConfirmCheckout";
 import DenomList from "./new/DenomList";
@@ -37,6 +37,7 @@ interface IFormProps {
 const NewFormTopup: React.FC<IFormProps> = ({ products, paymentsMethod }) => {
   const [cart, setCart] = useRecoilState(cartState);
   const cashtag = useRecoilValue(formCashtag);
+  console.log({ products, paymentsMethod });
   useEffect(() => {
     setCart({
       gameId: products.id,
@@ -161,70 +162,78 @@ const NewFormTopup: React.FC<IFormProps> = ({ products, paymentsMethod }) => {
         </Box>
         <Grid container spacing={6}>
           <Grid item xs={12} sm={4}>
-            <ProfileGame denoms={products} />
-            <Box sx={{ display: { xs: "none", sm: "block" } }}>
-              <ProductReview gameId={products.id} />
-            </Box>
+            <Stack gap={6}>
+              <ProfileGame denoms={products} />
+              <Box sx={{ display: { xs: "none", sm: "block" } }}>
+                <ProductReview gameId={products.id} />
+              </Box>
+            </Stack>
           </Grid>
           <Grid item xs={12} sm={8}>
-            <GameData
-              position={1}
-              value={data}
-              data={products}
-              onChange={(key: any, value: any) => handleChange(key, value)}
-            />
-            {!products.isGrouped && (
-              <DenomList
-                position={2}
+            <Stack gap={6}>
+              <GameData
+                position={1}
                 value={data}
                 data={products}
                 onChange={(key: any, value: any) => handleChange(key, value)}
               />
-            )}
-            {products.isGrouped && (
-              <GroupedDenomList
-                position={3}
-                value={data}
-                data={products}
-                onChange={(key: any, value: any) => handleChange(key, value)}
-              />
-            )}
-            <Quantity
-              position={3}
-              value={data}
-              data={products}
-              onChange={(key: any, value: any) => handleChange(key, value)}
-            />
-            <PaymentMethod
-              position={4}
-              value={data}
-              data={paymentsMethod.length > 0 && paymentsMethod}
-              onChange={(key: any, value: any) => handleChange(key, value)}
-            />
-            <AdditionalData
-              position={5}
-              value={data}
-              data={products}
-              onChange={(key: any, value: any) => handleChange(key, value)}
-            />
-            <Grid container spacing={{ xs: 0, md: 6 }}>
-              <Grid item xs={12} md={6}>
-                <MobileNumber
-                  position={5}
+              {!products.isGrouped && (
+                <DenomList
+                  position={2}
                   value={data}
                   data={products}
                   onChange={(key: any, value: any) => handleChange(key, value)}
                 />
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <PromoCode
+              )}
+              {products.isGrouped && (
+                <GroupedDenomList
                   position={3}
                   value={data}
                   data={products}
                   onChange={(key: any, value: any) => handleChange(key, value)}
                 />
+              )}
+              <Quantity
+                position={3}
+                value={data}
+                data={products}
+                onChange={(key: any, value: any) => handleChange(key, value)}
+              />
+              <PaymentMethod
+                position={4}
+                value={data}
+                data={paymentsMethod.length > 0 && paymentsMethod}
+                onChange={(key: any, value: any) => handleChange(key, value)}
+              />
+              <AdditionalData
+                position={5}
+                value={data}
+                data={products}
+                onChange={(key: any, value: any) => handleChange(key, value)}
+              />
+              <Grid container spacing={{ xs: 0, md: 6 }}>
+                <Grid item xs={12} md={6}>
+                  <MobileNumber
+                    position={5}
+                    value={data}
+                    data={products}
+                    onChange={(key: any, value: any) =>
+                      handleChange(key, value)
+                    }
+                  />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <PromoCode
+                    position={3}
+                    value={data}
+                    data={products}
+                    onChange={(key: any, value: any) =>
+                      handleChange(key, value)
+                    }
+                  />
+                </Grid>
               </Grid>
-            </Grid>
+            </Stack>
             <Button
               fullWidth
               variant="contained"

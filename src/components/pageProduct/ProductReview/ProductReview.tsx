@@ -83,7 +83,6 @@ function ProductReview({ gameId }: { gameId: string }) {
         borderRadius: 2,
         px: 4,
         py: 6,
-        marginTop: { xs: 15, sm: 6, md: 8 },
       }}
     >
       <Box>

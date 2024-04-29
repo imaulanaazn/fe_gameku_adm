@@ -7,10 +7,11 @@ interface IGameProps {
 }
 
 const GameListItem: React.FC<IGameProps> = ({ data }) => {
+  console.log(data);
   return (
     <Link
       key={data.id}
-      href={data.slug}
+      href={`/${data.slug}`}
       className="w-full bg-white transform transition-all hover:bg-slate-100 rounded-lg overflow-hidden"
     >
       <div className="w-full relative flex items-center gap-2 p-1">

@@ -6,8 +6,8 @@ import React, { useEffect, useState } from "react";
 import Loading from "./loading";
 import TableReseller from "@/components/admin/Reseller/TableReseller";
 
-const User = () => {
-  const [data, setData] = useState<IUserPagination>();
+const Reseller = () => {
+  const [data, setData] = useState<IUserPaginationWithSearch>();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -48,4 +48,4 @@ const User = () => {
   );
 };
 
-export default User;
+export default Reseller;

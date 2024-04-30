@@ -49,7 +49,7 @@ function convertRatings(ratings: IRatingSummary[]) {
 
 function ProductReview({ gameId }: { gameId: string }) {
   const [reviews, setReviews] = useState<IReviewsResponse>(initialState);
-  const totalRatings = convertRatings(reviews.ratings);
+  const allReviews = convertRatings(reviews.ratings);
 
   useEffect(() => {
     async function getReviews() {
@@ -120,7 +120,7 @@ function ProductReview({ gameId }: { gameId: string }) {
         </Box>
         {reviews.reviews.length > 0 ? (
           <Typography variant="body2" sx={{ mt: 1 }}>
-            {reviews.reviews.length} Ulasan
+            {reviews.totalRating} Ulasan
           </Typography>
         ) : (
           <Typography variant="body1" sx={{ mt: 1 }}>
@@ -129,51 +129,49 @@ function ProductReview({ gameId }: { gameId: string }) {
         )}
         <Stack pt={6}>
           <ul style={{ width: "100%", listStyle: "none", padding: 0 }}>
-            {totalRatings.map(
-              (item: { rating: string; totalRating: number }) => (
-                <li
-                  key={item.rating}
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    gap: "0.75rem",
-                    padding: "8px",
-                  }}
+            {allReviews.map((item: { rating: string; totalRating: number }) => (
+              <li
+                key={item.rating}
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  gap: "0.75rem",
+                  padding: "8px",
+                }}
+              >
+                <Stack
+                  direction="row"
+                  justifyContent="center"
+                  alignItems="center"
                 >
-                  <Stack
-                    direction="row"
-                    justifyContent="center"
-                    alignItems="center"
+                  <Typography variant="body2" sx={{ flexGrow: 0, mr: 1 }}>
+                    {item.rating}
+                  </Typography>
+                  <Rating
+                    value={1}
+                    precision={1}
+                    readOnly
+                    max={1}
+                    size="small"
+                  />
+                </Stack>
+                <Box sx={{ width: { xs: "70%", sm: "80%", md: "60%" } }}>
+                  <Box
+                    sx={{
+                      height: "8px",
+                      borderRadius: "4px",
+                    }}
                   >
-                    <Typography variant="body2" sx={{ flexGrow: 0, mr: 1 }}>
-                      {item.rating}
-                    </Typography>
-                    <Rating
-                      value={1}
-                      precision={1}
-                      readOnly
-                      max={1}
-                      size="small"
+                    <LinearProgress
+                      variant="determinate"
+                      value={(item.totalRating / reviews.totalRating) * 100}
                     />
-                  </Stack>
-                  <Box sx={{ width: { xs: "70%", sm: "80%", md: "60%" } }}>
-                    <Box
-                      sx={{
-                        height: "8px",
-                        borderRadius: "4px",
-                      }}
-                    >
-                      <LinearProgress
-                        variant="determinate"
-                        value={(item.totalRating / reviews.totalRating) * 100}
-                      />
-                    </Box>
                   </Box>
-                  <Typography variant="body2">{item.totalRating}</Typography>
-                </li>
-              )
-            )}
+                </Box>
+                <Typography variant="body2">{item.totalRating}</Typography>
+              </li>
+            ))}
           </ul>
         </Stack>
 

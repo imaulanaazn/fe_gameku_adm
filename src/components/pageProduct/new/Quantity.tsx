@@ -8,6 +8,17 @@ import {
 import React, { useState } from "react";
 
 const Quantity = ({ data, value, onChange, position }: any) => {
+  function handleInputChange(e: { target: { value: string } }) {
+    const numericValue = parseInt(e.target.value.replace(/\D/g, ""), 10);
+    if (!isNaN(numericValue)) {
+      onChange("quantity", numericValue);
+    } else {
+      onChange("quantity", "");
+    }
+
+    onChange("promoCode", "");
+    onChange("promo", "");
+  }
   return (
     <Card
       sx={{
@@ -50,11 +61,7 @@ const Quantity = ({ data, value, onChange, position }: any) => {
               background: "white",
             },
           }}
-          onChange={(e) => {
-            onChange("quantity", e.target.value.replace(/\D/, ""));
-            onChange("promoCode", "");
-            onChange("promo", "");
-          }}
+          onChange={handleInputChange}
         />
       </CardContent>
     </Card>

@@ -2,7 +2,8 @@ import {
   Card,
   CardContent,
   Grid,
-  CardHeader,
+  Paper,
+  Stack,
   Box,
   Avatar,
   Typography,
@@ -174,8 +175,26 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
       {order && (
         <>
           <Grid item xs={12} md={7}>
-            <Card sx={{ position: "relative" }}>
-              <CardContent>
+            <Stack spacing={6}>
+              <Paper
+                sx={{ position: "relative", padding: 6, borderRadius: 2 }}
+                elevation={0}
+              >
+                <Box
+                  sx={{
+                    marginBottom: 4,
+                    backgroundColor: "#FFE4E5",
+                    padding: 4,
+                    borderRadius: 1,
+                  }}
+                >
+                  <Typography
+                    variant="body1"
+                    sx={{ fontWeight: 600, color: "#B72025" }}
+                  >
+                    Informasi Produk
+                  </Typography>
+                </Box>
                 <Box
                   sx={{
                     display: "flex",
@@ -183,7 +202,7 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                     alignItems: "center",
                   }}
                 >
-                  <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+                  <Box sx={{ display: "flex", gap: 4, alignItems: "center" }}>
                     <Avatar
                       src={order.logoGame}
                       variant="rounded"
@@ -233,81 +252,95 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                     </Typography>
                   </Box>
                 </Box>
+
                 <Box sx={{ marginTop: 4 }}>
                   {(order.detail?.userId ||
                     order.detail?.serverId ||
                     order.detail?.username) && (
-                    <Typography variant="body1" sx={{ fontWeight: 600 }}>
+                    <Typography
+                      variant="body1"
+                      sx={{ fontWeight: 600, color: "#374151" }}
+                    >
                       Data game :
                     </Typography>
                   )}
                 </Box>
-                <Grid container spacing={6}>
-                  <Grid item xs={6} md={2}>
-                    <Box sx={{ display: "flex", flexDirection: "column" }}>
-                      {order.detail?.userId && (
+
+                <Box>
+                  {order?.detail?.userId && (
+                    <Stack direction="row" justifyContent="space-between">
+                      <Typography
+                        variant="body2"
+                        sx={{ fontWeight: 500, marginTop: 2 }}
+                      >
+                        User ID
+                      </Typography>
+                      {order?.detail?.userId && (
                         <Typography
                           variant="body2"
-                          sx={{ fontWeight: 600, marginTop: 2 }}
+                          sx={{ fontWeight: 500, marginTop: 2 }}
                         >
-                          User ID
+                          {order?.detail?.userId}
                         </Typography>
                       )}
-                      {order.detail?.serverId && (
+                    </Stack>
+                  )}
+                  {order?.detail?.serverId && (
+                    <Stack direction="row" justifyContent="space-between">
+                      <Typography
+                        variant="body2"
+                        sx={{ fontWeight: 500, marginTop: 2 }}
+                      >
+                        Server ID
+                      </Typography>
+                      {order?.detail?.serverId && (
                         <Typography
                           variant="body2"
-                          sx={{ fontWeight: 600, marginTop: 2 }}
+                          sx={{ fontWeight: 500, marginTop: 2 }}
                         >
-                          Server ID
+                          {order?.detail?.serverId}
                         </Typography>
                       )}
-                      {order.detail?.username && (
+                    </Stack>
+                  )}
+                  {order?.detail?.username && (
+                    <Stack direction="row" justifyContent="space-between">
+                      <Typography
+                        variant="body2"
+                        sx={{ fontWeight: 500, marginTop: 2 }}
+                      >
+                        Username
+                      </Typography>
+                      {order?.detail?.username && (
                         <Typography
                           variant="body2"
-                          sx={{ fontWeight: 600, marginTop: 2 }}
+                          sx={{ fontWeight: 500, marginTop: 2 }}
                         >
-                          Username
+                          {order?.detail?.username}
                         </Typography>
                       )}
-                    </Box>
-                  </Grid>
-                  <Grid item>
-                    <Box>
-                      {order.detail?.userId && (
-                        <Typography
-                          variant="body2"
-                          sx={{ fontWeight: 600, marginTop: 2 }}
-                        >
-                          : {order.detail?.userId}
-                        </Typography>
-                      )}
-                      {order.detail?.serverId && (
-                        <Typography
-                          variant="body2"
-                          sx={{ fontWeight: 600, marginTop: 2 }}
-                        >
-                          : {order.detail?.serverId}
-                        </Typography>
-                      )}
-                      {order.detail?.username && (
-                        <Typography
-                          variant="body2"
-                          sx={{ fontWeight: 600, marginTop: 2 }}
-                        >
-                          : {order.detail?.username}
-                        </Typography>
-                      )}
-                    </Box>
-                  </Grid>
-                </Grid>
-              </CardContent>
-            </Card>
-            <Card sx={{ position: "relative", marginTop: 4 }}>
-              {/* <CardHeader title='Informasi Pembayaran' titleTypographyProps={{ fontSize: 40 }} /> */}
-              <CardContent>
-                <Box sx={{ marginBottom: 4 }}>
-                  <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
-                    Informasi Pembayaran
+                    </Stack>
+                  )}
+                </Box>
+              </Paper>
+
+              <Paper
+                sx={{ position: "relative", padding: 6, borderRadius: 2 }}
+                elevation={0}
+              >
+                <Box
+                  sx={{
+                    marginBottom: 4,
+                    backgroundColor: "#FFE4E5",
+                    padding: 4,
+                    borderRadius: 1,
+                  }}
+                >
+                  <Typography
+                    variant="body1"
+                    sx={{ fontWeight: 600, color: "#B72025" }}
+                  >
+                    Informasi Pesanan
                   </Typography>
                 </Box>
                 <Box
@@ -401,19 +434,43 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                     marginTop: 2,
                   }}
                 >
-                  <Typography variant="body1" sx={{ fontWeight: 600 }}>
+                  <Typography
+                    variant="body1"
+                    sx={{ fontWeight: 600, color: "#374151" }}
+                  >
                     Total
                   </Typography>
-                  <Typography variant="body1" sx={{ fontWeight: 600 }}>
+                  <Typography
+                    variant="body1"
+                    sx={{ fontWeight: 600, color: "#374151" }}
+                  >
                     {currencyConverter(order.totalAmt)}
                   </Typography>
                 </Box>
-              </CardContent>
-            </Card>
+              </Paper>
+            </Stack>
           </Grid>
           <Grid item xs={12} md={5}>
-            <Card>
-              <CardContent>
+            <Stack spacing={6}>
+              <Paper
+                sx={{ position: "relative", padding: 6, borderRadius: 2 }}
+                elevation={0}
+              >
+                <Box
+                  sx={{
+                    marginBottom: 4,
+                    backgroundColor: "#FFE4E5",
+                    padding: 4,
+                    borderRadius: 1,
+                  }}
+                >
+                  <Typography
+                    variant="body1"
+                    sx={{ fontWeight: 600, color: "#B72025" }}
+                  >
+                    Informasi Pembayaran
+                  </Typography>
+                </Box>
                 {(order.cd === "ID_JENIUSPAY" || order.cd === "ID_OVO") &&
                   order.status === OrderStatuses.PENDING_PAYMENT && (
                     <Box sx={{ marginBottom: 4 }}>
@@ -434,113 +491,97 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                     ).alert
                   }
                 </Box>
-                <Box sx={{ marginBottom: 4 }}>
-                  <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
-                    Pembayaran
-                  </Typography>
+                <Box>
+                  <Stack
+                    direction="row"
+                    justifyContent="space-between"
+                    sx={{ marginBottom: 2 }}
+                  >
+                    <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                      Status
+                    </Typography>
+                    <Typography noWrap variant="body2" sx={{ fontWeight: 500 }}>
+                      {
+                        getStatusPayment(
+                          order.status as OrderStatuses,
+                          order.type as OrderType,
+                          order.expiredAt as string
+                        ).box
+                      }
+                    </Typography>
+                  </Stack>
+                  <Stack
+                    direction="row"
+                    justifyContent="space-between"
+                    sx={{ marginBottom: 2 }}
+                  >
+                    <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                      Nomor Invoice
+                    </Typography>
+                    <Typography noWrap variant="body2" sx={{ fontWeight: 500 }}>
+                      {order.invoiceId}
+                    </Typography>
+                  </Stack>
+                  <Stack
+                    direction="row"
+                    justifyContent="space-between"
+                    sx={{ marginBottom: 2 }}
+                  >
+                    <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                      Tanggal Order
+                    </Typography>
+                    <Typography noWrap variant="body2" sx={{ fontWeight: 500 }}>
+                      {dayjs(order.createdAt).format("DD MMM YYYY HH:mm:ss")}
+                    </Typography>
+                  </Stack>
+                  <Stack
+                    direction="row"
+                    justifyContent="space-between"
+                    sx={{ marginBottom: 2 }}
+                  >
+                    <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                      Metode Pembayaran
+                    </Typography>
+                    <Typography noWrap variant="body2" sx={{ fontWeight: 500 }}>
+                      {order.paymentMethods?.name}
+                    </Typography>
+                  </Stack>
+                  {order.cd === "ID_OVO" && (
+                    <Stack
+                      direction="row"
+                      justifyContent="space-between"
+                      sx={{ marginBottom: 2 }}
+                    >
+                      <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                        Nomor OVO
+                      </Typography>
+                      <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                        {order.payment?.mobileNumber.replace("+62", "0")}
+                      </Typography>
+                    </Stack>
+                  )}
+                  {order.cd === "ID_JENIUSPAY" && (
+                    <Stack
+                      direction="row"
+                      justifyContent="space-between"
+                      sx={{ marginBottom: 2 }}
+                    >
+                      <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                        Nomor OVO
+                      </Typography>
+                      <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                        {order.cashtag}
+                      </Typography>
+                    </Stack>
+                  )}
                 </Box>
-                <Grid container spacing={6}>
-                  <Grid item md={6}>
-                    <Box sx={{ marginBottom: 2 }}>
-                      <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                        Status
-                      </Typography>
-                    </Box>
-                    <Box sx={{ marginBottom: 2 }}>
-                      <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                        Nomor Invoice
-                      </Typography>
-                    </Box>
-                    <Box sx={{ marginBottom: 2 }}>
-                      <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                        Tanggal Order
-                      </Typography>
-                    </Box>
-                    <Box sx={{ marginBottom: 2 }}>
-                      <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                        Metode Pembayaran
-                      </Typography>
-                    </Box>
-                    {order.cd === "ID_OVO" && (
-                      <Box sx={{ marginBottom: 2 }}>
-                        <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                          Nomor OVO
-                        </Typography>
-                      </Box>
-                    )}
-                    {order.cd === "ID_JENIUSPAY" && (
-                      <Box sx={{ marginBottom: 2 }}>
-                        <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                          Nomor OVO
-                        </Typography>
-                      </Box>
-                    )}
-                  </Grid>
-                  <Grid item md={6}>
-                    <Box sx={{ marginBottom: 2 }}>
-                      <Typography
-                        noWrap
-                        variant="body2"
-                        sx={{ fontWeight: 600 }}
-                      >
-                        {
-                          getStatusPayment(
-                            order.status as OrderStatuses,
-                            order.type as OrderType,
-                            order.expiredAt as string
-                          ).box
-                        }
-                      </Typography>
-                    </Box>
-                    <Box sx={{ marginBottom: 2 }}>
-                      <Typography
-                        noWrap
-                        variant="body2"
-                        sx={{ fontWeight: 600 }}
-                      >
-                        {order.invoiceId}
-                      </Typography>
-                    </Box>
-                    <Box sx={{ marginBottom: 2 }}>
-                      <Typography
-                        noWrap
-                        variant="body2"
-                        sx={{ fontWeight: 600 }}
-                      >
-                        {dayjs(order.createdAt).format("DD MMM YYYY HH:mm:ss")}
-                      </Typography>
-                    </Box>
-                    <Box sx={{ marginBottom: 2 }}>
-                      <Typography
-                        noWrap
-                        variant="body2"
-                        sx={{ fontWeight: 600 }}
-                      >
-                        {order.paymentMethods?.name}
-                      </Typography>
-                    </Box>
-                    {order.cd === "ID_OVO" && (
-                      <Box sx={{ marginBottom: 2 }}>
-                        <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                          {order.payment?.mobileNumber.replace("+62", "0")}
-                        </Typography>
-                      </Box>
-                    )}
-                    {order.cd === "ID_JENIUSPAY" && (
-                      <Box sx={{ marginBottom: 2 }}>
-                        <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                          {order.cashtag}
-                        </Typography>
-                      </Box>
-                    )}
-                  </Grid>
-                </Grid>
-              </CardContent>
-            </Card>
-            {!(order.cd === "ID_JENIUSPAY" || order.cd === "ID_OVO") &&
-              order.status === OrderStatuses.PENDING_PAYMENT && (
-                <Card sx={{ marginTop: 4 }}>
-                  <CardContent>
+              </Paper>
+              {!(order.cd === "ID_JENIUSPAY" || order.cd === "ID_OVO") &&
+                order.status === OrderStatuses.PENDING_PAYMENT && (
+                  <Paper
+                    sx={{ position: "relative", padding: 6, borderRadius: 2 }}
+                    elevation={0}
+                  >
                     <Box>
                       <Box
                         sx={{
@@ -549,7 +590,7 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                           alignItems: "center",
                         }}
                       >
-                        <Typography>
+                        <Typography sx={{ color: "#374151", fontWeight: 600 }}>
                           {getTitlePayment(order.category)}
                         </Typography>
                         <Box>
@@ -666,9 +707,9 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                         </ClickAwayListener>
                       )}
                     </Box>
-                  </CardContent>
-                </Card>
-              )}
+                  </Paper>
+                )}
+            </Stack>
           </Grid>
         </>
       )}

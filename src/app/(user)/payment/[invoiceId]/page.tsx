@@ -3,9 +3,10 @@ import sendRequest from "@/lib/baseApi";
 import NotFound from "./not-found";
 import Invoices from "@/components/payment/Invoices";
 import Maintenance from "@/components/maintenance/Maintenance";
-import { Container } from "@/lib/mui";
 import { InvoiceArrowRight } from "mdi-material-ui";
 import { useEffect } from "react";
+import Container from "@/components/global/Container/Container";
+import { Box } from "@mui/material";
 
 interface IParams {
   params: {
@@ -29,9 +30,11 @@ const Payment = async ({ params }: IParams) => {
   }
 
   return (
-    <Container maxWidth="lg" sx={{ paddingBottom: 4 }}>
-      <Invoices invoice={invoice.data} />
-    </Container>
+    <Box sx={{ backgroundColor: "#FFF3F3", pb: 20, pt: 10 }}>
+      <Container>
+        <Invoices invoice={invoice.data} />
+      </Container>
+    </Box>
   );
 };
 

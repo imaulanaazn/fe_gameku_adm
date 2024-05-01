@@ -59,6 +59,7 @@ const GroupedDenomList = ({ position, data, onChange, value }: any) => {
             {data.groupedDenoms?.length > 0 &&
               data.groupedDenoms?.map((category: any) => (
                 <Tab
+                  sx={{ fontWeight: "600", color: "#4B5563" }}
                   key={category.id}
                   label={category.name}
                   value={category.id}

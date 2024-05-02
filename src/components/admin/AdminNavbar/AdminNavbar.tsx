@@ -25,7 +25,7 @@ export default function AdminNavbar() {
         </div>
 
         <div className="search-input w-auto h-max relative flex flex-wrap items-center">
-          <span className="absolute top-1/2 left-0 -translate-y-1/2 px-4 py-2">
+          {/* <span className="absolute top-1/2 left-0 -translate-y-1/2 px-4 py-2">
             <FontAwesomeIcon
               icon={faMagnifyingGlass}
               className="text-xl text-slate-400"
@@ -35,7 +35,7 @@ export default function AdminNavbar() {
             type="search"
             placeholder="Search..."
             className="flex-1 px-4 placeholder:pl-10 rounded-md border"
-          />
+          /> */}
         </div>
 
         <button className="navbar-toggler hidden">

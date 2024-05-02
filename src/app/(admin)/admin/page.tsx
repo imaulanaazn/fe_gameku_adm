@@ -208,7 +208,7 @@ const Admin = () => {
       <AdminNavbar />
       <div className="iq-navbar-header h-48 bg-[url('/images/bg-header-abstract.jpg')] bg-cover rounded-b-3xl text-white px-12 pt-10">
         <h1 className="text-4xl font-semibold">Hello Admin</h1>
-        <p className="text-lg mt-2">
+        <p className="text-base mt-2">
           Selamat datang di dashboard, semoga bisnis anda berjalan lancar dan
           terus berkembang.
         </p>
@@ -216,8 +216,8 @@ const Admin = () => {
       {loading && <Loading />}
       {/* <Header title="Dashboard" /> */}
       {!loading && (
-        <div className="stats-wrapper">
-          <div className="w-11/12 mx-auto flex space-x-3 -translate-y-8">
+        <div className="stats-wrapper px-8">
+          <div className="w-full mx-auto flex space-x-3 -translate-y-8">
             <Swiper
               modules={[Navigation, Pagination, Autoplay]}
               spaceBetween={28}
@@ -227,75 +227,81 @@ const Admin = () => {
                   slidesPerView: 1,
                 },
                 640: {
-                  slidesPerView: 1.5,
+                  slidesPerView: 1.25,
                 },
                 768: {
-                  slidesPerView: 2.8,
+                  slidesPerView: 1.5,
                 },
-                1440: {
+                1024: {
+                  slidesPerView: 2.5,
+                },
+                1280: {
                   slidesPerView: 3.5,
+                },
+                1536: {
+                  slidesPerView: 4,
                 },
               }}
               freeMode={true}
               className="lg:max-w-screen-2xl flex items-center"
             >
-              <SwiperSlide>
+              <SwiperSlide className="pb-1">
                 <DisplayTotal
                   title="Pesanan"
                   value={todaysData?.totalOrders || 0}
                   valueBefore={yesterdayData?.totalOrders || 0}
                   icon={faShoppingCart}
-                  colorIcon="blue-400"
+                  color="blue"
                   countPercent={true}
                   classes={bgColors.orders}
-                  day="HARI INI"
+                  day="Hari Ini"
                 />
               </SwiperSlide>
-              <SwiperSlide>
+              <SwiperSlide className="pb-1">
                 <DisplayTotal
                   title="Pesanan Berhasil"
                   value={todaysData?.paid || 0}
                   valueBefore={yesterdayData?.paid || 0}
                   icon={faCheck}
-                  colorIcon="green-400"
+                  color="green"
                   countPercent={true}
                   classes={bgColors.ordersSuccess}
-                  day="HARI INI"
+                  day="Hari Ini"
                 />
               </SwiperSlide>
-              <SwiperSlide>
+              <SwiperSlide className="pb-1">
                 <DisplayTotal
                   title="Pesanan Pending"
                   value={todaysData?.pending || 0}
                   valueBefore={yesterdayData?.pending || 0}
                   icon={faQuestion}
-                  colorIcon="blue-400"
+                  color="yellow"
                   countPercent={true}
                   classes={bgColors.ordersFailed}
-                  day="HARI INI"
+                  day="Hari Ini"
                 />
               </SwiperSlide>
-              <SwiperSlide>
+              <SwiperSlide className="pb-1">
                 <DisplayTotal
                   title="Pendaftaran"
                   value={todaysData?.totalCustomers || 0}
                   valueBefore={yesterdayData?.totalCustomers || 0}
                   icon={faUserPlus}
-                  colorIcon="yellow-400"
+                  color="orange"
                   countPercent={true}
                   classes={bgColors.registration}
-                  day="HARI INI"
+                  day="Hari Ini"
                 />
               </SwiperSlide>
             </Swiper>
           </div>
-          <div className="w-full flex space-x-3">
+          <div className="w-full flex space-x-8">
             {data?.data && (
-              <div className="w-1/2 mt-5 p-5 bg-white rounded-lg shadow-lg">
+              <div className="w-1/2 p-5 bg-white rounded-xl shadow-sm">
                 <ChartOrderHistory data={data.data} />
               </div>
             )}
-            <div className="w-1/2 mt-5 p-5 bg-white rounded-lg shadow-lg">
+            <div className="w-1/2 p-5 bg-white rounded-xl shadow-sm">
               {popularGame.length > 0 && (
                 <ChartPopulargame data={popularGame} />
               )}

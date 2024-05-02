@@ -15,7 +15,7 @@ const DisplayTotal: React.FC<{
   value: number;
   valueBefore: number;
   icon: IconDefinition;
-  colorIcon: string;
+  color: string;
   countPercent?: boolean;
   classes?: string;
   day?: string;
@@ -25,7 +25,7 @@ const DisplayTotal: React.FC<{
   value,
   valueBefore,
   icon,
-  colorIcon,
+  color,
   countPercent,
   classes,
   day,
@@ -63,42 +63,39 @@ const DisplayTotal: React.FC<{
 
   return (
     <div
-      className={`p-5 rounded-lg shadow-sm w-full transition ease-in-out ${
+      className={`p-5 rounded-lg shadow-sm w-full h-full transition ease-in-out ${
         classes ? classes : "bg-white"
       }`}
     >
-      <div className="flex justify-between gap-2 items-center">
+      <div className="flex gap-6 items-center">
         <div
-          className={`white text-${colorIcon} w-16 h-16 rounded-full flex items-center justify-center border-2 border-emerald-400`}
+          className={`white text-${color}-400 w-16 h-16 rounded-full flex items-center justify-center border-2 border-solid border-${color}-400 bg-${color}-50`}
         >
-          <FontAwesomeIcon icon={icon} size="xl" className={``} />
+          <FontAwesomeIcon icon={icon} size="xl" />
         </div>
         <div>
-          <p className="text-gray-400 uppercase text-sm">{title}</p>
-          {day && (
-            <p className="text-gray-400 uppercase text-sm">
-              {day.toUpperCase()}
-            </p>
-          )}
-          <p className="text-xl font-semibold">
+          <p className="text-gray-500 mb-2">
+            {title} {day && day}
+          </p>
+          <p className="text-2xl font-semibold">
             {isCurrency ? formatter(value) : value}
           </p>
+          {countPercent && (
+            <div
+              className={`flex gap-2 mt-2 items-center ${
+                percent
+                  ? percent < 0
+                    ? "text-red-600"
+                    : "text-green-600"
+                  : "text-gray-600"
+              } font-semibold`}
+            >
+              <FontAwesomeIcon icon={iconTrend} />
+              <p className="text-xs">{percent ? percent : 0}% dari kemarin</p>
+            </div>
+          )}
         </div>
       </div>
-      {countPercent && (
-        <div
-          className={`flex gap-2 mt-2 items-center ${
-            percent
-              ? percent < 0
-                ? "text-red-600"
-                : "text-green-600"
-              : "text-gray-600"
-          } font-semibold`}
-        >
-          <FontAwesomeIcon icon={iconTrend} />
-          <p className="text-xs">{percent ? percent : 0}% dari kemarin</p>
-        </div>
-      )}
     </div>
   );
 };

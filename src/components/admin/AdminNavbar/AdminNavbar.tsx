@@ -5,24 +5,60 @@ import {
   faArrowRight,
   faBars,
   faMagnifyingGlass,
+  faRightFromBracket,
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 export default function AdminNavbar() {
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    const toastId = toast.loading("Proses Logout...");
+    const responseCustomer = await fetch(
+      process.env.NEXT_PUBLIC_BASE_URL + "/v1/admin/logout",
+      {
+        method: "DELETE",
+        credentials: "include",
+        headers: {
+          "ngrok-skip-browser-warning": "true",
+        },
+      }
+    );
+
+    if (responseCustomer.ok) {
+      toast.update(toastId, {
+        render: "Berhasil Logout",
+        type: "success",
+        isLoading: false,
+        position: "top-right",
+        autoClose: 3000,
+      });
+      localStorage.setItem("auth-admin", JSON.stringify({ login: false }));
+      localStorage.removeItem("admin");
+      router.push("/admin/auth/login");
+    } else {
+      const res = await responseCustomer.json();
+      toast.update(toastId, {
+        render: res.message,
+        type: "error",
+        isLoading: false,
+        position: "top-right",
+        autoClose: 3000,
+      });
+    }
+  };
   return (
     <nav className="flex flex-nowrap justify-start sticky top-0 right-0 bg-white z-40">
-      <div className="navbar-inner flex w-full justify-between px-6 py-4">
+      <div className="navbar-inner flex w-full justify-between items-center px-6 py-3">
         <Link href={"/"} className="hidden">
           <div className="logo">
             {/* <Image src="" width={40} height={40} alt="gasskeun logo" /> */}
           </div>
           <h4>Gasskeun Topup</h4>
         </Link>
-
-        <div className="sidebar-toggle hidden">
-          <FontAwesomeIcon icon={faArrowRight} />
-        </div>
 
         <div className="search-input w-auto h-max relative flex flex-wrap items-center">
           {/* <span className="absolute top-1/2 left-0 -translate-y-1/2 px-4 py-2">
@@ -43,7 +79,7 @@ export default function AdminNavbar() {
         </button>
 
         <div className="navbar">
-          <ul className="ml-auto">
+          <ul className="ml-auto flex items-center gap-6">
             <li className="hidden">
               <a href="#">
                 <FontAwesomeIcon icon={faBars} />
@@ -70,6 +106,17 @@ export default function AdminNavbar() {
 
               <div className="profile-dropdown absolute top-0 right-0 hidden">
                 implement dropdown for user profile here
+              </div>
+            </li>
+            <li>
+              <div
+                onClick={handleLogout}
+                className={`icon text-base transition-all duration-500 text-neutral-500 hover:text-primary-900 hover:cursor-pointer`}
+              >
+                <FontAwesomeIcon
+                  icon={faRightFromBracket}
+                  className="text-2xl"
+                />
               </div>
             </li>
           </ul>

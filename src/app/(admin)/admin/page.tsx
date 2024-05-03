@@ -214,7 +214,6 @@ const Admin = () => {
         </p>
       </div>
       {loading && <Loading />}
-      {/* <Header title="Dashboard" /> */}
       {!loading && (
         <div className="stats-wrapper px-8">
           <div className="w-full mx-auto flex space-x-3 -translate-y-8">

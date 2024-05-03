@@ -43,22 +43,29 @@ const Configuration = () => {
   return (
     <>
       <AdminNavbar />
-      <div className="wrapper w-full p-8">
-        <div className="website-config bg-white shadow-md rounded-2xl p-8 mt-8 mb-8">
+      <div className="iq-navbar-header h-48 bg-[url('/images/bg-header-abstract.jpg')] bg-cover rounded-b-3xl text-white px-12 pt-10">
+        <h1 className="text-4xl font-semibold">Hello Admin</h1>
+        <p className="text-base mt-2">
+          Selamat datang di dashboard, semoga bisnis anda berjalan lancar dan
+          terus berkembang.
+        </p>
+      </div>
+      <div className="wrapper w-full p-8 pt-0 -translate-y-8">
+        <div className="website-config bg-white shadow-md rounded-xl p-8 mb-8">
           <h1 className="font-medium text-2xl text-neutral-800 w-full">
             konfigurasi Website
           </h1>
           <div>
+            <StatusWebsite />
             <div className="w-full flex">
               <div className="mt-4 flex gap-4 w-1/2">
                 <ChangeLogo />
-                <StatusWebsite />
+                <ChangeLogoFooter />
               </div>
               <div className="mt-4 flex gap-4 w-1/2">
                 <BackgroungImages />
               </div>
             </div>
-            <ChangeLogoFooter />
           </div>
         </div>
 

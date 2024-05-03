@@ -11,8 +11,22 @@ const StatusWebsite = () => {
   const [loading, setLoading] = useState(true);
 
   const options = [
-    { value: "online", label: "Online", color: "green" },
-    { value: "maintenance", label: "Maintenance", color: "yellow" },
+    {
+      value: "online",
+      label: "Online",
+      bgActive: " bg-emerald-100 ",
+      textActive: " text-emerald-800 ",
+      bgIcon: " bg-emerald-600 ",
+      borderActive: " border-emerald-700 ",
+    },
+    {
+      value: "maintenance",
+      label: "Maintenance",
+      bgActive: "bg-yellow-100",
+      textActive: "text-yellow-700",
+      bgIcon: "bg-yellow-600",
+      borderActive: "border-yellow-700",
+    },
     // { value: "offline", label: "Offline", color: "bg-red-600" },
   ];
 
@@ -92,34 +106,30 @@ const StatusWebsite = () => {
     getWebsiteStatus();
   }, []);
   return (
-    <div className="mt-2">
-      <p>Status Website</p>
+    <div className="mt-6">
+      <h2 className="text-lg text-neutral-700">Status Website</h2>
       <div className="flex flex-col space-y-2">
-        <div
-          id="selectOption"
-          className="p-2 border border-gray-300 rounded cursor-pointer relative"
-          onClick={toggleOptions}
-        >
-          <div className="w-full flex gap-4 bg-white mt-1">
-            {options.map((option) => (
-              <div
-                key={option.value}
-                className={`py-2 px-4 cursor-pointer border-slate-400 rounded-full text-${
-                  option.color
-                }-600 ${
+        <div className="w-full flex gap-4 bg-white mt-1">
+          {options.map((option) => (
+            <div
+              key={option.value}
+              className={`py-2 px-4 cursor-pointer border rounded-full ${
+                selectedOption === option.value
+                  ? option.bgActive + option.textActive
+                  : "bg-slate-200 text-slate-600 hover:bg-white hover:border-slate-400"
+              }`}
+              onClick={() => handleOptionClick(option.value)}
+            >
+              <span
+                className={`h-3 w-3 rounded-full inline-block mr-2 ${
                   selectedOption === option.value
-                    ? "bg-" + option.color + "-100"
-                    : ""
+                    ? option.bgIcon
+                    : "bg-slate-400"
                 }`}
-                onClick={() => handleOptionClick(option.value)}
-              >
-                <span
-                  className={`h-3 w-3 rounded-full inline-block mr-2 bg-${option.color}-600`}
-                />
-                {option.label}
-              </div>
-            ))}
-          </div>
+              />
+              {option.label}
+            </div>
+          ))}
         </div>
       </div>
     </div>

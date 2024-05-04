@@ -6,6 +6,7 @@ import DisplayTotal from "@/components/admin/Dashboard/DisplayTotal";
 import TableRecentOrders from "@/components/admin/Dashboard/TableRecentOrders";
 import Header from "@/components/admin/Header";
 import {
+  faArrowRotateRight,
   faCheck,
   faQuestion,
   faShoppingCart,
@@ -25,17 +26,98 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import useDateRange, { useSocketEvents } from "./customHooks";
+import { GestureSwipeHorizontal } from "mdi-material-ui";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+interface ApiResponse {
+  startAt: string;
+  endAt: string;
+  data: AnalyticsData;
+}
+
+interface AnalyticsData {
+  statusCount: StatusCounts;
+  newBuyersCount: number;
+  diagramData: DiagramData;
+  popularGame: PopularGame[];
+}
+
+interface StatusCounts {
+  pending: StatusDetail;
+  success: StatusDetail;
+  failed: StatusDetail;
+  expired: StatusDetail;
+}
+
+interface StatusDetail {
+  total: number;
+  totalBefore: number;
+  percentageChange: number;
+}
+
+interface DiagramData {
+  startAt: string;
+  endAt: string;
+  data: DiagramDataEntry[];
+}
+
+interface DiagramDataEntry {
+  date: string;
+  totalOrders: number;
+}
+
+interface PopularGame {
+  game: string;
+  total: number;
+}
+
+const initialStatusCounts = {
+  pending: {
+    total: 0,
+    totalBefore: 0,
+    percentageChange: 0,
+  },
+  success: {
+    total: 0,
+    totalBefore: 0,
+    percentageChange: 0,
+  },
+  failed: {
+    total: 0,
+    totalBefore: 0,
+    percentageChange: 0,
+  },
+  expired: {
+    total: 0,
+    totalBefore: 0,
+    percentageChange: 0,
+  },
+};
+
+interface IOptionStatsDate {
+  label: string;
+  value: string;
+}
 
 const Admin = () => {
   const [data, setData] = useState<IResponseApiAnalytics>();
-  const [selectedOptionStatsDate, setSelectedOptionStatsDate] = useState<{
-    label: string;
-    value: string;
-  } | null>(null);
+  const [statusCounts, setStatusCounts] =
+    useState<StatusCounts>(initialStatusCounts);
+  const [totalOrders, setTotalOrders] = useState({
+    total: 0,
+    totalBefore: 0,
+    percentageChange: 0,
+  });
+  const [newBuyers, setNewBuyers] = useState(0);
+  const [diagramData, setDiagramData] = useState([]);
+  const [selectedOptionStatsDate, setSelectedOptionStatsDate] =
+    useState<IOptionStatsDate | null>(null);
   const [latestOrder, setLatestOrder] = useState<IOrderHistory[]>([]);
   const [popularGame, setPopularGame] = useState<
-    { name: string; value: number }[]
+    { game: string; total: number }[]
   >([]);
+
+  const [refresh, setRefresh] = useState(0);
   const [loading, setLoading] = useState(true);
   const [bgColors, setBgColors] = useState({
     orders: "bg-white",
@@ -43,7 +125,6 @@ const Admin = () => {
     ordersSuccess: "bg-white",
     registration: "bg-white",
   });
-  const statsDatePickerRef = useRef<DatePicker>(null);
   const [bgColorsLatestOrder, setBgColorsLatestOrders] = useState("bg-white");
   const [updateOrderId, setUpdateOrderId] = useState("");
 
@@ -58,6 +139,7 @@ const Admin = () => {
 
   // Callback functions
   const handleOrderSuccess = useCallback((orderId: string) => {
+    console.log(orderId);
     getUpdateData("paid", "ordersSuccess");
     setLatestOrder((prev) => {
       if (prev) {
@@ -89,18 +171,18 @@ const Admin = () => {
     });
     getUpdateData("totalOrders", "orders");
 
-    setLatestOrder((prev) => [data, ...prev].slice(0, 5));
+    setLatestOrder((prev) => [data, ...prev].slice(0, 10));
 
     setPopularGame((prev) => {
       if (prev) {
-        const existingItem = prev.find((item) => item.name === data.game);
+        const existingItem = prev.find((item) => item.game === data.game);
 
         if (existingItem) {
-          existingItem.value++;
+          existingItem.total++;
         } else {
           prev.push({
-            name: data.game,
-            value: 1,
+            game: data.game,
+            total: 1,
           });
         }
       }
@@ -160,10 +242,10 @@ const Admin = () => {
   };
 
   useEffect(() => {
-    const getData = async (type: string, funcSetData: (data: any) => void) => {
+    const getLatestOrder = async () => {
       setLoading(true);
       const req = await fetch(
-        process.env.NEXT_PUBLIC_BASE_URL + "/v1/order-analytics?type=" + type,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/v1/latest-order`,
         {
           cache: "no-cache",
           method: "GET",
@@ -176,76 +258,105 @@ const Admin = () => {
 
       const res = await req.json();
       if (req.ok) {
-        funcSetData(res);
+        setLatestOrder(res);
       }
       setLoading(false);
     };
-    getData("count", setData);
-    getData("latestOrder", setLatestOrder);
-    getData("popularGame", setPopularGame);
+    getLatestOrder();
   }, []);
 
   useDateRange(
     selectedOptionStatsDate,
-    (dateRange: { startDate: string; endDate: string }) => {}
+    refresh,
+    async (dateRange: { startDate: string; endDate: string }) => {
+      try {
+        setLoading(true);
+
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/v2/order-analytics?startAt=${dateRange.startDate}&endAt=${dateRange.endDate}`,
+          {
+            cache: "no-cache",
+            method: "GET",
+            credentials: "include",
+            headers: {
+              "ngrok-skip-browser-warning": "true",
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const analytics = await response.json();
+        setLoading(false);
+
+        setStatusCounts(analytics.data.statusCount);
+        setTotalOrders(analytics.data.totalOrders);
+        setNewBuyers(analytics.data.newBuyersCount);
+        setPopularGame(analytics.data.popularGame);
+        setDiagramData(analytics.data.diagramData.data);
+      } catch (error) {
+        setLoading(false);
+        console.error("Failed to get analytics", error);
+      }
+    }
   );
-
-  const todaysData = useMemo(() => {
-    const dateNow = dayjs().format("YYYY-MM-DD");
-    return data?.data.find((dataItem) => dataItem.date === dateNow);
-  }, [data]);
-
-  const yesterdayData = useMemo(() => {
-    const dateYesterday = dayjs().subtract(1, "day").format("YYYY-MM-DD");
-    return data?.data.find((dataItem) => dataItem.date === dateYesterday);
-  }, [data]);
 
   return (
     <>
       <AdminNavbar />
-      <div className="iq-navbar-header h-48 bg-[url('/images/bg-header-abstract.jpg')] bg-cover rounded-b-3xl text-white px-12 pt-10 flex justify-between">
-        <div>
-          <h1 className="text-4xl font-semibold">Hello Admin</h1>
-          <p className="text-base mt-2">
-            Selamat datang di dashboard, semoga bisnis anda berjalan lancar dan
-            terus berkembang.
-          </p>
-        </div>
-        <div className="shrink-0">
-          <Select
-            id="selectStatsDate"
-            value={selectedOptionStatsDate?.value}
-            isSearchable={false}
-            onChange={(e: any) => {
-              e.value === "custom"
-                ? statsDatePickerRef?.current?.setOpen(true)
-                : setSelectedOptionStatsDate(e);
-            }}
-            options={optionsStatsDate}
-            placeholder="Rentang Statistik"
-            styles={{
-              control: (provided, state) => ({
-                ...provided,
-                paddingTop: "6px",
-                paddingBottom: "6px",
-                cursor: "pointer",
-              }),
-              singleValue: (provided, state) => ({
-                ...provided,
-                color: "#333",
-                cursor: "pointer",
-              }),
-              option: (provided, state) => ({
-                ...provided,
-                backgroundColor: state.isSelected ? "#007BFF" : "white",
-                color: state.isSelected ? "white" : "#333",
-                cursor: "pointer",
-                ":hover": {
-                  backgroundColor: "#f0f0f0",
-                },
-              }),
-            }}
-          />
+      <div className="iq-navbar-header h-48 bg-[url('/images/bg-header-abstract.jpg')] bg-cover rounded-b-3xl text-white px-12 pt-10">
+        <div className="flex justify-between items-center">
+          <div>
+            <h1 className="text-4xl font-semibold">Hello Admin</h1>
+            <p className="text-base mt-2">
+              Selamat datang di dashboard, semoga bisnis anda berjalan lancar
+              dan terus berkembang.
+            </p>
+          </div>
+          <div className="shrink-0 flex items-center gap-6">
+            <Select
+              id="selectStatsDate"
+              value={selectedOptionStatsDate}
+              isSearchable={false}
+              onChange={(e: any) => {
+                setSelectedOptionStatsDate(e);
+              }}
+              options={optionsStatsDate}
+              placeholder="Rentang Statistik"
+              styles={{
+                control: (provided, state) => ({
+                  ...provided,
+                  paddingTop: "6px",
+                  paddingBottom: "6px",
+                  cursor: "pointer",
+                }),
+                singleValue: (provided, state) => ({
+                  ...provided,
+                  color: "#333",
+                  cursor: "pointer",
+                }),
+                option: (provided, state) => ({
+                  ...provided,
+                  backgroundColor: state.isSelected ? "#007BFF" : "white",
+                  color: state.isSelected ? "white" : "#333",
+                  cursor: "pointer",
+                  ":hover": {
+                    backgroundColor: "#f0f0f0",
+                  },
+                }),
+              }}
+            />
+            <div
+              className={`hover:cursor-pointer`}
+              onClick={() => {
+                setRefresh((prev) => prev + 1);
+              }}
+            >
+              <FontAwesomeIcon icon={faArrowRotateRight} className="text-xl" />
+            </div>
+          </div>
         </div>
       </div>
       {loading && <Loading />}
@@ -253,7 +364,6 @@ const Admin = () => {
         <div className="stats-wrapper px-8">
           <div className="w-full mx-auto flex space-x-3 -translate-y-8">
             <Swiper
-              modules={[]}
               spaceBetween={28}
               slidesPerView={1}
               breakpoints={carouselBreakpoints}
@@ -263,8 +373,8 @@ const Admin = () => {
               <SwiperSlide className="pb-1">
                 <DisplayTotal
                   title="Pesanan"
-                  value={todaysData?.totalOrders || 0}
-                  valueBefore={yesterdayData?.totalOrders || 0}
+                  total={totalOrders.total}
+                  percentageChange={totalOrders.percentageChange}
                   icon={faShoppingCart}
                   color={{
                     icon: "text-blue-500",
@@ -273,14 +383,18 @@ const Admin = () => {
                   }}
                   countPercent={true}
                   classes={bgColors.orders}
-                  day="Hari Ini"
+                  day={
+                    selectedOptionStatsDate
+                      ? selectedOptionStatsDate.label
+                      : "Sebulan Terakhir"
+                  }
                 />
               </SwiperSlide>
               <SwiperSlide className="pb-1">
                 <DisplayTotal
                   title="Pesanan Berhasil"
-                  value={todaysData?.paid || 0}
-                  valueBefore={yesterdayData?.paid || 0}
+                  total={statusCounts.success.total}
+                  percentageChange={statusCounts.success.percentageChange}
                   icon={faCheck}
                   color={{
                     icon: "text-emerald-500",
@@ -289,14 +403,18 @@ const Admin = () => {
                   }}
                   countPercent={true}
                   classes={bgColors.ordersSuccess}
-                  day="Hari Ini"
+                  day={
+                    selectedOptionStatsDate
+                      ? selectedOptionStatsDate.label
+                      : "Sebulan Terakhir"
+                  }
                 />
               </SwiperSlide>
               <SwiperSlide className="pb-1">
                 <DisplayTotal
                   title="Pesanan Pending"
-                  value={todaysData?.pending || 0}
-                  valueBefore={yesterdayData?.pending || 0}
+                  total={statusCounts.pending.total}
+                  percentageChange={statusCounts.pending.percentageChange}
                   icon={faQuestion}
                   color={{
                     icon: "text-yellow-500",
@@ -305,36 +423,58 @@ const Admin = () => {
                   }}
                   countPercent={true}
                   classes={bgColors.ordersFailed}
-                  day="Hari Ini"
+                  day={
+                    selectedOptionStatsDate
+                      ? selectedOptionStatsDate.label
+                      : "Sebulan Terakhir"
+                  }
                 />
               </SwiperSlide>
               <SwiperSlide className="pb-1">
                 <DisplayTotal
                   title="Pembeli baru"
-                  value={todaysData?.totalCustomers || 0}
-                  valueBefore={yesterdayData?.totalCustomers || 0}
+                  total={newBuyers}
+                  percentageChange={0}
                   icon={faUserPlus}
                   color={{
                     icon: "text-orange-500",
                     background: "bg-orange-100",
                     border: "border-orange-500",
                   }}
-                  countPercent={true}
+                  countPercent={false}
                   classes={bgColors.registration}
-                  day="Hari Ini"
+                  day={
+                    selectedOptionStatsDate
+                      ? selectedOptionStatsDate.label
+                      : "Sebulan Terakhir"
+                  }
                 />
               </SwiperSlide>
             </Swiper>
           </div>
           <div className="w-full flex space-x-8">
-            {data?.data && (
+            {diagramData.length > 0 && (
               <div className="w-1/2 p-5 bg-white rounded-xl shadow-sm">
-                <ChartOrderHistory data={data.data} />
+                <ChartOrderHistory
+                  data={diagramData}
+                  day={
+                    selectedOptionStatsDate
+                      ? selectedOptionStatsDate.label
+                      : "Sebulan Terakhir"
+                  }
+                />
               </div>
             )}
             <div className="w-1/2 p-5 bg-white rounded-xl shadow-sm">
               {popularGame.length > 0 && (
-                <ChartPopulargame data={popularGame} />
+                <ChartPopulargame
+                  data={popularGame}
+                  day={
+                    selectedOptionStatsDate
+                      ? selectedOptionStatsDate.label
+                      : "Sebulan Terakhir"
+                  }
+                />
               )}
             </div>
           </div>

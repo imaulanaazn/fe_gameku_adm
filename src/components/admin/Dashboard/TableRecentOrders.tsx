@@ -5,10 +5,11 @@ import dayjs from "dayjs";
 import Image from "next/image";
 
 const TableRecentOrders: React.FC<{
-  recentOrders: IOrderHistory[];
+  recentOrders: any;
   classes: string;
   orderId?: string;
 }> = ({ recentOrders, classes, orderId }) => {
+  console.log(recentOrders);
   return (
     <div className="w-full overflow-x-scroll md:overflow-x-auto overflow-y-hidden bg-white shadow rounded-2xl p-8 mt-8 mb-8">
       <div>
@@ -53,12 +54,12 @@ const TableRecentOrders: React.FC<{
                         scope="col"
                         className="px-6 lg:py-4 lg:py-5 text-xs font-bold text-right text-neutral-600 uppercase text-right"
                       >
-                        Tanggal Order
+                        Invoice Id
                       </th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200">
-                    {recentOrders.map((data, index) => (
+                    {recentOrders.map((data: any, index: number) => (
                       <tr
                         key={data.id}
                         className={
@@ -75,7 +76,7 @@ const TableRecentOrders: React.FC<{
                           <div className="flex gap-3 items-center">
                             <div className="h-10 aspect-square flex items-center">
                               <Image
-                                src={data.logoUrl}
+                                src={data.gameLogo}
                                 alt={`Logo Game`}
                                 width="0"
                                 height="0"
@@ -104,7 +105,7 @@ const TableRecentOrders: React.FC<{
                           <StatusesOrder value={data.status} />
                         </td>
                         <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap text-right">
-                          {dayjs(data.createdAt).format("YYYY-MM-DD HH:mm:ss")}
+                          {data.invoiceId}
                         </td>
                       </tr>
                     ))}

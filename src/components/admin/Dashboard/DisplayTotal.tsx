@@ -12,8 +12,8 @@ import React from "react";
 
 const DisplayTotal: React.FC<{
   title: string;
-  value: number;
-  valueBefore: number;
+  total: number;
+  percentageChange: number;
   icon: IconDefinition;
   color: { border: string; background: string; icon: string };
   countPercent?: boolean;
@@ -22,8 +22,8 @@ const DisplayTotal: React.FC<{
   isCurrency?: boolean;
 }> = ({
   title,
-  value,
-  valueBefore,
+  total,
+  percentageChange,
   icon,
   color,
   countPercent,
@@ -31,16 +31,12 @@ const DisplayTotal: React.FC<{
   day,
   isCurrency,
 }) => {
-  const result = ((value - valueBefore) / valueBefore) * 100;
-  let percent =
-    valueBefore === 0 ? value * 100 : Math.round(result * 100) / 100;
-
   let iconTrend: any;
   let colorTrend: string;
-  if (percent && percent < 0) {
+  if (percentageChange && percentageChange < 0) {
     iconTrend = faArrowTrendDown;
     colorTrend = "text-red-600";
-  } else if (percent && percent > 0) {
+  } else if (percentageChange && percentageChange > 0) {
     iconTrend = faArrowTrendUp;
     colorTrend = "text-green-600";
   } else {
@@ -49,10 +45,10 @@ const DisplayTotal: React.FC<{
   }
 
   if (title === "Pesanan Gagal") {
-    if (percent && percent < 0) {
+    if (percentageChange && percentageChange < 0) {
       iconTrend = faArrowTrendUp;
       colorTrend = "text-green-600";
-    } else if (percent && percent > 0) {
+    } else if (percentageChange && percentageChange > 0) {
       iconTrend = faArrowTrendDown;
       colorTrend = "text-red-600";
     } else {
@@ -63,13 +59,13 @@ const DisplayTotal: React.FC<{
 
   return (
     <div
-      className={`p-5 rounded-lg shadow-sm w-full h-full transition ease-in-out ${
+      className={`p-5 rounded-lg shadow-sm w-full h-full transition ease-in-out flex item-center justify-center ${
         classes ? classes : "bg-white"
       }`}
     >
-      <div className="flex gap-6 items-center">
+      <div className="flex gap-6 items-center justify-center">
         <div
-          className={`white ${color.icon} w-16 h-16 rounded-full flex items-center justify-center border-2 border-solid ${color.border} ${color.background}`}
+          className={`white ${color.icon} w-16 h-16 rounded-full flex items-center justify-center border-2 border-solid ${color.border} ${color.background} shrink-0`}
         >
           <FontAwesomeIcon icon={icon} size="xl" />
         </div>
@@ -78,20 +74,22 @@ const DisplayTotal: React.FC<{
             {title} {day && day}
           </p>
           <p className="text-2xl font-semibold">
-            {isCurrency ? formatter(value) : value}
+            {isCurrency ? formatter(total) : total}
           </p>
           {countPercent && (
             <div
               className={`flex gap-2 mt-2 items-center ${
-                percent
-                  ? percent < 0
+                percentageChange
+                  ? percentageChange < 0
                     ? "text-red-600"
                     : "text-green-600"
                   : "text-gray-600"
               } font-semibold`}
             >
               <FontAwesomeIcon icon={iconTrend} />
-              <p className="text-xs">{percent ? percent : 0}% dari kemarin</p>
+              <p className="text-xs">
+                {percentageChange ? percentageChange : 0}% dari kemarin
+              </p>
             </div>
           )}
         </div>

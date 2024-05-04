@@ -15,7 +15,7 @@ const DisplayTotal: React.FC<{
   value: number;
   valueBefore: number;
   icon: IconDefinition;
-  color: string;
+  color: { border: string; background: string; icon: string };
   countPercent?: boolean;
   classes?: string;
   day?: string;
@@ -69,7 +69,7 @@ const DisplayTotal: React.FC<{
     >
       <div className="flex gap-6 items-center">
         <div
-          className={`white text-${color}-400 w-16 h-16 rounded-full flex items-center justify-center border-2 border-solid border-${color}-400 bg-${color}-50`}
+          className={`white ${color.icon} w-16 h-16 rounded-full flex items-center justify-center border-2 border-solid ${color.border} ${color.background}`}
         >
           <FontAwesomeIcon icon={icon} size="xl" />
         </div>

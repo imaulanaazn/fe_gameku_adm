@@ -334,7 +334,9 @@ const Admin = () => {
               }}
             />
             <div
-              className={`hover:cursor-pointer`}
+              className={`hover:cursor-pointer ${
+                statsLoading && "animate-spin"
+              }`}
               onClick={() => {
                 setRefresh((prev) => prev + 1);
               }}
@@ -345,7 +347,7 @@ const Admin = () => {
         </div>
       </div>
       {loading && <Loading />}
-      {!statsLoading && (
+      {!loading && (
         <div className="stats-wrapper px-8">
           <div className="w-full mx-auto flex space-x-3 -translate-y-8">
             <Swiper

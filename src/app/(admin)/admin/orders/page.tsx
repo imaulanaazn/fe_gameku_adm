@@ -21,6 +21,7 @@ const Orders = () => {
   const [data, setData] =
     useState<IOrderWithAnalitycsPaginationWithDetail | null>(null);
   const [loading, setLoading] = useState(true);
+  const [revenueLoading, setRevenueLoading] = useState(false);
   const [revenue, setRevenue] = useState(initialRevenue);
   const [refresh, setRefresh] = useState(0);
   const [selectedOptionStatsDate, setSelectedOptionStatsDate] = useState<{
@@ -33,6 +34,7 @@ const Orders = () => {
     refresh,
     async (dateRange: { startDate: string; endDate: string }) => {
       try {
+        setRevenueLoading(true);
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_BASE_URL}/v1/order-revenue?startAt=${dateRange.startDate}&endAt=${dateRange.endDate}`,
           {
@@ -51,8 +53,10 @@ const Orders = () => {
 
         const revenue = await response.json();
         setRevenue(revenue.data);
+        setRevenueLoading(false);
       } catch (error) {
         console.error("Failed to get revenue", error);
+        setRevenueLoading(false);
       }
     }
   );
@@ -125,7 +129,9 @@ const Orders = () => {
               }}
             />
             <div
-              className={`hover:cursor-pointer`}
+              className={`hover:cursor-pointer ${
+                revenueLoading && "animate-spin"
+              }`}
               onClick={() => {
                 setRefresh((prev) => prev + 1);
               }}
@@ -136,7 +142,7 @@ const Orders = () => {
         </div>
       </div>
 
-      <div className="wrapper px-8">
+      <div className="wrapper px-8 -mt-10">
         <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           <DisplayTotal
             title="Pesanan"

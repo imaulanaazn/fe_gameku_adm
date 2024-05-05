@@ -15,7 +15,7 @@ export const carouselBreakpoints = {
     slidesPerView: 2.75,
   },
   1536: {
-    slidesPerView: 4,
+    slidesPerView: 4.25,
   },
 };
 

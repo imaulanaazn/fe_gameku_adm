@@ -12,6 +12,7 @@ import {
   faShoppingCart,
   faTimes,
   faUserPlus,
+  faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import dayjs from "dayjs";
@@ -28,6 +29,7 @@ import "swiper/css/pagination";
 import useDateRange, { useSocketEvents } from "./customHooks";
 import { GestureSwipeHorizontal } from "mdi-material-ui";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { toast } from "react-toastify";
 
 interface ApiResponse {
   startAt: string;
@@ -119,9 +121,12 @@ const Admin = () => {
 
   const [refresh, setRefresh] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [statsLoading, setStatsLoading] = useState(false);
   const [bgColors, setBgColors] = useState({
     orders: "bg-white",
     ordersFailed: "bg-white",
+    ordersPending: "bg-white",
+    ordersExpired: "bg-white",
     ordersSuccess: "bg-white",
     registration: "bg-white",
   });
@@ -137,37 +142,18 @@ const Admin = () => {
     }
   );
 
-  // Callback functions
   const handleOrderSuccess = useCallback((orderId: string) => {
-    getUpdateData("paid", "ordersSuccess");
     setLatestOrder((prev) => {
-      if (prev) {
-        const check = prev.find((item) => item.id === orderId);
-        if (check) {
-          check.status = "3";
+      return prev.map((order) => {
+        if (order.id === orderId) {
+          return { ...order, status: "success" };
         }
-      }
-
-      return prev;
+        return order;
+      });
     });
-
-    setUpdateOrderId(orderId);
-    setBgColorsLatestOrders("bg-green-200 bg-opacity-30");
-
-    setTimeout(() => {
-      setUpdateOrderId("");
-      setBgColorsLatestOrders("bg-white");
-    }, 500);
   }, []);
 
   const handleOrderNew = useCallback((data: IOrderHistory) => {
-    setData((prev) => {
-      if (prev) {
-        prev.totalOrders30daysAgo++;
-      }
-
-      return prev;
-    });
     getUpdateData("totalOrders", "orders");
 
     setLatestOrder((prev) => [data, ...prev].slice(0, 10));
@@ -240,27 +226,28 @@ const Admin = () => {
     });
   };
 
-  useEffect(() => {
-    const getLatestOrder = async () => {
-      setLoading(true);
-      const req = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/v1/latest-order`,
-        {
-          cache: "no-cache",
-          method: "GET",
-          credentials: "include",
-          headers: {
-            "ngrok-skip-browser-warning": "true",
-          },
-        }
-      );
-
-      const res = await req.json();
-      if (req.ok) {
-        setLatestOrder(res);
+  const getLatestOrder = async () => {
+    setLoading(true);
+    const req = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/v1/latest-order`,
+      {
+        cache: "no-cache",
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "ngrok-skip-browser-warning": "true",
+        },
       }
-      setLoading(false);
-    };
+    );
+
+    const res = await req.json();
+    if (req.ok) {
+      setLatestOrder(res);
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
     getLatestOrder();
   }, []);
 
@@ -269,8 +256,7 @@ const Admin = () => {
     refresh,
     async (dateRange: { startDate: string; endDate: string }) => {
       try {
-        setLoading(true);
-
+        setStatsLoading(true);
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_BASE_URL}/v2/order-analytics?startAt=${dateRange.startDate}&endAt=${dateRange.endDate}`,
           {
@@ -288,15 +274,15 @@ const Admin = () => {
         }
 
         const analytics = await response.json();
-        setLoading(false);
 
         setStatusCounts(analytics.data.statusCount);
         setTotalOrders(analytics.data.totalOrders);
         setNewBuyers(analytics.data.newBuyersCount);
         setPopularGame(analytics.data.popularGame);
         setDiagramData(analytics.data.diagramData.data);
+        setStatsLoading(false);
       } catch (error) {
-        setLoading(false);
+        setStatsLoading(false);
         console.error("Failed to get analytics", error);
       }
     }
@@ -308,7 +294,7 @@ const Admin = () => {
       <div className="iq-navbar-header h-48 bg-[url('/images/bg-header-abstract.jpg')] bg-cover rounded-b-3xl text-white px-12 pt-10">
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-4xl font-semibold">Hello Admin</h1>
+            <h1 className="text-4xl font-semibold">Halo Admin</h1>
             <p className="text-base mt-2">
               Selamat datang di dashboard, semoga bisnis anda berjalan lancar
               dan terus berkembang.
@@ -359,7 +345,7 @@ const Admin = () => {
         </div>
       </div>
       {loading && <Loading />}
-      {!loading && (
+      {!statsLoading && (
         <div className="stats-wrapper px-8">
           <div className="w-full mx-auto flex space-x-3 -translate-y-8">
             <Swiper
@@ -419,6 +405,26 @@ const Admin = () => {
                     icon: "text-yellow-500",
                     background: "bg-yellow-100",
                     border: "border-yellow-500",
+                  }}
+                  countPercent={true}
+                  classes={bgColors.ordersPending}
+                  day={
+                    selectedOptionStatsDate
+                      ? selectedOptionStatsDate.label
+                      : "Sebulan Terakhir"
+                  }
+                />
+              </SwiperSlide>
+              <SwiperSlide className="pb-1">
+                <DisplayTotal
+                  title="Pesanan Gagal"
+                  total={statusCounts.failed.total}
+                  percentageChange={statusCounts.failed.percentageChange}
+                  icon={faXmark}
+                  color={{
+                    icon: "text-rose-500",
+                    background: "bg-rose-100",
+                    border: "border-rose-500",
                   }}
                   countPercent={true}
                   classes={bgColors.ordersFailed}
@@ -481,7 +487,6 @@ const Admin = () => {
             <TableRecentOrders
               recentOrders={latestOrder}
               classes={bgColorsLatestOrder}
-              orderId={updateOrderId}
             />
           )}
         </div>

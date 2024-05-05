@@ -75,7 +75,7 @@ const TableRecentOrders: React.FC<{
                           <div className="flex gap-3 items-center">
                             <div className="h-10 aspect-square flex items-center">
                               <Image
-                                src={data.gameLogo}
+                                src={data.gameLogo || data.logoUrl}
                                 alt={`Logo Game`}
                                 width="0"
                                 height="0"

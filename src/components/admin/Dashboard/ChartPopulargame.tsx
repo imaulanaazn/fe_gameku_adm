@@ -20,6 +20,9 @@ function generateColors(length: number) {
     "#707078",
     "#7D8570",
     "#000000",
+    "#9b0d5c",
+    "#690c83",
+    "#32077b",
   ];
   //   for (let i = 0; i < length; i++) {
   //     const hue = (i * 360) / length;

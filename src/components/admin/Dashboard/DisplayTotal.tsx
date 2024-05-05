@@ -88,7 +88,7 @@ const DisplayTotal: React.FC<{
             >
               <FontAwesomeIcon icon={iconTrend} />
               <p className="text-xs">
-                {percentageChange ? percentageChange : 0}% dari kemarin
+                {percentageChange ? percentageChange : 0}% dari sebelumnya
               </p>
             </div>
           )}

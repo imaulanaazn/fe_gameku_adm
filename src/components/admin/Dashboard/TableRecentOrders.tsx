@@ -9,7 +9,6 @@ const TableRecentOrders: React.FC<{
   classes: string;
   orderId?: string;
 }> = ({ recentOrders, classes, orderId }) => {
-  console.log(recentOrders);
   return (
     <div className="w-full overflow-x-scroll md:overflow-x-auto overflow-y-hidden bg-white shadow rounded-2xl p-8 mt-8 mb-8">
       <div>

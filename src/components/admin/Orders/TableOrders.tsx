@@ -27,7 +27,6 @@ import FormOrders from "./FormOrders";
 import { RefreshCircle } from "mdi-material-ui";
 import { Box } from "@mui/system";
 import { Button } from "@mui/material";
-import AdminNavbar from "../AdminNavbar/AdminNavbar";
 const column = [
   {
     id: "game",
@@ -128,7 +127,6 @@ const TableOrders: React.FC<{
 }> = ({ data }) => {
   const datePickerRef = useRef<DatePicker>(null);
   const downloadDatePickerRef = useRef<DatePicker>(null);
-  const statsDatePickerRef = useRef<DatePicker>(null);
   const [query, setQuery] = useState<{
     search: {
       key: string;
@@ -162,11 +160,6 @@ const TableOrders: React.FC<{
   } | null>(null);
 
   const [selectedOptionDownloadDate, setSelectedOptionDownloadDate] = useState<{
-    label: string;
-    value: string;
-  } | null>(null);
-
-  const [selectedOptionStatsDate, setSelectedOptionStatsDate] = useState<{
     label: string;
     value: string;
   } | null>(null);
@@ -374,46 +367,6 @@ const TableOrders: React.FC<{
   ]);
 
   useEffect(() => {
-    if (selectedOptionStatsDate) {
-      let date: { startDate: string; endDate: string } = {
-        startDate: "",
-        endDate: "",
-      };
-      if (selectedOptionStatsDate.value === "today") {
-        const today = dayjs();
-        date.startDate = today.startOf("day").toISOString();
-        date.endDate = today.endOf("day").toISOString();
-      } else if (selectedOptionStatsDate.value === "yesterday") {
-        const yesterday = dayjs().subtract(1, "day");
-        date.startDate = yesterday.startOf("day").toISOString();
-        date.endDate = yesterday.endOf("day").toISOString();
-      } else if (selectedOptionStatsDate.value === "thisWeek") {
-        const startDate = dayjs().startOf("week");
-        const endDate = dayjs();
-        date.startDate = startDate.startOf("day").toISOString();
-        date.endDate = endDate.endOf("day").toISOString();
-      } else if (selectedOptionStatsDate.value === "thisMonth") {
-        const startDate = dayjs().startOf("month");
-        const endDate = dayjs();
-        date.startDate = startDate.startOf("day").toISOString();
-        date.endDate = endDate.endOf("day").toISOString();
-      } else if (selectedOptionStatsDate.value === "lastMonth") {
-        const endDate = dayjs();
-        const startDate = endDate.subtract(1, "month");
-        date.startDate = startDate.startOf("day").toISOString();
-        date.endDate = endDate.endOf("day").toISOString();
-      }
-      if (date.startDate && date.endDate) {
-        downloadFile(date);
-      }
-    }
-  }, [
-    selectedOptionStatsDate,
-    selectedOptionStatsDate?.label,
-    selectedOptionStatsDate?.value,
-  ]);
-
-  useEffect(() => {
     getNewData();
   }, [JSON.stringify(query), query.search.length]);
 
@@ -519,452 +472,369 @@ const TableOrders: React.FC<{
 
   return (
     <>
-      <AdminNavbar />
-      <div className="iq-navbar-header h-48 bg-[url('/images/bg-header-abstract.jpg')] bg-cover rounded-b-3xl text-white px-12 pt-10 flex justify-between">
-        <div>
-          <h1 className="text-4xl font-semibold">Hello Admin</h1>
-          <p className="text-base mt-2">
-            Selamat datang di dashboard, semoga bisnis anda berjalan lancar dan
-            terus berkembang.
-          </p>
-        </div>
-        <div className="shrink-0">
-          <Select
-            id="selectStatsDate"
-            value={selectedOptionStatsDate?.value}
-            isSearchable={false}
-            onChange={(e: any) => {
-              e.value === "custom"
-                ? statsDatePickerRef?.current?.setOpen(true)
-                : setSelectedOptionStatsDate(e);
-            }}
-            options={optionsStatsDate}
-            placeholder="Rentang Statistik"
-            styles={{
-              control: (provided, state) => ({
-                ...provided,
-                paddingTop: "6px",
-                paddingBottom: "6px",
-                cursor: "pointer",
-              }),
-              singleValue: (provided, state) => ({
-                ...provided,
-                color: "#333",
-                cursor: "pointer",
-              }),
-              option: (provided, state) => ({
-                ...provided,
-                backgroundColor: state.isSelected ? "#007BFF" : "white",
-                color: state.isSelected ? "white" : "#333",
-                cursor: "pointer",
-                ":hover": {
-                  backgroundColor: "#f0f0f0",
-                },
-              }),
-            }}
-          />
-        </div>
-      </div>
-      <div className="wrapper px-8">
-        <DatePicker
-          selected={startDate}
-          onChange={onChange}
-          startDate={startDate}
-          endDate={endDate}
-          dateFormat="dd/MM/yyyy"
-          showMonthDropdown
-          showYearDropdown
-          selectsRange
-          dropdownMode="select"
-          minDate={new Date(2000, 0, 1)}
-          maxDate={new Date(2100, 11, 31)}
-          withPortal
-          customInput={<input type="hidden" />}
-          ref={datePickerRef}
-        />
-        <DatePicker
-          selected={downloadDate.start}
-          onChange={onDownloadDateChange}
-          startDate={downloadDate.start}
-          endDate={downloadDate.end}
-          dateFormat="dd/MM/yyyy"
-          showMonthDropdown
-          showYearDropdown
-          selectsRange
-          dropdownMode="select"
-          minDate={new Date(2000, 0, 1)}
-          maxDate={new Date(2100, 11, 31)}
-          withPortal
-          customInput={<input type="hidden" />}
-          ref={downloadDatePickerRef}
-        />
-        <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          <DisplayTotal
-            title="Pesanan"
-            value={data.analytics.orders}
-            valueBefore={0}
-            icon={faShoppingCart}
-            color={{
-              icon: "text-blue-400",
-              background: "bg-blue-100",
-              border: "border-blue-400",
-            }}
-          />
-          <DisplayTotal
-            title="Pendapatan"
-            value={data.analytics.revenue}
-            valueBefore={0}
-            icon={faMoneyBill}
-            color={{
-              icon: "text-yellow-400",
-              background: "bg-yellow-100",
-              border: "border-yellow-400",
-            }}
-            isCurrency={true}
-          />
-          <DisplayTotal
-            title="Pesanan Berhasil"
-            value={data.analytics.countPaid}
-            valueBefore={0}
-            icon={faCheckCircle}
-            color={{
-              icon: "text-emerald-400",
-              background: "bg-emerald-100",
-              border: "border-emerald-400",
-            }}
-          />
-        </div>
-        <div className="w-full bg-white rounded shadow p-5 mt-5">
-          <div className="flex justify-between">
-            <div className="w-full flex gap-3 items-center">
-              <div className="w-1/2 max-w-sm relative">
-                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                  <FontAwesomeIcon icon={faSearch} />
-                </div>
-                <input
-                  type="search"
-                  id="default-search"
-                  className="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-                  placeholder={`Cari berdasarkan ${selectedOptionSearchBy.label}`}
-                  value={inputSearch}
-                  onChange={(e) => setInputSearch(e.target.value)}
-                />
-                <button
-                  type="button"
-                  disabled={!inputSearch}
-                  onClick={(e) => handleClickSearch()}
-                  className={`${
-                    !inputSearch
-                      ? "bg-gray-400 text-black cursor-not-allowed"
-                      : "bg-blue-700 hover:bg-blue-800"
-                  } text-white absolute right-2.5 bottom-2.5 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2`}
-                >
-                  Cari
-                </button>
+      <DatePicker
+        selected={startDate}
+        onChange={onChange}
+        startDate={startDate}
+        endDate={endDate}
+        dateFormat="dd/MM/yyyy"
+        showMonthDropdown
+        showYearDropdown
+        selectsRange
+        dropdownMode="select"
+        minDate={new Date(2000, 0, 1)}
+        maxDate={new Date(2100, 11, 31)}
+        withPortal
+        customInput={<input type="hidden" />}
+        ref={datePickerRef}
+      />
+      <DatePicker
+        selected={downloadDate.start}
+        onChange={onDownloadDateChange}
+        startDate={downloadDate.start}
+        endDate={downloadDate.end}
+        dateFormat="dd/MM/yyyy"
+        showMonthDropdown
+        showYearDropdown
+        selectsRange
+        dropdownMode="select"
+        minDate={new Date(2000, 0, 1)}
+        maxDate={new Date(2100, 11, 31)}
+        withPortal
+        customInput={<input type="hidden" />}
+        ref={downloadDatePickerRef}
+      />
+      <div className="w-full bg-white rounded shadow p-5 mt-5">
+        <div className="flex justify-between">
+          <div className="w-full flex gap-3 items-center">
+            <div className="w-1/2 max-w-sm relative">
+              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                <FontAwesomeIcon icon={faSearch} />
               </div>
-              <Select
-                id="filterSearchBy"
-                value={selectedOptionSearchBy}
-                onChange={(e: any) => {
-                  const check = query.search.find(
-                    (item) => item.key === selectedOptionSearchBy.value
+              <input
+                type="search"
+                id="default-search"
+                className="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                placeholder={`Cari berdasarkan ${selectedOptionSearchBy.label}`}
+                value={inputSearch}
+                onChange={(e) => setInputSearch(e.target.value)}
+              />
+              <button
+                type="button"
+                disabled={!inputSearch}
+                onClick={(e) => handleClickSearch()}
+                className={`${
+                  !inputSearch
+                    ? "bg-gray-400 text-black cursor-not-allowed"
+                    : "bg-blue-700 hover:bg-blue-800"
+                } text-white absolute right-2.5 bottom-2.5 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2`}
+              >
+                Cari
+              </button>
+            </div>
+            <Select
+              id="filterSearchBy"
+              value={selectedOptionSearchBy}
+              onChange={(e: any) => {
+                const check = query.search.find(
+                  (item) => item.key === selectedOptionSearchBy.value
+                );
+                if (check) {
+                  setSelectedOptionSearchByBefore(check);
+                }
+                setSelectedOptionSearchBy(e);
+              }}
+              options={optionsSearchBy}
+              placeholder="Cari Berdasarkan"
+              styles={{
+                control: (provided, state) => ({
+                  ...provided,
+                  paddingTop: "6px",
+                  paddingBottom: "6px",
+                  cursor: "pointer",
+                }),
+                singleValue: (provided, state) => ({
+                  ...provided,
+                  color: "#333",
+                  cursor: "pointer",
+                }),
+                option: (provided, state) => ({
+                  ...provided,
+                  backgroundColor: state.isSelected ? "#007BFF" : "white",
+                  color: state.isSelected ? "white" : "#333",
+                  cursor: "pointer",
+                  ":hover": {
+                    backgroundColor: "#f0f0f0",
+                  },
+                }),
+              }}
+            />
+          </div>
+          <div className="shrink-0">
+            <Select
+              id="selectDownloadDate"
+              value={selectedOptionDownloadDate?.value}
+              key={`my_unique_select_key__${selectedOptionDownloadDate}`}
+              isSearchable={false}
+              onChange={(e: any) => {
+                e.value === "custom"
+                  ? downloadDatePickerRef?.current?.setOpen(true)
+                  : setSelectedOptionDownloadDate(e);
+              }}
+              options={optionsDownloadDate}
+              placeholder="Download Laporan"
+              styles={{
+                control: (provided, state) => ({
+                  ...provided,
+                  paddingTop: "6px",
+                  paddingBottom: "6px",
+                  cursor: "pointer",
+                }),
+                singleValue: (provided, state) => ({
+                  ...provided,
+                  color: "#333",
+                  cursor: "pointer",
+                }),
+                option: (provided, state) => ({
+                  ...provided,
+                  backgroundColor: state.isSelected ? "#007BFF" : "white",
+                  color: state.isSelected ? "white" : "#333",
+                  cursor: "pointer",
+                  ":hover": {
+                    backgroundColor: "#f0f0f0",
+                  },
+                }),
+              }}
+            />
+          </div>
+        </div>
+        <div className="flex mt-5 justify-between">
+          <div className="flex gap-3 ">
+            <Select
+              id="filterDate"
+              value={selectedOptionDate}
+              onChange={(e: any) => {
+                setSelectedOptionDate(e);
+              }}
+              options={optionsFilterDate}
+              placeholder="Filter Tanggal"
+              styles={{
+                control: (provided, state) => ({
+                  ...provided,
+                  paddingTop: "6px",
+                  paddingBottom: "6px",
+                  cursor: "pointer",
+                }),
+                singleValue: (provided, state) => ({
+                  ...provided,
+                  color: "#333",
+                  cursor: "pointer",
+                }),
+                option: (provided, state) => ({
+                  ...provided,
+                  backgroundColor: state.isSelected ? "#007BFF" : "white",
+                  color: state.isSelected ? "white" : "#333",
+                  cursor: "pointer",
+                  ":hover": {
+                    backgroundColor: "#f0f0f0",
+                  },
+                }),
+              }}
+            />
+            <Select
+              id="filterStatus"
+              value={selectedFilterStatus}
+              onChange={(e: any) => {
+                const data = {
+                  key: "status",
+                  value: e.value,
+                };
+                setQuery((prev) => {
+                  const check = prev.search.find(
+                    (item) => item.key === "status"
                   );
                   if (check) {
-                    setSelectedOptionSearchByBefore(check);
+                    check.value = e.value;
+                  } else {
+                    prev.search.push(data);
                   }
-                  setSelectedOptionSearchBy(e);
-                }}
-                options={optionsSearchBy}
-                placeholder="Cari Berdasarkan"
-                styles={{
-                  control: (provided, state) => ({
-                    ...provided,
-                    paddingTop: "6px",
-                    paddingBottom: "6px",
-                    cursor: "pointer",
-                  }),
-                  singleValue: (provided, state) => ({
-                    ...provided,
-                    color: "#333",
-                    cursor: "pointer",
-                  }),
-                  option: (provided, state) => ({
-                    ...provided,
-                    backgroundColor: state.isSelected ? "#007BFF" : "white",
-                    color: state.isSelected ? "white" : "#333",
-                    cursor: "pointer",
-                    ":hover": {
-                      backgroundColor: "#f0f0f0",
-                    },
-                  }),
-                }}
-              />
-            </div>
-            <div className="shrink-0">
-              <Select
-                id="selectDownloadDate"
-                value={selectedOptionDownloadDate?.value}
-                key={`my_unique_select_key__${selectedOptionDownloadDate}`}
-                isSearchable={false}
-                onChange={(e: any) => {
-                  e.value === "custom"
-                    ? downloadDatePickerRef?.current?.setOpen(true)
-                    : setSelectedOptionDownloadDate(e);
-                }}
-                options={optionsDownloadDate}
-                placeholder="Download Laporan"
-                styles={{
-                  control: (provided, state) => ({
-                    ...provided,
-                    paddingTop: "6px",
-                    paddingBottom: "6px",
-                    cursor: "pointer",
-                  }),
-                  singleValue: (provided, state) => ({
-                    ...provided,
-                    color: "#333",
-                    cursor: "pointer",
-                  }),
-                  option: (provided, state) => ({
-                    ...provided,
-                    backgroundColor: state.isSelected ? "#007BFF" : "white",
-                    color: state.isSelected ? "white" : "#333",
-                    cursor: "pointer",
-                    ":hover": {
-                      backgroundColor: "#f0f0f0",
-                    },
-                  }),
-                }}
-              />
-            </div>
-          </div>
-          <div className="flex mt-5 justify-between">
-            <div className="flex gap-3 ">
-              <Select
-                id="filterDate"
-                value={selectedOptionDate}
-                onChange={(e: any) => {
-                  setSelectedOptionDate(e);
-                }}
-                options={optionsFilterDate}
-                placeholder="Filter Tanggal"
-                styles={{
-                  control: (provided, state) => ({
-                    ...provided,
-                    paddingTop: "6px",
-                    paddingBottom: "6px",
-                    cursor: "pointer",
-                  }),
-                  singleValue: (provided, state) => ({
-                    ...provided,
-                    color: "#333",
-                    cursor: "pointer",
-                  }),
-                  option: (provided, state) => ({
-                    ...provided,
-                    backgroundColor: state.isSelected ? "#007BFF" : "white",
-                    color: state.isSelected ? "white" : "#333",
-                    cursor: "pointer",
-                    ":hover": {
-                      backgroundColor: "#f0f0f0",
-                    },
-                  }),
-                }}
-              />
-              <Select
-                id="filterStatus"
-                value={selectedFilterStatus}
-                onChange={(e: any) => {
-                  const data = {
-                    key: "status",
-                    value: e.value,
-                  };
-                  setQuery((prev) => {
-                    const check = prev.search.find(
-                      (item) => item.key === "status"
-                    );
-                    if (check) {
-                      check.value = e.value;
-                    } else {
-                      prev.search.push(data);
-                    }
 
-                    prev.page = 1;
+                  prev.page = 1;
 
-                    return prev;
-                  });
-                  setSelectedFilterStatus(e);
-                }}
-                options={optionsFilterStatus}
-                placeholder="Filter Status"
-                styles={{
-                  control: (provided, state) => ({
-                    ...provided,
-                    paddingTop: "6px",
-                    paddingBottom: "6px",
-                    cursor: "pointer",
-                  }),
-                  singleValue: (provided, state) => ({
-                    ...provided,
-                    color: "#333",
-                    cursor: "pointer",
-                  }),
-                  option: (provided, state) => ({
-                    ...provided,
-                    backgroundColor: state.isSelected ? "#007BFF" : "white",
-                    color: state.isSelected ? "white" : "#333",
-                    cursor: "pointer",
-                    ":hover": {
-                      backgroundColor: "#f0f0f0",
-                    },
-                  }),
-                }}
-              />
-              {optionLimit && (
-                <div>
-                  <Select
-                    id="filterLimit"
-                    value={selectedFilterLimit}
-                    onChange={(e: any) => {
-                      setSelectedFilterLimit(e);
-                      setQuery((prev) => {
-                        return { ...prev, limit: e.value };
-                      });
-                    }}
-                    options={optionLimit}
-                    placeholder="Limit PerPage"
-                    styles={{
-                      control: (provided, state) => ({
-                        ...provided,
-                        paddingTop: "6px",
-                        paddingBottom: "6px",
-                        cursor: "pointer",
-                      }),
-                      singleValue: (provided, state) => ({
-                        ...provided,
-                        color: "#333",
-                        cursor: "pointer",
-                      }),
-                      option: (provided, state) => ({
-                        ...provided,
-                        backgroundColor: state.isSelected ? "#007BFF" : "white",
-                        color: state.isSelected ? "white" : "#333",
-                        cursor: "pointer",
-                        ":hover": {
-                          backgroundColor: "#f0f0f0",
-                        },
-                      }),
-                    }}
-                  />
-                </div>
-              )}
-            </div>
-            <button
-              onClick={() => handleClickClearButton()}
-              className="h-12 aspect-square rounded-md text-white bg-blue-700 hover:bg-blue-800 cursor-pointer"
-            >
-              <FontAwesomeIcon icon={faTimes} />
-            </button>
-          </div>
-        </div>
-        {showForm && (
-          <FormOrders
-            handleShowForm={(value: boolean) => setShowForm(value)}
-            getNewData={getNewData}
-            data={detailData}
-            type={typeForm}
-          />
-        )}
-        <>
-          {loading ? (
-            <Loading />
-          ) : (
-            <div className="w-full bg-white rounded shadow overflow-y-hidden mt-5">
-              <div className={`p-5 bg-white flex justify-between items-center`}>
-                <div className="flex items-center justify-between">
-                  <p className="text-xl font-semibold">Pesanan</p>
-                </div>
-                <Box
-                  onClick={() => getNewData()}
-                  sx={{
-                    cursor: "pointer",
+                  return prev;
+                });
+                setSelectedFilterStatus(e);
+              }}
+              options={optionsFilterStatus}
+              placeholder="Filter Status"
+              styles={{
+                control: (provided, state) => ({
+                  ...provided,
+                  paddingTop: "6px",
+                  paddingBottom: "6px",
+                  cursor: "pointer",
+                }),
+                singleValue: (provided, state) => ({
+                  ...provided,
+                  color: "#333",
+                  cursor: "pointer",
+                }),
+                option: (provided, state) => ({
+                  ...provided,
+                  backgroundColor: state.isSelected ? "#007BFF" : "white",
+                  color: state.isSelected ? "white" : "#333",
+                  cursor: "pointer",
+                  ":hover": {
+                    backgroundColor: "#f0f0f0",
+                  },
+                }),
+              }}
+            />
+            {optionLimit && (
+              <div>
+                <Select
+                  id="filterLimit"
+                  value={selectedFilterLimit}
+                  onChange={(e: any) => {
+                    setSelectedFilterLimit(e);
+                    setQuery((prev) => {
+                      return { ...prev, limit: e.value };
+                    });
                   }}
-                >
-                  <RefreshCircle
-                    sx={{
-                      width: 35,
-                      height: 35,
-                      marginRight: 4,
+                  options={optionLimit}
+                  placeholder="Limit PerPage"
+                  styles={{
+                    control: (provided, state) => ({
+                      ...provided,
+                      paddingTop: "6px",
+                      paddingBottom: "6px",
+                      cursor: "pointer",
+                    }),
+                    singleValue: (provided, state) => ({
+                      ...provided,
                       color: "#333",
-                    }}
-                  />
-                </Box>
+                      cursor: "pointer",
+                    }),
+                    option: (provided, state) => ({
+                      ...provided,
+                      backgroundColor: state.isSelected ? "#007BFF" : "white",
+                      color: state.isSelected ? "white" : "#333",
+                      cursor: "pointer",
+                      ":hover": {
+                        backgroundColor: "#f0f0f0",
+                      },
+                    }),
+                  }}
+                />
               </div>
-              <div className="flex flex-col">
-                <div className="overflow-x-auto">
-                  <div className="w-full inline-block align-middle">
-                    <div className="overflow-hidden px-5">
-                      <table className="min-w-full divide-y divide-gray-200">
-                        <thead className="bg-gray-50">
-                          <tr>
-                            {column.map((item) => (
-                              <th
-                                key={item.id}
-                                scope="col"
-                                className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase "
+            )}
+          </div>
+          <button
+            onClick={() => handleClickClearButton()}
+            className="h-12 aspect-square rounded-md text-white bg-blue-700 hover:bg-blue-800 cursor-pointer"
+          >
+            <FontAwesomeIcon icon={faTimes} />
+          </button>
+        </div>
+      </div>
+      {showForm && (
+        <FormOrders
+          handleShowForm={(value: boolean) => setShowForm(value)}
+          getNewData={getNewData}
+          data={detailData}
+          type={typeForm}
+        />
+      )}
+      <>
+        {loading ? (
+          <Loading />
+        ) : (
+          <div className="w-full bg-white rounded shadow overflow-y-hidden mt-5">
+            <div className={`p-5 bg-white flex justify-between items-center`}>
+              <div className="flex items-center justify-between">
+                <p className="text-xl font-semibold">Pesanan</p>
+              </div>
+              <Box
+                onClick={() => getNewData()}
+                sx={{
+                  cursor: "pointer",
+                }}
+              >
+                <RefreshCircle
+                  sx={{
+                    width: 35,
+                    height: 35,
+                    marginRight: 4,
+                    color: "#333",
+                  }}
+                />
+              </Box>
+            </div>
+            <div className="flex flex-col">
+              <div className="overflow-x-auto">
+                <div className="w-full inline-block align-middle">
+                  <div className="overflow-hidden px-5">
+                    <table className="min-w-full divide-y divide-gray-200">
+                      <thead className="bg-gray-50">
+                        <tr>
+                          {column.map((item) => (
+                            <th
+                              key={item.id}
+                              scope="col"
+                              className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase "
+                            >
+                              <div
+                                className="flex gap-3 cursor-pointer items-center"
+                                onClick={() =>
+                                  setQuery((prev) => ({
+                                    ...prev,
+                                    sort: item.id,
+                                    order:
+                                      query.sort === item.id &&
+                                      query.order === "ASC"
+                                        ? "DESC"
+                                        : "ASC",
+                                  }))
+                                }
                               >
-                                <div
-                                  className="flex gap-3 cursor-pointer items-center"
-                                  onClick={() =>
-                                    setQuery((prev) => ({
-                                      ...prev,
-                                      sort: item.id,
-                                      order:
-                                        query.sort === item.id &&
-                                        query.order === "ASC"
-                                          ? "DESC"
-                                          : "ASC",
-                                    }))
-                                  }
-                                >
-                                  <p>{item.name}</p>
-                                  {query.sort === item.id && (
-                                    <FontAwesomeIcon
-                                      icon={
-                                        query.order === "ASC"
-                                          ? faArrowUp
-                                          : faArrowDown
-                                      }
-                                    />
-                                  )}
-                                </div>
-                              </th>
-                            ))}
-                            {/* <th
+                                <p>{item.name}</p>
+                                {query.sort === item.id && (
+                                  <FontAwesomeIcon
+                                    icon={
+                                      query.order === "ASC"
+                                        ? faArrowUp
+                                        : faArrowDown
+                                    }
+                                  />
+                                )}
+                              </div>
+                            </th>
+                          ))}
+                          {/* <th
                                                         scope="col"
                                                         className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase "
                                                     >
                                                         Denom
                                                     </th> */}
-                            <th
-                              scope="col"
-                              className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase "
-                            >
-                              Akun
-                            </th>
-                            <th
-                              scope="col"
-                              className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase "
-                            >
-                              No. Whatsapp
-                            </th>
-                            <th
-                              scope="col"
-                              className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase "
-                            >
-                              Kuantitas
-                            </th>
-                            {/* <th
+                          <th
+                            scope="col"
+                            className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase "
+                          >
+                            Akun
+                          </th>
+                          <th
+                            scope="col"
+                            className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase "
+                          >
+                            No. Whatsapp
+                          </th>
+                          <th
+                            scope="col"
+                            className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase "
+                          >
+                            Kuantitas
+                          </th>
+                          {/* <th
                                                         scope="col"
                                                         className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase "
                                                     >
@@ -976,87 +846,86 @@ const TableOrders: React.FC<{
                                                     >
                                                         Status
                                                     </th> */}
-                            <th
-                              scope="col"
-                              className="px-6 py-3 text-xs font-bold text-right text-gray-500 uppercase "
-                            >
-                              Aksi
-                            </th>
+                          <th
+                            scope="col"
+                            className="px-6 py-3 text-xs font-bold text-right text-gray-500 uppercase "
+                          >
+                            Aksi
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-200">
+                        {newData.data.map((data) => (
+                          <tr key={data.id} className={`bg-white`}>
+                            <td className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">
+                              <div className="flex gap-3 items-center">
+                                <div className="h-10 aspect-square flex items-center">
+                                  <Image
+                                    src={data.logoUrl}
+                                    alt={`Logo Game`}
+                                    width="0"
+                                    height="0"
+                                    sizes="100vw"
+                                    style={{ width: "100%", height: "100%" }}
+                                    className="rounded-lg object-cover"
+                                  />
+                                </div>
+                                <div>
+                                  <p className="font-bold text-base">
+                                    {data.game}
+                                  </p>
+                                  <p>{data.productName}</p>
+                                </div>
+                              </div>
+                            </td>
+                            <td className="px-6 py-4 text-sm text-gray-800">
+                              {formatter(data.totalAmt)}
+                            </td>
+                            <td className="px-6 py-4 text-sm text-gray-800">
+                              <StatusesOrder value={data.status} />
+                            </td>
+                            <td className="px-6 py-4 text-sm text-gray-800">
+                              {data.custName}
+                            </td>
+                            <td className="px-6 py-4 text-sm text-gray-800">
+                              {data.mobileNumber}
+                            </td>
+                            <td className="px-6 py-4 text-sm text-gray-800">
+                              {data.quantity}
+                            </td>
+                            <td className="px-6 py-4 text-sm font-medium text-right">
+                              <div className="flex justify-end w-full">
+                                <div
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setShowForm(true);
+                                    setTypeForm("detail");
+                                    setDetailData(data);
+                                  }}
+                                  className="bg-green-600 px-4 py-2 rounded-md text-white cursor-pointer"
+                                >
+                                  Lihat
+                                </div>
+                              </div>
+                            </td>
                           </tr>
-                        </thead>
-                        <tbody className="divide-y divide-gray-200">
-                          {newData.data.map((data) => (
-                            <tr key={data.id} className={`bg-white`}>
-                              <td className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">
-                                <div className="flex gap-3 items-center">
-                                  <div className="h-10 aspect-square flex items-center">
-                                    <Image
-                                      src={data.logoUrl}
-                                      alt={`Logo Game`}
-                                      width="0"
-                                      height="0"
-                                      sizes="100vw"
-                                      style={{ width: "100%", height: "100%" }}
-                                      className="rounded-lg object-cover"
-                                    />
-                                  </div>
-                                  <div>
-                                    <p className="font-bold text-base">
-                                      {data.game}
-                                    </p>
-                                    <p>{data.productName}</p>
-                                  </div>
-                                </div>
-                              </td>
-                              <td className="px-6 py-4 text-sm text-gray-800">
-                                {formatter(data.totalAmt)}
-                              </td>
-                              <td className="px-6 py-4 text-sm text-gray-800">
-                                <StatusesOrder value={data.status} />
-                              </td>
-                              <td className="px-6 py-4 text-sm text-gray-800">
-                                {data.custName}
-                              </td>
-                              <td className="px-6 py-4 text-sm text-gray-800">
-                                {data.mobileNumber}
-                              </td>
-                              <td className="px-6 py-4 text-sm text-gray-800">
-                                {data.quantity}
-                              </td>
-                              <td className="px-6 py-4 text-sm font-medium text-right">
-                                <div className="flex justify-end w-full">
-                                  <div
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      setShowForm(true);
-                                      setTypeForm("detail");
-                                      setDetailData(data);
-                                    }}
-                                    className="bg-green-600 px-4 py-2 rounded-md text-white cursor-pointer"
-                                  >
-                                    Lihat
-                                  </div>
-                                </div>
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
+                        ))}
+                      </tbody>
+                    </table>
                   </div>
                 </div>
               </div>
-              <Pagination
-                onPageChange={handlePageClick}
-                page={newData.page}
-                limit={newData.limit}
-                total={newData.total}
-                totalPage={newData.totalPage}
-              />
             </div>
-          )}
-        </>
-      </div>
+            <Pagination
+              onPageChange={handlePageClick}
+              page={newData.page}
+              limit={newData.limit}
+              total={newData.total}
+              totalPage={newData.totalPage}
+            />
+          </div>
+        )}
+      </>
     </>
   );
 };

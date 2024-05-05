@@ -139,7 +139,6 @@ const Admin = () => {
 
   // Callback functions
   const handleOrderSuccess = useCallback((orderId: string) => {
-    console.log(orderId);
     getUpdateData("paid", "ordersSuccess");
     setLatestOrder((prev) => {
       if (prev) {

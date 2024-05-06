@@ -834,7 +834,7 @@ const TableOrders: React.FC<{
                             scope="col"
                             className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase "
                           >
-                            Kuantitas
+                            Waktu
                           </th>
                           {/* <th
                                                         scope="col"
@@ -893,7 +893,9 @@ const TableOrders: React.FC<{
                               {data.mobileNumber}
                             </td>
                             <td className="px-6 py-4 text-sm text-gray-800">
-                              {data.quantity}
+                              {dayjs(data.createdAt).format(
+                                "YYYY-MM-DD HH:mm:ss"
+                              )}
                             </td>
                             <td className="px-6 py-4 text-sm font-medium text-right">
                               <div className="flex justify-end w-full">

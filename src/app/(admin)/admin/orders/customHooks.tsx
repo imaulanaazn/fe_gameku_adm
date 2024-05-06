@@ -3,6 +3,10 @@ import { useEffect } from "react";
 
 export function useDateRange(
   selectedOption: { label: string; value: string } | null,
+  statsDate: {
+    start: Date | null;
+    end: Date | null;
+  },
   refresh: number,
   callback: ({
     startDate,
@@ -49,10 +53,13 @@ export function useDateRange(
           startDate = today.subtract(1, "year").startOf("day");
           endDate = today.endOf("day");
           break;
+        case "custom":
+          startDate = dayjs(statsDate.start).startOf("day");
+          endDate = dayjs(statsDate.end || startDate).endOf("day");
+          break;
         default:
           startDate = today.subtract(1, "year").startOf("day");
           endDate = today.endOf("day");
-          // Handle other cases if necessary
           break;
       }
     } else {
@@ -72,5 +79,5 @@ export function useDateRange(
     if (date.startDate && date.endDate) {
       callback(date);
     }
-  }, [selectedOption?.value, refresh]);
+  }, [selectedOption?.value, refresh, statsDate.start, statsDate.end]);
 }

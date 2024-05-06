@@ -3,7 +3,7 @@
 import TableOrders from "@/components/admin/Orders/TableOrders";
 import "react-datepicker/dist/react-datepicker.css";
 import Loading from "./loading";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import AdminNavbar from "@/components/admin/AdminNavbar/AdminNavbar";
 import Select from "react-select";
 import { initialRevenue, optionsStatsDate } from "./utils";
@@ -16,6 +16,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useDateRange } from "./customHooks";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import DatePicker from "react-datepicker";
+import dayjs from "dayjs";
 
 const Orders = () => {
   const [data, setData] =
@@ -24,13 +26,24 @@ const Orders = () => {
   const [revenueLoading, setRevenueLoading] = useState(false);
   const [revenue, setRevenue] = useState(initialRevenue);
   const [refresh, setRefresh] = useState(0);
+  const [statsDate, setStatsDate] = useState({
+    start: new Date(),
+    end: null,
+  });
+
+  const onStatsDateChange = (dates: any) => {
+    const [start, end] = dates;
+    setStatsDate({ start, end });
+  };
   const [selectedOptionStatsDate, setSelectedOptionStatsDate] = useState<{
     label: string;
     value: string;
   } | null>(null);
+  const statsDatePickerRef = useRef<DatePicker>(null);
 
   useDateRange(
     selectedOptionStatsDate,
+    statsDate,
     refresh,
     async (dateRange: { startDate: string; endDate: string }) => {
       try {
@@ -86,6 +99,24 @@ const Orders = () => {
     <>
       {loading && <Loading />}
       <AdminNavbar />
+      <div className="fixed top-0 left-0 z-50">
+        <DatePicker
+          selected={statsDate.start}
+          onChange={onStatsDateChange}
+          startDate={statsDate.start}
+          endDate={statsDate.end}
+          dateFormat="dd/MM/yyyy"
+          showMonthDropdown
+          showYearDropdown
+          selectsRange
+          dropdownMode="select"
+          minDate={new Date(2000, 0, 1)}
+          maxDate={new Date(2100, 11, 31)}
+          withPortal
+          customInput={<input type="hidden" />}
+          ref={statsDatePickerRef}
+        />
+      </div>
       <div className="iq-navbar-header h-48 bg-[url('/images/bg-header-abstract.jpg')] bg-cover rounded-b-3xl text-white px-12 pt-10">
         <div className="flex justify-between items-center">
           <div>
@@ -98,10 +129,15 @@ const Orders = () => {
           <div className="shrink-0 flex items-center gap-6">
             <Select
               id="selectStatsDate"
-              value={selectedOptionStatsDate?.value}
+              value={selectedOptionStatsDate}
               isSearchable={false}
               onChange={(e: any) => {
-                setSelectedOptionStatsDate(e);
+                if (e.value === "custom") {
+                  statsDatePickerRef?.current?.setOpen(true);
+                  setSelectedOptionStatsDate(e);
+                } else {
+                  setSelectedOptionStatsDate(e);
+                }
               }}
               options={optionsStatsDate}
               placeholder="Rentang Statistik"
@@ -157,7 +193,11 @@ const Orders = () => {
             }}
             day={
               selectedOptionStatsDate
-                ? selectedOptionStatsDate.label
+                ? selectedOptionStatsDate.value === "custom"
+                  ? dayjs(statsDate.start).format("YY/MM/DD") +
+                    " - " +
+                    dayjs(statsDate.end || statsDate.start).format("YY/MM/DD")
+                  : selectedOptionStatsDate.label
                 : "Setahun Terakhir"
             }
           />
@@ -175,7 +215,11 @@ const Orders = () => {
             isCurrency={true}
             day={
               selectedOptionStatsDate
-                ? selectedOptionStatsDate.label
+                ? selectedOptionStatsDate.value === "custom"
+                  ? dayjs(statsDate.start).format("YY/MM/DD") +
+                    " - " +
+                    dayjs(statsDate.end || statsDate.start).format("YY/MM/DD")
+                  : selectedOptionStatsDate.label
                 : "Setahun Terakhir"
             }
           />
@@ -192,7 +236,11 @@ const Orders = () => {
             }}
             day={
               selectedOptionStatsDate
-                ? selectedOptionStatsDate.label
+                ? selectedOptionStatsDate.value === "custom"
+                  ? dayjs(statsDate.start).format("YY/MM/DD") +
+                    " - " +
+                    dayjs(statsDate.end || statsDate.start).format("YY/MM/DD")
+                  : selectedOptionStatsDate.label
                 : "Setahun Terakhir"
             }
           />

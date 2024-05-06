@@ -74,7 +74,10 @@ const Configuration = () => {
           </div>
         </div>
 
-        <div>
+        <div className="bg-white shadow-md rounded-xl p-8 mb-8">
+          <h1 className="font-medium text-2xl text-neutral-800 w-full">
+            konfigurasi Whatsapp
+          </h1>
           <Whatsapp />
           {listTemplate.length > 0 && <TemplateMessage />}
         </div>

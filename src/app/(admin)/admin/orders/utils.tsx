@@ -6,6 +6,7 @@ export const optionsStatsDate = [
   { value: "lastMonth", label: "Bulan Lalu" },
   { value: "last30days", label: "Sebulan Terakhir" },
   { value: "lastYear", label: "Setahun Terakhir" },
+  { value: "custom", label: "Custom" },
 ];
 
 export const initialRevenue = {

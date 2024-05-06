@@ -107,7 +107,9 @@ const StatusWebsite = () => {
   }, []);
   return (
     <div className="mt-6">
-      <h2 className="text-lg text-neutral-700">Status Website</h2>
+      <h2 className="text-lg text-neutral-700 mb-4 font-medium">
+        Status Website
+      </h2>
       <div className="flex flex-col space-y-2">
         <div className="w-full flex gap-4 bg-white mt-1">
           {options.map((option) => (

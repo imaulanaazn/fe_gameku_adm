@@ -57,12 +57,17 @@ const Configuration = () => {
           </h1>
           <div>
             <StatusWebsite />
-            <div className="w-full flex">
-              <div className="mt-4 flex gap-4 w-1/2">
-                <ChangeLogo />
-                <ChangeLogoFooter />
+            <div className="flex mt-6">
+              <div className="mt-2 w-1/2">
+                <h2 className="text-lg text-neutral-700 mb-4 font-medium">
+                  Logo Image
+                </h2>
+                <div className="flex gap-6">
+                  <ChangeLogo />
+                  <ChangeLogoFooter />
+                </div>
               </div>
-              <div className="mt-4 flex gap-4 w-1/2">
+              <div className="w-1/2 mt-2 ">
                 <BackgroungImages />
               </div>
             </div>

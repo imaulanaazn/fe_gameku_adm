@@ -122,7 +122,7 @@ const ChangeLogoFooter = () => {
 
   return (
     <div>
-      <div className="w-[200px] aspect-square mt-3 relative rounded-lg bg-slate-100 p-6 overflow-hidden group">
+      <div className="h-64 aspect-square relative rounded-lg bg-slate-100 p-6 overflow-hidden group">
         <Image
           src={displayLogo || logoFooter?.value || ""}
           alt={`Logo Footer`}
@@ -152,15 +152,15 @@ const ChangeLogoFooter = () => {
       </div>
 
       {selectedImage && (
-        <div className="flex flex-col">
+        <div className="flex gap-2 mt-2">
           <button
-            className="py-2 bg-green-600 px-4 text-center border shadow-md w-[150px] mt-2 rounded-md hover:bg-green-400 text-white font-semibold"
+            className="py-2 flex-1 bg-emerald-400 text-white px-4 text-center border shadow-md rounded-md hover:bg-emerald-500 text-white font-semibold"
             onClick={handleChangeImage}
           >
             Save
           </button>
           <button
-            className="py-2 bg-red-600 px-4 text-center border shadow-md w-[150px] mt-2 rounded-md hover:bg-red-400 text-white font-semibold"
+            className="py-2 flex-1 bg-primary-600 px-4 text-center border shadow-md rounded-md hover:bg-primary-900 text-white font-semibold"
             onClick={() => {
               setSelectedImage(null);
               setDisplayLogo(logoFooter?.value || "");

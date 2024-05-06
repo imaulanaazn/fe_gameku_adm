@@ -104,6 +104,15 @@ const optionsDownloadDate = [
   { value: "custom", label: "Custom" },
 ];
 
+const optionsStatsDate = [
+  { value: "all", label: "Semua" },
+  { value: "today", label: "Hari Ini" },
+  { value: "yesterday", label: "Kemarin" },
+  { value: "thisWeek", label: "Minggu ini" },
+  { value: "thisMonth", label: "Bulan ini" },
+  { value: "lastMonth", label: "Sebulan yang lalu" },
+];
+
 const optionsFilterStatus = [
   { value: "1", label: "Belum Dibayar" },
   { value: "2", label: "Belum Diproses" },
@@ -159,6 +168,7 @@ const TableOrders: React.FC<{
     label: string;
     value: string;
   } | null>(null);
+
   const [selectedFilterLimit, setSelectedFilterLimit] = useState<{
     label: string;
     value: number;
@@ -462,7 +472,7 @@ const TableOrders: React.FC<{
 
   return (
     <>
-      <div>
+      <div className="fixed z-50 top-0 left-0 w-full">
         <DatePicker
           selected={startDate}
           onChange={onChange}
@@ -479,8 +489,6 @@ const TableOrders: React.FC<{
           customInput={<input type="hidden" />}
           ref={datePickerRef}
         />
-      </div>
-      <div>
         <DatePicker
           selected={downloadDate.start}
           onChange={onDownloadDateChange}
@@ -496,30 +504,6 @@ const TableOrders: React.FC<{
           withPortal
           customInput={<input type="hidden" />}
           ref={downloadDatePickerRef}
-        />
-      </div>
-      <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 mt-5">
-        <DisplayTotal
-          title="Pesanan"
-          value={data.analytics.orders}
-          valueBefore={0}
-          icon={faShoppingCart}
-          bgColorIcon="bg-blue-400"
-        />
-        <DisplayTotal
-          title="Pendapatan"
-          value={data.analytics.revenue}
-          valueBefore={0}
-          icon={faMoneyBill}
-          bgColorIcon="bg-green-400"
-          isCurrency={true}
-        />
-        <DisplayTotal
-          title="Pesanan Berhasil"
-          value={data.analytics.countPaid}
-          valueBefore={0}
-          icon={faCheckCircle}
-          bgColorIcon="bg-green-400"
         />
       </div>
       <div className="w-full bg-white rounded shadow p-5 mt-5">
@@ -779,7 +763,12 @@ const TableOrders: React.FC<{
                 }}
               >
                 <RefreshCircle
-                  sx={{ width: 35, height: 35, marginRight: 4, color: "#333" }}
+                  sx={{
+                    width: 35,
+                    height: 35,
+                    marginRight: 4,
+                    color: "#333",
+                  }}
                 />
               </Box>
             </div>

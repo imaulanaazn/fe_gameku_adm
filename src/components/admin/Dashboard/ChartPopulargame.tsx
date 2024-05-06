@@ -20,6 +20,9 @@ function generateColors(length: number) {
     "#707078",
     "#7D8570",
     "#000000",
+    "#9b0d5c",
+    "#690c83",
+    "#32077b",
   ];
   //   for (let i = 0; i < length; i++) {
   //     const hue = (i * 360) / length;
@@ -30,8 +33,9 @@ function generateColors(length: number) {
 }
 
 const ChartPopulargame: React.FC<{
-  data: { name: string; value: number }[];
-}> = ({ data }) => {
+  data: { game: string; total: number }[];
+  day: string;
+}> = ({ data, day }) => {
   const [dataChart, setDataChart] = useState<any[]>([]);
   const COLORS = generateColors(data.length);
 
@@ -41,13 +45,13 @@ const ChartPopulargame: React.FC<{
     return (
       <div>
         {payload &&
-          payload.map((entry, index) => (
+          payload.map((entry: any, index) => (
             <div key={index} className="flex gap-3 my-3">
               <div
                 className={`w-5 h-5 rounded-full`}
                 style={{ backgroundColor: entry.color }}
               ></div>
-              <p>{entry.value}</p>
+              <p>{entry?.payload?.game}</p>
             </div>
           ))}
       </div>
@@ -55,7 +59,7 @@ const ChartPopulargame: React.FC<{
   };
 
   useEffect(() => {
-    const sortingData = data.sort((a, b) => b.value - a.value);
+    const sortingData = data.sort((a, b) => b.total - a.total);
     setDataChart(sortingData.slice(0, 10));
   }, []);
 
@@ -63,9 +67,7 @@ const ChartPopulargame: React.FC<{
     <>
       <h1 className="mb-5 font-medium text-2xl text-neutral-800">
         Game Popular{" "}
-        <span className="text-gray-500 text-base font-normal">
-          (30 Hari Terakhir)
-        </span>
+        <span className="text-gray-500 text-base font-normal">({day})</span>
       </h1>
       <ResponsiveContainer width="100%" height={300}>
         <PieChart width={300} height={300}>
@@ -78,7 +80,7 @@ const ChartPopulargame: React.FC<{
             innerRadius={50}
             outerRadius={100}
             fill="#fff"
-            dataKey="value"
+            dataKey="total"
             legendType="star"
           >
             {data.map((entry, index) => (

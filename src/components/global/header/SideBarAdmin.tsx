@@ -14,6 +14,7 @@ import {
   faHistory,
   faHome,
   faImage,
+  faRightFromBracket,
   faSortNumericUpAlt,
   faTicket,
   faTrash,
@@ -202,8 +203,10 @@ const SideBarAdmin = () => {
 
   return (
     <div
-      className={`w-full ${
-        showFullSidebar ? "max-w-[16rem]" : "max-w-[5rem]"
+      className={`w-full fixed top-0 left-0 z-50 lg:static ${
+        showFullSidebar
+          ? "max-w-[16rem] translate-x-0"
+          : "max-w-[6rem] -translate-x-full lg:translate-x-0"
       } flex flex-col items-center bg-white gap-3 overflow-x-visible h-screen transition-all duration-700`}
     >
       {/* close button */}
@@ -212,14 +215,19 @@ const SideBarAdmin = () => {
           onClick={() => {
             setShowFullSidebar((prev) => !prev);
           }}
-          className="text-white w-7 h-7 flex items-center justify-center rounded-full bg-primary-900 text-base absolute top-1/2 right-0 -translate-y-1/2 translate-x-1/2 z-50"
+          className={`text-white w-7 h-7 flex items-center justify-center rounded-full bg-primary-900 
+          text-base absolute top-1/2 right-0 -translate-y-1/2 translate-x-1/2 z-50 hover:cursor-pointer transition-all duration-700
+          ${
+            showFullSidebar
+              ? "translate-x-1/2"
+              : "translate-x-12 lg:translate-x-1/2"
+          }
+          `}
         >
           <FontAwesomeIcon
             icon={faArrowLeft}
-            className={`${
-              !showFullSidebar
-                ? "rotate-180"
-                : "rotate-0 transition-all duration-700"
+            className={`transition-all duration-700 ${
+              !showFullSidebar ? "rotate-180" : "rotate-0"
             }`}
           />
         </div>
@@ -259,7 +267,7 @@ const SideBarAdmin = () => {
                   currentPath === menu.link
                     ? "bg-primary-900"
                     : "bg-transparent hover:bg-primary-100"
-                } w-full py-3 px-4 rounded-md flex gap-4 items-center group duration-500 `}
+                } w-full py-3 px-4 rounded-md flex gap-4 items-center group duration-500`}
               >
                 <div
                   className={`icon text-base transition-all duration-500 ${
@@ -272,7 +280,7 @@ const SideBarAdmin = () => {
                 </div>
 
                 <p
-                  className={`font-base text-base transition-all duration-500 ${
+                  className={`font-base text-base transition-all duration-500 whitespace-nowrap ${
                     !showFullSidebar && "scale-0 opacity-0 -translate-x-full"
                   } ${
                     currentPath === menu.link
@@ -285,20 +293,28 @@ const SideBarAdmin = () => {
               </Link>
             )
         )}
-      </div>
-      {/* <div className="border-t-2 border-gray-400 w-full">
-        <div
-          onClick={handleLogout}
-          className={`mt-4 w-full cursor-pointer p-2 rounded-lg flex gap-3 items-center hover:bg-gray-300 border-2 shadow-lg shadow-gray-300`}
-        >
+
+        <div className="border-t border-gray-200 w-full">
           <div
-            className={`w-10 h-10 rounded-md flex items-center justify-center shadow-md bg-gray-100`}
+            onClick={handleLogout}
+            className={`bg-transparent hover:bg-primary-100 w-full py-3 px-4 rounded-md flex gap-4 items-center group duration-500 hover:cursor-pointer`}
           >
-            <FontAwesomeIcon icon={faDoorOpen} size="1x" />
+            <div
+              className={`icon text-base transition-all duration-500 text-neutral-500 group-hover:text-primary-900`}
+            >
+              <FontAwesomeIcon icon={faRightFromBracket} />
+            </div>
+
+            <p
+              className={`font-base text-base transition-all duration-500 whitespace-nowrap ${
+                !showFullSidebar && "scale-0 opacity-0 -translate-x-full"
+              } text-neutral-500 group-hover:text-primary-900`}
+            >
+              Logout
+            </p>
           </div>
-          <p className="font-semibold text-sm">Logout</p>
         </div>
-      </div> */}
+      </div>
     </div>
   );
 };

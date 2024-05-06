@@ -6,41 +6,133 @@ import DisplayTotal from "@/components/admin/Dashboard/DisplayTotal";
 import TableRecentOrders from "@/components/admin/Dashboard/TableRecentOrders";
 import Header from "@/components/admin/Header";
 import {
+  faArrowRotateRight,
   faCheck,
   faQuestion,
   faShoppingCart,
   faTimes,
   faUserPlus,
+  faXmark,
 } from "@fortawesome/free-solid-svg-icons";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import dayjs from "dayjs";
 import Loading from "./loading";
 import { io } from "socket.io-client";
 import AdminNavbar from "@/components/admin/AdminNavbar/AdminNavbar";
 import { Swiper, SwiperSlide } from "swiper/react";
+import DatePicker from "react-datepicker";
+import { carouselBreakpoints, optionsStatsDate } from "./utils";
+import Select from "react-select";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import { Navigation, Pagination, Autoplay } from "swiper/modules";
+import useDateRange, { useSocketEvents } from "./customHooks";
+import { GestureSwipeHorizontal } from "mdi-material-ui";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { toast } from "react-toastify";
+
+interface ApiResponse {
+  startAt: string;
+  endAt: string;
+  data: AnalyticsData;
+}
+
+interface AnalyticsData {
+  statusCount: StatusCounts;
+  newBuyersCount: number;
+  diagramData: DiagramData;
+  popularGame: PopularGame[];
+}
+
+interface StatusCounts {
+  pending: StatusDetail;
+  success: StatusDetail;
+  failed: StatusDetail;
+  expired: StatusDetail;
+}
+
+interface StatusDetail {
+  total: number;
+  totalBefore: number;
+  percentageChange: number;
+}
+
+interface DiagramData {
+  startAt: string;
+  endAt: string;
+  data: DiagramDataEntry[];
+}
+
+interface DiagramDataEntry {
+  date: string;
+  totalOrders: number;
+}
+
+interface PopularGame {
+  game: string;
+  total: number;
+}
+
+const initialStatusCounts = {
+  pending: {
+    total: 0,
+    totalBefore: 0,
+    percentageChange: 0,
+  },
+  success: {
+    total: 0,
+    totalBefore: 0,
+    percentageChange: 0,
+  },
+  failed: {
+    total: 0,
+    totalBefore: 0,
+    percentageChange: 0,
+  },
+  expired: {
+    total: 0,
+    totalBefore: 0,
+    percentageChange: 0,
+  },
+};
+
+interface IOptionStatsDate {
+  label: string;
+  value: string;
+}
 
 const Admin = () => {
   const [data, setData] = useState<IResponseApiAnalytics>();
-  const [latestOrder, setLatestOrder] = useState<IOrderHistory[]>();
-  const [todaysData, setTodaysData] = useState<IDataAnalythicsChartLine>();
-  const [yesterdayData, setYesterdayData] =
-    useState<IDataAnalythicsChartLine>();
+  const [statusCounts, setStatusCounts] =
+    useState<StatusCounts>(initialStatusCounts);
+  const [totalOrders, setTotalOrders] = useState({
+    total: 0,
+    totalBefore: 0,
+    percentageChange: 0,
+  });
+  const [newBuyers, setNewBuyers] = useState(0);
+  const [diagramData, setDiagramData] = useState([]);
+  const [selectedOptionStatsDate, setSelectedOptionStatsDate] =
+    useState<IOptionStatsDate | null>(null);
+  const [latestOrder, setLatestOrder] = useState<IOrderHistory[]>([]);
   const [popularGame, setPopularGame] = useState<
-    { name: string; value: number }[]
+    { game: string; total: number }[]
   >([]);
+
+  const [refresh, setRefresh] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [statsLoading, setStatsLoading] = useState(false);
   const [bgColors, setBgColors] = useState({
     orders: "bg-white",
     ordersFailed: "bg-white",
+    ordersPending: "bg-white",
+    ordersExpired: "bg-white",
     ordersSuccess: "bg-white",
     registration: "bg-white",
   });
   const [bgColorsLatestOrder, setBgColorsLatestOrders] = useState("bg-white");
   const [updateOrderId, setUpdateOrderId] = useState("");
+
   const socket = io(
     process.env.NEXT_PUBLIC_SOCKET_BASE_URL || "http://localhost:3001",
     {
@@ -50,26 +142,55 @@ const Admin = () => {
     }
   );
 
-  const getData = async (type: string, funcSetData: (data: any) => void) => {
-    setLoading(true);
-    const req = await fetch(
-      process.env.NEXT_PUBLIC_BASE_URL + "/v1/order-analytics?type=" + type,
-      {
-        cache: "no-cache",
-        method: "GET",
-        credentials: "include",
-        headers: {
-          "ngrok-skip-browser-warning": "true",
-        },
-      }
-    );
+  const handleOrderSuccess = useCallback((orderId: string) => {
+    setLatestOrder((prev) => {
+      return prev.map((order) => {
+        if (order.id === orderId) {
+          return { ...order, status: "success" };
+        }
+        return order;
+      });
+    });
+  }, []);
 
-    const res = await req.json();
-    if (req.ok) {
-      funcSetData(res);
-    }
-    setLoading(false);
-  };
+  const handleOrderNew = useCallback((data: IOrderHistory) => {
+    getUpdateData("totalOrders", "orders");
+
+    setLatestOrder((prev) => [data, ...prev].slice(0, 10));
+
+    setPopularGame((prev) => {
+      if (prev) {
+        const existingItem = prev.find((item) => item.game === data.game);
+
+        if (existingItem) {
+          existingItem.total++;
+        } else {
+          prev.push({
+            game: data.game,
+            total: 1,
+          });
+        }
+      }
+      return prev;
+    });
+
+    setBgColorsLatestOrders("bg-green-200 bg-opacity-30");
+    setTimeout(() => {
+      setBgColorsLatestOrders("bg-white");
+    }, 500);
+  }, []);
+
+  const handleCountRegister = useCallback(() => {
+    getUpdateData("totalCustomers", "registration");
+  }, []);
+
+  // Use custom hooks
+  useSocketEvents(
+    socket,
+    handleOrderSuccess,
+    handleOrderNew,
+    handleCountRegister
+  );
 
   const getUpdateData = (fieldUpdateData: string, fieldUpdateColor: string) => {
     setData((prev) => {
@@ -105,213 +226,269 @@ const Admin = () => {
     });
   };
 
+  const getLatestOrder = async () => {
+    setLoading(true);
+    const req = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/v1/latest-order`,
+      {
+        cache: "no-cache",
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "ngrok-skip-browser-warning": "true",
+        },
+      }
+    );
+
+    const res = await req.json();
+    if (req.ok) {
+      setLatestOrder(res);
+    }
+    setLoading(false);
+  };
+
   useEffect(() => {
-    socket.on("order:success", (orderId: string) => {
-      getUpdateData("paid", "ordersSuccess");
-      setLatestOrder((prev) => {
-        if (prev) {
-          const check = prev.find((item) => item.id === orderId);
-          if (check) {
-            check.status = "3";
-          }
-        }
-
-        return prev;
-      });
-
-      setUpdateOrderId(orderId);
-      setBgColorsLatestOrders("bg-green-200 bg-opacity-30");
-
-      setTimeout(() => {
-        setUpdateOrderId("");
-        setBgColorsLatestOrders("bg-white");
-      }, 500);
-    });
-
-    socket.on("order:new", (data: IOrderHistory) => {
-      setData((prev) => {
-        if (prev) {
-          prev.totalOrders30daysAgo++;
-        }
-
-        return prev;
-      });
-      getUpdateData("totalOrders", "orders");
-
-      setLatestOrder((prev) => {
-        if (prev) {
-          const duplicateData = [...prev];
-          duplicateData.pop();
-          duplicateData.unshift(data);
-
-          return duplicateData;
-        }
-
-        return prev;
-      });
-
-      setPopularGame((prev) => {
-        if (prev) {
-          const existingItem = prev.find((item) => item.name === data.game);
-
-          if (existingItem) {
-            existingItem.value++;
-          } else {
-            prev.push({
-              name: data.game,
-              value: 1,
-            });
-          }
-        }
-        return prev;
-      });
-
-      setBgColorsLatestOrders("bg-green-200 bg-opacity-30");
-      setTimeout(() => {
-        setBgColorsLatestOrders("bg-white");
-      }, 500);
-    });
-
-    socket.on("count:register", () => {
-      getUpdateData("totalCustomers", "registration");
-    });
-
-    getData("count", setData);
-    getData("latestOrder", setLatestOrder);
-    getData("popularGame", setPopularGame);
-
-    return () => {
-      socket.off("order:success");
-      socket.off("order:new");
-      socket.off("count:register");
-    };
+    getLatestOrder();
   }, []);
 
-  useEffect(() => {
-    const dateNow = dayjs().format("YYYY-MM-DD");
-    const dateYesterday = dayjs().subtract(1, "day").format("YYYY-MM-DD");
-    const findDataNow = data?.data.find((data) => data.date === dateNow);
-    const findDataYesterday = data?.data.find(
-      (data) => data.date === dateYesterday
-    );
-    if (findDataNow) {
-      setTodaysData(findDataNow);
-    }
+  useDateRange(
+    selectedOptionStatsDate,
+    refresh,
+    async (dateRange: { startDate: string; endDate: string }) => {
+      try {
+        setStatsLoading(true);
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/v2/order-analytics?startAt=${dateRange.startDate}&endAt=${dateRange.endDate}`,
+          {
+            cache: "no-cache",
+            method: "GET",
+            credentials: "include",
+            headers: {
+              "ngrok-skip-browser-warning": "true",
+            },
+          }
+        );
 
-    if (findDataYesterday) {
-      setYesterdayData(findDataYesterday);
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const analytics = await response.json();
+
+        setStatusCounts(analytics.data.statusCount);
+        setTotalOrders(analytics.data.totalOrders);
+        setNewBuyers(analytics.data.newBuyersCount);
+        setPopularGame(analytics.data.popularGame);
+        setDiagramData(analytics.data.diagramData.data);
+        setStatsLoading(false);
+      } catch (error) {
+        setStatsLoading(false);
+        console.error("Failed to get analytics", error);
+      }
     }
-  }, [data]);
+  );
 
   return (
     <>
       <AdminNavbar />
       <div className="iq-navbar-header h-48 bg-[url('/images/bg-header-abstract.jpg')] bg-cover rounded-b-3xl text-white px-12 pt-10">
-        <h1 className="text-4xl font-semibold">Hello Admin</h1>
-        <p className="text-base mt-2">
-          Selamat datang di dashboard, semoga bisnis anda berjalan lancar dan
-          terus berkembang.
-        </p>
+        <div className="flex justify-between items-center">
+          <div>
+            <h1 className="text-4xl font-semibold">Halo Admin</h1>
+            <p className="text-base mt-2">
+              Selamat datang di dashboard, semoga bisnis anda berjalan lancar
+              dan terus berkembang.
+            </p>
+          </div>
+          <div className="shrink-0 flex items-center gap-6">
+            <Select
+              id="selectStatsDate"
+              value={selectedOptionStatsDate}
+              isSearchable={false}
+              onChange={(e: any) => {
+                setSelectedOptionStatsDate(e);
+              }}
+              options={optionsStatsDate}
+              placeholder="Rentang Statistik"
+              styles={{
+                control: (provided, state) => ({
+                  ...provided,
+                  paddingTop: "6px",
+                  paddingBottom: "6px",
+                  cursor: "pointer",
+                }),
+                singleValue: (provided, state) => ({
+                  ...provided,
+                  color: "#333",
+                  cursor: "pointer",
+                }),
+                option: (provided, state) => ({
+                  ...provided,
+                  backgroundColor: state.isSelected ? "#007BFF" : "white",
+                  color: state.isSelected ? "white" : "#333",
+                  cursor: "pointer",
+                  ":hover": {
+                    backgroundColor: "#f0f0f0",
+                  },
+                }),
+              }}
+            />
+            <div
+              className={`hover:cursor-pointer ${
+                statsLoading && "animate-spin"
+              }`}
+              onClick={() => {
+                setRefresh((prev) => prev + 1);
+              }}
+            >
+              <FontAwesomeIcon icon={faArrowRotateRight} className="text-xl" />
+            </div>
+          </div>
+        </div>
       </div>
       {loading && <Loading />}
-      {/* <Header title="Dashboard" /> */}
       {!loading && (
         <div className="stats-wrapper px-8">
           <div className="w-full mx-auto flex space-x-3 -translate-y-8">
             <Swiper
-              modules={[Navigation, Pagination, Autoplay]}
               spaceBetween={28}
               slidesPerView={1}
-              breakpoints={{
-                0: {
-                  slidesPerView: 1,
-                },
-                640: {
-                  slidesPerView: 1.25,
-                },
-                768: {
-                  slidesPerView: 1.5,
-                },
-                1024: {
-                  slidesPerView: 2.5,
-                },
-                1280: {
-                  slidesPerView: 3.5,
-                },
-                1536: {
-                  slidesPerView: 4,
-                },
-              }}
+              breakpoints={carouselBreakpoints}
               freeMode={true}
               className="lg:max-w-screen-2xl flex items-center"
             >
               <SwiperSlide className="pb-1">
                 <DisplayTotal
                   title="Pesanan"
-                  value={todaysData?.totalOrders || 0}
-                  valueBefore={yesterdayData?.totalOrders || 0}
+                  total={totalOrders.total}
+                  percentageChange={totalOrders.percentageChange}
                   icon={faShoppingCart}
-                  color="blue"
+                  color={{
+                    icon: "text-blue-500",
+                    background: "bg-blue-100",
+                    border: "border-blue-500",
+                  }}
                   countPercent={true}
                   classes={bgColors.orders}
-                  day="Hari Ini"
+                  day={
+                    selectedOptionStatsDate
+                      ? selectedOptionStatsDate.label
+                      : "Sebulan Terakhir"
+                  }
                 />
               </SwiperSlide>
               <SwiperSlide className="pb-1">
                 <DisplayTotal
                   title="Pesanan Berhasil"
-                  value={todaysData?.paid || 0}
-                  valueBefore={yesterdayData?.paid || 0}
+                  total={statusCounts.success.total}
+                  percentageChange={statusCounts.success.percentageChange}
                   icon={faCheck}
-                  color="green"
+                  color={{
+                    icon: "text-emerald-500",
+                    background: "bg-emerald-100",
+                    border: "border-emerald-500",
+                  }}
                   countPercent={true}
                   classes={bgColors.ordersSuccess}
-                  day="Hari Ini"
+                  day={
+                    selectedOptionStatsDate
+                      ? selectedOptionStatsDate.label
+                      : "Sebulan Terakhir"
+                  }
                 />
               </SwiperSlide>
               <SwiperSlide className="pb-1">
                 <DisplayTotal
                   title="Pesanan Pending"
-                  value={todaysData?.pending || 0}
-                  valueBefore={yesterdayData?.pending || 0}
+                  total={statusCounts.pending.total}
+                  percentageChange={statusCounts.pending.percentageChange}
                   icon={faQuestion}
-                  color="yellow"
+                  color={{
+                    icon: "text-yellow-500",
+                    background: "bg-yellow-100",
+                    border: "border-yellow-500",
+                  }}
                   countPercent={true}
-                  classes={bgColors.ordersFailed}
-                  day="Hari Ini"
+                  classes={bgColors.ordersPending}
+                  day={
+                    selectedOptionStatsDate
+                      ? selectedOptionStatsDate.label
+                      : "Sebulan Terakhir"
+                  }
                 />
               </SwiperSlide>
               <SwiperSlide className="pb-1">
                 <DisplayTotal
-                  title="Pendaftaran"
-                  value={todaysData?.totalCustomers || 0}
-                  valueBefore={yesterdayData?.totalCustomers || 0}
-                  icon={faUserPlus}
-                  color="orange"
+                  title="Pesanan Gagal"
+                  total={statusCounts.failed.total}
+                  percentageChange={statusCounts.failed.percentageChange}
+                  icon={faXmark}
+                  color={{
+                    icon: "text-rose-500",
+                    background: "bg-rose-100",
+                    border: "border-rose-500",
+                  }}
                   countPercent={true}
+                  classes={bgColors.ordersFailed}
+                  day={
+                    selectedOptionStatsDate
+                      ? selectedOptionStatsDate.label
+                      : "Sebulan Terakhir"
+                  }
+                />
+              </SwiperSlide>
+              <SwiperSlide className="pb-1">
+                <DisplayTotal
+                  title="Pembeli baru"
+                  total={newBuyers}
+                  percentageChange={0}
+                  icon={faUserPlus}
+                  color={{
+                    icon: "text-orange-500",
+                    background: "bg-orange-100",
+                    border: "border-orange-500",
+                  }}
+                  countPercent={false}
                   classes={bgColors.registration}
-                  day="Hari Ini"
+                  day={
+                    selectedOptionStatsDate
+                      ? selectedOptionStatsDate.label
+                      : "Sebulan Terakhir"
+                  }
                 />
               </SwiperSlide>
             </Swiper>
           </div>
           <div className="w-full flex space-x-8">
-            {data?.data && (
+            {diagramData.length > 0 && (
               <div className="w-1/2 p-5 bg-white rounded-xl shadow-sm">
-                <ChartOrderHistory data={data.data} />
+                <ChartOrderHistory
+                  data={diagramData}
+                  day={
+                    selectedOptionStatsDate
+                      ? selectedOptionStatsDate.label
+                      : "Sebulan Terakhir"
+                  }
+                />
               </div>
             )}
             <div className="w-1/2 p-5 bg-white rounded-xl shadow-sm">
               {popularGame.length > 0 && (
-                <ChartPopulargame data={popularGame} />
+                <ChartPopulargame
+                  data={popularGame}
+                  day={
+                    selectedOptionStatsDate
+                      ? selectedOptionStatsDate.label
+                      : "Sebulan Terakhir"
+                  }
+                />
               )}
             </div>
           </div>
-          {latestOrder && (
+          {latestOrder.length > 0 && (
             <TableRecentOrders
               recentOrders={latestOrder}
               classes={bgColorsLatestOrder}
-              orderId={updateOrderId}
             />
           )}
         </div>

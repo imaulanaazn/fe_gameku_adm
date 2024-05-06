@@ -129,7 +129,7 @@ const Orders = () => {
           <div className="shrink-0 flex items-center gap-6">
             <Select
               id="selectStatsDate"
-              value={selectedOptionStatsDate?.value}
+              value={selectedOptionStatsDate}
               isSearchable={false}
               onChange={(e: any) => {
                 if (e.value === "custom") {

@@ -50,19 +50,16 @@ const Configuration = () => {
           terus berkembang.
         </p>
       </div>
-      <div className="wrapper w-full p-8 pt-0 -translate-y-8">
-        <div className="website-config bg-white shadow-md rounded-xl p-8 mb-8">
-          <h1 className="font-medium text-2xl text-neutral-800 w-full">
-            konfigurasi Website
-          </h1>
+      <div className="wrapper w-full p-8 pt-0 -mt-12">
+        <div className="website-config bg-white rounded-xl p-8 mb-8">
           <div>
             <StatusWebsite />
-            <div className="flex mt-6">
+            <div className="flex mt-8">
               <div className="mt-2 w-1/2">
-                <h2 className="text-lg text-neutral-700 mb-4 font-medium">
-                  Logo Image
-                </h2>
-                <div className="flex gap-6">
+                <h1 className="font-medium text-2xl text-neutral-800 w-full mb-4">
+                  Logo Website
+                </h1>
+                <div className="flex gap-8">
                   <ChangeLogo />
                   <ChangeLogoFooter />
                 </div>
@@ -74,15 +71,12 @@ const Configuration = () => {
           </div>
         </div>
 
-        <div className="bg-white shadow-md rounded-xl p-8 mb-8">
-          <h1 className="font-medium text-2xl text-neutral-800 w-full">
-            konfigurasi Whatsapp
-          </h1>
+        <div className="bg-white rounded-xl p-8 mb-8">
           <Whatsapp />
           {listTemplate.length > 0 && <TemplateMessage />}
         </div>
 
-        <div className="mt-4 w-2/3">
+        <div className="mt-4 bg-white rounded-xl p-8 w-1/2">
           <Xendit />
         </div>
       </div>

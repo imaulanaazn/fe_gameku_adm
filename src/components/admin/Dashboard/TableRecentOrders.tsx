@@ -53,7 +53,7 @@ const TableRecentOrders: React.FC<{
                         scope="col"
                         className="px-6 lg:py-4 lg:py-5 text-xs font-bold text-right text-neutral-600 uppercase text-right"
                       >
-                        Invoice Id
+                        Waktu
                       </th>
                     </tr>
                   </thead>
@@ -104,7 +104,7 @@ const TableRecentOrders: React.FC<{
                           <StatusesOrder value={data.status} />
                         </td>
                         <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap text-right">
-                          {data.invoiceId}
+                          {dayjs(data.createdAt).format("YYYY-MM-DD HH:MM:ss")}
                         </td>
                       </tr>
                     ))}

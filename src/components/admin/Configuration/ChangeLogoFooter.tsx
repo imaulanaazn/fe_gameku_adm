@@ -154,13 +154,13 @@ const ChangeLogoFooter = () => {
       {selectedImage && (
         <div className="flex gap-2 mt-2">
           <button
-            className="py-2 flex-1 bg-emerald-400 text-white px-4 text-center border shadow-md rounded-md hover:bg-emerald-500 text-white font-semibold"
+            className="py-2 flex-1 bg-emerald-500 text-white px-4 text-center border rounded-md hover:bg-emerald-600 text-white font-medium"
             onClick={handleChangeImage}
           >
             Save
           </button>
           <button
-            className="py-2 flex-1 bg-primary-600 px-4 text-center border shadow-md rounded-md hover:bg-primary-900 text-white font-semibold"
+            className="py-2 flex-1 bg-primary-600 px-4 text-center border rounded-md hover:bg-primary-900 text-white font-medium"
             onClick={() => {
               setSelectedImage(null);
               setDisplayLogo(logoFooter?.value || "");

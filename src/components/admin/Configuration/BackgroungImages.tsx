@@ -151,11 +151,14 @@ const BackgroungImages = () => {
   return (
     <>
       <div className="flex justify-between items-end mb-4">
-        <h2 className="text-lg text-neutral-700 font-medium">
+        <h1 className="font-medium text-2xl text-neutral-800 w-full">
           Background Image
-        </h2>
-        <div className="bg-gray-100 flex items-center justify-center">
-          <div className="relative inline-block text-left" ref={dropDownRef}>
+        </h1>
+        <div className="bg-gray-100 flex items-center justify-center w-max">
+          <div
+            className="relative inline-block text-left w-max"
+            ref={dropDownRef}
+          >
             <button
               id="dropdown-button"
               onClick={() => {
@@ -230,13 +233,13 @@ const BackgroungImages = () => {
         {selectedImage && (
           <div className="w-full flex gap-2 mt-2">
             <button
-              className="py-2 bg-emerald-400 text-white px-4 text-center border shadow-md rounded-md hover:bg-emerald-500 text-white font-semibold"
+              className="py-2 bg-emerald-500 text-white px-4 text-center border rounded-md hover:bg-emerald-600 text-white font-medium"
               onClick={handleUpload}
             >
               Save
             </button>
             <button
-              className="py-2 bg-primary-600 px-4 text-center border shadow-md rounded-md hover:bg-primary-900 text-white font-semibold"
+              className="py-2 bg-primary-600 px-4 text-center border rounded-md hover:bg-primary-900 text-white font-medium"
               onClick={() => {
                 setSelectedImage(null);
                 setDisplayImage("");

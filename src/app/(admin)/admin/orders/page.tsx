@@ -179,28 +179,7 @@ const Orders = () => {
       </div>
 
       <div className="wrapper px-8 -mt-10">
-        <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          <DisplayTotal
-            title="Pesanan"
-            total={revenue.totalOrders}
-            percentageChange={0}
-            countPercent={false}
-            icon={faShoppingCart}
-            color={{
-              icon: "text-blue-500",
-              background: "bg-blue-100",
-              border: "border-blue-500",
-            }}
-            day={
-              selectedOptionStatsDate
-                ? selectedOptionStatsDate.value === "custom"
-                  ? dayjs(statsDate.start).format("YY/MM/DD") +
-                    " - " +
-                    dayjs(statsDate.end || statsDate.start).format("YY/MM/DD")
-                  : selectedOptionStatsDate.label
-                : "Setahun Terakhir"
-            }
-          />
+        <div className="w-3/4 grid grid-cols-1 sm:grid-cols-2 gap-6 mx-auto">
           <DisplayTotal
             title="Pendapatan"
             total={revenue.revenue}

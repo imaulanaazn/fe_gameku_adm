@@ -98,134 +98,145 @@ const Orders = () => {
   return (
     <>
       {loading && <Loading />}
-      <AdminNavbar />
-      <div className="fixed top-0 left-0 z-50">
-        <DatePicker
-          selected={statsDate.start}
-          onChange={onStatsDateChange}
-          startDate={statsDate.start}
-          endDate={statsDate.end}
-          dateFormat="dd/MM/yyyy"
-          showMonthDropdown
-          showYearDropdown
-          selectsRange
-          dropdownMode="select"
-          minDate={new Date(2000, 0, 1)}
-          maxDate={new Date(2100, 11, 31)}
-          withPortal
-          customInput={<input type="hidden" />}
-          ref={statsDatePickerRef}
-        />
-      </div>
-      <div className="iq-navbar-header h-48 bg-[url('/images/bg-header-abstract.jpg')] bg-cover rounded-b-3xl text-white px-12 pt-10">
-        <div className="flex justify-between items-center">
-          <div>
-            <h1 className="text-4xl font-semibold">Hello Admin</h1>
-            <p className="text-base mt-2">
-              Selamat datang di dashboard, semoga bisnis anda berjalan lancar
-              dan terus berkembang.
-            </p>
-          </div>
-          <div className="shrink-0 flex items-center gap-6">
-            <Select
-              id="selectStatsDate"
-              value={selectedOptionStatsDate}
-              isSearchable={false}
-              onChange={(e: any) => {
-                if (e.value === "custom") {
-                  statsDatePickerRef?.current?.setOpen(true);
-                  setSelectedOptionStatsDate(e);
-                } else {
-                  setSelectedOptionStatsDate(e);
-                }
-              }}
-              options={optionsStatsDate}
-              placeholder="Rentang Statistik"
-              styles={{
-                control: (provided, state) => ({
-                  ...provided,
-                  paddingTop: "6px",
-                  paddingBottom: "6px",
-                  cursor: "pointer",
-                }),
-                singleValue: (provided, state) => ({
-                  ...provided,
-                  color: "#333",
-                  cursor: "pointer",
-                }),
-                option: (provided, state) => ({
-                  ...provided,
-                  backgroundColor: state.isSelected ? "#007BFF" : "white",
-                  color: state.isSelected ? "white" : "#333",
-                  cursor: "pointer",
-                  ":hover": {
-                    backgroundColor: "#f0f0f0",
-                  },
-                }),
-              }}
+      {!loading && (
+        <>
+          <AdminNavbar />
+          <div className="fixed top-0 left-0 z-50">
+            <DatePicker
+              selected={statsDate.start}
+              onChange={onStatsDateChange}
+              startDate={statsDate.start}
+              endDate={statsDate.end}
+              dateFormat="dd/MM/yyyy"
+              showMonthDropdown
+              showYearDropdown
+              selectsRange
+              dropdownMode="select"
+              minDate={new Date(2000, 0, 1)}
+              maxDate={new Date(2100, 11, 31)}
+              withPortal
+              customInput={<input type="hidden" />}
+              ref={statsDatePickerRef}
             />
-            <div
-              className={`hover:cursor-pointer ${
-                revenueLoading && "animate-spin"
-              }`}
-              onClick={() => {
-                setRefresh((prev) => prev + 1);
-              }}
-            >
-              <FontAwesomeIcon icon={faArrowRotateRight} className="text-xl" />
+          </div>
+          <div className="iq-navbar-header h-48 bg-[url('/images/bg-header-abstract.jpg')] bg-cover rounded-b-3xl text-white px-12 pt-10">
+            <div className="flex justify-between items-center">
+              <div>
+                <h1 className="text-4xl font-semibold">Hello Admin</h1>
+                <p className="text-base mt-2">
+                  Selamat datang di dashboard, semoga bisnis anda berjalan
+                  lancar dan terus berkembang.
+                </p>
+              </div>
+              <div className="shrink-0 flex items-center gap-6">
+                <Select
+                  id="selectStatsDate"
+                  value={selectedOptionStatsDate}
+                  isSearchable={false}
+                  onChange={(e: any) => {
+                    if (e.value === "custom") {
+                      statsDatePickerRef?.current?.setOpen(true);
+                      setSelectedOptionStatsDate(e);
+                    } else {
+                      setSelectedOptionStatsDate(e);
+                    }
+                  }}
+                  options={optionsStatsDate}
+                  placeholder="Rentang Statistik"
+                  styles={{
+                    control: (provided, state) => ({
+                      ...provided,
+                      paddingTop: "6px",
+                      paddingBottom: "6px",
+                      cursor: "pointer",
+                    }),
+                    singleValue: (provided, state) => ({
+                      ...provided,
+                      color: "#333",
+                      cursor: "pointer",
+                    }),
+                    option: (provided, state) => ({
+                      ...provided,
+                      backgroundColor: state.isSelected ? "#007BFF" : "white",
+                      color: state.isSelected ? "white" : "#333",
+                      cursor: "pointer",
+                      ":hover": {
+                        backgroundColor: "#f0f0f0",
+                      },
+                    }),
+                  }}
+                />
+                <div
+                  className={`hover:cursor-pointer ${
+                    revenueLoading && "animate-spin"
+                  }`}
+                  onClick={() => {
+                    setRefresh((prev) => prev + 1);
+                  }}
+                >
+                  <FontAwesomeIcon
+                    icon={faArrowRotateRight}
+                    className="text-xl"
+                  />
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
 
-      <div className="wrapper px-8 -mt-10">
-        <div className="w-3/4 grid grid-cols-1 sm:grid-cols-2 gap-6 mx-auto">
-          <DisplayTotal
-            title="Pendapatan"
-            total={revenue.revenue}
-            percentageChange={0}
-            icon={faMoneyBill}
-            countPercent={false}
-            color={{
-              icon: "text-yellow-400",
-              background: "bg-yellow-100",
-              border: "border-yellow-400",
-            }}
-            isCurrency={true}
-            day={
-              selectedOptionStatsDate
-                ? selectedOptionStatsDate.value === "custom"
-                  ? dayjs(statsDate.start).format("YY/MM/DD") +
-                    " - " +
-                    dayjs(statsDate.end || statsDate.start).format("YY/MM/DD")
-                  : selectedOptionStatsDate.label
-                : "Setahun Terakhir"
-            }
-          />
-          <DisplayTotal
-            title="Pesanan Berhasil"
-            total={revenue.totalTrxSuccess}
-            countPercent={false}
-            percentageChange={0}
-            icon={faCheckCircle}
-            color={{
-              icon: "text-emerald-400",
-              background: "bg-emerald-100",
-              border: "border-emerald-400",
-            }}
-            day={
-              selectedOptionStatsDate
-                ? selectedOptionStatsDate.value === "custom"
-                  ? dayjs(statsDate.start).format("YY/MM/DD") +
-                    " - " +
-                    dayjs(statsDate.end || statsDate.start).format("YY/MM/DD")
-                  : selectedOptionStatsDate.label
-                : "Setahun Terakhir"
-            }
-          />
-        </div>
-        {!loading && data && <TableOrders data={data} />}
-      </div>
+          <div className="wrapper px-8 -mt-10">
+            <div className="w-3/4 grid grid-cols-1 sm:grid-cols-2 gap-6 mx-auto">
+              <DisplayTotal
+                title="Pendapatan"
+                total={revenue.revenue}
+                percentageChange={0}
+                icon={faMoneyBill}
+                countPercent={false}
+                color={{
+                  icon: "text-yellow-400",
+                  background: "bg-yellow-100",
+                  border: "border-yellow-400",
+                }}
+                isCurrency={true}
+                day={
+                  selectedOptionStatsDate
+                    ? selectedOptionStatsDate.value === "custom"
+                      ? dayjs(statsDate.start).format("YY/MM/DD") +
+                        " - " +
+                        dayjs(statsDate.end || statsDate.start).format(
+                          "YY/MM/DD"
+                        )
+                      : selectedOptionStatsDate.label
+                    : "Setahun Terakhir"
+                }
+              />
+              <DisplayTotal
+                title="Pesanan Berhasil"
+                total={revenue.totalTrxSuccess}
+                countPercent={false}
+                percentageChange={0}
+                icon={faCheckCircle}
+                color={{
+                  icon: "text-emerald-400",
+                  background: "bg-emerald-100",
+                  border: "border-emerald-400",
+                }}
+                day={
+                  selectedOptionStatsDate
+                    ? selectedOptionStatsDate.value === "custom"
+                      ? dayjs(statsDate.start).format("YY/MM/DD") +
+                        " - " +
+                        dayjs(statsDate.end || statsDate.start).format(
+                          "YY/MM/DD"
+                        )
+                      : selectedOptionStatsDate.label
+                    : "Setahun Terakhir"
+                }
+              />
+            </div>
+            {data && <TableOrders data={data} />}
+          </div>
+        </>
+      )}
     </>
   );
 };

@@ -370,7 +370,7 @@ const TableBanner: React.FC<{ banner: IImageCarouselPagination }> = ({
           <div className="flex flex-col">
             <div className="overflow-x-auto">
               <div className="w-full inline-block align-middle">
-                <div className="overflow-hidden px-5">
+                <div className="overflow-hidden">
                   <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-gray-50">
                       <tr>
@@ -403,7 +403,7 @@ const TableBanner: React.FC<{ banner: IImageCarouselPagination }> = ({
                           <th
                             key={item.id}
                             scope="col"
-                            className="px-6 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-left"
+                            className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-left"
                           >
                             <div
                               className="flex gap-3 cursor-pointer items-center"
@@ -452,7 +452,7 @@ const TableBanner: React.FC<{ banner: IImageCarouselPagination }> = ({
                                                 </th> */}
                         <th
                           scope="col"
-                          className="px-6 lg:py-4 lg:py-5 text-xs font-bold text-right text-neutral-600 uppercase"
+                          className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase"
                         >
                           Aksi
                         </th>

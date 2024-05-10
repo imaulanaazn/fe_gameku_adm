@@ -212,77 +212,6 @@ const TableBanner: React.FC<{ banner: IImageCarouselPagination }> = ({
 
   return (
     <>
-      <div className="w-full bg-white rounded-xl p-5">
-        <div className="flex justify-between items-center">
-          <div className="relative w-max">
-            <input
-              placeholder="Cari Nama..."
-              value={inputSearch}
-              onChange={(e) => setInputSearch(e.target.value)}
-              className="inline-flex items-center px-6 py-2 rounded-md gap-x-2 bg-rose-100/60 text-primary-900 placeholder:text-primary-900 border-primary-900"
-            />
-            <button
-              type="button"
-              disabled={!inputSearch}
-              onClick={(e) => handleClickSearch()}
-              className="absolute top-1/2 right-6 -translate-y-1/2"
-            >
-              <FontAwesomeIcon
-                icon={faMagnifyingGlass}
-                className="text-primary-900 text-lg"
-              />
-            </button>
-          </div>
-          <div className="flex gap-4 items-center mt-5">
-            <div className="flex gap-2 items-center">
-              {optionLimit && (
-                <div>
-                  <Select
-                    id="filterLimit"
-                    value={selectedFilterLimit}
-                    onChange={(e: any) => {
-                      setSelectedFilterLimit(e);
-                      setQuery((prev) => {
-                        return { ...prev, limit: e.value };
-                      });
-                    }}
-                    options={optionLimit}
-                    placeholder="Limit PerPage"
-                    styles={{
-                      control: (provided, state) => ({
-                        ...provided,
-                        paddingTop: "6px",
-                        paddingBottom: "6px",
-                        cursor: "pointer",
-                      }),
-                      singleValue: (provided, state) => ({
-                        ...provided,
-                        color: "#333",
-                        cursor: "pointer",
-                      }),
-                      option: (provided, state) => ({
-                        ...provided,
-                        backgroundColor: state.isSelected ? "#007BFF" : "white",
-                        color: state.isSelected ? "white" : "#333",
-                        cursor: "pointer",
-                        ":hover": {
-                          backgroundColor: "#f0f0f0",
-                        },
-                      }),
-                    }}
-                  />
-                </div>
-              )}
-            </div>
-            <button
-              onClick={() => handleClickClearButton()}
-              className="h-12 aspect-square rounded-md text-white bg-blue-700 hover:bg-blue-800 cursor-pointer"
-            >
-              <FontAwesomeIcon icon={faTimes} />
-            </button>
-          </div>
-        </div>
-      </div>
       {showForm && (
         <FormAddBanner
           handleShowForm={(value: boolean) => setShowForm(value)}
@@ -301,57 +230,142 @@ const TableBanner: React.FC<{ banner: IImageCarouselPagination }> = ({
       {loading ? (
         <Loading />
       ) : (
-        <div className="w-full bg-white rounded-xl overflow-x-scroll md:overflow-x-auto overflow-y-hidden mt-8">
-          <div
-            className={`p-5 ${
-              selected.length > 0 ? "bg-green-200" : "bg-white"
-            }`}
-          >
-            {selected.length === 0 && (
-              <div className="flex items-center justify-between">
-                <p className="text-xl font-semibold">Banner</p>
-                <div
-                  onClick={() => {
-                    setShowForm(!showForm);
-                    setTypeForm("add");
-                  }}
-                  className="flex justify-between py-3 px-4 gap-5 items-center bg-green-600 hover:bg-green-500 text-white rounded-md cursor-pointer"
-                >
-                  <p>Banner Baru</p>
-                  <FontAwesomeIcon icon={faPlus} size="lg" />
-                </div>
-              </div>
-            )}
-            {selected.length > 0 && (
-              <div className="flex items-center justify-between">
-                <p className="text-xl font-semibold text-green-600">
-                  {selected.length} Selected
-                </p>
-                <div>
-                  <div className="relative">
-                    <div
-                      onClick={() => setShowDelete(true)}
-                      className="bg-red-800 hover:bg-red-600 w-10 h-10 rounded-full cursor-pointer grid place-content-center"
-                      data-tooltip-id="tooltip-delete"
-                      data-tooltip-content="Hapus"
-                    >
-                      <FontAwesomeIcon
-                        icon={faTrash}
-                        size="xl"
-                        className="text-white"
-                      />
+        <div className="w-full bg-white rounded-xl overflow-x-scroll md:overflow-x-auto overflow-y-hidden p-8">
+          <div className="mb-4 flex justify-between items-center">
+            <h1 className="font-medium text-2xl text-neutral-800">Banner</h1>
+
+            <div className="flex gap-8 items-center">
+              <div>
+                {selected.length > 0 && (
+                  <div className="flex items-end gap-2 items-center bg-primary-100 rounded-full">
+                    <p className="text-xl font-medium text-primary-900 pl-4">
+                      {selected.length}
+                    </p>
+                    <div>
+                      <div className="relative">
+                        <div
+                          onClick={() => setShowDelete(true)}
+                          className="bg-primary-900 hover:bg-red-600 w-10 h-10 rounded-full cursor-pointer grid place-content-center"
+                          data-tooltip-id="tooltip-delete"
+                          data-tooltip-content="Hapus"
+                        >
+                          <FontAwesomeIcon
+                            icon={faTrash}
+                            size="xl"
+                            className="text-white"
+                          />
+                        </div>
+                        <ReactTooltip
+                          id="tooltip-delete"
+                          style={{
+                            fontSize: "12px",
+                            padding: "10px",
+                          }}
+                        />
+                      </div>
                     </div>
-                    <ReactTooltip
-                      id="tooltip-delete"
-                      style={{
-                        fontSize: "12px",
-                        padding: "10px",
+                  </div>
+                )}
+              </div>
+
+              <button
+                onClick={() => {
+                  setShowForm(!showForm);
+                  setTypeForm("add");
+                }}
+                className="shrink-0 flex justify-between py-3 px-4 gap-5 items-center bg-primary-900 hover:bg-red-600 text-white rounded-md cursor-pointer"
+              >
+                <p>Banner Baru</p>
+                <FontAwesomeIcon icon={faPlus} size="lg" />
+              </button>
+            </div>
+          </div>
+
+          <div className="flex items-center mb-8 gap-4">
+            <div className="relative w-max">
+              <input
+                placeholder="Cari Nama..."
+                value={inputSearch}
+                onChange={(e) => setInputSearch(e.target.value)}
+                className="inline-flex items-center px-6 py-2 rounded-md gap-x-2 bg-rose-100/60 text-primary-900 placeholder:text-primary-900 border-primary-900"
+              />
+              <button
+                type="button"
+                disabled={!inputSearch}
+                onClick={(e) => handleClickSearch()}
+                className="absolute top-1/2 right-6 -translate-y-1/2"
+              >
+                <FontAwesomeIcon
+                  icon={faMagnifyingGlass}
+                  className="text-primary-900 text-lg"
+                />
+              </button>
+            </div>
+            <div className="flex gap-4 items-center">
+              <div className="flex gap-2 items-center">
+                {optionLimit && (
+                  <div>
+                    <Select
+                      id="filterLimit"
+                      value={selectedFilterLimit}
+                      isSearchable={false}
+                      onChange={(e: any) => {
+                        setSelectedFilterLimit(e);
+                        setQuery((prev) => {
+                          return { ...prev, limit: e.value };
+                        });
+                      }}
+                      options={optionLimit}
+                      placeholder="Limit / Page"
+                      styles={{
+                        placeholder: (base) => ({
+                          ...base,
+                          color: "#b72025",
+                        }),
+                        dropdownIndicator: (base) => ({
+                          ...base,
+                          color: "#b72025",
+                          "&:hover": { color: "#b72025" },
+                        }),
+                        control: (provided, state) => ({
+                          ...provided,
+                          paddingTop: "2px",
+                          paddingBottom: "2px",
+                          cursor: "pointer",
+                          color: "#b72025",
+                          borderColor: "#b72025",
+                          "&:hover": { borderColor: "#b72025" },
+                          borderRadius: "0.4rem",
+                          backgroundColor: "#fff3f3",
+                        }),
+                        singleValue: (provided, state) => ({
+                          ...provided,
+                          color: "#b72025",
+                          cursor: "pointer",
+                        }),
+                        option: (provided, state) => ({
+                          ...provided,
+                          backgroundColor: state.isSelected
+                            ? "#b72025"
+                            : "white",
+                          color: state.isSelected ? "white" : "#333",
+                          cursor: "pointer",
+                          ":hover": {
+                            backgroundColor: "#f0f0f0",
+                          },
+                        }),
                       }}
                     />
                   </div>
-                </div>
+                )}
               </div>
-            )}
+              <button
+                onClick={() => handleClickClearButton()}
+                className="px-4 py-2 aspect-square rounded-md text-white bg-primary-900 hover:bg-red-600 cursor-pointer"
+              >
+                <FontAwesomeIcon icon={faTimes} />
+              </button>
+            </div>
           </div>
           <div className="flex flex-col">
             <div className="overflow-x-auto">
@@ -451,7 +465,7 @@ const TableBanner: React.FC<{ banner: IImageCarouselPagination }> = ({
                           onClick={() => handleRowSelect(banner.id)}
                           className={`${
                             selected.includes(banner.id)
-                              ? "bg-gray-200"
+                              ? "bg-primary-50"
                               : "bg-white hover:bg-gray-100"
                           }`}
                         >
@@ -479,21 +493,15 @@ const TableBanner: React.FC<{ banner: IImageCarouselPagination }> = ({
                                 height="0"
                                 sizes="100vw"
                                 style={{ width: "100%", height: "100%" }}
-                                className="rounded-lg object-cover"
+                                className="rounded-md object-cover"
                               />
                             </div>
                           </td>
                           <td className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">
-                            {banner.name}
+                            <p>{banner.name}</p>
                           </td>
                           <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
-                            {!banner.eventUrl ? (
-                              <p className="font-bold text-xs text-gray-400">
-                                N/A
-                              </p>
-                            ) : (
-                              banner.eventUrl
-                            )}
+                            {!banner.eventUrl ? <p>N/A</p> : banner.eventUrl}
                           </td>
                           <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
                             <div className="flex justify-end w-full">
@@ -504,7 +512,7 @@ const TableBanner: React.FC<{ banner: IImageCarouselPagination }> = ({
                                   setTypeForm("detail");
                                   setDetailData(banner);
                                 }}
-                                className="bg-green-600 px-4 py-2 rounded-md text-white cursor-pointer"
+                                className="bg-primary-900 px-4 py-2 rounded-md text-white cursor-pointer hover:bg-red-600"
                               >
                                 Lihat
                               </div>

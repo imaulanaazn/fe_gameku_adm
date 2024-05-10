@@ -48,7 +48,7 @@ const Banner = () => {
           </div>
         </div>
       </div>
-      <div className="stats-wrapper px-8 -mt-12">
+      <div className="stats-wrapper px-8 -mt-10">
         {!loading && <>{banners && <TableBanner banner={banners} />}</>}
       </div>
     </>

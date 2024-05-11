@@ -10,13 +10,50 @@ import Loading from "@/app/(admin)/admin/user/loading";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { currencyConverter } from "@/lib/currencyConverter";
+import Select from "react-select";
+
+const optionsSortBy: { label: string; value: string }[] = [
+  {
+    label: "Created At",
+    value: "createdAt",
+  },
+  {
+    label: "Name",
+    value: "name",
+  },
+  {
+    label: "Email",
+    value: "email",
+  },
+  {
+    label: "Mobile Number",
+    value: "mobileNumber",
+  },
+];
+
+const optionsOrder: { label: string; value: string }[] = [
+  {
+    label: "ASCENDING",
+    value: "ASC",
+  },
+  {
+    label: "DESCENDING",
+    value: "DESC",
+  },
+];
 
 const TableUser: React.FC<{ user: IUserPaginationWithSearch }> = ({ user }) => {
   const [customer, setCustomer] = useRecoilState(userAdmin);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState(customer.keySearch || "");
-  const [order, setOrder] = useState<"DESC" | "ASC">(user.order);
-  const [sort, setSort] = useState(user.sort);
+  const [selectedOptionSortBy, setSelectedOptionSortBy] = useState<{
+    label: string;
+    value: string;
+  } | null>(null);
+  const [selectedOptionOrder, setSelectedOptionOrder] = useState<{
+    label: string;
+    value: string;
+  } | null>(null);
 
   const getCustomers = async (pagination?: Partial<IPagination>) => {
     setLoading(true);
@@ -33,8 +70,8 @@ const TableUser: React.FC<{ user: IUserPaginationWithSearch }> = ({ user }) => {
     }
 
     searchParams.append("limit", user.limit.toString());
-    searchParams.append("order", order || user.order);
-    searchParams.append("sort", sort || user.sort);
+    searchParams.append("order", selectedOptionOrder?.value || user.order);
+    searchParams.append("sort", selectedOptionSortBy?.value || user.sort);
     searchParams.append("type", "reseller");
 
     try {
@@ -75,179 +112,235 @@ const TableUser: React.FC<{ user: IUserPaginationWithSearch }> = ({ user }) => {
     setSearchQuery(event.target.value);
   };
 
-  const handleOrderChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    if (event.target.value === "ASC" || event.target.value === "DESC") {
-      setOrder(event.target.value);
-    }
-  };
-
-  const handleSortChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSort(event.target.value);
-  };
-
-  // Initialize customer state
   useEffect(() => {
     setCustomer({ ...user, keySearch: "" });
   }, [user, setCustomer]);
 
   useEffect(() => {
     getCustomers();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchQuery, order, sort]);
+  }, [searchQuery, selectedOptionOrder?.value, selectedOptionSortBy?.value]);
 
   return (
-    <div className="xl:p-10">
-      <div className="w-full overflow-x-scroll md:overflow-x-auto overflow-y-hidden bg-white shadow rounded-2xl px-8 py-10">
-        <div>
-          <p className="text-2xl font-semibold text-neutral-800">Reseller</p>
-          <div className="header p-1 flex justify-between gap-16 shrink-0 mb-4 mt-6 w-full overflow-x-auto">
-            <div className="filter flex gap-3 w-max">
-              <select
-                name="sort"
-                id="sort"
-                onChange={handleSortChange}
-                className="inline-flex shrink-0 items-center px-6 py-2 rounded-md gap-x-2 text-rose-500 bg-rose-100/60 border-0 "
-              >
-                <option value="createdAt">SORT BY</option>
-                <option value="createdAt">BALANCE</option>
-                <option value="name">NAME</option>
-                <option value="email">EMAIL</option>
-                <option value="mobileNumber">MOBILE NUMBER</option>
-              </select>
-              <select
-                name="sort"
-                id="order"
-                onChange={handleOrderChange}
-                className="inline-flex shrink-0 items-center px-6 py-2 rounded-md gap-x-2 text-rose-500 bg-rose-100/60 border-0 "
-              >
-                <option value="DESC">ORDER</option>
-                <option value="DESC">DESCENDING</option>
-                <option value="ASC" className="text-white">
-                  ASCENDING
-                </option>
-              </select>
-            </div>
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Search people"
-                onChange={handleSearchInputChange}
-                className="inline-flex items-center px-6 py-2 rounded-md gap-x-2 bg-rose-100/60 text-primary-900 placeholder:text-primary-900 border-primary-900"
-              />
-              <FontAwesomeIcon
-                icon={faMagnifyingGlass}
-                className="absolute top-1/2 right-6 -translate-y-1/2 text-primary-900 text-lg"
-              />
-            </div>
+    <div className="w-full overflow-x-scroll md:overflow-x-auto overflow-y-hidden bg-white rounded-2xl px-8 py-10">
+      <div>
+        <p className="text-2xl font-semibold text-neutral-800">Reseller</p>
+        <div className="header p-1 flex justify-between gap-16 shrink-0 mb-4 mt-6 w-full">
+          <div className="filter flex gap-3 w-max">
+            <Select
+              id="sort_by"
+              value={selectedOptionSortBy}
+              onChange={(e: any) => {
+                setSelectedOptionSortBy(e);
+              }}
+              options={optionsSortBy}
+              isSearchable={false}
+              placeholder="Urutkan Berdasarkan"
+              styles={{
+                placeholder: (base) => ({
+                  ...base,
+                  color: "#b72025",
+                }),
+                dropdownIndicator: (base) => ({
+                  ...base,
+                  color: "#b72025",
+                  "&:hover": { color: "#b72025" },
+                }),
+                control: (provided, state) => ({
+                  ...provided,
+                  paddingTop: "2px",
+                  paddingBottom: "2px",
+                  cursor: "pointer",
+                  color: "#b72025",
+                  borderColor: "#b72025",
+                  "&:hover": { borderColor: "#b72025" },
+                  borderRadius: "0.4rem",
+                  backgroundColor: "#fff3f3",
+                }),
+                singleValue: (provided, state) => ({
+                  ...provided,
+                  color: "#b72025",
+                  cursor: "pointer",
+                }),
+                option: (provided, state) => ({
+                  ...provided,
+                  whiteSpace: "nowrap",
+                  backgroundColor: state.isSelected ? "#b72025" : "white",
+                  color: state.isSelected ? "white" : "#333",
+                  cursor: "pointer",
+                  ":hover": {
+                    backgroundColor: "#f0f0f0",
+                  },
+                }),
+              }}
+            />
+            <Select
+              id="order"
+              value={selectedOptionOrder}
+              onChange={(e: any) => {
+                setSelectedOptionOrder(e);
+              }}
+              options={optionsOrder}
+              isSearchable={false}
+              placeholder="Urutan"
+              styles={{
+                placeholder: (base) => ({
+                  ...base,
+                  color: "#b72025",
+                }),
+                dropdownIndicator: (base) => ({
+                  ...base,
+                  color: "#b72025",
+                  "&:hover": { color: "#b72025" },
+                }),
+                control: (provided, state) => ({
+                  ...provided,
+                  paddingTop: "2px",
+                  paddingBottom: "2px",
+                  cursor: "pointer",
+                  color: "#b72025",
+                  borderColor: "#b72025",
+                  "&:hover": { borderColor: "#b72025" },
+                  borderRadius: "0.4rem",
+                  backgroundColor: "#fff3f3",
+                }),
+                singleValue: (provided, state) => ({
+                  ...provided,
+                  color: "#b72025",
+                  cursor: "pointer",
+                }),
+                option: (provided, state) => ({
+                  ...provided,
+                  whiteSpace: "nowrap",
+                  backgroundColor: state.isSelected ? "#b72025" : "white",
+                  color: state.isSelected ? "white" : "#333",
+                  cursor: "pointer",
+                  ":hover": {
+                    backgroundColor: "#f0f0f0",
+                  },
+                }),
+              }}
+            />
+          </div>
+          <div className="relative">
+            <input
+              type="text"
+              placeholder="Search people"
+              onChange={handleSearchInputChange}
+              className="inline-flex items-center px-6 py-2 rounded-md gap-x-2 bg-rose-100/60 text-primary-900 placeholder:text-primary-900 border-primary-900"
+            />
+            <FontAwesomeIcon
+              icon={faMagnifyingGlass}
+              className="absolute top-1/2 right-6 -translate-y-1/2 text-primary-900 text-lg"
+            />
           </div>
         </div>
-        {loading && <Loading />}
-        {!loading && (
-          <div className="flex flex-col">
-            <div className="overflow-x-auto">
-              <div className="w-max xl:w-full inline-block align-middle">
-                <div className="overflow-hidden overflow-x-auto">
-                  <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-slate-100">
-                      <tr>
-                        <th
-                          scope="col"
-                          className="px-6 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase "
-                        ></th>
-                        <th
-                          scope="col"
-                          className="px-6 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-left"
+      </div>
+      {loading && <Loading />}
+      {!loading && (
+        <div className="flex flex-col">
+          <div className="overflow-x-auto">
+            <div className="w-max xl:w-full inline-block align-middle">
+              <div className="overflow-hidden overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-slate-100">
+                    <tr>
+                      <th
+                        scope="col"
+                        className="px-6 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase "
+                      ></th>
+                      <th
+                        scope="col"
+                        className="px-6 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-left"
+                      >
+                        Nama
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-6 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-center"
+                      >
+                        Email
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-6 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-center"
+                      >
+                        No Whatsapp
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-6 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-center"
+                      >
+                        Balance
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-6 lg:py-4 lg:py-5 text-xs font-bold text-right text-neutral-600 uppercase text-right"
+                      >
+                        Tanggal Pendaftaran
+                      </th>
+                    </tr>
+                  </thead>
+                  {customer.data.length > 0 && (
+                    <tbody className="divide-y divide-gray-200">
+                      {customer.data.map((data) => (
+                        <tr
+                          key={data.id}
+                          className={`bg-white hover:bg-gray-100`}
                         >
-                          Nama
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-6 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-center"
-                        >
-                          Email
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-6 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-center"
-                        >
-                          No Whatsapp
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-6 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-center"
-                        >
-                          Balance
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-6 lg:py-4 lg:py-5 text-xs font-bold text-right text-neutral-600 uppercase text-right"
-                        >
-                          Tanggal Pendaftaran
-                        </th>
-                      </tr>
-                    </thead>
-                    {customer.data.length > 0 && (
-                      <tbody className="divide-y divide-gray-200">
-                        {customer.data.map((data) => (
-                          <tr
-                            key={data.id}
-                            className={`bg-white hover:bg-gray-100`}
-                          >
-                            <td className="py-4 pl-8">
-                              <div className="w-10 h-10 object-cover">
-                                <Image
-                                  src={data.image || "/images/IconUser.png"}
-                                  alt={`Logo User`}
-                                  width="0"
-                                  height="0"
-                                  sizes="100vw"
-                                  style={{ width: "100%", height: "100%" }}
-                                  className="rounded-lg object-cover"
-                                />
-                              </div>
-                            </td>
-                            <td className="px-4 py-4 text-base text-gray-800  whitespace-nowrap text-left">
-                              {data.name}
-                            </td>
-                            <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap text-center">
-                              {data.email}
-                            </td>
-                            <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap text-center">
-                              {data.mobileNumber}
-                            </td>
-                            <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap text-center">
-                              {data.balance && currencyConverter(data.balance)}
-                            </td>
-                            <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap text-right">
-                              {dayjs(data.createdAt).format(
-                                "YYYY-MM-DD HH:mm:ss"
-                              )}
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    )}
-                  </table>
-                  {customer.data.length < 0 && (
-                    <h1 className="text-center text-lg font-medium text-slate-600 mx-auto my-12">
-                      No Data Found
-                    </h1>
+                          <td className="py-4 pl-8">
+                            <div className="w-10 h-10 object-cover">
+                              <Image
+                                src={data.image || "/images/IconUser.png"}
+                                alt={`Logo User`}
+                                width="0"
+                                height="0"
+                                sizes="100vw"
+                                style={{ width: "100%", height: "100%" }}
+                                className="rounded-lg object-cover"
+                              />
+                            </div>
+                          </td>
+                          <td className="px-4 py-4 text-base text-gray-800  whitespace-nowrap text-left">
+                            {data.name}
+                          </td>
+                          <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap text-center">
+                            {data.email}
+                          </td>
+                          <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap text-center">
+                            {data.mobileNumber}
+                          </td>
+                          <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap text-center">
+                            {data.balance && currencyConverter(data.balance)}
+                          </td>
+                          <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap text-right">
+                            {dayjs(data.createdAt).format(
+                              "YYYY-MM-DD HH:mm:ss"
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
                   )}
-                </div>
+                </table>
+                {customer.data.length < 0 && (
+                  <h1 className="text-center text-lg font-medium text-slate-600 mx-auto my-12">
+                    No Data Found
+                  </h1>
+                )}
               </div>
             </div>
           </div>
-        )}
-        {customer.data.length > 0 && (
-          <Pagination
-            onPageChange={handlePageClick}
-            page={user.page}
-            limit={user.limit}
-            total={user.total}
-            totalPage={user.totalPage}
-          />
-        )}
-      </div>
+        </div>
+      )}
+      {customer.data.length > 0 && (
+        <Pagination
+          onPageChange={handlePageClick}
+          page={user.page}
+          limit={user.limit}
+          total={user.total}
+          totalPage={user.totalPage}
+        />
+      )}
     </div>
   );
 };

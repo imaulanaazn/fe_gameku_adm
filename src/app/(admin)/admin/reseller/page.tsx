@@ -5,6 +5,7 @@ import TableUser from "@/components/admin/User/TableUser";
 import React, { useEffect, useState } from "react";
 import Loading from "./loading";
 import TableReseller from "@/components/admin/Reseller/TableReseller";
+import AdminNavbar from "@/components/admin/AdminNavbar/AdminNavbar";
 
 const Reseller = () => {
   const [data, setData] = useState<IUserPaginationWithSearch>();
@@ -40,8 +41,21 @@ const Reseller = () => {
       {loading && <Loading />}
       {!loading && (
         <>
-          {/* <Header title="User" /> */}
-          {data && <TableReseller user={data} />}
+          <AdminNavbar />
+          <div className="iq-navbar-header h-48 bg-[url('/images/bg-header-abstract.jpg')] bg-cover rounded-b-3xl text-white px-12 pt-10">
+            <div className="flex justify-between items-center">
+              <div>
+                <h1 className="text-4xl font-semibold">Halo Admin</h1>
+                <p className="text-base mt-2">
+                  Selamat datang di dashboard, semoga bisnis anda berjalan
+                  lancar dan terus berkembang.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="stats-wrapper px-8 -mt-10 mb-8">
+            {data && <TableReseller user={data} />}
+          </div>
         </>
       )}
     </>

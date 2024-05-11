@@ -100,3 +100,8 @@ code[class*="language-"] {
 .custom-pagination.swiper-pagination-bullets.swiper-pagination-horizontal {
   width: fit-content;
 }
+
+.edit > .ql-toolbar.ql-snow,
+.edit > .ql-container.ql-snow {
+  border-color: #b72025 !important;
+}

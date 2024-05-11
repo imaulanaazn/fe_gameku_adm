@@ -302,57 +302,9 @@ const TablePromoCode: React.FC<{ data: IPromotionPagination }> = ({ data }) => {
         <Loading />
       ) : (
         <div className="w-full bg-white rounded-xl overflow-x-scroll md:overflow-x-auto overflow-y-hidden p-8">
-          <div className="mb-4 flex justify-between items-center">
-            <h1 className="font-medium text-2xl text-neutral-800">Banner</h1>
+          <h1 className="mb-4 font-medium text-2xl text-neutral-800">Banner</h1>
 
-            <div className="flex gap-8 items-center">
-              <div>
-                {selected.length > 0 && (
-                  <div className="flex items-end gap-2 items-center bg-primary-100 rounded-full">
-                    <p className="text-xl font-medium text-primary-900 pl-4">
-                      {selected.length}
-                    </p>
-                    <div>
-                      <div className="relative">
-                        <div
-                          onClick={() => setShowDelete(true)}
-                          className="bg-primary-900 hover:bg-red-600 w-10 h-10 rounded-full cursor-pointer grid place-content-center"
-                          data-tooltip-id="tooltip-delete"
-                          data-tooltip-content="Hapus"
-                        >
-                          <FontAwesomeIcon
-                            icon={faTrash}
-                            size="xl"
-                            className="text-white"
-                          />
-                        </div>
-                        <ReactTooltip
-                          id="tooltip-delete"
-                          style={{
-                            fontSize: "12px",
-                            padding: "10px",
-                          }}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              <button
-                onClick={() => {
-                  setShowForm(!showForm);
-                  setTypeForm("add");
-                }}
-                className="shrink-0 flex justify-between py-3 px-4 gap-5 items-center bg-primary-900 hover:bg-red-600 text-white rounded-md cursor-pointer"
-              >
-                <p>Kode Promo Baru</p>
-                <FontAwesomeIcon icon={faPlus} size="lg" />
-              </button>
-            </div>
-          </div>
-
-          <div className="flex justify-between items-center w-full bg-white mb-8">
+          <div className="flex justify-between items-center w-full bg-white mb-4">
             <div className="flex gap-4 items-center">
               <div className="relative w-full border border-primary-900 bg-primary-50 rounded-md overflow-hidden flex items-center">
                 <input
@@ -555,7 +507,37 @@ const TablePromoCode: React.FC<{ data: IPromotionPagination }> = ({ data }) => {
             </div>
           </div>
 
-          <div className="flex flex-col">
+          {selected.length > 0 && (
+            <div className="mb-4 flex justify-between items-center bg-primary-50 py-4 px-4 rounded-md">
+              <h1 className="font-medium text-primary-900">
+                {selected.length} items selected
+              </h1>
+
+              <div className="relative">
+                <div
+                  onClick={() => setShowDelete(true)}
+                  className="cursor-pointer"
+                  data-tooltip-id="tooltip-delete"
+                  data-tooltip-content="Hapus"
+                >
+                  <FontAwesomeIcon
+                    icon={faTrash}
+                    size="xl"
+                    className="text-primary-900"
+                  />
+                </div>
+                <ReactTooltip
+                  id="tooltip-delete"
+                  style={{
+                    fontSize: "12px",
+                    padding: "10px",
+                  }}
+                />
+              </div>
+            </div>
+          )}
+
+          <div className="flex flex-col mt-8">
             <div className="overflow-x-auto">
               <div className="w-full inline-block align-middle">
                 <div className="overflow-hidden overflow-x-auto">
@@ -622,7 +604,7 @@ const TablePromoCode: React.FC<{ data: IPromotionPagination }> = ({ data }) => {
                         ))}
                         <th
                           scope="col"
-                          className="p-6 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase"
+                          className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase"
                         >
                           Aksi
                         </th>
@@ -635,7 +617,7 @@ const TablePromoCode: React.FC<{ data: IPromotionPagination }> = ({ data }) => {
                           onClick={() => handleRowSelect(data.id)}
                           className={`${
                             selected.includes(data.id)
-                              ? "bg-primary-50"
+                              ? "bg-gray-100"
                               : "bg-white hover:bg-gray-100"
                           }`}
                         >
@@ -654,7 +636,7 @@ const TablePromoCode: React.FC<{ data: IPromotionPagination }> = ({ data }) => {
                               </label>
                             </div>
                           </td>
-                          <td className="px-6 py-4">
+                          <td className="px-4 py-4">
                             <div>
                               <p className="font-medium text-gray-800 text-sm whitespace-nowrap">
                                 {data.code}

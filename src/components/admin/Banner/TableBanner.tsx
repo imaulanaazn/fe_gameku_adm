@@ -465,7 +465,7 @@ const TableBanner: React.FC<{ banner: IImageCarouselPagination }> = ({
                           onClick={() => handleRowSelect(banner.id)}
                           className={`${
                             selected.includes(banner.id)
-                              ? "bg-primary-50"
+                              ? "bg-gray-100"
                               : "bg-white hover:bg-gray-100"
                           }`}
                         >

@@ -426,15 +426,13 @@ const FormGame: React.FC<IForm> = ({
               : `Detail Produk ${data?.name}`}
           </h1>
           <div
-            className="w-8 h-8 flex items-center justify-center cursor-pointer hover:bg-gray-400 rounded-full"
             onClick={() => handleShowForm(false)}
+            className="group w-8 h-8 flex items-center justify-center cursor-pointer bg-primary-100 hover:bg-primary-900 rounded-full transition-all"
           >
-            <div className="group w-8 h-8 flex items-center justify-center cursor-pointer bg-primary-100 hover:bg-primary-900 rounded-full transition-all">
-              <FontAwesomeIcon
-                icon={faTimes}
-                className="text-primary-900 group-hover:text-white transition-all"
-              />
-            </div>
+            <FontAwesomeIcon
+              icon={faTimes}
+              className="text-primary-900 group-hover:text-white transition-all"
+            />
           </div>
         </div>
 
@@ -1192,7 +1190,7 @@ const FormGame: React.FC<IForm> = ({
               </div>
             )}
             {typeForm !== "detail" && (
-              <div className="flex gap-4 justify-end bg-white py-5">
+              <div className="flex gap-4 justify-end bg-white mt-4">
                 {loading ? (
                   <>
                     <div className="bg-gray-300 text-gray-800 font-semibold w-24 text-center py-3 rounded-md cursor-not-allowed">

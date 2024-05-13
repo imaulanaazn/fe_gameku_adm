@@ -213,20 +213,30 @@ const FormOrders: React.FC<IForm> = ({
   };
 
   return (
-    <div className="w-full h-screen bg-gray-800 bg-opacity-30 absolute top-0 left-0 flex items-center justify-center z-50 font-montserrat py-10">
-      <div className="md:w-3/4 md:max-h-full w-full bg-white shadow p-4 rounded overflow-y-auto relative">
-        <div className="flex justify-between border-b-2 py-2 border-gray-300 items-center">
-          <h1 className="text-xl">Detail Order</h1>
+    <div className="w-full h-screen bg-gray-800 bg-opacity-70 absolute top-0 left-0 flex items-center justify-center z-50 py-8">
+      <div className="md:w-2/5 w-full max-h-full bg-white shadow p-8 rounded-xl overflow-y-auto relative">
+        <div className="flex justify-between border-b-2 pb-4 border-gray-200 items-center">
+          <h1 className="text-xl font-medium text-2xl text-neutral-800">
+            Detail Order
+          </h1>
           <div
-            className="w-8 h-8 flex items-center justify-center cursor-pointer hover:bg-gray-400 rounded-full"
             onClick={() => handleShowForm(false)}
+            className="group w-8 h-8 flex items-center justify-center cursor-pointer bg-primary-100 hover:bg-primary-900 rounded-full transition-all"
           >
-            <FontAwesomeIcon icon={faTimes} />
+            <FontAwesomeIcon
+              icon={faTimes}
+              className="text-primary-900 group-hover:text-white transition-all"
+            />
           </div>
         </div>
         <form>
           <div className="mt-3 w-full">
-            <label htmlFor="invoiceId">Akun</label>
+            <label
+              htmlFor="invoiceId"
+              className="font-medium text-base text-neutral-900 inline-block"
+            >
+              Akun
+            </label>
             <div className="w-full mt-2">
               <input
                 disabled={typeForm === "detail"}
@@ -236,13 +246,18 @@ const FormOrders: React.FC<IForm> = ({
                 id="invoiceId"
                 autoComplete="off"
                 defaultValue={newData.custName}
-                className={`cursor-not-allowed bg-gray-100 border border-gray-200 focus:ring-2 focus:ring-gray-600 focus:outline-none rounded-md py-3 px-2 w-full`}
+                className="cursor-not-allowed bg-gray-100 border-none text-neutral-600 w-full py-3 px-4 rounded-md text-sm placeholder:text-sm overflow-hidden"
               />
             </div>
           </div>
-          <div className="mt-3 flex gap-3">
+          <div className="mt-3 flex gap-4">
             <div className="w-1/2">
-              <label htmlFor="invoiceId">Nomor Transaksi</label>
+              <label
+                htmlFor="invoiceId"
+                className="font-medium text-base text-neutral-900 inline-block"
+              >
+                Nomor Transaksi
+              </label>
               <div className="w-full mt-2">
                 <input
                   disabled={typeForm === "detail"}
@@ -252,12 +267,17 @@ const FormOrders: React.FC<IForm> = ({
                   id="invoiceId"
                   autoComplete="off"
                   defaultValue={newData.invoiceId}
-                  className={`cursor-not-allowed bg-gray-100 border border-gray-200 focus:ring-2 focus:ring-gray-600 focus:outline-none rounded-md py-3 px-2 w-full`}
+                  className="cursor-not-allowed bg-gray-100 border-none text-neutral-600 w-full py-3 px-4 rounded-md text-sm placeholder:text-sm overflow-hidden"
                 />
               </div>
             </div>
             <div className="w-1/2">
-              <label htmlFor="mobileNumber">Nomor Handphone</label>
+              <label
+                htmlFor="mobileNumber"
+                className="font-medium text-base text-neutral-900 inline-block"
+              >
+                Nomor Handphone
+              </label>
               <div className="w-full mt-2">
                 <input
                   disabled={typeForm === "detail"}
@@ -267,14 +287,19 @@ const FormOrders: React.FC<IForm> = ({
                   id="mobileNumber"
                   autoComplete="off"
                   defaultValue={newData.mobileNumber}
-                  className={`cursor-not-allowed bg-gray-100 border border-gray-200 focus:ring-2 focus:ring-gray-600 focus:outline-none rounded-md py-3 px-2 w-full`}
+                  className="cursor-not-allowed bg-gray-100 border-none text-neutral-600 w-full py-3 px-4 rounded-md text-sm placeholder:text-sm overflow-hidden"
                 />
               </div>
             </div>
           </div>
-          <div className="mt-3 flex gap-3">
+          <div className="mt-3 flex gap-4">
             <div className="w-1/2">
-              <label htmlFor="game">Produk</label>
+              <label
+                htmlFor="game"
+                className="font-medium text-base text-neutral-900 inline-block"
+              >
+                Produk
+              </label>
               <div className="w-full mt-2">
                 <input
                   disabled={typeForm === "detail"}
@@ -284,12 +309,17 @@ const FormOrders: React.FC<IForm> = ({
                   id="game"
                   autoComplete="off"
                   defaultValue={newData.game}
-                  className={`cursor-not-allowed bg-gray-100 border border-gray-200 focus:ring-2 focus:ring-gray-600 focus:outline-none rounded-md py-3 px-2 w-full`}
+                  className="cursor-not-allowed bg-gray-100 border-none text-neutral-600 w-full py-3 px-4 rounded-md text-sm placeholder:text-sm overflow-hidden"
                 />
               </div>
             </div>
             <div className="w-1/2">
-              <label htmlFor="productName">Denom</label>
+              <label
+                htmlFor="productName"
+                className="font-medium text-base text-neutral-900 inline-block"
+              >
+                Denom
+              </label>
               <div className="w-full mt-2">
                 <input
                   disabled={typeForm === "detail"}
@@ -299,14 +329,19 @@ const FormOrders: React.FC<IForm> = ({
                   id="productName"
                   autoComplete="off"
                   defaultValue={newData.productName}
-                  className={`cursor-not-allowed bg-gray-100 border border-gray-200 focus:ring-2 focus:ring-gray-600 focus:outline-none rounded-md py-3 px-2 w-full`}
+                  className="cursor-not-allowed bg-gray-100 border-none text-neutral-600 w-full py-3 px-4 rounded-md text-sm placeholder:text-sm overflow-hidden"
                 />
               </div>
             </div>
           </div>
-          <div className="mt-3 flex gap-3">
+          <div className="mt-3 flex gap-4">
             <div className="w-1/2">
-              <label htmlFor="quantity">Kuantitas</label>
+              <label
+                htmlFor="quantity"
+                className="font-medium text-base text-neutral-900 inline-block"
+              >
+                Kuantitas
+              </label>
               <div className="w-full mt-2">
                 <input
                   disabled={typeForm === "detail"}
@@ -318,12 +353,17 @@ const FormOrders: React.FC<IForm> = ({
                   defaultValue={
                     data?.quantity ? data.quantity : newData.quantity
                   }
-                  className={`cursor-not-allowed bg-gray-100 border border-gray-200 focus:ring-2 focus:ring-gray-600 focus:outline-none rounded-md py-3 px-2 w-full`}
+                  className="cursor-not-allowed bg-gray-100 border-none text-neutral-600 w-full py-3 px-4 rounded-md text-sm placeholder:text-sm overflow-hidden"
                 />
               </div>
             </div>
             <div className="w-1/2">
-              <label htmlFor="totalAmt">Total Pembayaran</label>
+              <label
+                htmlFor="totalAmt"
+                className="font-medium text-base text-neutral-900 inline-block"
+              >
+                Total Pembayaran
+              </label>
               <div className="w-full mt-2">
                 <input
                   disabled={typeForm === "detail"}
@@ -335,14 +375,19 @@ const FormOrders: React.FC<IForm> = ({
                   defaultValue={formatter(
                     data?.totalAmt ? data.totalAmt : newData.totalAmt
                   )}
-                  className={`cursor-not-allowed bg-gray-100 border border-gray-200 focus:ring-2 focus:ring-gray-600 focus:outline-none rounded-md py-3 px-2 w-full`}
+                  className="cursor-not-allowed bg-gray-100 border-none text-neutral-600 w-full py-3 px-4 rounded-md text-sm placeholder:text-sm overflow-hidden"
                 />
               </div>
             </div>
           </div>
-          <div className="mt-3 flex gap-3">
+          <div className="mt-3 flex gap-4">
             <div className="w-1/2">
-              <label htmlFor="feeAmt">Biaya admin</label>
+              <label
+                htmlFor="feeAmt"
+                className="font-medium text-base text-neutral-900 inline-block"
+              >
+                Biaya admin
+              </label>
               <div className="w-full mt-2">
                 <input
                   disabled={typeForm === "detail"}
@@ -354,12 +399,17 @@ const FormOrders: React.FC<IForm> = ({
                   defaultValue={formatter(
                     data?.feeAmt ? data.feeAmt : newData.feeAmt
                   )}
-                  className={`cursor-not-allowed bg-gray-100 border border-gray-200 focus:ring-2 focus:ring-gray-600 focus:outline-none rounded-md py-3 px-2 w-full`}
+                  className="cursor-not-allowed bg-gray-100 border-none text-neutral-600 w-full py-3 px-4 rounded-md text-sm placeholder:text-sm overflow-hidden"
                 />
               </div>
             </div>
             <div className="w-1/2">
-              <label htmlFor="discAmt">Total Diskon</label>
+              <label
+                htmlFor="discAmt"
+                className="font-medium text-base text-neutral-900 inline-block"
+              >
+                Total Diskon
+              </label>
               <div className="w-full mt-2">
                 <input
                   disabled={typeForm === "detail"}
@@ -371,14 +421,19 @@ const FormOrders: React.FC<IForm> = ({
                   defaultValue={formatter(
                     data?.discAmt ? data.discAmt : newData.discAmt
                   )}
-                  className={`cursor-not-allowed bg-gray-100 border border-gray-200 focus:ring-2 focus:ring-gray-600 focus:outline-none rounded-md py-3 px-2 w-full`}
+                  className="cursor-not-allowed bg-gray-100 border-none text-neutral-600 w-full py-3 px-4 rounded-md text-sm placeholder:text-sm overflow-hidden"
                 />
               </div>
             </div>
           </div>
-          <div className="mt-3 flex gap-3">
+          <div className="mt-3 flex gap-4">
             <div className="w-1/2">
-              <label htmlFor="paymentMethod">Metode Pembayaran</label>
+              <label
+                htmlFor="paymentMethod"
+                className="font-medium text-base text-neutral-900 inline-block"
+              >
+                Metode Pembayaran
+              </label>
               <div className="w-full mt-2">
                 <input
                   disabled={typeForm === "detail"}
@@ -388,12 +443,17 @@ const FormOrders: React.FC<IForm> = ({
                   id="paymentMethod"
                   autoComplete="off"
                   defaultValue={newData.paymentMethod}
-                  className={`cursor-not-allowed bg-gray-100 border border-gray-200 focus:ring-2 focus:ring-gray-600 focus:outline-none rounded-md py-3 px-2 w-full`}
+                  className="cursor-not-allowed bg-gray-100 border-none text-neutral-600 w-full py-3 px-4 rounded-md text-sm placeholder:text-sm overflow-hidden"
                 />
               </div>
             </div>
             <div className="w-1/2">
-              <label htmlFor="promoCd">Kode Promo</label>
+              <label
+                htmlFor="promoCd"
+                className="font-medium text-base text-neutral-900 inline-block"
+              >
+                Kode Promo
+              </label>
               <div className="w-full mt-2">
                 <input
                   disabled={typeForm === "detail"}
@@ -403,14 +463,19 @@ const FormOrders: React.FC<IForm> = ({
                   id="promoCd"
                   autoComplete="off"
                   defaultValue={newData.promoCd}
-                  className={`cursor-not-allowed bg-gray-100 border border-gray-200 focus:ring-2 focus:ring-gray-600 focus:outline-none rounded-md py-3 px-2 w-full`}
+                  className="cursor-not-allowed bg-gray-100 border-none text-neutral-600 w-full py-3 px-4 rounded-md text-sm placeholder:text-sm overflow-hidden"
                 />
               </div>
             </div>
           </div>
-          <div className="mt-3 flex gap-3">
+          <div className="mt-3 flex gap-4">
             <div className="w-1/2">
-              <label htmlFor="userId">User Id</label>
+              <label
+                htmlFor="userId"
+                className="font-medium text-base text-neutral-900 inline-block"
+              >
+                User Id
+              </label>
               <div className="w-full mt-2">
                 <input
                   disabled={typeForm === "detail"}
@@ -420,12 +485,17 @@ const FormOrders: React.FC<IForm> = ({
                   id="userId"
                   autoComplete="off"
                   defaultValue={newData.detail.userId}
-                  className={`cursor-not-allowed bg-gray-100 border border-gray-200 focus:ring-2 focus:ring-gray-600 focus:outline-none rounded-md py-3 px-2 w-full`}
+                  className="cursor-not-allowed bg-gray-100 border-none text-neutral-600 w-full py-3 px-4 rounded-md text-sm placeholder:text-sm overflow-hidden"
                 />
               </div>
             </div>
             <div className="w-1/2">
-              <label htmlFor="serverId">Server Id</label>
+              <label
+                htmlFor="serverId"
+                className="font-medium text-base text-neutral-900 inline-block"
+              >
+                Server Id
+              </label>
               <div className="w-full mt-2">
                 <input
                   disabled={typeForm === "detail"}
@@ -435,13 +505,18 @@ const FormOrders: React.FC<IForm> = ({
                   id="serverId"
                   autoComplete="off"
                   defaultValue={newData.detail.serverId}
-                  className={`cursor-not-allowed bg-gray-100 border border-gray-200 focus:ring-2 focus:ring-gray-600 focus:outline-none rounded-md py-3 px-2 w-full`}
+                  className="cursor-not-allowed bg-gray-100 border-none text-neutral-600 w-full py-3 px-4 rounded-md text-sm placeholder:text-sm overflow-hidden"
                 />
               </div>
             </div>
           </div>
           <div className="mt-3 w-full">
-            <label htmlFor="gameVoucher">Game Voucher</label>
+            <label
+              htmlFor="gameVoucher"
+              className="font-medium text-base text-neutral-900 inline-block"
+            >
+              Game Voucher
+            </label>
             <textarea
               name="gameVoucher"
               id="gameVoucher"
@@ -457,7 +532,12 @@ const FormOrders: React.FC<IForm> = ({
           </div>
           {newData?.detail.username && (
             <div className="mt-3 w-full">
-              <label htmlFor="username">Username Game</label>
+              <label
+                htmlFor="username"
+                className="font-medium text-base text-neutral-900 inline-block"
+              >
+                Username Game
+              </label>
               <div className="w-full mt-2">
                 <input
                   disabled={typeForm === "detail"}
@@ -467,13 +547,18 @@ const FormOrders: React.FC<IForm> = ({
                   id="username"
                   autoComplete="off"
                   defaultValue={newData?.detail.username}
-                  className={`cursor-not-allowed bg-gray-100 border border-gray-200 focus:ring-2 focus:ring-gray-600 focus:outline-none rounded-md py-3 px-2 w-full`}
+                  className="cursor-not-allowed bg-gray-100 border-none text-neutral-600 w-full py-3 px-4 rounded-md text-sm placeholder:text-sm overflow-hidden"
                 />
               </div>
             </div>
           )}
           <div className="mt-3 w-full">
-            <label htmlFor="serverId">Status</label>
+            <label
+              htmlFor="serverId"
+              className="font-medium text-base text-neutral-900 inline-block"
+            >
+              Status
+            </label>
             <div className="w-full mt-2">
               <input
                 disabled={typeForm === "detail"}
@@ -483,13 +568,18 @@ const FormOrders: React.FC<IForm> = ({
                 id="serverId"
                 autoComplete="off"
                 defaultValue={checkStatus(newData.status)}
-                className={`cursor-not-allowed bg-gray-100 border border-gray-200 focus:ring-2 focus:ring-gray-600 focus:outline-none rounded-md py-3 px-2 w-full`}
+                className="cursor-not-allowed bg-gray-100 border-none text-neutral-600 w-full py-3 px-4 rounded-md text-sm placeholder:text-sm overflow-hidden"
               />
             </div>
           </div>
           {newData.status === "6" && newData.isError && (
             <div className="mt-3 w-full">
-              <label htmlFor="serverId">Error</label>
+              <label
+                htmlFor="serverId"
+                className="font-medium text-base text-neutral-900 inline-block"
+              >
+                Error
+              </label>
               <div className="w-full mt-2">
                 <input
                   disabled={typeForm === "detail"}
@@ -499,30 +589,30 @@ const FormOrders: React.FC<IForm> = ({
                   id="serverId"
                   autoComplete="off"
                   defaultValue={newData.remark}
-                  className={`cursor-not-allowed bg-gray-100 border border-gray-200 focus:ring-2 focus:ring-gray-600 focus:outline-none rounded-md py-3 px-2 w-full`}
+                  className="cursor-not-allowed bg-gray-100 border-none text-neutral-600 w-full py-3 px-4 rounded-md text-sm placeholder:text-sm overflow-hidden"
                 />
               </div>
             </div>
           )}
 
-          <div className="flex justify-end space-x-2 sticky -bottom-4 bg-white py-5">
-            <div className="relative flex gap-2">
-              {newData.status === "6" &&
+          <div className="flex justify-end gap-4 bg-white mt-4">
+            <div className="relative flex gap-4">
+              {/* {newData.status === "6" &&
                 newData.isError &&
-                newData.isCanResend && (
-                  <button
-                    type="button"
-                    disabled={false}
-                    onClick={handleResendOrder}
-                    className={`hover:bg-green-400 bg-green-600 text-white font-semibold py-3 px-5 rounded-md`}
-                  >
-                    Resend Order
-                  </button>
-                )}
+                newData.isCanResend && ( */}
+              <button
+                type="button"
+                disabled={false}
+                onClick={handleResendOrder}
+                className={`hover:bg-emerald-400 bg-emerald-600 text-white font-semibold py-3 px-5 rounded-md`}
+              >
+                Resend Order
+              </button>
+              {/* )} */}
               <button
                 type="button"
                 onClick={handleClickCopyTrx}
-                className="hover:bg-green-400 bg-green-600 text-white font-semibold py-3 px-5 rounded-md"
+                className="bg-primary-900 hover:bg-red-600 text-white font-medium px-5 py-3 rounded-md transition-all"
                 data-tooltip-id="tooltip-unpopular"
                 data-tooltip-content="Berhasil dicopy"
               >
@@ -552,8 +642,8 @@ const FormOrders: React.FC<IForm> = ({
                     className={`${
                       false
                         ? "bg-opacity-50 cursor-not-allowed"
-                        : "bg-opacity-100 hover:bg-green-400"
-                    } bg-green-600 text-white font-semibold py-3 px-5 rounded-md`}
+                        : "bg-opacity-100 hover:bg-emerald-400"
+                    } bg-emerald-600 text-white font-semibold py-3 px-5 rounded-md`}
                   >
                     Selesaikan
                   </button>

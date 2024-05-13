@@ -5,8 +5,10 @@ import { useEffect, useRef, useState } from "react";
 import { useRecoilState } from "recoil";
 import {
   faArrowDown,
+  faArrowRotateRight,
   faArrowUp,
   faCheckCircle,
+  faMagnifyingGlass,
   faMoneyBill,
   faSearch,
   faShoppingCart,
@@ -506,239 +508,7 @@ const TableOrders: React.FC<{
           ref={downloadDatePickerRef}
         />
       </div>
-      <div className="w-full bg-white rounded shadow p-5 mt-5">
-        <div className="flex justify-between">
-          <div className="w-full flex gap-3 items-center">
-            <div className="w-1/2 max-w-sm relative">
-              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                <FontAwesomeIcon icon={faSearch} />
-              </div>
-              <input
-                type="search"
-                id="default-search"
-                className="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-                placeholder={`Cari berdasarkan ${selectedOptionSearchBy.label}`}
-                value={inputSearch}
-                onChange={(e) => setInputSearch(e.target.value)}
-              />
-              <button
-                type="button"
-                disabled={!inputSearch}
-                onClick={(e) => handleClickSearch()}
-                className={`${
-                  !inputSearch
-                    ? "bg-gray-400 text-black cursor-not-allowed"
-                    : "bg-blue-700 hover:bg-blue-800"
-                } text-white absolute right-2.5 bottom-2.5 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2`}
-              >
-                Cari
-              </button>
-            </div>
-            <Select
-              id="filterSearchBy"
-              value={selectedOptionSearchBy}
-              onChange={(e: any) => {
-                const check = query.search.find(
-                  (item) => item.key === selectedOptionSearchBy.value
-                );
-                if (check) {
-                  setSelectedOptionSearchByBefore(check);
-                }
-                setSelectedOptionSearchBy(e);
-              }}
-              options={optionsSearchBy}
-              placeholder="Cari Berdasarkan"
-              styles={{
-                control: (provided, state) => ({
-                  ...provided,
-                  paddingTop: "6px",
-                  paddingBottom: "6px",
-                  cursor: "pointer",
-                }),
-                singleValue: (provided, state) => ({
-                  ...provided,
-                  color: "#333",
-                  cursor: "pointer",
-                }),
-                option: (provided, state) => ({
-                  ...provided,
-                  backgroundColor: state.isSelected ? "#007BFF" : "white",
-                  color: state.isSelected ? "white" : "#333",
-                  cursor: "pointer",
-                  ":hover": {
-                    backgroundColor: "#f0f0f0",
-                  },
-                }),
-              }}
-            />
-          </div>
-          <div className="shrink-0">
-            <Select
-              id="selectDownloadDate"
-              value={selectedOptionDownloadDate?.value}
-              key={`my_unique_select_key__${selectedOptionDownloadDate}`}
-              isSearchable={false}
-              onChange={(e: any) => {
-                e.value === "custom"
-                  ? downloadDatePickerRef?.current?.setOpen(true)
-                  : setSelectedOptionDownloadDate(e);
-              }}
-              options={optionsDownloadDate}
-              placeholder="Download Laporan"
-              styles={{
-                control: (provided, state) => ({
-                  ...provided,
-                  paddingTop: "6px",
-                  paddingBottom: "6px",
-                  cursor: "pointer",
-                }),
-                singleValue: (provided, state) => ({
-                  ...provided,
-                  color: "#333",
-                  cursor: "pointer",
-                }),
-                option: (provided, state) => ({
-                  ...provided,
-                  backgroundColor: state.isSelected ? "#007BFF" : "white",
-                  color: state.isSelected ? "white" : "#333",
-                  cursor: "pointer",
-                  ":hover": {
-                    backgroundColor: "#f0f0f0",
-                  },
-                }),
-              }}
-            />
-          </div>
-        </div>
-        <div className="flex mt-5 justify-between">
-          <div className="flex gap-3 ">
-            <Select
-              id="filterDate"
-              value={selectedOptionDate}
-              onChange={(e: any) => {
-                setSelectedOptionDate(e);
-              }}
-              options={optionsFilterDate}
-              placeholder="Filter Tanggal"
-              styles={{
-                control: (provided, state) => ({
-                  ...provided,
-                  paddingTop: "6px",
-                  paddingBottom: "6px",
-                  cursor: "pointer",
-                }),
-                singleValue: (provided, state) => ({
-                  ...provided,
-                  color: "#333",
-                  cursor: "pointer",
-                }),
-                option: (provided, state) => ({
-                  ...provided,
-                  backgroundColor: state.isSelected ? "#007BFF" : "white",
-                  color: state.isSelected ? "white" : "#333",
-                  cursor: "pointer",
-                  ":hover": {
-                    backgroundColor: "#f0f0f0",
-                  },
-                }),
-              }}
-            />
-            <Select
-              id="filterStatus"
-              value={selectedFilterStatus}
-              onChange={(e: any) => {
-                const data = {
-                  key: "status",
-                  value: e.value,
-                };
-                setQuery((prev) => {
-                  const check = prev.search.find(
-                    (item) => item.key === "status"
-                  );
-                  if (check) {
-                    check.value = e.value;
-                  } else {
-                    prev.search.push(data);
-                  }
 
-                  prev.page = 1;
-
-                  return prev;
-                });
-                setSelectedFilterStatus(e);
-              }}
-              options={optionsFilterStatus}
-              placeholder="Filter Status"
-              styles={{
-                control: (provided, state) => ({
-                  ...provided,
-                  paddingTop: "6px",
-                  paddingBottom: "6px",
-                  cursor: "pointer",
-                }),
-                singleValue: (provided, state) => ({
-                  ...provided,
-                  color: "#333",
-                  cursor: "pointer",
-                }),
-                option: (provided, state) => ({
-                  ...provided,
-                  backgroundColor: state.isSelected ? "#007BFF" : "white",
-                  color: state.isSelected ? "white" : "#333",
-                  cursor: "pointer",
-                  ":hover": {
-                    backgroundColor: "#f0f0f0",
-                  },
-                }),
-              }}
-            />
-            {optionLimit && (
-              <div>
-                <Select
-                  id="filterLimit"
-                  value={selectedFilterLimit}
-                  onChange={(e: any) => {
-                    setSelectedFilterLimit(e);
-                    setQuery((prev) => {
-                      return { ...prev, limit: e.value };
-                    });
-                  }}
-                  options={optionLimit}
-                  placeholder="Limit PerPage"
-                  styles={{
-                    control: (provided, state) => ({
-                      ...provided,
-                      paddingTop: "6px",
-                      paddingBottom: "6px",
-                      cursor: "pointer",
-                    }),
-                    singleValue: (provided, state) => ({
-                      ...provided,
-                      color: "#333",
-                      cursor: "pointer",
-                    }),
-                    option: (provided, state) => ({
-                      ...provided,
-                      backgroundColor: state.isSelected ? "#007BFF" : "white",
-                      color: state.isSelected ? "white" : "#333",
-                      cursor: "pointer",
-                      ":hover": {
-                        backgroundColor: "#f0f0f0",
-                      },
-                    }),
-                  }}
-                />
-              </div>
-            )}
-          </div>
-          <button
-            onClick={() => handleClickClearButton()}
-            className="h-12 aspect-square rounded-md text-white bg-blue-700 hover:bg-blue-800 cursor-pointer"
-          >
-            <FontAwesomeIcon icon={faTimes} />
-          </button>
-        </div>
-      </div>
       {showForm && (
         <FormOrders
           handleShowForm={(value: boolean) => setShowForm(value)}
@@ -751,42 +521,339 @@ const TableOrders: React.FC<{
         {loading ? (
           <Loading />
         ) : (
-          <div className="w-full bg-white rounded shadow overflow-y-hidden mt-5">
-            <div className={`p-5 bg-white flex justify-between items-center`}>
-              <div className="flex items-center justify-between">
+          <div className="w-full bg-white rounded-xl overflow-y-hidden p-8 mt-8">
+            <div className={`bg-white flex justify-between items-center mb-4`}>
+              <div className="flex items-center gap-4">
                 <p className="text-xl font-semibold">Pesanan</p>
+                <div onClick={() => getNewData()} className="cursor-pointer">
+                  <FontAwesomeIcon
+                    icon={faArrowRotateRight}
+                    className="text-xl text-primary-900"
+                  />
+                </div>
               </div>
-              <Box
-                onClick={() => getNewData()}
-                sx={{
-                  cursor: "pointer",
-                }}
-              >
-                <RefreshCircle
-                  sx={{
-                    width: 35,
-                    height: 35,
-                    marginRight: 4,
-                    color: "#333",
+              <div className="shrink-0">
+                <Select
+                  id="selectDownloadDate"
+                  value={selectedOptionDownloadDate?.value}
+                  key={`my_unique_select_key__${selectedOptionDownloadDate}`}
+                  isSearchable={false}
+                  onChange={(e: any) => {
+                    e.value === "custom"
+                      ? downloadDatePickerRef?.current?.setOpen(true)
+                      : setSelectedOptionDownloadDate(e);
+                  }}
+                  options={optionsDownloadDate}
+                  placeholder="Download Laporan"
+                  styles={{
+                    placeholder: (base) => ({
+                      ...base,
+                      color: "#b72025",
+                    }),
+                    dropdownIndicator: (base) => ({
+                      ...base,
+                      color: "#b72025",
+                      "&:hover": { color: "#b72025" },
+                    }),
+                    control: (provided, state) => ({
+                      ...provided,
+                      paddingTop: "2px",
+                      paddingBottom: "2px",
+                      cursor: "pointer",
+                      color: "#b72025",
+                      borderColor: "#b72025",
+                      "&:hover": { borderColor: "#b72025" },
+                      borderRadius: "0.4rem",
+                      backgroundColor: "#fff3f3",
+                    }),
+                    singleValue: (provided, state) => ({
+                      ...provided,
+                      color: "#b72025",
+                      cursor: "pointer",
+                    }),
+                    option: (provided, state) => ({
+                      ...provided,
+                      whiteSpace: "nowrap",
+                      backgroundColor: state.isSelected ? "#b72025" : "white",
+                      color: state.isSelected ? "white" : "#333",
+                      cursor: "pointer",
+                      ":hover": {
+                        backgroundColor: "#f0f0f0",
+                      },
+                    }),
                   }}
                 />
-              </Box>
+              </div>
             </div>
-            <div className="flex flex-col">
+
+            <div className="flex justify-between">
+              <div className="flex gap-4 items-center justify-between flex-wrap">
+                <div className="w-full flex gap-4 items-center">
+                  <div className="relative w-max border border-primary-900 bg-primary-50 rounded-md overflow-hidden flex items-center">
+                    <input
+                      placeholder={`Cari berdasarkan ${selectedOptionSearchBy.label}`}
+                      value={inputSearch}
+                      onChange={(e) => setInputSearch(e.target.value)}
+                      className="w-full py-2 border-none bg-transparent text-primary-900 placeholder:text-primary-900 focus:ring-transparent"
+                    />
+                    <button
+                      type="button"
+                      disabled={!inputSearch}
+                      onClick={(e) => handleClickSearch()}
+                      className="pr-4 hover:cursor-pointer"
+                    >
+                      <FontAwesomeIcon
+                        icon={faMagnifyingGlass}
+                        className="text-primary-900 text-lg"
+                      />
+                    </button>
+                  </div>
+
+                  <Select
+                    id="filterSearchBy"
+                    value={selectedOptionSearchBy}
+                    onChange={(e: any) => {
+                      const check = query.search.find(
+                        (item) => item.key === selectedOptionSearchBy.value
+                      );
+                      if (check) {
+                        setSelectedOptionSearchByBefore(check);
+                      }
+                      setSelectedOptionSearchBy(e);
+                    }}
+                    options={optionsSearchBy}
+                    placeholder="Cari Berdasarkan"
+                    styles={{
+                      placeholder: (base) => ({
+                        ...base,
+                        color: "#b72025",
+                      }),
+                      dropdownIndicator: (base) => ({
+                        ...base,
+                        color: "#b72025",
+                        "&:hover": { color: "#b72025" },
+                      }),
+                      control: (provided, state) => ({
+                        ...provided,
+                        paddingTop: "2px",
+                        paddingBottom: "2px",
+                        cursor: "pointer",
+                        color: "#b72025",
+                        borderColor: "#b72025",
+                        "&:hover": { borderColor: "#b72025" },
+                        borderRadius: "0.4rem",
+                        backgroundColor: "#fff3f3",
+                      }),
+                      singleValue: (provided, state) => ({
+                        ...provided,
+                        color: "#b72025",
+                        cursor: "pointer",
+                      }),
+                      option: (provided, state) => ({
+                        ...provided,
+                        whiteSpace: "nowrap",
+                        backgroundColor: state.isSelected ? "#b72025" : "white",
+                        color: state.isSelected ? "white" : "#333",
+                        cursor: "pointer",
+                        ":hover": {
+                          backgroundColor: "#f0f0f0",
+                        },
+                      }),
+                    }}
+                  />
+                </div>
+              </div>
+
+              <div className="flex gap-4 ">
+                <Select
+                  id="filterDate"
+                  value={selectedOptionDate}
+                  onChange={(e: any) => {
+                    setSelectedOptionDate(e);
+                  }}
+                  options={optionsFilterDate}
+                  placeholder="Filter Tanggal"
+                  styles={{
+                    placeholder: (base) => ({
+                      ...base,
+                      color: "#b72025",
+                    }),
+                    dropdownIndicator: (base) => ({
+                      ...base,
+                      color: "#b72025",
+                      "&:hover": { color: "#b72025" },
+                    }),
+                    control: (provided, state) => ({
+                      ...provided,
+                      paddingTop: "2px",
+                      paddingBottom: "2px",
+                      cursor: "pointer",
+                      color: "#b72025",
+                      borderColor: "#b72025",
+                      "&:hover": { borderColor: "#b72025" },
+                      borderRadius: "0.4rem",
+                      backgroundColor: "#fff3f3",
+                    }),
+                    singleValue: (provided, state) => ({
+                      ...provided,
+                      color: "#b72025",
+                      cursor: "pointer",
+                    }),
+                    option: (provided, state) => ({
+                      ...provided,
+                      whiteSpace: "nowrap",
+                      backgroundColor: state.isSelected ? "#b72025" : "white",
+                      color: state.isSelected ? "white" : "#333",
+                      cursor: "pointer",
+                      ":hover": {
+                        backgroundColor: "#f0f0f0",
+                      },
+                    }),
+                  }}
+                />
+                <Select
+                  id="filterStatus"
+                  value={selectedFilterStatus}
+                  onChange={(e: any) => {
+                    const data = {
+                      key: "status",
+                      value: e.value,
+                    };
+                    setQuery((prev) => {
+                      const check = prev.search.find(
+                        (item) => item.key === "status"
+                      );
+                      if (check) {
+                        check.value = e.value;
+                      } else {
+                        prev.search.push(data);
+                      }
+
+                      prev.page = 1;
+
+                      return prev;
+                    });
+                    setSelectedFilterStatus(e);
+                  }}
+                  options={optionsFilterStatus}
+                  placeholder="Filter Status"
+                  styles={{
+                    placeholder: (base) => ({
+                      ...base,
+                      color: "#b72025",
+                    }),
+                    dropdownIndicator: (base) => ({
+                      ...base,
+                      color: "#b72025",
+                      "&:hover": { color: "#b72025" },
+                    }),
+                    control: (provided, state) => ({
+                      ...provided,
+                      paddingTop: "2px",
+                      paddingBottom: "2px",
+                      cursor: "pointer",
+                      color: "#b72025",
+                      borderColor: "#b72025",
+                      "&:hover": { borderColor: "#b72025" },
+                      borderRadius: "0.4rem",
+                      backgroundColor: "#fff3f3",
+                    }),
+                    singleValue: (provided, state) => ({
+                      ...provided,
+                      color: "#b72025",
+                      cursor: "pointer",
+                    }),
+                    option: (provided, state) => ({
+                      ...provided,
+                      whiteSpace: "nowrap",
+                      backgroundColor: state.isSelected ? "#b72025" : "white",
+                      color: state.isSelected ? "white" : "#333",
+                      cursor: "pointer",
+                      ":hover": {
+                        backgroundColor: "#f0f0f0",
+                      },
+                    }),
+                  }}
+                />
+                {optionLimit && (
+                  <div>
+                    <Select
+                      id="filterLimit"
+                      value={selectedFilterLimit}
+                      onChange={(e: any) => {
+                        setSelectedFilterLimit(e);
+                        setQuery((prev) => {
+                          return { ...prev, limit: e.value };
+                        });
+                      }}
+                      options={optionLimit}
+                      placeholder="Limit PerPage"
+                      styles={{
+                        placeholder: (base) => ({
+                          ...base,
+                          color: "#b72025",
+                        }),
+                        dropdownIndicator: (base) => ({
+                          ...base,
+                          color: "#b72025",
+                          "&:hover": { color: "#b72025" },
+                        }),
+                        control: (provided, state) => ({
+                          ...provided,
+                          paddingTop: "2px",
+                          paddingBottom: "2px",
+                          cursor: "pointer",
+                          color: "#b72025",
+                          borderColor: "#b72025",
+                          "&:hover": { borderColor: "#b72025" },
+                          borderRadius: "0.4rem",
+                          backgroundColor: "#fff3f3",
+                        }),
+                        singleValue: (provided, state) => ({
+                          ...provided,
+                          color: "#b72025",
+                          cursor: "pointer",
+                        }),
+                        option: (provided, state) => ({
+                          ...provided,
+                          whiteSpace: "nowrap",
+                          backgroundColor: state.isSelected
+                            ? "#b72025"
+                            : "white",
+                          color: state.isSelected ? "white" : "#333",
+                          cursor: "pointer",
+                          ":hover": {
+                            backgroundColor: "#f0f0f0",
+                          },
+                        }),
+                      }}
+                    />
+                  </div>
+                )}
+                <button
+                  onClick={() => handleClickClearButton()}
+                  className="px-4 py-2 aspect-square rounded-md text-white bg-primary-900 hover:bg-red-600 cursor-pointer"
+                >
+                  <FontAwesomeIcon icon={faTimes} />
+                </button>
+              </div>
+            </div>
+
+            <div className="flex flex-col mt-8">
               <div className="overflow-x-auto">
                 <div className="w-full inline-block align-middle">
-                  <div className="overflow-hidden px-5">
+                  <div className="overflow-hidden">
                     <table className="min-w-full divide-y divide-gray-200">
-                      <thead className="bg-gray-50">
+                      <thead className="bg-slate-100">
                         <tr>
                           {column.map((item) => (
                             <th
                               key={item.id}
                               scope="col"
-                              className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase "
+                              className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-left"
                             >
                               <div
-                                className="flex gap-3 cursor-pointer items-center"
+                                className="flex gap-4 cursor-pointer items-center"
                                 onClick={() =>
                                   setQuery((prev) => ({
                                     ...prev,
@@ -820,19 +887,19 @@ const TableOrders: React.FC<{
                                                     </th> */}
                           <th
                             scope="col"
-                            className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase "
+                            className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase"
                           >
                             Akun
                           </th>
                           <th
                             scope="col"
-                            className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase "
+                            className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase"
                           >
                             No. Whatsapp
                           </th>
                           <th
                             scope="col"
-                            className="px-6 py-3 text-xs font-bold text-center text-gray-500 uppercase "
+                            className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase"
                           >
                             Waktu
                           </th>
@@ -850,7 +917,7 @@ const TableOrders: React.FC<{
                                                     </th> */}
                           <th
                             scope="col"
-                            className="px-6 py-3 text-xs font-bold text-right text-gray-500 uppercase "
+                            className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase"
                           >
                             Aksi
                           </th>
@@ -859,8 +926,8 @@ const TableOrders: React.FC<{
                       <tbody className="divide-y divide-gray-200">
                         {newData.data.map((data) => (
                           <tr key={data.id} className={`bg-white`}>
-                            <td className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">
-                              <div className="flex gap-3 items-center">
+                            <td className="px-4 py-4">
+                              <div className="flex gap-4 items-center">
                                 <div className="h-10 aspect-square flex items-center">
                                   <Image
                                     src={data.logoUrl}
@@ -873,32 +940,32 @@ const TableOrders: React.FC<{
                                   />
                                 </div>
                                 <div>
-                                  <p className="font-bold text-base">
+                                  <p className="font-medium text-gray-800 text-sm whitespace-nowrap">
                                     {data.game}
                                   </p>
-                                  <p>{data.productName}</p>
+                                  <p className="text-sm text-gray-500 whitespace-nowrap">
+                                    {data.productName}
+                                  </p>
                                 </div>
                               </div>
                             </td>
-                            <td className="px-6 py-4 text-sm text-gray-800">
+                            <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
                               {formatter(data.totalAmt)}
                             </td>
-                            <td className="px-6 py-4 text-sm text-gray-800">
+                            <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
                               <StatusesOrder value={data.status} />
                             </td>
-                            <td className="px-6 py-4 text-sm text-gray-800">
+                            <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
                               {data.custName}
                             </td>
-                            <td className="px-6 py-4 text-sm text-gray-800">
+                            <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
                               {data.mobileNumber}
                             </td>
-                            <td className="px-6 py-4 text-sm text-gray-800">
-                              {dayjs(data.createdAt).format(
-                                "YYYY-MM-DD HH:mm:ss"
-                              )}
+                            <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
+                              {dayjs(data.createdAt).format("YYYY-MM-DD HH:mm")}
                             </td>
-                            <td className="px-6 py-4 text-sm font-medium text-right">
-                              <div className="flex justify-end w-full">
+                            <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
+                              <div className="flex justify-start w-full">
                                 <div
                                   onClick={(e) => {
                                     e.stopPropagation();
@@ -906,7 +973,7 @@ const TableOrders: React.FC<{
                                     setTypeForm("detail");
                                     setDetailData(data);
                                   }}
-                                  className="bg-green-600 px-4 py-2 rounded-md text-white cursor-pointer"
+                                  className="bg-primary-900 px-4 py-2 rounded-md text-white cursor-pointer hover:bg-red-600"
                                 >
                                   Lihat
                                 </div>

@@ -627,9 +627,9 @@ const TableGame: React.FC<{ game: IGamePagination }> = ({ game }) => {
 
           {selected.length > 0 && (
             <div className="mt-4 flex justify-between items-center bg-primary-50 py-4 px-4 rounded-md">
-              <h1 className="font-medium text-primary-900">
+              <h2 className="font-medium text-primary-900">
                 {selected.length} items selected
-              </h1>
+              </h2>
 
               <div className="flex gap-4 items-center">
                 <div className="relative">

@@ -1110,7 +1110,7 @@ const FormGame: React.FC<IForm> = ({
                       typeForm === "detail"
                         ? "cursor-not-allowed bg-gray-100 border-none text-neutral-600"
                         : "bg-primary-50 text-primary-900 bg-opacity-100 border border-solid border-primary-900 focus:bg-white focus:ring-0 focus:border-primary-900"
-                    } w-full h-12 max-h-40 py-3 px-4 rounded-md text-sm placeholder:text-sm overflow-hidden resize-none`}
+                    } w-full h-12 max-h-40 py-3 px-4 rounded-md text-sm placeholder:text-sm overflow-y-auto resize-none`}
                   />
                 </div>
               )}

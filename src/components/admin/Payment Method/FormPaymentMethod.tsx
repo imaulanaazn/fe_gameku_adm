@@ -66,21 +66,31 @@ const FormPaymentMethod: React.FC<IForm> = ({ handleShowForm, type, data }) => {
   }
 
   return (
-    <div className="w-full h-screen bg-gray-800 bg-opacity-30 absolute top-0 left-0 flex items-center justify-center z-[10] font-montserrat py-10">
-      <div className="md:w-3/4 md:max-h-full w-full bg-white shadow p-4 rounded overflow-y-auto relative">
-        <div className="flex justify-between border-b-2 py-2 border-gray-300 items-center">
-          <h1 className="text-xl">Detail {data?.name}</h1>
+    <div className="w-full h-screen bg-gray-800 bg-opacity-70 absolute top-0 left-0 flex items-center justify-center z-50 py-8">
+      <div className="md:w-2/5 md:max-h-full w-full bg-white p-8 rounded-xl overflow-y-auto relative">
+        <div className="flex justify-between border-b-2 pb-4 border-gray-200 items-center">
+          <h1 className="text-xl font-medium text-2xl text-neutral-800">
+            Detail {data?.name}
+          </h1>
           <div
-            className="w-8 h-8 flex items-center justify-center cursor-pointer hover:bg-gray-400 rounded-full"
             onClick={() => handleShowForm(false)}
+            className="group w-8 h-8 flex items-center justify-center cursor-pointer bg-primary-100 hover:bg-primary-900 rounded-full transition-all"
           >
-            <FontAwesomeIcon icon={faTimes} />
+            <FontAwesomeIcon
+              icon={faTimes}
+              className="text-primary-900 group-hover:text-white transition-all"
+            />
           </div>
         </div>
         <form>
-          <div className="w-full mt-3 gap-3">
-            <label htmlFor="name">Logo</label>
-            <div className="w-[150px] aspect-square mt-3">
+          <div className="w-full mt-4 gap-4">
+            <label
+              htmlFor="name"
+              className="font-medium text-base text-neutral-900 inline-block"
+            >
+              Logo
+            </label>
+            <div className="w-[140px] aspect-square mt-4">
               <Image
                 src={data.logo}
                 alt={"Logo Metode Pembayaran"}
@@ -92,9 +102,14 @@ const FormPaymentMethod: React.FC<IForm> = ({ handleShowForm, type, data }) => {
               />
             </div>
           </div>
-          <div className="mt-3 flex gap-3">
+          <div className="mt-4 flex gap-4">
             <div className="w-1/2">
-              <label htmlFor="name">Nama</label>
+              <label
+                htmlFor="name"
+                className="font-medium text-base text-neutral-900 inline-block"
+              >
+                Nama
+              </label>
               <div className="w-full mt-2">
                 <input
                   disabled={type === "detail"}
@@ -104,12 +119,19 @@ const FormPaymentMethod: React.FC<IForm> = ({ handleShowForm, type, data }) => {
                   id="name"
                   autoComplete="off"
                   defaultValue={data.name}
-                  className={`cursor-not-allowed bg-gray-100 border border-gray-200 focus:ring-2 focus:ring-gray-600 focus:outline-none rounded-md py-3 px-2 w-full`}
+                  className={
+                    "cursor-not-allowed bg-gray-100 border-none text-neutral-600 w-full py-3 px-4 rounded-md text-sm placeholder:text-sm overflow-hidden"
+                  }
                 />
               </div>
             </div>
             <div className="w-1/2">
-              <label htmlFor="minAmount">Minimal Pembelian</label>
+              <label
+                htmlFor="minAmount"
+                className="font-medium text-base text-neutral-900 inline-block"
+              >
+                Minimal Pembelian
+              </label>
               <div className="w-full mt-2">
                 <input
                   disabled={type === "detail"}
@@ -119,14 +141,21 @@ const FormPaymentMethod: React.FC<IForm> = ({ handleShowForm, type, data }) => {
                   id="minAmount"
                   autoComplete="off"
                   defaultValue={formatter(data.minAmount)}
-                  className={`cursor-not-allowed bg-gray-100 border border-gray-200 focus:ring-2 focus:ring-gray-600 focus:outline-none rounded-md py-3 px-2 w-full`}
+                  className={
+                    "cursor-not-allowed bg-gray-100 border-none text-neutral-600 w-full py-3 px-4 rounded-md text-sm placeholder:text-sm overflow-hidden"
+                  }
                 />
               </div>
             </div>
           </div>
-          <div className="mt-3 flex gap-3">
+          <div className="mt-4 flex gap-4">
             <div className="w-1/2">
-              <label htmlFor="maxAmount">Maximal Pembelian</label>
+              <label
+                htmlFor="maxAmount"
+                className="font-medium text-base text-neutral-900 inline-block"
+              >
+                Maximal Pembelian
+              </label>
               <div className="w-full mt-2">
                 <input
                   disabled={type === "detail"}
@@ -136,12 +165,19 @@ const FormPaymentMethod: React.FC<IForm> = ({ handleShowForm, type, data }) => {
                   id="maxAmount"
                   autoComplete="off"
                   defaultValue={formatter(data.maxAmount)}
-                  className={`cursor-not-allowed bg-gray-100 border border-gray-200 focus:ring-2 focus:ring-gray-600 focus:outline-none rounded-md py-3 px-2 w-full`}
+                  className={
+                    "cursor-not-allowed bg-gray-100 border-none text-neutral-600 w-full py-3 px-4 rounded-md text-sm placeholder:text-sm overflow-hidden"
+                  }
                 />
               </div>
             </div>
             <div className="w-1/2">
-              <label htmlFor="fee">Fee</label>
+              <label
+                htmlFor="fee"
+                className="font-medium text-base text-neutral-900 inline-block"
+              >
+                Fee
+              </label>
               <div className="w-full mt-2">
                 <input
                   disabled={type === "detail"}
@@ -155,14 +191,21 @@ const FormPaymentMethod: React.FC<IForm> = ({ handleShowForm, type, data }) => {
                       ? formatter(data.fee)
                       : data.fee + " %"
                   }
-                  className={`cursor-not-allowed bg-gray-100 border border-gray-200 focus:ring-2 focus:ring-gray-600 focus:outline-none rounded-md py-3 px-2 w-full`}
+                  className={
+                    "cursor-not-allowed bg-gray-100 border-none text-neutral-600 w-full py-3 px-4 rounded-md text-sm placeholder:text-sm overflow-hidden"
+                  }
                 />
               </div>
             </div>
           </div>
-          <div className="mt-3 flex gap-3">
+          <div className="mt-4 flex gap-4">
             <div className="w-1/2">
-              <label htmlFor="category">Kategory</label>
+              <label
+                htmlFor="category"
+                className="font-medium text-base text-neutral-900 inline-block"
+              >
+                Kategori
+              </label>
               <div className="w-full mt-2">
                 <input
                   disabled={type === "detail"}
@@ -172,12 +215,19 @@ const FormPaymentMethod: React.FC<IForm> = ({ handleShowForm, type, data }) => {
                   id="category"
                   autoComplete="off"
                   defaultValue={categ}
-                  className={`cursor-not-allowed bg-gray-100 border border-gray-200 focus:ring-2 focus:ring-gray-600 focus:outline-none rounded-md py-3 px-2 w-full`}
+                  className={
+                    "cursor-not-allowed bg-gray-100 border-none text-neutral-600 w-full py-3 px-4 rounded-md text-sm placeholder:text-sm overflow-hidden"
+                  }
                 />
               </div>
             </div>
             <div className="w-1/2">
-              <label htmlFor="fee">Status</label>
+              <label
+                htmlFor="fee"
+                className="font-medium text-base text-neutral-900 inline-block"
+              >
+                Status
+              </label>
               <div className="w-full mt-2">
                 <input
                   disabled={type === "detail"}
@@ -187,13 +237,20 @@ const FormPaymentMethod: React.FC<IForm> = ({ handleShowForm, type, data }) => {
                   id="fee"
                   autoComplete="off"
                   defaultValue={data.isActive ? "Aktif" : "Tidak Aktif"}
-                  className={`cursor-not-allowed bg-gray-100 border border-gray-200 focus:ring-2 focus:ring-gray-600 focus:outline-none rounded-md py-3 px-2 w-full`}
+                  className={
+                    "cursor-not-allowed bg-gray-100 border-none text-neutral-600 w-full py-3 px-4 rounded-md text-sm placeholder:text-sm overflow-hidden"
+                  }
                 />
               </div>
             </div>
           </div>
-          <div className="w-full mt-3 gap-3">
-            <label htmlFor="duration">Durasi Kadaluarsa</label>
+          <div className="w-full mt-4 gap-4">
+            <label
+              htmlFor="duration"
+              className="font-medium text-base text-neutral-900 inline-block"
+            >
+              Durasi Kadaluarsa
+            </label>
             <div className="w-full mt-2">
               <input
                 disabled={type === "detail"}
@@ -203,7 +260,7 @@ const FormPaymentMethod: React.FC<IForm> = ({ handleShowForm, type, data }) => {
                 id="duration"
                 autoComplete="off"
                 defaultValue={data.durationExpired + " " + strTime}
-                className={`cursor-not-allowed bg-gray-100 border border-gray-200 focus:ring-2 focus:ring-gray-600 focus:outline-none rounded-md py-3 px-2 w-full`}
+                className="cursor-not-allowed bg-gray-100 border-none text-neutral-60 w-full py-3 px-4 rounded-md text-sm placeholder:text-sm overflow-hidden"
               />
             </div>
           </div>

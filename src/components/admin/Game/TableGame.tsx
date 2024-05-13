@@ -331,9 +331,7 @@ const TableGame: React.FC<{ game: IGamePagination }> = ({ game }) => {
         <Loading />
       ) : (
         <div className="w-full bg-white rounded-xl overflow-x-scroll md:overflow-x-auto overflow-y-hidden p-8">
-          <div className="mb-4 flex justify-between items-center">
-            <h1 className="font-medium text-2xl text-neutral-800">Game</h1>
-          </div>
+          <h1 className="font-medium text-2xl text-neutral-800 mb-4">Game</h1>
 
           <div className="flex gap-4 items-center justify-between flex-wrap">
             <div className="relative w-max border border-primary-900 bg-primary-50 rounded-md overflow-hidden flex items-center">
@@ -741,7 +739,7 @@ const TableGame: React.FC<{ game: IGamePagination }> = ({ game }) => {
                             className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-left"
                           >
                             <div
-                              className="flex gap-3 cursor-pointer items-center"
+                              className="flex gap-4 cursor-pointer items-center"
                               onClick={() =>
                                 setQuery((prev) => ({
                                   ...prev,

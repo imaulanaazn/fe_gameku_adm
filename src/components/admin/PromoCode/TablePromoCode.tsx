@@ -302,7 +302,23 @@ const TablePromoCode: React.FC<{ data: IPromotionPagination }> = ({ data }) => {
         <Loading />
       ) : (
         <div className="w-full bg-white rounded-xl overflow-x-scroll md:overflow-x-auto overflow-y-hidden p-8">
-          <h1 className="mb-4 font-medium text-2xl text-neutral-800">Banner</h1>
+          <div className="flex items-center justify-between mb-4">
+            <h1 className="font-medium text-2xl text-neutral-800">
+              Kode Promo
+            </h1>
+
+            <button
+              type="button"
+              onClick={() => {
+                setShowForm(!showForm);
+                setTypeForm("add");
+              }}
+              className="shrink-0 flex justify-between py-3 px-4 gap-5 items-center bg-primary-900 hover:bg-red-600 text-white rounded-md cursor-pointer"
+            >
+              <p>Kode Promo Baru</p>
+              <FontAwesomeIcon icon={faPlus} size="lg" />
+            </button>
+          </div>
 
           <div className="flex justify-between items-center w-full bg-white mb-4">
             <div className="flex gap-4 items-center">

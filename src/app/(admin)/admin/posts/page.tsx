@@ -1,9 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Header from "@/components/admin/Header";
-import TableYoutubeVideo from "@/components/admin/Youtube Video/TableYoutubeVideo";
-import { IImageCarouselPagination } from "@/interfaces/carousels";
 import { INewsVideosPagination } from "@/interfaces/newsVideo";
 import Loading from "./loading";
 import TablePosts from "@/app/(admin)/admin/posts/components/TablePosts";

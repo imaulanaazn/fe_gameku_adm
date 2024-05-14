@@ -1,7 +1,5 @@
 "use client";
 
-import TableDenom from "@/components/admin/Denom/TableDenom";
-import Header from "@/components/admin/Header";
 import { useEffect, useState } from "react";
 import Loading from "./loading";
 import TableCategoryProduct from "@/app/(admin)/admin/product-category/components/TableCategoryProduct";

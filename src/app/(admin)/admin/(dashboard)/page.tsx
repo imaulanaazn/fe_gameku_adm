@@ -315,12 +315,16 @@ const Admin = () => {
               }),
               control: (provided, state) => ({
                 ...provided,
+                boxShadow: state.isFocused ? "0" : "0",
                 paddingTop: "2px",
                 paddingBottom: "2px",
                 cursor: "pointer",
                 color: "#b72025",
                 borderColor: "#b72025",
-                "&:hover": { borderColor: "#b72025" },
+                "&:hover": {
+                  borderColor: "#b72025",
+                  border: state.isFocused ? 0 : 0,
+                },
                 borderRadius: "0.4rem",
                 backgroundColor: "#fff3f3",
               }),
@@ -331,6 +335,7 @@ const Admin = () => {
               }),
               option: (provided, state) => ({
                 ...provided,
+                zIndex: 100,
                 backgroundColor: state.isSelected ? "#b72025" : "white",
                 color: state.isSelected ? "white" : "#333",
                 cursor: "pointer",
@@ -353,8 +358,8 @@ const Admin = () => {
 
       {loading && <Loading />}
       {!loading && (
-        <div className="stats-wrapper px-8">
-          <div className="w-full mx-auto flex space-x-3 -mt-10">
+        <div className="stats-wrapper px-8 -mt-10">
+          <div className="w-full mx-auto flex space-x-3">
             <Swiper
               spaceBetween={28}
               slidesPerView={1}

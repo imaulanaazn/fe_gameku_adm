@@ -196,9 +196,9 @@ const FormAddBanner: React.FC<IFormAddBanner> = ({
       onDragOver={(e) => e.preventDefault()}
       className="w-full h-screen bg-gray-800 bg-opacity-70 absolute top-0 left-0 flex items-center justify-center z-50"
     >
-      <div className="md:w-max md:max-h-screen w-full bg-white p-8 rounded-xl">
-        <div className="flex justify-between mb-8 items-center">
-          <h1 className="text-xl font-medium text-2xl text-neutral-800">
+      <div className="md:w-max h-screen lg:h-auto md:max-h-screen w-full bg-white p-8  lg:rounded-xl">
+        <div className="flex justify-between mb-6 lg:mb-8 items-center">
+          <h1 className="font-medium text-xl md:text-2xl text-neutral-800">
             {typeForm === "add"
               ? "Tambah Banner Baru"
               : typeForm === "edit"

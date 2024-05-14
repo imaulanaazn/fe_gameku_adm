@@ -301,10 +301,12 @@ const TablePromoCode: React.FC<{ data: IPromotionPagination }> = ({ data }) => {
       {loading ? (
         <Loading />
       ) : (
-        <div className="w-full bg-white rounded-xl overflow-x-scroll md:overflow-x-auto overflow-y-hidden p-8">
-          <h1 className="mb-4 font-medium text-2xl text-neutral-800">Banner</h1>
+        <div className="w-full bg-white rounded-xl overflow-x-scroll md:overflow-x-auto overflow-y-hidden p-6 lg:p-8">
+          <h1 className="mb-4 font-medium text-xl md:text-2xl text-neutral-800">
+            Banner
+          </h1>
 
-          <div className="flex justify-between items-center w-full bg-white mb-4">
+          <div className="flex flex-col xl:flex-row justify-between xl:items-center gap-4 w-full bg-white mb-4">
             <div className="flex gap-4 items-center">
               <div className="relative w-full border border-primary-900 bg-primary-50 rounded-md overflow-hidden flex items-center">
                 <input
@@ -360,6 +362,7 @@ const TablePromoCode: React.FC<{ data: IPromotionPagination }> = ({ data }) => {
                     "&:hover": { borderColor: "#b72025" },
                     borderRadius: "0.4rem",
                     backgroundColor: "#fff3f3",
+                    minWidth: "10rem",
                   }),
                   singleValue: (provided, state) => ({
                     ...provided,

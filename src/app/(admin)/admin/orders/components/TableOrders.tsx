@@ -16,8 +16,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import Loading from "@/app/(admin)/admin/game/loading";
 import { orderHistoryState } from "@/atom/orderHistory";
-import DisplayTotal from "../../../app/(admin)/admin/(dashboard)/components/DisplayTotal";
-import Pagination from "../Pagination";
+import Pagination from "@/components/admin/Pagination";
 import formatter from "@/lib/formatter";
 import StatusesOrder from "@/components/global/StatusesOrder";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -522,9 +521,13 @@ const TableOrders: React.FC<{
           <Loading />
         ) : (
           <div className="w-full bg-white rounded-xl overflow-y-hidden p-8 mt-8">
-            <div className={`bg-white flex justify-between items-center mb-4`}>
+            <div
+              className={`bg-white flex justify-between items-center mb-4 flex-wrap gap-2`}
+            >
               <div className="flex items-center gap-4">
-                <p className="text-xl font-semibold">Pesanan</p>
+                <h1 className="font-medium text-xl md:text-2xl text-neutral-800">
+                  Pesanan
+                </h1>
                 <div onClick={() => getNewData()} className="cursor-pointer">
                   <FontAwesomeIcon
                     icon={faArrowRotateRight}
@@ -586,9 +589,9 @@ const TableOrders: React.FC<{
               </div>
             </div>
 
-            <div className="flex justify-between">
+            <div className="flex justify-between flex-wrap gap-4">
               <div className="flex gap-4 items-center justify-between flex-wrap">
-                <div className="w-full flex gap-4 items-center">
+                <div className="w-full flex gap-4 items-center flex-wrap">
                   <div className="relative w-max border border-primary-900 bg-primary-50 rounded-md overflow-hidden flex items-center">
                     <input
                       placeholder={`Cari berdasarkan ${selectedOptionSearchBy.label}`}
@@ -664,7 +667,7 @@ const TableOrders: React.FC<{
                 </div>
               </div>
 
-              <div className="flex gap-4 ">
+              <div className="flex gap-4 flex-wrap">
                 <Select
                   id="filterDate"
                   value={selectedOptionDate}
@@ -842,9 +845,9 @@ const TableOrders: React.FC<{
             <div className="flex flex-col mt-8">
               <div className="overflow-x-auto">
                 <div className="w-full inline-block align-middle">
-                  <div className="overflow-hidden">
+                  <div className="overflow-x-auto">
                     <table className="min-w-full divide-y divide-gray-200">
-                      <thead className="bg-slate-100">
+                      <thead className="p-4 bg-slate-100">
                         <tr>
                           {column.map((item) => (
                             <th

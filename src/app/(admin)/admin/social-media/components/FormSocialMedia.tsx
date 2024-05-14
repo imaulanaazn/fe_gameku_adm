@@ -126,7 +126,7 @@ const FormSocialMedia: React.FC<IForm> = ({
 
   return (
     <div className="w-full h-screen bg-gray-800 bg-opacity-70 absolute top-0 left-0 flex items-center justify-center z-50 py-8">
-      <div className="md:w-2/5 md:max-h-full w-full bg-white p-8 rounded-xl overflow-y-auto relative">
+      <div className="md:w-3/4 lg:w-2/5 h-screen md:h-max md:max-h-full w-full bg-white p-6 lg:p-8 md:rounded-xl overflow-y-auto relative">
         <div className="flex justify-between border-b-2 py-2 border-gray-200 items-center">
           <h1 className="text-xl">
             {typeForm === "add"
@@ -146,8 +146,8 @@ const FormSocialMedia: React.FC<IForm> = ({
           </div>
         </div>
         <form onSubmit={handleCreateData}>
-          <div className="flex gap-4 py-3">
-            <div className="flex flex-col gap-2 w-1/2">
+          <div className="flex flex-col lg:flex-row gap-4 py-3">
+            <div className="flex flex-col gap-2 w-full lg:w-1/2">
               <label
                 htmlFor="image"
                 className="font-medium text-base text-neutral-900 inline-block"
@@ -187,7 +187,7 @@ const FormSocialMedia: React.FC<IForm> = ({
                   ))}
               </div>
             </div>
-            <div className="w-1/2">
+            <div className="w-full lg:w-1/2">
               <div>
                 <label
                   htmlFor="name"

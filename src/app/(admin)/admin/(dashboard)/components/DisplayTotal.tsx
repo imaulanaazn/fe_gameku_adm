@@ -59,7 +59,7 @@ const DisplayTotal: React.FC<{
 
   return (
     <div
-      className={`p-5 rounded-lg shadow-sm w-full h-full transition ease-in-out flex item-center justify-center ${
+      className={`py-4 px-5 md:p-5 rounded-lg shadow-sm w-full h-full transition ease-in-out flex item-center justify-center ${
         classes ? classes : "bg-white"
       }`}
     >
@@ -70,10 +70,10 @@ const DisplayTotal: React.FC<{
           <FontAwesomeIcon icon={icon} size="xl" />
         </div>
         <div>
-          <p className="text-gray-500 mb-2">
+          <p className="text-gray-500 mb-2 text-base md:text-sm">
             {title} {day && day}
           </p>
-          <p className="text-2xl font-semibold">
+          <p className="text-2xl font-medium">
             {isCurrency ? formatter(total) : total}
           </p>
           {countPercent && (

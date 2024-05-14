@@ -21,7 +21,11 @@ import { io } from "socket.io-client";
 import AdminNavbar from "@/app/(admin)/admin/(dashboard)/components/AdminNavbar";
 import { Swiper, SwiperSlide } from "swiper/react";
 import DatePicker from "react-datepicker";
-import { carouselBreakpoints, optionsStatsDate } from "./utils";
+import {
+  carouselBreakpoints,
+  initialStatusCounts,
+  optionsStatsDate,
+} from "./utils";
 import Select from "react-select";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -31,12 +35,6 @@ import { GestureSwipeHorizontal } from "mdi-material-ui";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { toast } from "react-toastify";
 import AdminHeader from "@/components/admin/AdminHeader";
-
-interface ApiResponse {
-  startAt: string;
-  endAt: string;
-  data: AnalyticsData;
-}
 
 interface AnalyticsData {
   statusCount: StatusCounts;
@@ -73,29 +71,6 @@ interface PopularGame {
   game: string;
   total: number;
 }
-
-const initialStatusCounts = {
-  pending: {
-    total: 0,
-    totalBefore: 0,
-    percentageChange: 0,
-  },
-  success: {
-    total: 0,
-    totalBefore: 0,
-    percentageChange: 0,
-  },
-  failed: {
-    total: 0,
-    totalBefore: 0,
-    percentageChange: 0,
-  },
-  expired: {
-    total: 0,
-    totalBefore: 0,
-    percentageChange: 0,
-  },
-};
 
 interface IOptionStatsDate {
   label: string;
@@ -307,6 +282,7 @@ const Admin = () => {
               placeholder: (base) => ({
                 ...base,
                 color: "#b72025",
+                fontWeight: 500,
               }),
               dropdownIndicator: (base) => ({
                 ...base,
@@ -358,8 +334,8 @@ const Admin = () => {
 
       {loading && <Loading />}
       {!loading && (
-        <div className="stats-wrapper px-8 -mt-10">
-          <div className="w-full mx-auto flex space-x-3">
+        <div className="stats-wrapper px-6 md:px-8 lg:-translate-y-10">
+          <div className="w-full mx-auto flex space-x-3 mt-6 lg:mt-0">
             <Swiper
               spaceBetween={28}
               slidesPerView={1}
@@ -469,9 +445,9 @@ const Admin = () => {
               </SwiperSlide>
             </Swiper>
           </div>
-          <div className="w-full flex space-x-8 mt-8">
+          <div className="w-full flex flex-col lg:flex-row gap-6 lg:gap-8 mt-6 lg:mt-8">
             {diagramData.length > 0 && (
-              <div className="w-1/2 p-5 bg-white rounded-xl shadow-sm">
+              <div className="w-full lg:w-1/2 p-5 bg-white rounded-xl shadow-sm">
                 <ChartOrderHistory
                   data={diagramData}
                   day={
@@ -482,7 +458,7 @@ const Admin = () => {
                 />
               </div>
             )}
-            <div className="w-1/2 p-5 bg-white rounded-xl shadow-sm">
+            <div className="w-full lg:w-1/2 p-5 bg-white rounded-xl">
               {popularGame.length > 0 && (
                 <ChartPopulargame
                   data={popularGame}

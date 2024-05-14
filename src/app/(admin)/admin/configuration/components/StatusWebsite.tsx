@@ -107,7 +107,7 @@ const StatusWebsite = () => {
   }, []);
   return (
     <div>
-      <h1 className="font-medium text-2xl text-neutral-800 w-full mb-4">
+      <h1 className="mb-4 font-medium text-xl md:text-2xl text-neutral-800">
         Status Website
       </h1>
       <div className="flex flex-col space-y-2">

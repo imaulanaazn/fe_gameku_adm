@@ -18,10 +18,10 @@ import {
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import Loading from "@/app/(admin)/admin/game/loading";
-import ConfirmDelete from "../ConfirmDelete";
+import ConfirmDelete from "@/components/admin/ConfirmDelete";
 import { selectedAdminState } from "@/atom/selectedAdminState";
 import { showDeleteState } from "@/atom/showDeleteState";
-import Pagination from "../Pagination";
+import Pagination from "@/components/admin/Pagination";
 import { toast } from "react-toastify";
 import { Tooltip as ReactTooltip } from "react-tooltip";
 import FormGame from "./FormGame";
@@ -330,11 +330,13 @@ const TableGame: React.FC<{ game: IGamePagination }> = ({ game }) => {
       {loading ? (
         <Loading />
       ) : (
-        <div className="w-full bg-white rounded-xl overflow-x-scroll md:overflow-x-auto overflow-y-hidden p-8">
-          <h1 className="font-medium text-2xl text-neutral-800 mb-4">Game</h1>
+        <div className="w-full bg-white rounded-xl p-6 lg:p-8">
+          <h1 className="font-medium text-xl md:text-2xl text-neutral-800 mb-4">
+            Game
+          </h1>
 
           <div className="flex gap-4 items-center justify-between flex-wrap">
-            <div className="relative w-max border border-primary-900 bg-primary-50 rounded-md overflow-hidden flex items-center">
+            <div className="relative w-full md:w-max border border-primary-900 bg-primary-50 rounded-md overflow-hidden flex items-center">
               <input
                 placeholder={`Cari berdasarkan Nama`}
                 value={inputSearch}
@@ -354,9 +356,9 @@ const TableGame: React.FC<{ game: IGamePagination }> = ({ game }) => {
               </button>
             </div>
 
-            <div className="filter flex gap-4">
+            <div className="filter flex gap-4 w-full xl:w-max flex-wrap">
               {optionCategory && (
-                <div>
+                <div className="shrink-0">
                   <Select
                     id="filterCategory"
                     value={selectedFilterCategory}
@@ -425,7 +427,7 @@ const TableGame: React.FC<{ game: IGamePagination }> = ({ game }) => {
                 </div>
               )}
               {optionType && (
-                <div>
+                <div className="shrink-0">
                   <Select
                     id="filterType"
                     value={selectedFilterType}
@@ -494,7 +496,7 @@ const TableGame: React.FC<{ game: IGamePagination }> = ({ game }) => {
                 </div>
               )}
               {optionPopuler && (
-                <div>
+                <div className="shrink-0">
                   <Select
                     id="filterPopular"
                     value={selectedFilterPopular}
@@ -563,7 +565,7 @@ const TableGame: React.FC<{ game: IGamePagination }> = ({ game }) => {
                 </div>
               )}
               {optionLimit && (
-                <div>
+                <div className="shrink-0">
                   <Select
                     id="filterLimit"
                     value={selectedFilterLimit}
@@ -703,9 +705,9 @@ const TableGame: React.FC<{ game: IGamePagination }> = ({ game }) => {
           <div className="flex flex-col mt-8">
             <div className="overflow-x-auto">
               <div className="w-full inline-block align-middle">
-                <div className="overflow-hidden">
+                <div className="overflow-x-auto">
                   <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
+                    <thead className="p-4 bg-slate-100">
                       <tr>
                         <th scope="col" className="py-3 pl-4">
                           <div className="flex items-center h-5 relative">
@@ -835,7 +837,7 @@ const TableGame: React.FC<{ game: IGamePagination }> = ({ game }) => {
                             {game.slug}
                           </td>
                           <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
-                            <div className="flex justify-end w-full">
+                            <div className="flex justify-start w-full">
                               <div
                                 onClick={(e) => {
                                   e.stopPropagation();

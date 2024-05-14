@@ -243,9 +243,9 @@ const TableSocialMedia: React.FC<{ data: ISocialMediaPagination }> = ({
       {loading ? (
         <Loading />
       ) : (
-        <div className="w-full bg-white rounded-xl overflow-x-scroll md:overflow-x-auto overflow-y-hidden p-8">
+        <div className="w-full bg-white rounded-xl p-6 lg:p-8">
           <div className="flex items-center justify-between">
-            <h1 className="font-medium text-2xl text-neutral-800 mb-4">
+            <h1 className="font-medium text-xl md:text-2xl text-neutral-800">
               Social Media
             </h1>
             <button
@@ -378,9 +378,9 @@ const TableSocialMedia: React.FC<{ data: ISocialMediaPagination }> = ({
           <div className="flex flex-col mt-8">
             <div className="overflow-x-auto">
               <div className="w-full inline-block align-middle">
-                <div className="overflow-hidden">
+                <div className="overflow-x-auto">
                   <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
+                    <thead className="p-4 bg-slate-100">
                       <tr>
                         <th scope="col" className="py-3 pl-4">
                           <div className="flex items-center h-5 relative">
@@ -477,7 +477,7 @@ const TableSocialMedia: React.FC<{ data: ISocialMediaPagination }> = ({
                           <td className="px-4 py-4 font-medium text-gray-800 text-sm whitespace-nowrap">
                             {data.name}
                           </td>
-                          <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
+                          <td className="px-4 py-4 text-sm text-gray-500">
                             <div className="h-10 aspect-video flex items-center w-full">
                               <ButtonSocialMedia
                                 icon={svgBrandsIcon[data.icon]}

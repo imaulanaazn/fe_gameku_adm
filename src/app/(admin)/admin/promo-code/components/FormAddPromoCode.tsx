@@ -287,9 +287,9 @@ const FormAddPromoCode: React.FC<IForm> = ({
 
   return (
     <div className="w-full h-screen bg-gray-800 bg-opacity-70 absolute top-0 left-0 flex items-center justify-center z-50 py-10">
-      <div className="md:w-2/5 md:max-h-full w-full bg-white p-8 rounded-xl overflow-y-auto overflow-x-hidden relative">
+      <div className="xl:w-2/5 lg:w-1/2 md:w-3/4 h-screen md:h-auto md:max-h-full w-full bg-white p-6 lg:p-8 md:rounded-xl overflow-y-auto overflow-x-hidden relative">
         <div className="flex justify-between items-center">
-          <h1 className="text-xl font-medium text-2xl text-neutral-800">
+          <h1 className="font-medium text-xl md:text-2xl text-neutral-800">
             {typeForm === "add"
               ? "Tambah Kode Promo Baru"
               : typeForm === "edit"

@@ -3,10 +3,10 @@ export const carouselBreakpoints = {
     slidesPerView: 1,
   },
   640: {
-    slidesPerView: 1.2,
+    slidesPerView: 1.25,
   },
   768: {
-    slidesPerView: 1.2,
+    slidesPerView: 1.5,
   },
   1024: {
     slidesPerView: 2.25,
@@ -27,3 +27,26 @@ export const optionsStatsDate = [
   { value: "lastMonth", label: "Bulan Lalu" },
   { value: "last30days", label: "Sebulan Terakhir" },
 ];
+
+export const initialStatusCounts = {
+  pending: {
+    total: 0,
+    totalBefore: 0,
+    percentageChange: 0,
+  },
+  success: {
+    total: 0,
+    totalBefore: 0,
+    percentageChange: 0,
+  },
+  failed: {
+    total: 0,
+    totalBefore: 0,
+    percentageChange: 0,
+  },
+  expired: {
+    total: 0,
+    totalBefore: 0,
+    percentageChange: 0,
+  },
+};

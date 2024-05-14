@@ -213,8 +213,8 @@ const FormOrders: React.FC<IForm> = ({
   };
 
   return (
-    <div className="w-full h-screen bg-gray-800 bg-opacity-70 absolute top-0 left-0 flex items-center justify-center z-50 py-8">
-      <div className="md:w-2/5 w-full max-h-full bg-white shadow p-8 rounded-xl overflow-y-auto relative">
+    <div className="w-full h-screen bg-gray-800 bg-opacity-70 absolute top-0 left-0 flex items-center justify-center z-50 md:py-8">
+      <div className="md:w-3/4 lg:w-2/5 w-full h-screen md:h-max max-h-full bg-white shadow p-6 lg:p-8 md:rounded-xl overflow-y-auto relative">
         <div className="flex justify-between border-b-2 pb-4 border-gray-200 items-center">
           <h1 className="text-xl font-medium text-2xl text-neutral-800">
             Detail Order

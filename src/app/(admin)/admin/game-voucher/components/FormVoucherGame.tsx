@@ -207,8 +207,8 @@ const FormVoucherGame: React.FC<IFormAdmin> = ({
   }, [product]);
 
   return (
-    <div className="w-full h-screen bg-gray-800 bg-opacity-30 absolute top-0 left-0 flex items-center justify-center z-50 py-10">
-      <div className="md:w-2/5 md:max-h-full w-full bg-white p-8 rounded-xl overflow-y-auto relative">
+    <div className="w-full h-screen bg-gray-800 bg-opacity-30 absolute top-0 left-0 flex items-center justify-center z-50">
+      <div className="md:w-2/5 h-screen md:max-h-full w-full bg-white p-6 lg:p-8 md:rounded-xl overflow-y-auto relative">
         <div className="flex justify-between border-b-2 pb-4 border-gray-200 items-center">
           <h1 className="text-xl font-medium text-2xl text-neutral-800">
             {typeForm === "add"
@@ -228,8 +228,8 @@ const FormVoucherGame: React.FC<IFormAdmin> = ({
           </div>
         </div>
         <form onSubmit={handleCreatePromoCode}>
-          <div className="flex gap-4 py-3">
-            <div className="flex flex-col gap-2 w-1/2">
+          <div className="flex flex-col lg:flex-row gap-4 py-3">
+            <div className="flex flex-col gap-2 w-full lg:w-1/2">
               <label
                 htmlFor="code"
                 className="font-medium text-base text-neutral-900 inline-block"
@@ -279,7 +279,7 @@ const FormVoucherGame: React.FC<IFormAdmin> = ({
                 </div>
               )}
             </div>
-            <div className="w-1/2">
+            <div className="w-full lg:w-1/2">
               <div>
                 <label
                   htmlFor="game"

@@ -67,7 +67,7 @@ const FormPaymentMethod: React.FC<IForm> = ({ handleShowForm, type, data }) => {
 
   return (
     <div className="w-full h-screen bg-gray-800 bg-opacity-70 absolute top-0 left-0 flex items-center justify-center z-50 py-8">
-      <div className="md:w-2/5 md:max-h-full w-full bg-white p-8 rounded-xl overflow-y-auto relative">
+      <div className="md:w-3/4 lg:w-2/5 md:max-h-full w-full bg-white p-8 rounded-xl overflow-y-auto relative">
         <div className="flex justify-between border-b-2 pb-4 border-gray-200 items-center">
           <h1 className="text-xl font-medium text-2xl text-neutral-800">
             Detail {data?.name}

@@ -164,7 +164,7 @@ const TemplateMessage = () => {
       {preview && (
         <div className="fixed top-0 left-0 right-0 h-screen bg-black bg-opacity-60 flex items-center justify-center z-50">
           <div className="p-6 bg-white rounded-xl w-2/3">
-            <h1 className="font-medium text-2xl text-neutral-800 w-full mb-4">
+            <h1 className="mb-4 font-medium text-xl md:text-2xl text-neutral-800">
               Template Pesan
             </h1>
             <div className="w-full mt-5 flex space-x-3">
@@ -237,15 +237,15 @@ const TemplateMessage = () => {
           </div>
         </div>
       )}
-      <div className="mt-8">
-        <h1 className="font-medium text-2xl text-neutral-800 w-full mb-4">
+      <div className="mt-6 lg:mt-8">
+        <h1 className="mb-4 font-medium text-xl md:text-2xl text-neutral-800">
           Template Pesan Whatsapp
         </h1>
-        <div className="grid grid-cols-3 grid-rows-auto w-full gap-8 flex-wrap">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 grid-rows-auto w-full gap-6 lg:gap-8 flex-wrap">
           {listTemplate.map((data, index) => (
             <div
               key={data.id}
-              className="w-full h-full flex flex-col gap-4 justify-between select-none rounded-xl shadow-md p-6"
+              className="w-full h-full flex flex-col gap-4 justify-between select-none rounded-xl shadow-md p-4 lg:p-6"
             >
               <div>
                 <h2 className="text-lg font-medium mb-2 truncate text-neutral-700">

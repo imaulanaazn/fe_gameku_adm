@@ -150,8 +150,8 @@ const BackgroungImages = () => {
 
   return (
     <>
-      <div className="flex justify-between items-end mb-4">
-        <h1 className="font-medium text-2xl text-neutral-800 w-full">
+      <div className="flex justify-between flex-wrap items-end mb-4 mt-6 lg:mt-0">
+        <h1 className="mb-4 font-medium text-xl md:text-2xl text-neutral-800">
           Background Image
         </h1>
         <div className="bg-gray-100 flex items-center justify-center w-max">

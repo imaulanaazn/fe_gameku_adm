@@ -14,10 +14,10 @@ import {
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import Loading from "@/app/(admin)/admin/game/loading";
-import ConfirmDelete from "../ConfirmDelete";
+import ConfirmDelete from "@/components/admin/ConfirmDelete";
 import { selectedAdminState } from "@/atom/selectedAdminState";
 import { showDeleteState } from "@/atom/showDeleteState";
-import Pagination from "../Pagination";
+import Pagination from "@/components/admin/Pagination";
 import { Tooltip as ReactTooltip } from "react-tooltip";
 import { voucherAdminState } from "@/atom/voucherAdminState";
 import FormVoucherGame from "./FormVoucherGame";
@@ -331,9 +331,61 @@ const TableVoucherGame: React.FC<{ data: IVoucherGamePagination }> = ({
       {loading ? (
         <Loading />
       ) : (
-        <div className="w-full bg-white rounded-xl overflow-x-scroll md:overflow-x-auto overflow-y-hidden p-8">
-          <div className="w-full flex justify-between">
-            <div className="relative w-max border border-primary-900 bg-primary-50 rounded-md overflow-hidden flex items-center">
+        <div className="w-full bg-white rounded-xl p-6 lg:p-8">
+          <div
+            className={`${selected.length > 0 ? "bg-green-200" : "bg-white"}`}
+          >
+            {selected.length === 0 && (
+              <div className="flex items-center justify-between">
+                <p className="text-xl font-semibold">Voucher</p>
+                <div className="flex gap-2">
+                  <div
+                    onClick={() => {
+                      setShowForm(!showForm);
+                      setTypeForm("add");
+                    }}
+                    className="shrink-0 flex justify-between py-3 px-4 gap-5 items-center bg-primary-900 hover:bg-red-600 text-white rounded-md cursor-pointer"
+                  >
+                    <p>Voucher Baru</p>
+                    <FontAwesomeIcon icon={faPlus} size="lg" />
+                  </div>
+                </div>
+              </div>
+            )}
+            {selected.length > 0 && (
+              <div className="flex items-center justify-between">
+                <p className="text-xl font-semibold text-green-600">
+                  {selected.length} Selected
+                </p>
+                <div>
+                  <div className="relative">
+                    <div
+                      onClick={() => setShowDelete(true)}
+                      className="bg-red-800 hover:bg-red-600 w-10 h-10 rounded-full cursor-pointer grid place-content-center"
+                      data-tooltip-id="tooltip-delete"
+                      data-tooltip-content="Hapus"
+                    >
+                      <FontAwesomeIcon
+                        icon={faTrash}
+                        size="xl"
+                        className="text-white"
+                      />
+                    </div>
+                    <ReactTooltip
+                      id="tooltip-delete"
+                      style={{
+                        fontSize: "12px",
+                        padding: "10px",
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="w-full flex flex-col xl:flex-row justify-between mt-4 gap-4">
+            <div className="relative w-full lg:w-max border border-primary-900 bg-primary-50 rounded-md overflow-hidden flex items-center">
               <input
                 placeholder={`Cari Voucher`}
                 value={inputSearch}
@@ -352,7 +404,8 @@ const TableVoucherGame: React.FC<{ data: IVoucherGamePagination }> = ({
                 />
               </button>
             </div>
-            <div className="flex gap-4 items-center">
+
+            <div className="flex gap-4 items-center flex-wrap">
               {optionsFilterStatus && (
                 <div>
                   <Select
@@ -614,205 +667,151 @@ const TableVoucherGame: React.FC<{ data: IVoucherGamePagination }> = ({
               </button>
             </div>
           </div>
-          <div
-            className={`p-5 ${
-              selected.length > 0 ? "bg-green-200" : "bg-white"
-            }`}
-          >
-            {selected.length === 0 && (
-              <div className="flex items-center justify-between">
-                <p className="text-xl font-semibold">Voucher</p>
-                <div className="flex gap-2">
-                  <div
-                    onClick={() => {
-                      setShowForm(!showForm);
-                      setTypeForm("add");
-                    }}
-                    className="shrink-0 flex justify-between py-3 px-4 gap-5 items-center bg-primary-900 hover:bg-red-600 text-white rounded-md cursor-pointer"
-                  >
-                    <p>Voucher Baru</p>
-                    <FontAwesomeIcon icon={faPlus} size="lg" />
-                  </div>
-                </div>
-              </div>
-            )}
-            {selected.length > 0 && (
-              <div className="flex items-center justify-between">
-                <p className="text-xl font-semibold text-green-600">
-                  {selected.length} Selected
-                </p>
-                <div>
-                  <div className="relative">
-                    <div
-                      onClick={() => setShowDelete(true)}
-                      className="bg-red-800 hover:bg-red-600 w-10 h-10 rounded-full cursor-pointer grid place-content-center"
-                      data-tooltip-id="tooltip-delete"
-                      data-tooltip-content="Hapus"
-                    >
-                      <FontAwesomeIcon
-                        icon={faTrash}
-                        size="xl"
-                        className="text-white"
-                      />
-                    </div>
-                    <ReactTooltip
-                      id="tooltip-delete"
-                      style={{
-                        fontSize: "12px",
-                        padding: "10px",
-                      }}
-                    />
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-          <div className="flex flex-col">
-            <div className="overflow-x-auto">
-              <div className="w-full inline-block align-middle">
-                <div className="overflow-hidden px-5">
-                  <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
-                      <tr>
-                        <th scope="col" className="py-3 pl-4">
-                          <div className="flex items-center h-5 relative">
+
+          <div className="flex flex-col mt-8">
+            <div className="w-full inline-block align-middle">
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="p-4 bg-slate-100">
+                    <tr>
+                      <th scope="col" className="py-3 pl-4">
+                        <div className="flex items-center h-5 relative">
+                          <input
+                            type="checkbox"
+                            name="selectAll"
+                            id="selectAll"
+                            checked={selectAll}
+                            onChange={handleSelectAll}
+                            className={`h-4 w-4 absolute cursor-pointer ${
+                              !selectAll &&
+                              selected.length > 0 &&
+                              "appearance-none"
+                            }`}
+                          />
+                          {!selectAll && selected.length > 0 && (
+                            <div className="h-4 w-4 bg-gray-400 flex items-center justify-center">
+                              <div className="w-2 h-1 bg-gray-200"></div>
+                            </div>
+                          )}
+
+                          <label htmlFor="checkbox" className="sr-only">
+                            Checkbox
+                          </label>
+                        </div>
+                      </th>
+                      {tableVG.map((item) => (
+                        <th
+                          key={item.id}
+                          scope="col"
+                          className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase "
+                        >
+                          <div
+                            className="flex gap-3 cursor-pointer items-center"
+                            onClick={() =>
+                              setQuery((prev) => ({
+                                ...prev,
+                                sort: item.id,
+                                order:
+                                  query.sort === item.id &&
+                                  query.order === "ASC"
+                                    ? "DESC"
+                                    : "ASC",
+                              }))
+                            }
+                          >
+                            <p>{item.name}</p>
+                            {query.sort === item.id && (
+                              <FontAwesomeIcon
+                                icon={
+                                  query.order === "ASC"
+                                    ? faArrowUp
+                                    : faArrowDown
+                                }
+                              />
+                            )}
+                          </div>
+                        </th>
+                      ))}
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-xs font-bold text-right text-gray-500 uppercase "
+                      >
+                        Aksi
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200">
+                    {newData.data.map((data) => (
+                      <tr
+                        key={data.id}
+                        onClick={() => handleRowSelect(data.id)}
+                        className={`${
+                          selected.includes(data.id)
+                            ? "bg-gray-200"
+                            : "bg-white hover:bg-gray-100"
+                        }`}
+                      >
+                        <td className="py-3 pl-4">
+                          <div className="flex items-center h-5">
                             <input
                               type="checkbox"
-                              name="selectAll"
-                              id="selectAll"
-                              checked={selectAll}
-                              onChange={handleSelectAll}
-                              className={`h-4 w-4 absolute cursor-pointer ${
-                                !selectAll &&
-                                selected.length > 0 &&
-                                "appearance-none"
-                              }`}
+                              name={data.id}
+                              id={data.id}
+                              checked={selected.includes(data.id)}
+                              onChange={() => handleRowSelect(data.id)}
+                              className="h-4 w-4 cursor-pointer"
                             />
-                            {!selectAll && selected.length > 0 && (
-                              <div className="h-4 w-4 bg-gray-400 flex items-center justify-center">
-                                <div className="w-2 h-1 bg-gray-200"></div>
-                              </div>
-                            )}
-
                             <label htmlFor="checkbox" className="sr-only">
                               Checkbox
                             </label>
                           </div>
-                        </th>
-                        {tableVG.map((item) => (
-                          <th
-                            key={item.id}
-                            scope="col"
-                            className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase "
-                          >
-                            <div
-                              className="flex gap-3 cursor-pointer items-center"
-                              onClick={() =>
-                                setQuery((prev) => ({
-                                  ...prev,
-                                  sort: item.id,
-                                  order:
-                                    query.sort === item.id &&
-                                    query.order === "ASC"
-                                      ? "DESC"
-                                      : "ASC",
-                                }))
-                              }
-                            >
-                              <p>{item.name}</p>
-                              {query.sort === item.id && (
-                                <FontAwesomeIcon
-                                  icon={
-                                    query.order === "ASC"
-                                      ? faArrowUp
-                                      : faArrowDown
-                                  }
-                                />
-                              )}
-                            </div>
-                          </th>
-                        ))}
-                        <th
-                          scope="col"
-                          className="px-6 py-3 text-xs font-bold text-right text-gray-500 uppercase "
-                        >
-                          Aksi
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-200">
-                      {newData.data.map((data) => (
-                        <tr
-                          key={data.id}
-                          onClick={() => handleRowSelect(data.id)}
-                          className={`${
-                            selected.includes(data.id)
-                              ? "bg-gray-200"
-                              : "bg-white hover:bg-gray-100"
-                          }`}
-                        >
-                          <td className="py-3 pl-4">
-                            <div className="flex items-center h-5">
-                              <input
-                                type="checkbox"
-                                name={data.id}
-                                id={data.id}
-                                checked={selected.includes(data.id)}
-                                onChange={() => handleRowSelect(data.id)}
-                                className="h-4 w-4 cursor-pointer"
+                        </td>
+                        <td className="px-6 py-4 text-sm font-medium text-gray-800">
+                          <div className="flex gap-3 items-center">
+                            <div className="h-10 aspect-square flex items-center">
+                              <Image
+                                src={data.game?.logoUrl || ""}
+                                alt={`Voucher ${data.game?.name}`}
+                                width="0"
+                                height="0"
+                                sizes="100vw"
+                                style={{ width: "100%", height: "100%" }}
+                                className="rounded-lg object-cover"
                               />
-                              <label htmlFor="checkbox" className="sr-only">
-                                Checkbox
-                              </label>
                             </div>
-                          </td>
-                          <td className="px-6 py-4 text-sm font-medium text-gray-800">
-                            <div className="flex gap-3 items-center">
-                              <div className="h-10 aspect-square flex items-center">
-                                <Image
-                                  src={data.game?.logoUrl || ""}
-                                  alt={`Voucher ${data.game?.name}`}
-                                  width="0"
-                                  height="0"
-                                  sizes="100vw"
-                                  style={{ width: "100%", height: "100%" }}
-                                  className="rounded-lg object-cover"
-                                />
-                              </div>
-                              <div>
-                                <p className="font-bold text-base">
-                                  {data.game?.name}
-                                </p>
-                                <p>{data.product?.name}</p>
-                              </div>
+                            <div>
+                              <p className="font-bold text-base">
+                                {data.game?.name}
+                              </p>
+                              <p>{data.product?.name}</p>
                             </div>
-                          </td>
-                          <td className="px-6 py-4 text-sm text-gray-800">
-                            {data.code}
-                          </td>
-                          <td className="px-6 py-4 text-sm text-gray-800">
-                            {data.used ? "Digunakan" : "Belum digunakan"}
-                          </td>
-                          <td className="px-6 py-4 text-sm font-medium text-right">
-                            <div className="flex justify-end w-full">
-                              <div
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setShowForm(true);
-                                  setTypeForm("detail");
-                                  setDetailData(data);
-                                }}
-                                className="bg-green-600 px-4 py-2 rounded-md text-white cursor-pointer"
-                              >
-                                Lihat
-                              </div>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 text-sm text-gray-800">
+                          {data.code}
+                        </td>
+                        <td className="px-6 py-4 text-sm text-gray-800">
+                          {data.used ? "Digunakan" : "Belum digunakan"}
+                        </td>
+                        <td className="px-6 py-4 text-sm font-medium text-right">
+                          <div className="flex justify-end w-full">
+                            <div
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setShowForm(true);
+                                setTypeForm("detail");
+                                setDetailData(data);
+                              }}
+                              className="bg-green-600 px-4 py-2 rounded-md text-white cursor-pointer"
+                            >
+                              Lihat
                             </div>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>

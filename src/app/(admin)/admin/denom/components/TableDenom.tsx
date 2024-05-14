@@ -22,13 +22,13 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import Loading from "@/app/(admin)/admin/game/loading";
 import { productAdminState } from "@/atom/denomAdminState";
-import Pagination from "../Pagination";
+import Pagination from "@/components/admin/Pagination";
 import { selectedAdminState } from "@/atom/selectedAdminState";
 import { showDeleteState } from "@/atom/showDeleteState";
 import { Tooltip as ReactTooltip } from "react-tooltip";
 import formatter from "@/lib/formatter";
 import Select from "react-select";
-import ConfirmDelete from "../ConfirmDelete";
+import ConfirmDelete from "@/components/admin/ConfirmDelete";
 import FormDenom from "./FormDenom";
 import { toast } from "react-toastify";
 
@@ -361,13 +361,15 @@ const TableDenom: React.FC<{ denom: IProductPagination }> = ({ denom }) => {
       {loading ? (
         <Loading />
       ) : (
-        <div className="w-full bg-white rounded-xl overflow-x-scroll md:overflow-x-auto overflow-y-hidden p-8">
+        <div className="w-full bg-white rounded-xl p-6 lg:p-8">
           <div className="mb-4 flex justify-between items-center">
-            <h1 className="font-medium text-2xl text-neutral-800">Denom</h1>
+            <h1 className="font-medium text-xl md:text-2xl text-neutral-800">
+              Denom
+            </h1>
           </div>
 
           <div className="flex gap-4 items-center justify-between flex-wrap">
-            <div className="relative w-max border border-primary-900 bg-primary-50 rounded-md overflow-hidden flex items-center">
+            <div className="relative w-full md:w-max border border-primary-900 bg-primary-50 rounded-md overflow-hidden flex items-center">
               <input
                 placeholder={`Cari berdasarkan ${selectedOptionSearchBy.label}`}
                 value={inputSearch}
@@ -387,89 +389,23 @@ const TableDenom: React.FC<{ denom: IProductPagination }> = ({ denom }) => {
               </button>
             </div>
 
-            <div className="filter flex gap-4">
-              <Select
-                id="filterSearchBy"
-                value={selectedOptionSearchBy}
-                isSearchable={false}
-                onChange={(e: any) => {
-                  const check = query.search.find(
-                    (item) => item.key === selectedOptionSearchBy.value
-                  );
-                  if (check) {
-                    setSelectedOptionSearchByBefore(check);
-                  }
-                  setSelectedOptionSearchBy(e);
-                }}
-                options={optionsSearchBy}
-                placeholder="Cari Berdasarkan"
-                styles={{
-                  placeholder: (base) => ({
-                    ...base,
-                    color: "#b72025",
-                  }),
-                  dropdownIndicator: (base) => ({
-                    ...base,
-                    color: "#b72025",
-                    "&:hover": { color: "#b72025" },
-                  }),
-                  control: (provided, state) => ({
-                    ...provided,
-                    paddingTop: "2px",
-                    paddingBottom: "2px",
-                    cursor: "pointer",
-                    color: "#b72025",
-                    borderColor: "#b72025",
-                    "&:hover": { borderColor: "#b72025" },
-                    borderRadius: "0.4rem",
-                    backgroundColor: "#fff3f3",
-                  }),
-                  singleValue: (provided, state) => ({
-                    ...provided,
-                    color: "#b72025",
-                    cursor: "pointer",
-                  }),
-                  option: (provided, state) => ({
-                    ...provided,
-                    whiteSpace: "nowrap",
-                    backgroundColor: state.isSelected ? "#b72025" : "white",
-                    color: state.isSelected ? "white" : "#333",
-                    cursor: "pointer",
-                    ":hover": {
-                      backgroundColor: "#f0f0f0",
-                    },
-                  }),
-                }}
-              />
-
-              {optionGame.length > 0 && (
+            <div className="w-full xl:w-max filter flex gap-4 flex-wrap">
+              <div className="shrink-0">
                 <Select
-                  id="filterGame"
-                  value={selectedFilterGame}
-                  isSearchable={true}
+                  id="filterSearchBy"
+                  value={selectedOptionSearchBy}
+                  isSearchable={false}
                   onChange={(e: any) => {
-                    const data = {
-                      key: "gameId",
-                      value: e.value,
-                    };
-                    setQuery((prev) => {
-                      const check = prev.search.find(
-                        (item) => item.key === "gameId"
-                      );
-                      if (check) {
-                        check.value = e.value;
-                      } else {
-                        prev.search.push(data);
-                      }
-
-                      prev.page = 1;
-
-                      return prev;
-                    });
-                    setSelectedFilterGame(e);
+                    const check = query.search.find(
+                      (item) => item.key === selectedOptionSearchBy.value
+                    );
+                    if (check) {
+                      setSelectedOptionSearchByBefore(check);
+                    }
+                    setSelectedOptionSearchBy(e);
                   }}
-                  options={optionGame}
-                  placeholder="Filter Game"
+                  options={optionsSearchBy}
+                  placeholder="Cari Berdasarkan"
                   styles={{
                     placeholder: (base) => ({
                       ...base,
@@ -490,7 +426,6 @@ const TableDenom: React.FC<{ denom: IProductPagination }> = ({ denom }) => {
                       "&:hover": { borderColor: "#b72025" },
                       borderRadius: "0.4rem",
                       backgroundColor: "#fff3f3",
-                      minWidth: "10rem",
                     }),
                     singleValue: (provided, state) => ({
                       ...provided,
@@ -499,7 +434,7 @@ const TableDenom: React.FC<{ denom: IProductPagination }> = ({ denom }) => {
                     }),
                     option: (provided, state) => ({
                       ...provided,
-                      whiteSpace: "wrap",
+                      whiteSpace: "nowrap",
                       backgroundColor: state.isSelected ? "#b72025" : "white",
                       color: state.isSelected ? "white" : "#333",
                       cursor: "pointer",
@@ -509,125 +444,200 @@ const TableDenom: React.FC<{ denom: IProductPagination }> = ({ denom }) => {
                     }),
                   }}
                 />
+              </div>
+
+              {optionGame.length > 0 && (
+                <div className="shrink-0">
+                  <Select
+                    id="filterGame"
+                    value={selectedFilterGame}
+                    isSearchable={true}
+                    onChange={(e: any) => {
+                      const data = {
+                        key: "gameId",
+                        value: e.value,
+                      };
+                      setQuery((prev) => {
+                        const check = prev.search.find(
+                          (item) => item.key === "gameId"
+                        );
+                        if (check) {
+                          check.value = e.value;
+                        } else {
+                          prev.search.push(data);
+                        }
+
+                        prev.page = 1;
+
+                        return prev;
+                      });
+                      setSelectedFilterGame(e);
+                    }}
+                    options={optionGame}
+                    placeholder="Filter Game"
+                    styles={{
+                      placeholder: (base) => ({
+                        ...base,
+                        color: "#b72025",
+                      }),
+                      dropdownIndicator: (base) => ({
+                        ...base,
+                        color: "#b72025",
+                        "&:hover": { color: "#b72025" },
+                      }),
+                      control: (provided, state) => ({
+                        ...provided,
+                        paddingTop: "2px",
+                        paddingBottom: "2px",
+                        cursor: "pointer",
+                        color: "#b72025",
+                        borderColor: "#b72025",
+                        "&:hover": { borderColor: "#b72025" },
+                        borderRadius: "0.4rem",
+                        backgroundColor: "#fff3f3",
+                        minWidth: "10rem",
+                      }),
+                      singleValue: (provided, state) => ({
+                        ...provided,
+                        color: "#b72025",
+                        cursor: "pointer",
+                      }),
+                      option: (provided, state) => ({
+                        ...provided,
+                        whiteSpace: "wrap",
+                        backgroundColor: state.isSelected ? "#b72025" : "white",
+                        color: state.isSelected ? "white" : "#333",
+                        cursor: "pointer",
+                        ":hover": {
+                          backgroundColor: "#f0f0f0",
+                        },
+                      }),
+                    }}
+                  />
+                </div>
               )}
 
               {optionStatus && (
-                <Select
-                  id="filterStatus"
-                  value={selectedFilterStatus}
-                  onChange={(e: any) => {
-                    const data = {
-                      key: "status",
-                      value: e.value,
-                    };
-                    setQuery((prev) => {
-                      const check = prev.search.find(
-                        (item) => item.key === "status"
-                      );
-                      if (check) {
-                        check.value = e.value;
-                      } else {
-                        prev.search.push(data);
-                      }
+                <div className="shrink-0">
+                  <Select
+                    id="filterStatus"
+                    value={selectedFilterStatus}
+                    onChange={(e: any) => {
+                      const data = {
+                        key: "status",
+                        value: e.value,
+                      };
+                      setQuery((prev) => {
+                        const check = prev.search.find(
+                          (item) => item.key === "status"
+                        );
+                        if (check) {
+                          check.value = e.value;
+                        } else {
+                          prev.search.push(data);
+                        }
 
-                      prev.page = 1;
+                        prev.page = 1;
 
-                      return prev;
-                    });
-                    setSelectedFilterStatus(e);
-                  }}
-                  options={optionStatus}
-                  placeholder="Filter Status"
-                  styles={{
-                    placeholder: (base) => ({
-                      ...base,
-                      color: "#b72025",
-                    }),
-                    dropdownIndicator: (base) => ({
-                      ...base,
-                      color: "#b72025",
-                      "&:hover": { color: "#b72025" },
-                    }),
-                    control: (provided, state) => ({
-                      ...provided,
-                      paddingTop: "2px",
-                      paddingBottom: "2px",
-                      cursor: "pointer",
-                      color: "#b72025",
-                      borderColor: "#b72025",
-                      "&:hover": { borderColor: "#b72025" },
-                      borderRadius: "0.4rem",
-                      backgroundColor: "#fff3f3",
-                    }),
-                    singleValue: (provided, state) => ({
-                      ...provided,
-                      color: "#b72025",
-                      cursor: "pointer",
-                    }),
-                    option: (provided, state) => ({
-                      ...provided,
-                      whiteSpace: "nowrap",
-                      backgroundColor: state.isSelected ? "#b72025" : "white",
-                      color: state.isSelected ? "white" : "#333",
-                      cursor: "pointer",
-                      ":hover": {
-                        backgroundColor: "#f0f0f0",
-                      },
-                    }),
-                  }}
-                />
+                        return prev;
+                      });
+                      setSelectedFilterStatus(e);
+                    }}
+                    options={optionStatus}
+                    placeholder="Filter Status"
+                    styles={{
+                      placeholder: (base) => ({
+                        ...base,
+                        color: "#b72025",
+                      }),
+                      dropdownIndicator: (base) => ({
+                        ...base,
+                        color: "#b72025",
+                        "&:hover": { color: "#b72025" },
+                      }),
+                      control: (provided, state) => ({
+                        ...provided,
+                        paddingTop: "2px",
+                        paddingBottom: "2px",
+                        cursor: "pointer",
+                        color: "#b72025",
+                        borderColor: "#b72025",
+                        "&:hover": { borderColor: "#b72025" },
+                        borderRadius: "0.4rem",
+                        backgroundColor: "#fff3f3",
+                      }),
+                      singleValue: (provided, state) => ({
+                        ...provided,
+                        color: "#b72025",
+                        cursor: "pointer",
+                      }),
+                      option: (provided, state) => ({
+                        ...provided,
+                        whiteSpace: "nowrap",
+                        backgroundColor: state.isSelected ? "#b72025" : "white",
+                        color: state.isSelected ? "white" : "#333",
+                        cursor: "pointer",
+                        ":hover": {
+                          backgroundColor: "#f0f0f0",
+                        },
+                      }),
+                    }}
+                  />
+                </div>
               )}
 
               {optionLimit && (
-                <Select
-                  id="filterLimit"
-                  value={selectedFilterLimit}
-                  onChange={(e: any) => {
-                    setSelectedFilterLimit(e);
-                    setQuery((prev) => {
-                      return { ...prev, limit: e.value };
-                    });
-                  }}
-                  options={optionLimit}
-                  placeholder="Limit PerPage"
-                  styles={{
-                    placeholder: (base) => ({
-                      ...base,
-                      color: "#b72025",
-                    }),
-                    dropdownIndicator: (base) => ({
-                      ...base,
-                      color: "#b72025",
-                      "&:hover": { color: "#b72025" },
-                    }),
-                    control: (provided, state) => ({
-                      ...provided,
-                      paddingTop: "2px",
-                      paddingBottom: "2px",
-                      cursor: "pointer",
-                      color: "#b72025",
-                      borderColor: "#b72025",
-                      "&:hover": { borderColor: "#b72025" },
-                      borderRadius: "0.4rem",
-                      backgroundColor: "#fff3f3",
-                    }),
-                    singleValue: (provided, state) => ({
-                      ...provided,
-                      color: "#b72025",
-                      cursor: "pointer",
-                    }),
-                    option: (provided, state) => ({
-                      ...provided,
-                      whiteSpace: "nowrap",
-                      backgroundColor: state.isSelected ? "#b72025" : "white",
-                      color: state.isSelected ? "white" : "#333",
-                      cursor: "pointer",
-                      ":hover": {
-                        backgroundColor: "#f0f0f0",
-                      },
-                    }),
-                  }}
-                />
+                <div className="shrink-0">
+                  <Select
+                    id="filterLimit"
+                    value={selectedFilterLimit}
+                    onChange={(e: any) => {
+                      setSelectedFilterLimit(e);
+                      setQuery((prev) => {
+                        return { ...prev, limit: e.value };
+                      });
+                    }}
+                    options={optionLimit}
+                    placeholder="Limit PerPage"
+                    styles={{
+                      placeholder: (base) => ({
+                        ...base,
+                        color: "#b72025",
+                      }),
+                      dropdownIndicator: (base) => ({
+                        ...base,
+                        color: "#b72025",
+                        "&:hover": { color: "#b72025" },
+                      }),
+                      control: (provided, state) => ({
+                        ...provided,
+                        paddingTop: "2px",
+                        paddingBottom: "2px",
+                        cursor: "pointer",
+                        color: "#b72025",
+                        borderColor: "#b72025",
+                        "&:hover": { borderColor: "#b72025" },
+                        borderRadius: "0.4rem",
+                        backgroundColor: "#fff3f3",
+                      }),
+                      singleValue: (provided, state) => ({
+                        ...provided,
+                        color: "#b72025",
+                        cursor: "pointer",
+                      }),
+                      option: (provided, state) => ({
+                        ...provided,
+                        whiteSpace: "nowrap",
+                        backgroundColor: state.isSelected ? "#b72025" : "white",
+                        color: state.isSelected ? "white" : "#333",
+                        cursor: "pointer",
+                        ":hover": {
+                          backgroundColor: "#f0f0f0",
+                        },
+                      }),
+                    }}
+                  />
+                </div>
               )}
               <button
                 onClick={() => handleClickClearButton()}
@@ -714,9 +724,9 @@ const TableDenom: React.FC<{ denom: IProductPagination }> = ({ denom }) => {
           <div className="flex flex-col mt-8">
             <div className="overflow-x-auto">
               <div className="w-full inline-block align-middle">
-                <div className="overflow-hidden">
+                <div className="overflow-hidden overflow-x-auto">
                   <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
+                    <thead className="p-4 bg-slate-100">
                       <tr>
                         <th scope="col" className="py-3 pl-4">
                           <div className="flex items-center h-5 relative">

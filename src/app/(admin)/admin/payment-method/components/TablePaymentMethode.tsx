@@ -24,15 +24,15 @@ import {
 import Loading from "@/app/(admin)/admin/game/loading";
 import { paymentMethodAdminState } from "@/atom/paymentMethodAdminState";
 import { FeeType } from "@/enum";
-import Pagination from "../Pagination";
+import Pagination from "@/components/admin/Pagination";
 import { IActionBulk } from "@/interfaces/actionBulk";
 import { selectedAdminState } from "@/atom/selectedAdminState";
-import ActionBulk from "../ActionBulk";
+import ActionBulk from "@/components/admin/ActionBulk";
 import { toast } from "react-toastify";
 import Link from "next/link";
 import { Tooltip as ReactTooltip } from "react-tooltip";
 import formatter from "@/lib/formatter";
-import ConfirmDelete from "../ConfirmDelete";
+import ConfirmDelete from "@/components/admin/ConfirmDelete";
 import { showDeleteState } from "@/atom/showDeleteState";
 import FormPaymentMethod from "./FormPaymentMethod";
 import Select from "react-select";
@@ -324,13 +324,13 @@ const TablePaymentMethod: React.FC<{ data: IPaymentMethodPagination }> = ({
       {loading ? (
         <Loading />
       ) : (
-        <div className="w-full bg-white rounded-xl overflow-x-scroll md:overflow-x-auto overflow-y-hidden p-8">
-          <h1 className="font-medium text-2xl text-neutral-800 mb-4">
+        <div className="w-full bg-white rounded-xl p-6 lg:p-8">
+          <h1 className="font-medium text-xl md:text-2xl text-neutral-800 mb-4">
             Metode Pembayaran
           </h1>
 
           <div className="flex gap-4 items-center justify-between items-center flex-wrap">
-            <div className="relative w-max border border-primary-900 bg-primary-50 rounded-md overflow-hidden flex items-center">
+            <div className="relative w-full lg:w-max border border-primary-900 bg-primary-50 rounded-md overflow-hidden flex items-center">
               <input
                 placeholder={`Cari voucher`}
                 value={inputSearch}
@@ -351,7 +351,7 @@ const TablePaymentMethod: React.FC<{ data: IPaymentMethodPagination }> = ({
             </div>
 
             <div className="flex justify-between items-center">
-              <div className="flex gap-4 items-center">
+              <div className="flex gap-4 items-center flex-wrap">
                 {optionStatus && (
                   <div>
                     <Select
@@ -611,9 +611,9 @@ const TablePaymentMethod: React.FC<{ data: IPaymentMethodPagination }> = ({
           <div className="flex flex-col mt-8">
             <div className="overflow-x-auto">
               <div className="w-full inline-block align-middle">
-                <div className="overflow-hidden">
+                <div className="overflow-x-auto">
                   <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
+                    <thead className="p-4 bg-slate-100">
                       <tr>
                         <th scope="col" className="py-3 pl-4">
                           <div className="flex items-center h-5 relative">

@@ -10,7 +10,7 @@ const TableRecentOrders: React.FC<{
   orderId?: string;
 }> = ({ recentOrders, classes, orderId }) => {
   return (
-    <div className="w-full overflow-x-scroll md:overflow-x-auto overflow-y-hidden bg-white shadow rounded-2xl p-8 mt-8 mb-8">
+    <div className="w-full overflow-x-scroll md:overflow-x-auto overflow-y-hidden bg-white rounded-2xl p-8 mt-6 lg:mt-8 mb-6 lg:mb-8">
       <div>
         <div className="mb-8 bg-white">
           <h1 className="font-medium text-2xl text-neutral-800 w-full">
@@ -23,35 +23,35 @@ const TableRecentOrders: React.FC<{
             <div className="w-max xl:w-full inline-block align-middle">
               <div className="overflow-hidden overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-slate-100">
+                  <thead className="py-3 pl-4 bg-slate-100">
                     <tr>
                       <th
                         scope="col"
-                        className="px-6 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-left"
+                        className="px-6 py-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-left"
                       >
                         Denom
                       </th>
                       <th
                         scope="col"
-                        className="px-6 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-center"
+                        className="px-6 py-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-center"
                       >
                         No. Whatsapp
                       </th>
                       <th
                         scope="col"
-                        className="px-6 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-center"
+                        className="px-6 py-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-center"
                       >
                         Kuantitas
                       </th>
                       <th
                         scope="col"
-                        className="px-6 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-center"
+                        className="px-6 py-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-center"
                       >
                         Status
                       </th>
                       <th
                         scope="col"
-                        className="px-6 lg:py-4 lg:py-5 text-xs font-bold text-right text-neutral-600 uppercase text-right"
+                        className="px-6 py-4 lg:py-4 lg:py-5 text-xs font-bold text-right text-neutral-600 uppercase text-right"
                       >
                         Waktu
                       </th>

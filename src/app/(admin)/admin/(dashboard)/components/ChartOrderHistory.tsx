@@ -23,7 +23,7 @@ const ChartOrderHistory: React.FC<{
   });
   return (
     <>
-      <h1 className="mb-5 font-medium text-2xl text-neutral-800">
+      <h1 className="mb-5 font-medium text-xl md:text-2xl text-neutral-800">
         Gambaran Pesanan{" "}
         <span className="text-gray-500 text-base font-normal">({day})</span>
       </h1>
@@ -33,16 +33,16 @@ const ChartOrderHistory: React.FC<{
           height={300}
           data={newData}
           margin={{
-            top: 10,
-            right: 20,
-            left: -12,
+            top: 30,
+            right: 0,
+            left: -25,
             bottom: 0,
           }}
         >
           <defs>
             <linearGradient id="colorPesanan" x1="0" y1="0" x2="0" y2="1">
               <stop offset="5%" stopColor="#bbf7d0" stopOpacity={0.8} />
-              <stop offset="95%" stopColor="#bbf7d0" stopOpacity={0} />
+              <stop offset="95%" stopColor="#bbf7d0" stopOpacity={0.3} />
             </linearGradient>
           </defs>
           <CartesianGrid strokeDasharray="3 3" vertical={false} />

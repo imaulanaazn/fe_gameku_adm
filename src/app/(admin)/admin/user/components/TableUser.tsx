@@ -5,7 +5,7 @@ import dayjs from "dayjs";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
-import Pagination from "../Pagination";
+import Pagination from "@/components/admin/Pagination";
 import Loading from "@/app/(admin)/admin/user/loading";
 
 const TableUser: React.FC<{ user: IUserPagination }> = ({ user }) => {
@@ -58,9 +58,11 @@ const TableUser: React.FC<{ user: IUserPagination }> = ({ user }) => {
   }, []);
 
   return (
-    <div className="w-full overflow-x-scroll md:overflow-x-auto overflow-y-hidden bg-white rounded-2xl px-8 py-10">
+    <div className="w-full overflow-x-scroll md:overflow-x-auto overflow-y-hidden bg-white rounded-2xl p-6 lg:p-8">
       <div>
-        <p className="text-2xl font-semibold text-neutral-800 w-full">User</p>
+        <h1 className="font-medium text-xl md:text-2xl text-neutral-800">
+          User
+        </h1>
         {loading && <Loading />}
         {!loading && (
           <div className="flex flex-col mt-6">
@@ -68,7 +70,7 @@ const TableUser: React.FC<{ user: IUserPagination }> = ({ user }) => {
               <div className="w-max xl:w-full inline-block align-middle">
                 <div className="overflow-hidden overflow-x-auto">
                   <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-slate-100">
+                    <thead className="px-4 py-4 bg-slate-100">
                       <tr>
                         <th
                           scope="col"
@@ -107,7 +109,7 @@ const TableUser: React.FC<{ user: IUserPagination }> = ({ user }) => {
                             key={data.id}
                             className={`bg-white hover:bg-gray-100`}
                           >
-                            <td className="py-4 pl-8">
+                            <td className="py-4 pl-6 lg:pl-8">
                               <div className="w-10 h-10 object-cover">
                                 <Image
                                   src={data.image || "/images/IconUser.png"}

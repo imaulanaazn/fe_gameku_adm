@@ -14,10 +14,10 @@ import {
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import Loading from "@/app/(admin)/admin/game/loading";
-import ConfirmDelete from "../ConfirmDelete";
+import ConfirmDelete from "@/components/admin/ConfirmDelete";
 import { selectedAdminState } from "@/atom/selectedAdminState";
 import { showDeleteState } from "@/atom/showDeleteState";
-import Pagination from "../Pagination";
+import Pagination from "@/components/admin/Pagination";
 import { INewsVideos, INewsVideosPagination } from "@/interfaces/newsVideo";
 import { newsVideosAdminState } from "@/atom/newsVideosAdminState";
 import { Tooltip as ReactTooltip } from "react-tooltip";
@@ -265,8 +265,8 @@ const TableYoutubeVideo: React.FC<{ data: INewsVideosPagination }> = ({
         <Loading />
       ) : (
         <div className="w-full bg-white rounded-xl p-8 overflow-x-scroll md:overflow-x-auto overflow-y-hidden">
-          <div className="flex items-center justify-between mb-4">
-            <h1 className="font-medium text-2xl text-neutral-800">
+          <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
+            <h1 className="font-medium text-xl md:text-2xl text-neutral-800">
               Youtube Video
             </h1>
             <button
@@ -283,7 +283,7 @@ const TableYoutubeVideo: React.FC<{ data: INewsVideosPagination }> = ({
           </div>
 
           <div className="flex gap-4 items-center justify-between flex-wrap">
-            <div className="flex gap-4">
+            <div className="flex gap-4 flex-wrap">
               <div className="relative w-max border border-primary-900 bg-primary-50 rounded-md overflow-hidden flex items-center">
                 <input
                   placeholder={`Cari berdasarkan ${selectedOptionSearchBy.label}`}
@@ -453,9 +453,9 @@ const TableYoutubeVideo: React.FC<{ data: INewsVideosPagination }> = ({
           <div className="flex flex-col mt-8">
             <div className="overflow-x-auto">
               <div className="w-full inline-block align-middle">
-                <div className="overflow-hidden">
+                <div className="overflow-x-auto">
                   <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
+                    <thead className="p-4 bg-slate-100">
                       <tr>
                         <th scope="col" className="py-3 pl-4">
                           <div className="flex items-center h-5 relative">

@@ -393,12 +393,12 @@ const TableDeposit: React.FC<{
         <Loading />
       ) : (
         <div className="w-full bg-white rounded-xl overflow-y-hidden p-8">
-          <h1 className="font-medium text-2xl text-neutral-800 mb-4">
-            Pesanan
+          <h1 className="font-medium text-xl md:text-2xl text-neutral-800 mb-4">
+            Riwayat Deposit
           </h1>
 
           <div className="flex gap-4 items-center justify-between flex-wrap">
-            <div className="w-1/2 flex gap-4 items-center">
+            <div className="w-full lg:w-1/2 flex gap-4 lg:items-center flex-col md:flex-row">
               <div className="relative w-max border border-primary-900 bg-primary-50 rounded-md overflow-hidden flex items-center">
                 <input
                   placeholder={`Cari berdasarkan ${selectedOptionSearchBy.label}`}
@@ -472,7 +472,7 @@ const TableDeposit: React.FC<{
               />
             </div>
 
-            <div className="flex gap-4 ">
+            <div className="flex gap-4 flex-wrap">
               <Select
                 id="filterStatus"
                 value={selectedFilterStatus}
@@ -600,70 +600,69 @@ const TableDeposit: React.FC<{
           </div>
 
           <div className="flex flex-col mt-8">
-            <div className="overflow-x-auto">
-              <div className="w-full inline-block align-middle">
-                <div className="overflow-hidden">
-                  <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-slate-100">
-                      <tr>
-                        {column.map((item) => (
-                          <th
-                            key={item.id}
-                            scope="col"
-                            className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-left"
+            <div className="w-full inline-block align-middle">
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="p-4 bg-slate-100">
+                    <tr>
+                      {column.map((item) => (
+                        <th
+                          key={item.id}
+                          scope="col"
+                          className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-left"
+                        >
+                          <div
+                            className="flex gap-4 cursor-pointer items-center"
+                            onClick={() =>
+                              setQuery((prev) => ({
+                                ...prev,
+                                sort: item.id,
+                                order:
+                                  query.sort === item.id &&
+                                  query.order === "ASC"
+                                    ? "DESC"
+                                    : "ASC",
+                              }))
+                            }
                           >
-                            <div
-                              className="flex gap-4 cursor-pointer items-center"
-                              onClick={() =>
-                                setQuery((prev) => ({
-                                  ...prev,
-                                  sort: item.id,
-                                  order:
-                                    query.sort === item.id &&
-                                    query.order === "ASC"
-                                      ? "DESC"
-                                      : "ASC",
-                                }))
-                              }
-                            >
-                              <p>{item.name}</p>
-                              {query.sort === item.id && (
-                                <FontAwesomeIcon
-                                  icon={
-                                    query.order === "ASC"
-                                      ? faArrowUp
-                                      : faArrowDown
-                                  }
-                                />
-                              )}
-                            </div>
-                          </th>
-                        ))}
-                        {/* <th
+                            <p>{item.name}</p>
+                            {query.sort === item.id && (
+                              <FontAwesomeIcon
+                                icon={
+                                  query.order === "ASC"
+                                    ? faArrowUp
+                                    : faArrowDown
+                                }
+                              />
+                            )}
+                          </div>
+                        </th>
+                      ))}
+                      {/* <th
                                                         scope="col"
                                                         className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase "
                                                     >
                                                         Denom
                                                     </th> */}
-                        <th
-                          scope="col"
-                          className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase"
-                        >
-                          Akun
-                        </th>
-                        <th
-                          scope="col"
-                          className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase"
-                        >
-                          No. Whatsapp
-                        </th>
-                        <th
-                          scope="col"
-                          className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase"
-                        >
-                          Kuantitas
-                        </th>
-                        {/* <th
+                      <th
+                        scope="col"
+                        className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase"
+                      >
+                        Akun
+                      </th>
+                      <th
+                        scope="col"
+                        className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase"
+                      >
+                        No. Whatsapp
+                      </th>
+                      <th
+                        scope="col"
+                        className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase"
+                      >
+                        Kuantitas
+                      </th>
+                      {/* <th
                                                         scope="col"
                                                         className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase "
                                                     >
@@ -675,68 +674,65 @@ const TableDeposit: React.FC<{
                                                     >
                                                         Status
                                                     </th> */}
-                        <th
-                          scope="col"
-                          className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase"
-                        >
-                          Aksi
-                        </th>
+                      <th
+                        scope="col"
+                        className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase"
+                      >
+                        Aksi
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200">
+                    {newData.data.map((data) => (
+                      <tr key={data.id} className={`bg-white`}>
+                        <td className="px-4 py-4 font-medium text-gray-800 text-sm whitespace-nowrap">
+                          {formatter(data.totalAmt)}
+                        </td>
+                        <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
+                          <StatusesOrder value={data.status} />
+                        </td>
+                        <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
+                          {data.custName}
+                        </td>
+                        <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
+                          {data.mobileNumber}
+                        </td>
+                        <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
+                          {data.quantity}
+                        </td>
+                        <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
+                          {data.status === "3" || data.status === "4" ? (
+                            <div className="flex justify-start gap-2 w-full">
+                              <div className="bg-gray-400 px-4 py-2 rounded-md text-white cursor-not-allowed">
+                                Approve
+                              </div>
+                              <div className="bg-gray-400 px-4 py-2 rounded-md text-white cursor-not-allowed">
+                                Reject
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="flex justify-start gap-2 w-full">
+                              <div
+                                onClick={(e) => handleChangeDeposit(data, true)}
+                                className="bg-emerald-600 px-4 py-2 rounded-md text-white cursor-pointer"
+                              >
+                                Approve
+                              </div>
+                              <div
+                                onClick={(e) =>
+                                  handleChangeDeposit(data, false)
+                                }
+                                className="bg-primary-900 px-4 py-2 rounded-md text-white cursor-pointer hover:bg-red-600"
+                              >
+                                Reject
+                              </div>
+                            </div>
+                          )}
+                        </td>
                       </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-200">
-                      {newData.data.map((data) => (
-                        <tr key={data.id} className={`bg-white`}>
-                          <td className="px-4 py-4 font-medium text-gray-800 text-sm whitespace-nowrap">
-                            {formatter(data.totalAmt)}
-                          </td>
-                          <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
-                            <StatusesOrder value={data.status} />
-                          </td>
-                          <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
-                            {data.custName}
-                          </td>
-                          <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
-                            {data.mobileNumber}
-                          </td>
-                          <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
-                            {data.quantity}
-                          </td>
-                          <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
-                            {data.status === "3" || data.status === "4" ? (
-                              <div className="flex justify-start gap-2 w-full">
-                                <div className="bg-gray-400 px-4 py-2 rounded-md text-white cursor-not-allowed">
-                                  Approve
-                                </div>
-                                <div className="bg-gray-400 px-4 py-2 rounded-md text-white cursor-not-allowed">
-                                  Reject
-                                </div>
-                              </div>
-                            ) : (
-                              <div className="flex justify-start gap-2 w-full">
-                                <div
-                                  onClick={(e) =>
-                                    handleChangeDeposit(data, true)
-                                  }
-                                  className="bg-emerald-600 px-4 py-2 rounded-md text-white cursor-pointer"
-                                >
-                                  Approve
-                                </div>
-                                <div
-                                  onClick={(e) =>
-                                    handleChangeDeposit(data, false)
-                                  }
-                                  className="bg-primary-900 px-4 py-2 rounded-md text-white cursor-pointer hover:bg-red-600"
-                                >
-                                  Reject
-                                </div>
-                              </div>
-                            )}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>

@@ -8,6 +8,7 @@ import Loading from "./loading";
 import AdminNavbar from "@/app/(admin)/admin/(dashboard)/components/AdminNavbar";
 import Select from "react-select";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import AdminHeader from "@/components/admin/AdminHeader";
 
 const Banner = () => {
   const [banners, setBanners] = useState<IImageCarouselPagination>();
@@ -37,18 +38,8 @@ const Banner = () => {
     <>
       {loading && <Loading />}
       <AdminNavbar />
-      <div className="iq-navbar-header h-48 bg-[url('/images/bg-header-abstract.jpg')] bg-cover rounded-b-3xl text-white px-12 pt-10">
-        <div className="flex justify-between items-center">
-          <div>
-            <h1 className="text-4xl font-semibold">Halo Admin</h1>
-            <p className="text-base mt-2">
-              Selamat datang di dashboard, semoga bisnis anda berjalan lancar
-              dan terus berkembang.
-            </p>
-          </div>
-        </div>
-      </div>
-      <div className="stats-wrapper px-8 -mt-10">
+      <AdminHeader />
+      <div className="stats-wrapper px-6 lg:px-8 pb-6 lg:pb-8 mt-6 lg:-mt-10">
         {!loading && <>{banners && <TableBanner banner={banners} />}</>}
       </div>
     </>

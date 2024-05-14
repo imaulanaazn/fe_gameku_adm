@@ -101,22 +101,22 @@ const Whatsapp = () => {
         />
       )}
       <div>
-        <h1 className="font-medium text-2xl text-neutral-800 w-full mb-4">
+        <h1 className="mb-4 font-medium text-xl md:text-2xl text-neutral-800">
           Whatsapp Connection
         </h1>
-        <div className="flex space-x-5 bg-white">
+        <div className="flex flex-col-reverse lg:flex-row gap-4 bg-white">
           <div className="flex items-center justify-center w-[200px] h-[200px] bg-slate-100 rounded-lg max-w-[200px]">
             {qrCode && (
               <QRCode size={200} value={qrCode} viewBox={`0 0 256 256`} />
             )}
             {statuses.status !== "CONNECTED" && !qrCode && (
-              <div className="h-full w-[200px] flex flex-col items-center gap-2 justify-center">
+              <div className="h-full w-full lg:w-[200px] flex flex-col items-center gap-2 justify-center">
                 <FontAwesomeIcon icon={faSpinner} spin size="xl" />
                 <p>{statuses.args}</p>
               </div>
             )}
             {statuses.status === "CONNECTED" && (
-              <div className="h-full w-[200px]">
+              <div className="h-full w-full lg:w-[200px]">
                 <Image
                   src="https://firebasestorage.googleapis.com/v0/b/gasskeun-topup.appspot.com/o/assets%2Fconfig%2Fwhatsapp.png?alt=media&token=86744128-86e2-4c2c-9bf4-2d1d3334d612&_gl=1*1red0dx*_ga*NDI2MzY2MjI3LjE2OTg3NTc4MDc.*_ga_CW55HF8NVT*MTY5OTAwODgyNS4yLjEuMTY5OTAwODg4NS42MC4wLjA."
                   alt={`Banner Carousel`}

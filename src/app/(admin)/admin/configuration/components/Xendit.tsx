@@ -165,7 +165,7 @@ const Xendit = () => {
               className="py-2 font-medium text-gray-900 whitespace-nowrap text-start"
             >
               <div
-                className="font-montserrat font-bold text-blue-800 cursor-pointer select-none w-max ml-4"
+                className="font-bold text-blue-800 cursor-pointer select-none w-max ml-4"
                 onClick={() => handleClickEdit("api")}
               >
                 <p>Edit</p>

@@ -230,13 +230,15 @@ const TableBanner: React.FC<{ banner: IImageCarouselPagination }> = ({
       {loading ? (
         <Loading />
       ) : (
-        <div className="w-full bg-white rounded-xl overflow-x-scroll md:overflow-x-auto overflow-y-hidden p-8">
-          <div className="mb-4 flex justify-between items-center">
-            <h1 className="font-medium text-2xl text-neutral-800">Banner</h1>
+        <div className="w-full bg-white rounded-xl overflow-x-scroll md:overflow-x-auto overflow-y-hidden p-6 lg:p-8">
+          <div className="mb-4 flex flex-col md:flex-row justify-between lg:items-center gap-4">
+            <h1 className="font-medium text-xl md:text-2xl text-neutral-800">
+              Banner
+            </h1>
 
-            <div className="flex gap-8 items-center">
-              <div>
-                {selected.length > 0 && (
+            <div className="flex gap-6 lg:gap-8 items-center justify-between">
+              {selected.length > 0 && (
+                <div>
                   <div className="flex items-end gap-2 items-center bg-primary-100 rounded-full">
                     <p className="text-xl font-medium text-primary-900 pl-4">
                       {selected.length}
@@ -265,8 +267,8 @@ const TableBanner: React.FC<{ banner: IImageCarouselPagination }> = ({
                       </div>
                     </div>
                   </div>
-                )}
-              </div>
+                </div>
+              )}
 
               <button
                 onClick={() => {
@@ -281,13 +283,13 @@ const TableBanner: React.FC<{ banner: IImageCarouselPagination }> = ({
             </div>
           </div>
 
-          <div className="flex items-center mb-8 gap-4">
-            <div className="relative w-max">
+          <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+            <div className="relative md:w-max w-full">
               <input
                 placeholder="Cari Nama..."
                 value={inputSearch}
                 onChange={(e) => setInputSearch(e.target.value)}
-                className="inline-flex items-center px-6 py-2 rounded-md gap-x-2 bg-rose-100/60 text-primary-900 placeholder:text-primary-900 border-primary-900"
+                className="inline-flex items-center w-full md:w-auto px-6 py-2 rounded-md gap-x-2 bg-rose-100/60 text-primary-900 placeholder:text-primary-900 border-primary-900"
               />
               <button
                 type="button"
@@ -370,9 +372,9 @@ const TableBanner: React.FC<{ banner: IImageCarouselPagination }> = ({
           <div className="flex flex-col">
             <div className="overflow-x-auto">
               <div className="w-full inline-block align-middle">
-                <div className="overflow-hidden">
+                <div className="overflow-hidden overflow-x-auto">
                   <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
+                    <thead className="bg-slate-100">
                       <tr>
                         <th scope="col" className="py-3 pl-4">
                           <div className="flex items-center h-5 relative">

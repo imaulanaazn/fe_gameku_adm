@@ -1,7 +1,5 @@
 "use client";
 
-import Select from "react-select";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -15,30 +13,30 @@ import {
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import Loading from "@/app/(admin)/admin/game/loading";
-import {
-  IImageCarousel,
-  IImageCarouselPagination,
-} from "@/interfaces/carousels";
-import { carouselAdminState } from "@/atom/carouselAdminState";
-import ConfirmDelete from "../ConfirmDelete";
+import ConfirmDelete from "../../../../../components/admin/ConfirmDelete";
 import { selectedAdminState } from "@/atom/selectedAdminState";
 import { showDeleteState } from "@/atom/showDeleteState";
-import { IActionBulk } from "@/interfaces/actionBulk";
-import Pagination from "../Pagination";
-import FormAddBanner from "./FormAddBanner";
+import Pagination from "../../../../../components/admin/Pagination";
 import { Tooltip as ReactTooltip } from "react-tooltip";
+import { ISocialMedia, ISocialMediaPagination } from "@/interfaces/socialMedia";
+import { socialMediaAdminState } from "@/atom/socialMediaState";
+import ButtonSocialMedia from "@/components/global/footer/ButtonSocialMedia";
+import dayjs from "dayjs";
+import FormSocialMedia from "./FormSocialMedia";
+import * as brands from "@fortawesome/free-brands-svg-icons";
+import Select from "react-select";
 const column = [
-  {
-    id: "imageUrl",
-    name: "Gambar",
-  },
   {
     id: "name",
     name: "Nama",
   },
   {
-    id: "eventUrl",
-    name: "Event Url",
+    id: "icon",
+    name: "Tombol",
+  },
+  {
+    id: "url",
+    name: "Url Media Sosial",
   },
 ];
 const optionLimit = [
@@ -68,8 +66,8 @@ const optionLimit = [
   },
 ];
 
-const TableBanner: React.FC<{ banner: IImageCarouselPagination }> = ({
-  banner,
+const TableSocialMedia: React.FC<{ data: ISocialMediaPagination }> = ({
+  data,
 }) => {
   const [inputSearch, setInputSearch] = useState("");
   const [query, setQuery] = useState<{
@@ -83,10 +81,10 @@ const TableBanner: React.FC<{ banner: IImageCarouselPagination }> = ({
     sort: string;
   }>({
     search: [],
-    order: banner.order,
-    limit: banner.limit,
-    page: banner.page,
-    sort: banner.sort,
+    order: data.order,
+    limit: data.limit,
+    page: data.page,
+    sort: data.sort,
   });
   const [selectedFilterLimit, setSelectedFilterLimit] = useState<{
     label: string;
@@ -97,29 +95,29 @@ const TableBanner: React.FC<{ banner: IImageCarouselPagination }> = ({
   const [showForm, setShowForm] = useState(false);
   const [selectAll, setSelectAll] = useState(false);
   const [typeForm, setTypeForm] = useState("");
-  const [detailData, setDetailData] = useState<IImageCarousel | undefined>();
+  const [detailData, setDetailData] = useState<ISocialMedia | undefined>();
+  const [svgBrandsIcon, setSvgBrandsIcon] = useState<any>({});
 
-  const [banners, setBanners] = useRecoilState(carouselAdminState);
+  const [newData, setNewData] = useRecoilState(socialMediaAdminState);
   const [selected, setSelected] = useRecoilState(selectedAdminState);
   const [showDelete, setShowDelete] = useRecoilState(showDeleteState);
 
-  const getBanners = async () => {
+  const getNewData = async (pagination?: Partial<IPagination>) => {
     setLoading(true);
     const searchParams = new URLSearchParams();
     if (query.search.length > 0) {
       for (const item of query.search) {
         searchParams.append(item.key, item.value);
       }
-    } else {
-      searchParams.append("page", query.page.toString());
     }
 
+    searchParams.append("page", query.page.toString());
     searchParams.append("limit", query.limit.toString());
     searchParams.append("order", query.order);
     searchParams.append("sort", query.sort);
     const req = await fetch(
       process.env.NEXT_PUBLIC_BASE_URL +
-        "/v1/banner?" +
+        "/v1/sosmed?" +
         searchParams.toString(),
       {
         cache: "no-cache",
@@ -133,7 +131,16 @@ const TableBanner: React.FC<{ banner: IImageCarouselPagination }> = ({
 
     const res = await req.json();
     if (req.ok) {
-      setBanners({ ...banners, ...res });
+      setNewData({
+        data: res.data,
+        keySearch: newData.keySearch,
+        order: res.order,
+        limit: res.limit,
+        page: res.page,
+        sort: res.sort,
+        total: res.total,
+        totalPage: res.totalPage,
+      });
     }
 
     setLoading(false);
@@ -146,23 +153,6 @@ const TableBanner: React.FC<{ banner: IImageCarouselPagination }> = ({
     }));
     setSelectAll(false);
     setSelected([]);
-  };
-
-  const handleSelectAll = () => {
-    setSelectAll(!selectAll);
-    if (!selectAll) {
-      setSelected(banners.data.map((banner) => banner.id));
-    } else {
-      setSelected([]);
-    }
-  };
-
-  const handleRowSelect = (gameId: string) => {
-    if (selected.includes(gameId)) {
-      setSelected(selected.filter((id) => id !== gameId));
-    } else {
-      setSelected([...selected, gameId]);
-    }
   };
 
   const handleClickSearch = () => {
@@ -193,107 +183,97 @@ const TableBanner: React.FC<{ banner: IImageCarouselPagination }> = ({
     setSelectedFilterLimit(null);
   };
 
-  useEffect(() => {
-    setBanners({ ...banners, ...banner });
-    setSelected([]);
-  }, []);
+  const handleSelectAll = () => {
+    setSelectAll(!selectAll);
+    if (!selectAll) {
+      setSelected(newData.data.map((item) => item.id));
+    } else {
+      setSelected([]);
+    }
+  };
+
+  const handleRowSelect = (gameId: string) => {
+    if (selected.includes(gameId)) {
+      setSelected(selected.filter((id) => id !== gameId));
+    } else {
+      setSelected([...selected, gameId]);
+    }
+  };
 
   useEffect(() => {
-    getBanners();
+    getNewData();
   }, [JSON.stringify(query), query.search.length]);
 
   useEffect(() => {
-    if (banners.data.length === selected.length && banners.data.length !== 0) {
+    setNewData({ ...newData, ...data });
+    setSelected([]);
+
+    const newDataBrands = { ...brands } as any;
+    delete newDataBrands.prefix;
+    delete newDataBrands.fab;
+
+    setSvgBrandsIcon(newDataBrands);
+  }, []);
+
+  useEffect(() => {
+    if (newData.data.length === selected.length && newData.data.length !== 0) {
       setSelectAll(true);
     } else {
       setSelectAll(false);
     }
-  }, [banners.data.length, selected.length, selectAll]);
+  }, [newData.data.length, selected.length, selectAll]);
 
   return (
     <>
       {showForm && (
-        <FormAddBanner
+        <FormSocialMedia
           handleShowForm={(value: boolean) => setShowForm(value)}
-          getBanners={getBanners}
+          getNewData={getNewData}
           type={typeForm}
-          dataBanner={detailData}
+          dataSocialMedia={detailData}
         />
       )}
       {showDelete && (
         <ConfirmDelete
-          path="/v1/banner"
+          path="/v1/sosmed"
           method="DELETE"
-          getNewData={getBanners}
+          getNewData={getNewData}
         />
       )}
       {loading ? (
         <Loading />
       ) : (
         <div className="w-full bg-white rounded-xl overflow-x-scroll md:overflow-x-auto overflow-y-hidden p-8">
-          <div className="mb-4 flex justify-between items-center">
-            <h1 className="font-medium text-2xl text-neutral-800">Banner</h1>
-
-            <div className="flex gap-8 items-center">
-              <div>
-                {selected.length > 0 && (
-                  <div className="flex items-end gap-2 items-center bg-primary-100 rounded-full">
-                    <p className="text-xl font-medium text-primary-900 pl-4">
-                      {selected.length}
-                    </p>
-                    <div>
-                      <div className="relative">
-                        <div
-                          onClick={() => setShowDelete(true)}
-                          className="bg-primary-900 hover:bg-red-600 w-10 h-10 rounded-full cursor-pointer grid place-content-center"
-                          data-tooltip-id="tooltip-delete"
-                          data-tooltip-content="Hapus"
-                        >
-                          <FontAwesomeIcon
-                            icon={faTrash}
-                            size="xl"
-                            className="text-white"
-                          />
-                        </div>
-                        <ReactTooltip
-                          id="tooltip-delete"
-                          style={{
-                            fontSize: "12px",
-                            padding: "10px",
-                          }}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              <button
-                onClick={() => {
-                  setShowForm(!showForm);
-                  setTypeForm("add");
-                }}
-                className="shrink-0 flex justify-between py-3 px-4 gap-5 items-center bg-primary-900 hover:bg-red-600 text-white rounded-md cursor-pointer"
-              >
-                <p>Banner Baru</p>
-                <FontAwesomeIcon icon={faPlus} size="lg" />
-              </button>
-            </div>
+          <div className="flex items-center justify-between">
+            <h1 className="font-medium text-2xl text-neutral-800 mb-4">
+              Social Media
+            </h1>
+            <button
+              type="button"
+              onClick={() => {
+                setShowForm(!showForm);
+                setTypeForm("add");
+              }}
+              className="shrink-0 flex justify-between py-3 px-4 gap-5 items-center bg-primary-900 hover:bg-red-600 text-white rounded-md cursor-pointer"
+            >
+              <p>Social Media Baru</p>
+              <FontAwesomeIcon icon={faPlus} size="lg" />
+            </button>
           </div>
 
-          <div className="flex items-center mb-8 gap-4">
-            <div className="relative w-max">
+          <div className="flex gap-4 items-center justify-between flex-wrap mt-4">
+            <div className="relative w-max border border-primary-900 bg-primary-50 rounded-md overflow-hidden flex items-center">
               <input
                 placeholder="Cari Nama..."
                 value={inputSearch}
                 onChange={(e) => setInputSearch(e.target.value)}
-                className="inline-flex items-center px-6 py-2 rounded-md gap-x-2 bg-rose-100/60 text-primary-900 placeholder:text-primary-900 border-primary-900"
+                className="w-full py-2 border-none bg-transparent text-primary-900 placeholder:text-primary-900 focus:ring-transparent"
               />
               <button
                 type="button"
                 disabled={!inputSearch}
                 onClick={(e) => handleClickSearch()}
-                className="absolute top-1/2 right-6 -translate-y-1/2"
+                className="pr-4 hover:cursor-pointer"
               >
                 <FontAwesomeIcon
                   icon={faMagnifyingGlass}
@@ -301,64 +281,61 @@ const TableBanner: React.FC<{ banner: IImageCarouselPagination }> = ({
                 />
               </button>
             </div>
+
             <div className="flex gap-4 items-center">
-              <div className="flex gap-2 items-center">
-                {optionLimit && (
-                  <div>
-                    <Select
-                      id="filterLimit"
-                      value={selectedFilterLimit}
-                      isSearchable={false}
-                      onChange={(e: any) => {
-                        setSelectedFilterLimit(e);
-                        setQuery((prev) => {
-                          return { ...prev, limit: e.value };
-                        });
-                      }}
-                      options={optionLimit}
-                      placeholder="Limit / Page"
-                      styles={{
-                        placeholder: (base) => ({
-                          ...base,
-                          color: "#b72025",
-                        }),
-                        dropdownIndicator: (base) => ({
-                          ...base,
-                          color: "#b72025",
-                          "&:hover": { color: "#b72025" },
-                        }),
-                        control: (provided, state) => ({
-                          ...provided,
-                          paddingTop: "2px",
-                          paddingBottom: "2px",
-                          cursor: "pointer",
-                          color: "#b72025",
-                          borderColor: "#b72025",
-                          "&:hover": { borderColor: "#b72025" },
-                          borderRadius: "0.4rem",
-                          backgroundColor: "#fff3f3",
-                        }),
-                        singleValue: (provided, state) => ({
-                          ...provided,
-                          color: "#b72025",
-                          cursor: "pointer",
-                        }),
-                        option: (provided, state) => ({
-                          ...provided,
-                          backgroundColor: state.isSelected
-                            ? "#b72025"
-                            : "white",
-                          color: state.isSelected ? "white" : "#333",
-                          cursor: "pointer",
-                          ":hover": {
-                            backgroundColor: "#f0f0f0",
-                          },
-                        }),
-                      }}
-                    />
-                  </div>
-                )}
-              </div>
+              {optionLimit && (
+                <div>
+                  <Select
+                    id="filterLimit"
+                    value={selectedFilterLimit}
+                    onChange={(e: any) => {
+                      setSelectedFilterLimit(e);
+                      setQuery((prev) => {
+                        return { ...prev, limit: e.value };
+                      });
+                    }}
+                    options={optionLimit}
+                    placeholder="Limit PerPage"
+                    styles={{
+                      placeholder: (base) => ({
+                        ...base,
+                        color: "#b72025",
+                      }),
+                      dropdownIndicator: (base) => ({
+                        ...base,
+                        color: "#b72025",
+                        "&:hover": { color: "#b72025" },
+                      }),
+                      control: (provided, state) => ({
+                        ...provided,
+                        paddingTop: "2px",
+                        paddingBottom: "2px",
+                        cursor: "pointer",
+                        color: "#b72025",
+                        borderColor: "#b72025",
+                        "&:hover": { borderColor: "#b72025" },
+                        borderRadius: "0.4rem",
+                        backgroundColor: "#fff3f3",
+                      }),
+                      singleValue: (provided, state) => ({
+                        ...provided,
+                        color: "#b72025",
+                        cursor: "pointer",
+                      }),
+                      option: (provided, state) => ({
+                        ...provided,
+                        whiteSpace: "nowrap",
+                        backgroundColor: state.isSelected ? "#b72025" : "white",
+                        color: state.isSelected ? "white" : "#333",
+                        cursor: "pointer",
+                        ":hover": {
+                          backgroundColor: "#f0f0f0",
+                        },
+                      }),
+                    }}
+                  />
+                </div>
+              )}
               <button
                 onClick={() => handleClickClearButton()}
                 className="px-4 py-2 aspect-square rounded-md text-white bg-primary-900 hover:bg-red-600 cursor-pointer"
@@ -367,7 +344,38 @@ const TableBanner: React.FC<{ banner: IImageCarouselPagination }> = ({
               </button>
             </div>
           </div>
-          <div className="flex flex-col">
+
+          {selected.length > 0 && (
+            <div className="mt-4 flex justify-between items-center bg-primary-50 py-4 px-4 rounded-md">
+              <h2 className="font-medium text-primary-900">
+                {selected.length} items selected
+              </h2>
+
+              <div className="relative">
+                <div
+                  onClick={() => setShowDelete(true)}
+                  className="cursor-pointer"
+                  data-tooltip-id="tooltip-delete"
+                  data-tooltip-content="Hapus"
+                >
+                  <FontAwesomeIcon
+                    icon={faTrash}
+                    size="xl"
+                    className="text-primary-900"
+                  />
+                </div>
+                <ReactTooltip
+                  id="tooltip-delete"
+                  style={{
+                    fontSize: "12px",
+                    padding: "10px",
+                  }}
+                />
+              </div>
+            </div>
+          )}
+
+          <div className="flex flex-col mt-8">
             <div className="overflow-x-auto">
               <div className="w-full inline-block align-middle">
                 <div className="overflow-hidden">
@@ -406,7 +414,7 @@ const TableBanner: React.FC<{ banner: IImageCarouselPagination }> = ({
                             className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-left"
                           >
                             <div
-                              className="flex gap-3 cursor-pointer items-center"
+                              className="flex gap-4 cursor-pointer items-center"
                               onClick={() =>
                                 setQuery((prev) => ({
                                   ...prev,
@@ -432,24 +440,6 @@ const TableBanner: React.FC<{ banner: IImageCarouselPagination }> = ({
                             </div>
                           </th>
                         ))}
-                        {/* <th
-                                                    scope="col"
-                                                    className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase "
-                                                >
-                                                    Gambar
-                                                </th>
-                                                <th
-                                                    scope="col"
-                                                    className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase "
-                                                >
-                                                    Nama
-                                                </th>
-                                                <th
-                                                    scope="col"
-                                                    className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase "
-                                                >
-                                                    Url Artikel
-                                                </th> */}
                         <th
                           scope="col"
                           className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase"
@@ -459,12 +449,12 @@ const TableBanner: React.FC<{ banner: IImageCarouselPagination }> = ({
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
-                      {banners.data.map((banner) => (
+                      {newData.data.map((data) => (
                         <tr
-                          key={banner.id}
-                          onClick={() => handleRowSelect(banner.id)}
+                          key={data.id}
+                          onClick={() => handleRowSelect(data.id)}
                           className={`${
-                            selected.includes(banner.id)
+                            selected.includes(data.id)
                               ? "bg-gray-100"
                               : "bg-white hover:bg-gray-100"
                           }`}
@@ -473,10 +463,10 @@ const TableBanner: React.FC<{ banner: IImageCarouselPagination }> = ({
                             <div className="flex items-center h-5">
                               <input
                                 type="checkbox"
-                                name={banner.id}
-                                id={banner.id}
-                                checked={selected.includes(banner.id)}
-                                onChange={() => handleRowSelect(banner.id)}
+                                name={data.id}
+                                id={data.id}
+                                checked={selected.includes(data.id)}
+                                onChange={() => handleRowSelect(data.id)}
                                 className="h-4 w-4 cursor-pointer"
                               />
                               <label htmlFor="checkbox" className="sr-only">
@@ -484,33 +474,37 @@ const TableBanner: React.FC<{ banner: IImageCarouselPagination }> = ({
                               </label>
                             </div>
                           </td>
+                          <td className="px-4 py-4 font-medium text-gray-800 text-sm whitespace-nowrap">
+                            {data.name}
+                          </td>
                           <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
-                            <div className="h-10 aspect-video flex items-center">
-                              <Image
-                                src={banner.imageUrl}
-                                alt={`Banner Carousel Gasskeun Topup`}
-                                width="0"
-                                height="0"
-                                sizes="100vw"
-                                style={{ width: "100%", height: "100%" }}
-                                className="rounded-md object-cover"
+                            <div className="h-10 aspect-video flex items-center w-full">
+                              <ButtonSocialMedia
+                                icon={svgBrandsIcon[data.icon]}
+                                title={data.name}
+                                to={data.url || "#"}
                               />
                             </div>
                           </td>
-                          <td className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">
-                            <p>{banner.name}</p>
+                          <td className="px-4 py-4">
+                            {data.url ? (
+                              <p className="text-sm text-gray-500 whitespace-nowrap">
+                                {data.url}
+                              </p>
+                            ) : (
+                              <p className="text-sm text-gray-500 whitespace-nowrap">
+                                N/A
+                              </p>
+                            )}
                           </td>
                           <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
-                            {!banner.eventUrl ? <p>N/A</p> : banner.eventUrl}
-                          </td>
-                          <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
-                            <div className="flex justify-end w-full">
+                            <div className="flex justify-start w-full">
                               <div
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   setShowForm(true);
                                   setTypeForm("detail");
-                                  setDetailData(banner);
+                                  setDetailData(data);
                                 }}
                                 className="bg-primary-900 px-4 py-2 rounded-md text-white cursor-pointer hover:bg-red-600"
                               >
@@ -528,10 +522,10 @@ const TableBanner: React.FC<{ banner: IImageCarouselPagination }> = ({
           </div>
           <Pagination
             onPageChange={handlePageClick}
-            page={banners.page}
-            limit={banners.limit}
-            total={banners.total}
-            totalPage={banners.totalPage}
+            page={newData.page}
+            limit={newData.limit}
+            total={newData.total}
+            totalPage={newData.totalPage}
           />
         </div>
       )}
@@ -539,4 +533,4 @@ const TableBanner: React.FC<{ banner: IImageCarouselPagination }> = ({
   );
 };
 
-export default TableBanner;
+export default TableSocialMedia;

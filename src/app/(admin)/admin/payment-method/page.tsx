@@ -4,7 +4,7 @@ import Header from "@/components/admin/Header";
 import TablePaymentMethod from "@/components/admin/Payment Method/TablePaymentMethode";
 import React, { useEffect, useState } from "react";
 import Loading from "./loading";
-import AdminNavbar from "@/components/admin/AdminNavbar/AdminNavbar";
+import AdminNavbar from "@/app/(admin)/admin/(dashboard)/components/AdminNavbar";
 
 const PaymentMethod = () => {
   const [data, setData] = useState<IPaymentMethodPagination>();

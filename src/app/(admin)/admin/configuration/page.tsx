@@ -12,7 +12,7 @@ import { useRecoilState } from "recoil";
 import Image from "next/image";
 import BackgroungImages from "@/components/admin/Configuration/BackgroungImages";
 import ChangeLogoFooter from "@/components/admin/Configuration/ChangeLogoFooter";
-import AdminNavbar from "@/components/admin/AdminNavbar/AdminNavbar";
+import AdminNavbar from "@/app/(admin)/admin/(dashboard)/components/AdminNavbar";
 
 const Configuration = () => {
   const [listTemplate, setListTemplate] = useRecoilState(whatsappTemplateState);

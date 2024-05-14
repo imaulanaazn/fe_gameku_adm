@@ -16,7 +16,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import Loading from "@/app/(admin)/admin/game/loading";
 import { orderHistoryState } from "@/atom/orderHistory";
-import DisplayTotal from "../Dashboard/DisplayTotal";
+import DisplayTotal from "../../../app/(admin)/admin/(dashboard)/components/DisplayTotal";
 import Pagination from "../Pagination";
 import formatter from "@/lib/formatter";
 import StatusesOrder from "@/components/global/StatusesOrder";

@@ -5,7 +5,7 @@ import TableUser from "@/components/admin/User/TableUser";
 import React, { useEffect, useState } from "react";
 import Loading from "./loading";
 import TableReseller from "@/components/admin/Reseller/TableReseller";
-import AdminNavbar from "@/components/admin/AdminNavbar/AdminNavbar";
+import AdminNavbar from "@/app/(admin)/admin/(dashboard)/components/AdminNavbar";
 
 const Reseller = () => {
   const [data, setData] = useState<IUserPaginationWithSearch>();

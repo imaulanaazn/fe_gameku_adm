@@ -4,10 +4,10 @@ import TableOrders from "@/components/admin/Orders/TableOrders";
 import "react-datepicker/dist/react-datepicker.css";
 import Loading from "./loading";
 import { useEffect, useRef, useState } from "react";
-import AdminNavbar from "@/components/admin/AdminNavbar/AdminNavbar";
+import AdminNavbar from "@/app/(admin)/admin/(dashboard)/components/AdminNavbar";
 import Select from "react-select";
 import { initialRevenue, optionsStatsDate } from "./utils";
-import DisplayTotal from "@/components/admin/Dashboard/DisplayTotal";
+import DisplayTotal from "@/app/(admin)/admin/(dashboard)/components/DisplayTotal";
 import {
   faArrowRotateRight,
   faCheckCircle,

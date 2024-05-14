@@ -4,7 +4,7 @@ import TableDenom from "@/components/admin/Denom/TableDenom";
 import Header from "@/components/admin/Header";
 import { useEffect, useState } from "react";
 import Loading from "./loading";
-import AdminNavbar from "@/components/admin/AdminNavbar/AdminNavbar";
+import AdminNavbar from "@/app/(admin)/admin/(dashboard)/components/AdminNavbar";
 
 const Denom = () => {
   const [denoms, setDenoms] = useState<IProductPagination>();

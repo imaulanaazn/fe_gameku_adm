@@ -4,7 +4,7 @@ import TableGame from "@/components/admin/Game/TableGame";
 import Header from "@/components/admin/Header";
 import { useState, useEffect } from "react";
 import Loading from "./loading";
-import AdminNavbar from "@/components/admin/AdminNavbar/AdminNavbar";
+import AdminNavbar from "@/app/(admin)/admin/(dashboard)/components/AdminNavbar";
 
 const AdminGame = () => {
   const [games, setGames] = useState<IGamePagination>();

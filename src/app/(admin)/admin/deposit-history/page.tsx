@@ -1,11 +1,10 @@
 "use client";
 
-import TableOrders from "@/components/admin/Orders/TableOrders";
 import "react-datepicker/dist/react-datepicker.css";
 import Loading from "./loading";
 import { useEffect, useState } from "react";
-import TableDeposit from "@/components/admin/Deposit/TableDeposit";
-import AdminNavbar from "@/components/admin/AdminNavbar/AdminNavbar";
+import TableDeposit from "@/app/(admin)/admin/deposit-history/components/TableDeposit";
+import AdminNavbar from "@/app/(admin)/admin/(dashboard)/components/AdminNavbar";
 
 const Orders = () => {
   const [data, setData] =

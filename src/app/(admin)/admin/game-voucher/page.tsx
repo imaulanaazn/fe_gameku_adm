@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Loading from "./loading";
 import TableVoucherGame from "@/components/admin/Voucher Game/TableVoucherGame";
-import AdminNavbar from "@/components/admin/AdminNavbar/AdminNavbar";
+import AdminNavbar from "@/app/(admin)/admin/(dashboard)/components/AdminNavbar";
 
 const PromoCode = () => {
   const [data, setData] = useState<IVoucherGamePagination | null>(null);

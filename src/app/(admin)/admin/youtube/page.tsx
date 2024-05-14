@@ -6,7 +6,7 @@ import TableYoutubeVideo from "@/components/admin/Youtube Video/TableYoutubeVide
 import { IImageCarouselPagination } from "@/interfaces/carousels";
 import { INewsVideosPagination } from "@/interfaces/newsVideo";
 import Loading from "./loading";
-import AdminNavbar from "@/components/admin/AdminNavbar/AdminNavbar";
+import AdminNavbar from "@/app/(admin)/admin/(dashboard)/components/AdminNavbar";
 
 const Youtube = () => {
   const [data, setData] = useState<INewsVideosPagination | null>(null);

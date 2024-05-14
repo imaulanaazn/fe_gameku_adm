@@ -4,8 +4,8 @@ import Header from "@/components/admin/Header";
 import React, { useEffect, useState } from "react";
 import Loading from "./loading";
 import { IPromotionPagination } from "@/interfaces/promotion";
-import TablePromoCode from "@/components/admin/PromoCode/TablePromoCode";
-import AdminNavbar from "@/components/admin/AdminNavbar/AdminNavbar";
+import TablePromoCode from "@/app/(admin)/admin/promo-code/components/TablePromoCode";
+import AdminNavbar from "@/app/(admin)/admin/(dashboard)/components/AdminNavbar";
 
 const PromoCode = () => {
   const [data, setData] = useState<IPromotionPagination>();

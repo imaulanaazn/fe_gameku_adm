@@ -1,9 +1,9 @@
 "use client";
 
-import ChartOrderHistory from "@/components/admin/Dashboard/ChartOrderHistory";
-import ChartPopulargame from "@/components/admin/Dashboard/ChartPopulargame";
-import DisplayTotal from "@/components/admin/Dashboard/DisplayTotal";
-import TableRecentOrders from "@/components/admin/Dashboard/TableRecentOrders";
+import ChartOrderHistory from "@/app/(admin)/admin/(dashboard)/components/ChartOrderHistory";
+import ChartPopulargame from "@/app/(admin)/admin/(dashboard)/components/ChartPopulargame";
+import DisplayTotal from "@/app/(admin)/admin/(dashboard)/components/DisplayTotal";
+import TableRecentOrders from "@/app/(admin)/admin/(dashboard)/components/TableRecentOrders";
 import Header from "@/components/admin/Header";
 import {
   faArrowRotateRight,
@@ -18,7 +18,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import dayjs from "dayjs";
 import Loading from "./loading";
 import { io } from "socket.io-client";
-import AdminNavbar from "@/components/admin/AdminNavbar/AdminNavbar";
+import AdminNavbar from "@/app/(admin)/admin/(dashboard)/components/AdminNavbar";
 import { Swiper, SwiperSlide } from "swiper/react";
 import DatePicker from "react-datepicker";
 import { carouselBreakpoints, optionsStatsDate } from "./utils";
@@ -30,6 +30,7 @@ import useDateRange, { useSocketEvents } from "./customHooks";
 import { GestureSwipeHorizontal } from "mdi-material-ui";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { toast } from "react-toastify";
+import AdminHeader from "@/components/admin/AdminHeader";
 
 interface ApiResponse {
   startAt: string;
@@ -291,65 +292,69 @@ const Admin = () => {
   return (
     <>
       <AdminNavbar />
-      <div className="iq-navbar-header h-48 bg-[url('/images/bg-header-abstract.jpg')] bg-cover rounded-b-3xl text-white px-12 pt-10">
-        <div className="flex justify-between items-center">
-          <div>
-            <h1 className="text-4xl font-semibold">Halo Admin</h1>
-            <p className="text-base mt-2">
-              Selamat datang di dashboard, semoga bisnis anda berjalan lancar
-              dan terus berkembang.
-            </p>
-          </div>
-          <div className="shrink-0 flex items-center gap-6">
-            <Select
-              id="selectStatsDate"
-              value={selectedOptionStatsDate}
-              isSearchable={false}
-              onChange={(e: any) => {
-                setSelectedOptionStatsDate(e);
-              }}
-              options={optionsStatsDate}
-              placeholder="Rentang Statistik"
-              styles={{
-                control: (provided, state) => ({
-                  ...provided,
-                  paddingTop: "6px",
-                  paddingBottom: "6px",
-                  cursor: "pointer",
-                }),
-                singleValue: (provided, state) => ({
-                  ...provided,
-                  color: "#333",
-                  cursor: "pointer",
-                }),
-                option: (provided, state) => ({
-                  ...provided,
-                  backgroundColor: state.isSelected ? "#007BFF" : "white",
-                  color: state.isSelected ? "white" : "#333",
-                  cursor: "pointer",
-                  ":hover": {
-                    backgroundColor: "#f0f0f0",
-                  },
-                }),
-              }}
-            />
-            <div
-              className={`hover:cursor-pointer ${
-                statsLoading && "animate-spin"
-              }`}
-              onClick={() => {
-                setRefresh((prev) => prev + 1);
-              }}
-            >
-              <FontAwesomeIcon icon={faArrowRotateRight} className="text-xl" />
-            </div>
+      <AdminHeader>
+        <div className="shrink-0 flex items-center gap-4">
+          <Select
+            id="selectStatsDate"
+            value={selectedOptionStatsDate}
+            isSearchable={false}
+            onChange={(e: any) => {
+              setSelectedOptionStatsDate(e);
+            }}
+            options={optionsStatsDate}
+            placeholder="Rentang Statistik"
+            styles={{
+              placeholder: (base) => ({
+                ...base,
+                color: "#b72025",
+              }),
+              dropdownIndicator: (base) => ({
+                ...base,
+                color: "#b72025",
+                "&:hover": { color: "#b72025" },
+              }),
+              control: (provided, state) => ({
+                ...provided,
+                paddingTop: "2px",
+                paddingBottom: "2px",
+                cursor: "pointer",
+                color: "#b72025",
+                borderColor: "#b72025",
+                "&:hover": { borderColor: "#b72025" },
+                borderRadius: "0.4rem",
+                backgroundColor: "#fff3f3",
+              }),
+              singleValue: (provided, state) => ({
+                ...provided,
+                color: "#b72025",
+                cursor: "pointer",
+              }),
+              option: (provided, state) => ({
+                ...provided,
+                backgroundColor: state.isSelected ? "#b72025" : "white",
+                color: state.isSelected ? "white" : "#333",
+                cursor: "pointer",
+                ":hover": {
+                  backgroundColor: "#f0f0f0",
+                },
+              }),
+            }}
+          />
+          <div
+            className={`hover:cursor-pointer ${statsLoading && "animate-spin"}`}
+            onClick={() => {
+              setRefresh((prev) => prev + 1);
+            }}
+          >
+            <FontAwesomeIcon icon={faArrowRotateRight} className="text-xl" />
           </div>
         </div>
-      </div>
+      </AdminHeader>
+
       {loading && <Loading />}
       {!loading && (
         <div className="stats-wrapper px-8">
-          <div className="w-full mx-auto flex space-x-3 -translate-y-8">
+          <div className="w-full mx-auto flex space-x-3 -mt-10">
             <Swiper
               spaceBetween={28}
               slidesPerView={1}
@@ -459,7 +464,7 @@ const Admin = () => {
               </SwiperSlide>
             </Swiper>
           </div>
-          <div className="w-full flex space-x-8">
+          <div className="w-full flex space-x-8 mt-8">
             {diagramData.length > 0 && (
               <div className="w-1/2 p-5 bg-white rounded-xl shadow-sm">
                 <ChartOrderHistory

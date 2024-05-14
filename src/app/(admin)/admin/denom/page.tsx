@@ -1,10 +1,10 @@
 "use client";
 
-import TableDenom from "@/components/admin/Denom/TableDenom";
-import Header from "@/components/admin/Header";
 import { useEffect, useState } from "react";
 import Loading from "./loading";
-import AdminNavbar from "@/components/admin/AdminNavbar/AdminNavbar";
+import AdminNavbar from "@/app/(admin)/admin/(dashboard)/components/AdminNavbar";
+import TableDenom from "./components/TableDenom";
+import AdminHeader from "@/components/admin/AdminHeader";
 
 const Denom = () => {
   const [denoms, setDenoms] = useState<IProductPagination>();
@@ -37,18 +37,8 @@ const Denom = () => {
       {!loading && (
         <>
           <AdminNavbar />
-          <div className="iq-navbar-header h-48 bg-[url('/images/bg-header-abstract.jpg')] bg-cover rounded-b-3xl text-white px-12 pt-10">
-            <div className="flex justify-between items-center">
-              <div>
-                <h1 className="text-4xl font-semibold">Halo Admin</h1>
-                <p className="text-base mt-2">
-                  Selamat datang di dashboard, semoga bisnis anda berjalan
-                  lancar dan terus berkembang.
-                </p>
-              </div>
-            </div>
-          </div>
-          <div className="stats-wrapper w-full px-8 -mt-10 mb-8">
+          <AdminHeader />
+          <div className="stats-wrapper w-full pb-6 lg:pb-8 px-6 lg:px-8 mt-6 lg:-mt-12 mb-6 lg:mb-8">
             {!loading && <>{denoms && <TableDenom denom={denoms} />}</>}
           </div>
         </>

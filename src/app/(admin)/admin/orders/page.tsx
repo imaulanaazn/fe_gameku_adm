@@ -1,13 +1,13 @@
 "use client";
 
-import TableOrders from "@/components/admin/Orders/TableOrders";
+import TableOrders from "./components/TableOrders";
 import "react-datepicker/dist/react-datepicker.css";
 import Loading from "./loading";
 import { useEffect, useRef, useState } from "react";
-import AdminNavbar from "@/components/admin/AdminNavbar/AdminNavbar";
+import AdminNavbar from "@/app/(admin)/admin/(dashboard)/components/AdminNavbar";
 import Select from "react-select";
 import { initialRevenue, optionsStatsDate } from "./utils";
-import DisplayTotal from "@/components/admin/Dashboard/DisplayTotal";
+import DisplayTotal from "@/app/(admin)/admin/(dashboard)/components/DisplayTotal";
 import {
   faArrowRotateRight,
   faCheckCircle,
@@ -18,6 +18,7 @@ import { useDateRange } from "./customHooks";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import DatePicker from "react-datepicker";
 import dayjs from "dayjs";
+import AdminHeader from "@/components/admin/AdminHeader";
 
 const Orders = () => {
   const [data, setData] =
@@ -119,72 +120,83 @@ const Orders = () => {
               ref={statsDatePickerRef}
             />
           </div>
-          <div className="iq-navbar-header h-48 bg-[url('/images/bg-header-abstract.jpg')] bg-cover rounded-b-3xl text-white px-12 pt-10">
-            <div className="flex justify-between items-center">
-              <div>
-                <h1 className="text-4xl font-semibold">Hello Admin</h1>
-                <p className="text-base mt-2">
-                  Selamat datang di dashboard, semoga bisnis anda berjalan
-                  lancar dan terus berkembang.
-                </p>
-              </div>
-              <div className="shrink-0 flex items-center gap-6">
-                <Select
-                  id="selectStatsDate"
-                  value={selectedOptionStatsDate}
-                  isSearchable={false}
-                  onChange={(e: any) => {
-                    if (e.value === "custom") {
-                      statsDatePickerRef?.current?.setOpen(true);
-                      setSelectedOptionStatsDate(e);
-                    } else {
-                      setSelectedOptionStatsDate(e);
-                    }
-                  }}
-                  options={optionsStatsDate}
-                  placeholder="Rentang Statistik"
-                  styles={{
-                    control: (provided, state) => ({
-                      ...provided,
-                      paddingTop: "6px",
-                      paddingBottom: "6px",
-                      cursor: "pointer",
-                    }),
-                    singleValue: (provided, state) => ({
-                      ...provided,
-                      color: "#333",
-                      cursor: "pointer",
-                    }),
-                    option: (provided, state) => ({
-                      ...provided,
-                      backgroundColor: state.isSelected ? "#007BFF" : "white",
-                      color: state.isSelected ? "white" : "#333",
-                      cursor: "pointer",
-                      ":hover": {
-                        backgroundColor: "#f0f0f0",
-                      },
-                    }),
-                  }}
+          <AdminHeader>
+            <div className="shrink-0 flex items-center gap-6">
+              <Select
+                id="selectStatsDate"
+                value={selectedOptionStatsDate}
+                isSearchable={false}
+                onChange={(e: any) => {
+                  if (e.value === "custom") {
+                    statsDatePickerRef?.current?.setOpen(true);
+                    setSelectedOptionStatsDate(e);
+                  } else {
+                    setSelectedOptionStatsDate(e);
+                  }
+                }}
+                options={optionsStatsDate}
+                placeholder="Rentang Statistik"
+                styles={{
+                  placeholder: (base) => ({
+                    ...base,
+                    color: "#b72025",
+                    fontWeight: 500,
+                  }),
+                  dropdownIndicator: (base) => ({
+                    ...base,
+                    color: "#b72025",
+                    "&:hover": { color: "#b72025" },
+                  }),
+                  control: (provided, state) => ({
+                    ...provided,
+                    boxShadow: state.isFocused ? "0" : "0",
+                    paddingTop: "2px",
+                    paddingBottom: "2px",
+                    cursor: "pointer",
+                    color: "#b72025",
+                    borderColor: "#b72025",
+                    "&:hover": {
+                      borderColor: "#b72025",
+                      border: state.isFocused ? 0 : 0,
+                    },
+                    borderRadius: "0.4rem",
+                    backgroundColor: "#fff3f3",
+                  }),
+                  singleValue: (provided, state) => ({
+                    ...provided,
+                    color: "#b72025",
+                    cursor: "pointer",
+                  }),
+                  option: (provided, state) => ({
+                    ...provided,
+                    zIndex: 100,
+                    backgroundColor: state.isSelected ? "#b72025" : "white",
+                    color: state.isSelected ? "white" : "#333",
+                    cursor: "pointer",
+                    ":hover": {
+                      backgroundColor: "#f0f0f0",
+                    },
+                  }),
+                }}
+              />
+              <div
+                className={`hover:cursor-pointer ${
+                  revenueLoading && "animate-spin"
+                }`}
+                onClick={() => {
+                  setRefresh((prev) => prev + 1);
+                }}
+              >
+                <FontAwesomeIcon
+                  icon={faArrowRotateRight}
+                  className="text-xl"
                 />
-                <div
-                  className={`hover:cursor-pointer ${
-                    revenueLoading && "animate-spin"
-                  }`}
-                  onClick={() => {
-                    setRefresh((prev) => prev + 1);
-                  }}
-                >
-                  <FontAwesomeIcon
-                    icon={faArrowRotateRight}
-                    className="text-xl"
-                  />
-                </div>
               </div>
             </div>
-          </div>
+          </AdminHeader>
 
-          <div className="wrapper px-8 -mt-10">
-            <div className="w-3/4 grid grid-cols-1 sm:grid-cols-2 gap-6 mx-auto">
+          <div className="wrapper w-full pb-6 lg:pb-8 px-6 lg:px-8 mt-6 lg:-mt-12 mb-6 lg:mb-8">
+            <div className="w-full lg:w-3/4 grid grid-cols-1 sm:grid-cols-2 gap-6 mx-auto">
               <DisplayTotal
                 title="Pendapatan"
                 total={revenue.revenue}

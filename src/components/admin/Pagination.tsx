@@ -51,8 +51,8 @@ const Pagination: React.FC<IPaginationProp> = ({
         nextLabel={<FontAwesomeIcon icon={faChevronRight} />}
         breakLabel={"..."}
         pageCount={totalPage ? parseInt(totalPage.toString()) : 1}
-        marginPagesDisplayed={3}
-        pageRangeDisplayed={3}
+        marginPagesDisplayed={2}
+        pageRangeDisplayed={2}
         onPageChange={handleChange}
         forcePage={page - 1}
         containerClassName={"flex space-x-2 items-center"}

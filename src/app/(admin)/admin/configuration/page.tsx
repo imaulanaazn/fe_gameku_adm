@@ -1,18 +1,17 @@
 "use client";
 
 import { whatsappTemplateState } from "@/atom/whatsappTemplateState";
-import ChangeLogo from "@/components/admin/Configuration/ChangeLogo";
-import StatusWebsite from "@/components/admin/Configuration/StatusWebsite";
-import TemplateMessage from "@/components/admin/Configuration/TemplateMessage";
-import Whatsapp from "@/components/admin/Configuration/Whatsapp";
-import Xendit from "@/components/admin/Configuration/Xendit";
-import Header from "@/components/admin/Header";
+import ChangeLogo from "./components/ChangeLogo";
+import StatusWebsite from "./components/StatusWebsite";
+import TemplateMessage from "./components/TemplateMessage";
+import Whatsapp from "./components/Whatsapp";
+import Xendit from "./components/Xendit";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
-import Image from "next/image";
-import BackgroungImages from "@/components/admin/Configuration/BackgroungImages";
-import ChangeLogoFooter from "@/components/admin/Configuration/ChangeLogoFooter";
-import AdminNavbar from "@/components/admin/AdminNavbar/AdminNavbar";
+import BackgroungImages from "./components/BackgroungImages";
+import ChangeLogoFooter from "./components/ChangeLogoFooter";
+import AdminNavbar from "@/app/(admin)/admin/(dashboard)/components/AdminNavbar";
+import AdminHeader from "@/components/admin/AdminHeader";
 
 const Configuration = () => {
   const [listTemplate, setListTemplate] = useRecoilState(whatsappTemplateState);
@@ -43,40 +42,34 @@ const Configuration = () => {
   return (
     <>
       <AdminNavbar />
-      <div className="iq-navbar-header h-48 bg-[url('/images/bg-header-abstract.jpg')] bg-cover rounded-b-3xl text-white px-12 pt-10">
-        <h1 className="text-4xl font-semibold">Hello Admin</h1>
-        <p className="text-base mt-2">
-          Selamat datang di dashboard, semoga bisnis anda berjalan lancar dan
-          terus berkembang.
-        </p>
-      </div>
-      <div className="wrapper w-full p-8 pt-0 -mt-12">
-        <div className="website-config bg-white rounded-xl p-8 mb-8">
+      <AdminHeader />
+      <div className="wrapper w-full px-6 lg:px-8 pb-6 lg:pb-8 pt-0 mt-6 lg:-mt-12">
+        <div className="website-config bg-white rounded-xl p-6 lg:p-8 mb-6 lg:mb-8">
           <div>
             <StatusWebsite />
-            <div className="flex mt-8">
-              <div className="mt-2 w-1/2">
-                <h1 className="font-medium text-2xl text-neutral-800 w-full mb-4">
+            <div className="flex flex-col xl:flex-row mt-6 lg:mt-8">
+              <div className="mt-2 w-full xl:w-1/2">
+                <h1 className="mb-4 font-medium text-xl md:text-2xl text-neutral-800">
                   Logo Website
                 </h1>
-                <div className="flex gap-8">
+                <div className="flex flex-col md:flex-row gap-6 lg:gap-8">
                   <ChangeLogo />
                   <ChangeLogoFooter />
                 </div>
               </div>
-              <div className="w-1/2 mt-2 ">
+              <div className="mt-2 w-full xl:w-1/2">
                 <BackgroungImages />
               </div>
             </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-xl p-8 mb-8">
+        <div className="bg-white rounded-xl p-6 lg:p-8 mb-6 lg:mb-8">
           <Whatsapp />
           {listTemplate.length > 0 && <TemplateMessage />}
         </div>
 
-        <div className="mt-4 bg-white rounded-xl p-8 w-1/2">
+        <div className="mt-4 bg-white rounded-xl p-6 lg:p-8 w-full lg:w-1/2">
           <Xendit />
         </div>
       </div>

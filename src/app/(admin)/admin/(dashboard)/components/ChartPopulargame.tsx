@@ -67,7 +67,9 @@ const ChartPopulargame: React.FC<{
     <>
       <h1 className="mb-5 font-medium text-xl md:text-2xl text-neutral-800">
         Game Popular{" "}
-        <span className="text-gray-500 text-base font-normal">({day})</span>
+        <span className="text-gray-500 text-sm lg:text-base font-normal">
+          ({day})
+        </span>
       </h1>
       <div className="w-full py-4 overflow-x-auto">
         <ResponsiveContainer minWidth={550} width={"100%"} height={300}>

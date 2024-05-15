@@ -102,26 +102,25 @@ const Orders = () => {
       {!loading && (
         <>
           <AdminNavbar />
-          <div className="fixed top-0 left-0 z-50">
-            <DatePicker
-              selected={statsDate.start}
-              onChange={onStatsDateChange}
-              startDate={statsDate.start}
-              endDate={statsDate.end}
-              dateFormat="dd/MM/yyyy"
-              showMonthDropdown
-              showYearDropdown
-              selectsRange
-              dropdownMode="select"
-              minDate={new Date(2000, 0, 1)}
-              maxDate={new Date(2100, 11, 31)}
-              withPortal
-              customInput={<input type="hidden" />}
-              ref={statsDatePickerRef}
-            />
-          </div>
+          <DatePicker
+            selected={statsDate.start}
+            onChange={onStatsDateChange}
+            startDate={statsDate.start}
+            endDate={statsDate.end}
+            dateFormat="dd/MM/yyyy"
+            showMonthDropdown
+            showYearDropdown
+            selectsRange
+            dropdownMode="select"
+            minDate={new Date(2000, 0, 1)}
+            maxDate={new Date(2100, 11, 31)}
+            withPortal
+            customInput={<input type="hidden" />}
+            ref={statsDatePickerRef}
+            className="fixed top-0 left-0 z-50"
+          />
           <AdminHeader>
-            <div className="shrink-0 flex items-center gap-6">
+            <div className="shrink-0 flex items-center gap-4">
               <Select
                 id="selectStatsDate"
                 value={selectedOptionStatsDate}

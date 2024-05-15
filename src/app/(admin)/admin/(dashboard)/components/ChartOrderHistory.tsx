@@ -25,7 +25,7 @@ const ChartOrderHistory: React.FC<{
     <>
       <h1 className="mb-5 font-medium text-xl md:text-2xl text-neutral-800">
         Gambaran Pesanan{" "}
-        <span className="text-gray-500 text-base font-normal">({day})</span>
+        <span className="text-gray-500 text-sm lg:text-base font-normal">({day})</span>
       </h1>
       <ResponsiveContainer width="100%" height={300}>
         <AreaChart

@@ -22,6 +22,7 @@ const config: Config = {
         "primary-300": "#FAB4B6",
         "primary-100": "#FFE4E5",
         "primary-50": "#FFF3F3",
+        "primary-25": "#fff7f7",
         "neutral-900": "#111827",
         "neutral-800": "#1F2937",
         "neutral-700": "#374151",

@@ -473,40 +473,40 @@ const TableOrders: React.FC<{
 
   return (
     <>
-      <div className="fixed z-50 top-0 left-0 w-full">
-        <DatePicker
-          selected={startDate}
-          onChange={onChange}
-          startDate={startDate}
-          endDate={endDate}
-          dateFormat="dd/MM/yyyy"
-          showMonthDropdown
-          showYearDropdown
-          selectsRange
-          dropdownMode="select"
-          minDate={new Date(2000, 0, 1)}
-          maxDate={new Date(2100, 11, 31)}
-          withPortal
-          customInput={<input type="hidden" />}
-          ref={datePickerRef}
-        />
-        <DatePicker
-          selected={downloadDate.start}
-          onChange={onDownloadDateChange}
-          startDate={downloadDate.start}
-          endDate={downloadDate.end}
-          dateFormat="dd/MM/yyyy"
-          showMonthDropdown
-          showYearDropdown
-          selectsRange
-          dropdownMode="select"
-          minDate={new Date(2000, 0, 1)}
-          maxDate={new Date(2100, 11, 31)}
-          withPortal
-          customInput={<input type="hidden" />}
-          ref={downloadDatePickerRef}
-        />
-      </div>
+      <DatePicker
+        selected={startDate}
+        onChange={onChange}
+        startDate={startDate}
+        endDate={endDate}
+        dateFormat="dd/MM/yyyy"
+        showMonthDropdown
+        showYearDropdown
+        selectsRange
+        dropdownMode="select"
+        minDate={new Date(2000, 0, 1)}
+        maxDate={new Date(2100, 11, 31)}
+        withPortal
+        customInput={<input type="hidden" />}
+        ref={datePickerRef}
+        className="fixed z-50 top-0 left-0 w-full"
+      />
+      <DatePicker
+        selected={downloadDate.start}
+        onChange={onDownloadDateChange}
+        startDate={downloadDate.start}
+        endDate={downloadDate.end}
+        dateFormat="dd/MM/yyyy"
+        showMonthDropdown
+        showYearDropdown
+        selectsRange
+        dropdownMode="select"
+        minDate={new Date(2000, 0, 1)}
+        maxDate={new Date(2100, 11, 31)}
+        withPortal
+        customInput={<input type="hidden" />}
+        ref={downloadDatePickerRef}
+        className="fixed z-50 top-0 left-0 w-full"
+      />
 
       {showForm && (
         <FormOrders

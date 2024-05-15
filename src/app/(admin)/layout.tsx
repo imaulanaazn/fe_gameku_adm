@@ -68,7 +68,7 @@ export default function RootLayout({
           />
           <div className="flex w-full text-sm">
             {pathname !== "/admin/auth/login" && <SideBarAdmin />}
-            <div className={`w-full bg-primary-50 overflow-y-scroll h-screen`}>
+            <div className={`w-full bg-primary-25 overflow-y-scroll h-screen`}>
               {children}
             </div>
           </div>

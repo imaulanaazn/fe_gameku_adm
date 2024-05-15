@@ -279,6 +279,7 @@ const Admin = () => {
             options={optionsStatsDate}
             placeholder="Rentang Statistik"
             styles={{
+              menu: (provided) => ({ ...provided, zIndex: 40 }),
               placeholder: (base) => ({
                 ...base,
                 color: "#b72025",
@@ -341,7 +342,7 @@ const Admin = () => {
               slidesPerView={1}
               breakpoints={carouselBreakpoints}
               freeMode={true}
-              className="lg:max-w-screen-2xl flex items-center"
+              className="flex items-center"
             >
               <SwiperSlide className="pb-1">
                 <DisplayTotal

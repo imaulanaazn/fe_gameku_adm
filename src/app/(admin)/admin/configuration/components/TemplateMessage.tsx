@@ -162,28 +162,28 @@ const TemplateMessage = () => {
   return (
     <>
       {preview && (
-        <div className="fixed top-0 left-0 right-0 h-screen bg-black bg-opacity-60 flex items-center justify-center z-50">
-          <div className="p-6 bg-white rounded-xl w-2/3">
+        <div className="fixed top-0 left-0 right-0 h-screen bg-black bg-opacity-60 flex md:items-center justify-center z-50 overflow-y-auto">
+          <div className="p-6 bg-white md:rounded-xl w-full md:w-10/12 lg:w-2/3 overflow-y-auto h-screen md:h-max">
             <h1 className="mb-4 font-medium text-xl md:text-2xl text-neutral-800">
               Template Pesan
             </h1>
-            <div className="w-full mt-5 flex space-x-3">
+            <div className="w-full mt-5 flex flex-col md:flex-row gap-4">
               <textarea
                 disabled={false}
                 name="content"
                 id="content"
                 cols={30}
                 rows={10}
-                className="resize-none h-[30rem] max-h-[30rem] p-4 w-3/4 bg-rose-50 border-none rounded-lg text-neutral-800"
+                className="resize-none h-[30rem] max-h-[25rem] lg:max-h-[30rem] p-4 w-full lg:w-3/4 bg-rose-50 border-none rounded-lg text-neutral-800"
                 onChange={(e) =>
                   setContent(e.target.value.replace(/\\n/g, "\n"))
                 }
                 ref={textareaRef}
                 value={content}
               />
-              <div className="w-1/4">
-                <div className="flex flex-col gap-2 h-[30rem] max-h-[30rem] p-2">
-                  <div className="flex flex-col gap-2 h-3/4 max-h-3/5 overflow-auto">
+              <div className="w-full lg:w-1/4">
+                <div className="flex flex-col gap-2 h-max md:h-[30rem] max-h-[30rem]">
+                  <div className="flex flex-row md:flex-col gap-2 h-auto md:h-3/4 max-h-3/5 overflow-auto md:flex-nowrap flex-wrap">
                     {template.map((data) => (
                       <>
                         <button

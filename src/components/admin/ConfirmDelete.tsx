@@ -88,7 +88,7 @@ const ConfirmDelete: React.FC<IConfirmDeleteProps> = ({
   };
 
   return (
-    <div className="w-full h-screen bg-gray-800 bg-opacity-70 absolute top-0 left-0 flex items-center justify-center z-50">
+    <div className="w-full h-screen bg-gray-800 bg-opacity-70 absolute top-0 left-0 flex items-center justify-center z-50 p-4">
       <div className="md:w-1/4 w-full bg-white shadow-lg opacity-100 p-8 rounded-xl">
         <div
           onClick={() => setShowDelete(false)}

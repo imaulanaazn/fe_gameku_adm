@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowDown,
   faArrowUp,
+  faFilter,
   faMagnifyingGlass,
   faPlus,
   faSearch,
@@ -98,6 +99,8 @@ const TableBanner: React.FC<{ banner: IImageCarouselPagination }> = ({
   const [selectAll, setSelectAll] = useState(false);
   const [typeForm, setTypeForm] = useState("");
   const [detailData, setDetailData] = useState<IImageCarousel | undefined>();
+
+  const [showFilter, setShowFilter] = useState(false);
 
   const [banners, setBanners] = useRecoilState(carouselAdminState);
   const [selected, setSelected] = useRecoilState(selectedAdminState);
@@ -231,51 +234,18 @@ const TableBanner: React.FC<{ banner: IImageCarouselPagination }> = ({
         <Loading />
       ) : (
         <div className="w-full bg-white rounded-xl overflow-x-scroll md:overflow-x-auto overflow-y-hidden p-6 lg:p-8">
-          <div className="mb-4 flex flex-col md:flex-row justify-between lg:items-center gap-4">
+          <div className="mb-4 flex flex-row justify-between items-center gap-4">
             <h1 className="font-medium text-xl md:text-2xl text-neutral-800">
               Banner
             </h1>
 
             <div className="flex gap-6 lg:gap-8 items-center justify-between">
-              {selected.length > 0 && (
-                <div>
-                  <div className="flex items-end gap-2 items-center bg-primary-100 rounded-full">
-                    <p className="text-xl font-medium text-primary-900 pl-4">
-                      {selected.length}
-                    </p>
-                    <div>
-                      <div className="relative">
-                        <div
-                          onClick={() => setShowDelete(true)}
-                          className="bg-primary-900 hover:bg-red-600 w-10 h-10 rounded-full cursor-pointer grid place-content-center"
-                          data-tooltip-id="tooltip-delete"
-                          data-tooltip-content="Hapus"
-                        >
-                          <FontAwesomeIcon
-                            icon={faTrash}
-                            size="xl"
-                            className="text-white"
-                          />
-                        </div>
-                        <ReactTooltip
-                          id="tooltip-delete"
-                          style={{
-                            fontSize: "12px",
-                            padding: "10px",
-                          }}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-
               <button
                 onClick={() => {
                   setShowForm(!showForm);
                   setTypeForm("add");
                 }}
-                className="shrink-0 flex justify-between py-3 px-4 gap-5 items-center bg-primary-900 hover:bg-red-600 text-white rounded-md cursor-pointer"
+                className="shrink-0 flex justify-between py-2 px-3 md:py-3 md:px-4 gap-2 md:gap-4 items-center bg-primary-900 hover:bg-red-600 text-white rounded-md cursor-pointer"
               >
                 <p>Banner Baru</p>
                 <FontAwesomeIcon icon={faPlus} size="lg" />
@@ -283,7 +253,7 @@ const TableBanner: React.FC<{ banner: IImageCarouselPagination }> = ({
             </div>
           </div>
 
-          <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="relative md:w-max w-full">
               <input
                 placeholder="Cari Nama..."
@@ -303,7 +273,22 @@ const TableBanner: React.FC<{ banner: IImageCarouselPagination }> = ({
                 />
               </button>
             </div>
-            <div className="flex gap-4 items-center">
+
+            <button
+              className="flex justify-end items-center gap-2 text-primary-900 md:hidden w-full"
+              onClick={() => {
+                setShowFilter((prev) => !prev);
+              }}
+            >
+              {showFilter ? "Close" : "Filter"}
+              <FontAwesomeIcon icon={faFilter} />
+            </button>
+
+            <div
+              className={`gap-4 items-center ${
+                showFilter ? "flex" : "hidden md:flex"
+              }`}
+            >
               <div className="flex gap-2 items-center">
                 {optionLimit && (
                   <div>
@@ -369,7 +354,37 @@ const TableBanner: React.FC<{ banner: IImageCarouselPagination }> = ({
               </button>
             </div>
           </div>
-          <div className="flex flex-col">
+
+          {selected.length > 0 && (
+            <div className="mt-4 flex justify-between items-center bg-primary-50 py-4 px-4 rounded-md">
+              <h2 className="font-medium text-primary-900">
+                {selected.length} items selected
+              </h2>
+              <div className="relative">
+                <div
+                  onClick={() => setShowDelete(true)}
+                  className="cursor-pointer"
+                  data-tooltip-id="tooltip-delete"
+                  data-tooltip-content="Hapus"
+                >
+                  <FontAwesomeIcon
+                    icon={faTrash}
+                    size="xl"
+                    className="text-primary-900"
+                  />
+                </div>
+                <ReactTooltip
+                  id="tooltip-delete"
+                  style={{
+                    fontSize: "12px",
+                    padding: "10px",
+                  }}
+                />
+              </div>
+            </div>
+          )}
+
+          <div className="flex flex-col mt-8">
             <div className="overflow-x-auto">
               <div className="w-full inline-block align-middle">
                 <div className="overflow-hidden overflow-x-auto">
@@ -454,7 +469,7 @@ const TableBanner: React.FC<{ banner: IImageCarouselPagination }> = ({
                                                 </th> */}
                         <th
                           scope="col"
-                          className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase"
+                          className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-right text-neutral-600 uppercase"
                         >
                           Aksi
                         </th>
@@ -499,7 +514,7 @@ const TableBanner: React.FC<{ banner: IImageCarouselPagination }> = ({
                               />
                             </div>
                           </td>
-                          <td className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">
+                          <td className="px-4 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">
                             <p>{banner.name}</p>
                           </td>
                           <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">

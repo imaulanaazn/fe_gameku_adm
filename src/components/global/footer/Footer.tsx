@@ -123,6 +123,7 @@ const Footer = () => {
                   alt="Logo Gasskeun Topup"
                   width="160"
                   height="160"
+                  sizes="10vw"
                   className="object-contain mx-auto"
                 />
               </Link>

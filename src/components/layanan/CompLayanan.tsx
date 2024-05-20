@@ -40,9 +40,6 @@ const CompLayanan: React.FC<ICompLayananProps> = ({
               <ListCategory data={data} key={data.id} />
             ))}
           </div>
-          {/* <div className="w-full lg:w-2/12">
-            <FormSearch />
-          </div> */}
         </div>
       </Container>
       <Container>

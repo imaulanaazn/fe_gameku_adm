@@ -12,6 +12,7 @@ import {
   Tabs,
   Typography,
 } from "@mui/material";
+import Image from "next/image";
 import React from "react";
 
 const GroupedDenomList = ({ position, data, onChange, value }: any) => {
@@ -141,12 +142,16 @@ const GroupedDenomList = ({ position, data, onChange, value }: any) => {
                               {currencyConverter(item.price)}
                             </Typography>
                           </Box>
-                          <Avatar
+                          <Image
                             src={
                               item.logoDenom || data.logoDenom || data.logoUrl
                             }
-                            variant="rounded"
-                            sx={{ width: 30, height: 30 }}
+                            alt="Logo Denom Gasskeun Topup"
+                            className="rounded-lg object-contain"
+                            width="30"
+                            height="30"
+                            quality={60}
+                            style={{ borderRadius: 2 }}
                           />
                         </CardContent>
                       </Card>

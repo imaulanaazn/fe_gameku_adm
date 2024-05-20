@@ -24,15 +24,18 @@ const ProfileGame = ({ denoms }: { denoms: IGameDetail }) => {
           gap={4}
           alignItems="center"
         >
-          <Box sx={{ display: "flex", gap: 2 }}>
-            <Avatar
+          <Box
+            width={{ xs: 70, md: 80, lg: 100 }}
+            height={{ xs: 70, md: 80, lg: 100 }}
+            borderRadius={{ xs: 1, lg: 2 }}
+            overflow={"hidden"}
+            position={"relative"}
+          >
+            <Image
               src={denoms.logoUrl}
-              variant="rounded"
-              sx={{
-                width: { xs: 70, sm: 80, md: 100 },
-                height: { xs: 70, sm: 80, md: 100 },
-                borderRadius: { xs: 1, md: 2 },
-              }}
+              fill={true}
+              alt="denom image"
+              quality={60}
             />
           </Box>
           <Typography

@@ -1,4 +1,3 @@
-import FormTopup from "@/components/pageProduct/FormTopup";
 import { Metadata } from "next";
 import NotFound from "./not-found";
 import sendRequest from "@/lib/baseApi";
@@ -29,15 +28,7 @@ const page = async ({ params }: IParams) => {
   );
 
   return (
-    <div
-      style={{
-        backgroundColor: "#eaeaea",
-        paddingBottom: 20,
-        backgroundImage: 'url("/images/red-blurry.png")',
-        backgroundRepeat: "repeat-y",
-        backgroundSize: "100% 100%",
-      }}
-    >
+    <div className="bg-blurry-red pb-10">
       <Container>
         {/* <div className="mx-auto "> */}
         <NewFormTopup

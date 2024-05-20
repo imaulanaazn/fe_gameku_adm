@@ -1,7 +1,4 @@
 import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
   Avatar,
   Box,
   Card,
@@ -14,6 +11,7 @@ import {
 import React from "react";
 import { FeeType, PaymentsCategory } from "@/enum";
 import { currencyConverter } from "@/lib/currencyConverter";
+import Image from "next/image";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -135,16 +133,15 @@ const PaymentMethod = ({ value, data, onChange, position }: any) => {
                   : { filter: "grayscale(100%)", cursor: "not-allowed" }),
               }}
             >
-              <Avatar
-                title="Logo Gasskeun Topup"
-                src={method.logo}
-                variant="rounded"
-                sx={{
-                  width: 50,
-                  height: 50,
-                  img: { width: "100%", height: "100%", objectFit: "contain" },
-                }}
-              />
+              <Box position={"relative"} width={70} height={40}>
+                <Image
+                  src={method.logo}
+                  alt="Logo payment method"
+                  fill={true}
+                  quality={55}
+                  objectFit="contain"
+                />
+              </Box>
               <Typography
                 variant="caption"
                 sx={{

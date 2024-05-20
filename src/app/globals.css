@@ -1,4 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
 
 @tailwind base;
@@ -6,7 +5,7 @@
 @tailwind utilities;
 
 @layer base {
-  /* [type="text"]:focus,
+  [type="text"]:focus,
   [type="email"]:focus,
   [type="url"]:focus,
   [type="password"]:focus,
@@ -24,6 +23,8 @@
     --tw-ring-color: #ffffff00;
     border-color: var(--tw-ring-color);
   }
+
+  /*
   [type="checkbox"],
   [type="radio"] {
     color: #b7202500;
@@ -82,10 +83,6 @@ code[class*="language-"] {
   padding: 0;
 }
 
-.font-monstserrat {
-  font-family: "Montserrat", sans-serif;
-}
-
 .custom-pagination .swiper-pagination-bullet {
   /* background-color: rgb(138, 30, 30);
   opacity: 0.5; */
@@ -104,4 +101,16 @@ code[class*="language-"] {
 .edit > .ql-toolbar.ql-snow,
 .edit > .ql-container.ql-snow {
   border-color: #b72025 !important;
+}
+
+.bg-blurry-red {
+  background-image: url("/images/red-blurry.jpg");
+  background-repeat: repeat-y;
+  background-size: 100% auto;
+}
+
+@media screen and (max-width: 600px) {
+  .bg-blurry-red {
+    background-size: 100% 25%;
+  }
 }

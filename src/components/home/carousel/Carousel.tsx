@@ -82,10 +82,11 @@ const Carousel = ({ slides }: { slides: IImageCarousel[] }) => {
                     <Image
                       src={slide.imageUrl}
                       alt="Slide Image Banner Promo Gasskeun Topup"
-                      loading="lazy"
-                      width={375}
-                      height={150}
+                      width={395}
+                      height={170}
+                      priority={true}
                       objectFit="contain"
+                      sizes="(max-width: 768px) 85vw, (max-width: 1200px) 40vw, 27vw"
                       className="w-full h-auto rounded-lg"
                     />
                   </div>

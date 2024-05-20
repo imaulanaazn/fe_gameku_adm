@@ -2,16 +2,11 @@ import Carousel from "@/components/home/carousel/Carousel";
 import ListGames from "@/components/home/listGame/ListGames";
 import PopularGames from "@/components/home/PopularGames/PopularGames";
 import NewsPost from "@/components/home/newsPost/NewsPost";
-import NewsVideo from "@/components/home/newsVideo/NewsVideo";
 import Maintenance from "@/components/maintenance/Maintenance";
 import { IImageCarousel } from "@/interfaces/carousels";
-import { INewsVideos } from "@/interfaces/newsVideo";
 import sendRequest from "@/lib/baseApi";
 import { Metadata } from "next";
 import CompLayanan from "@/components/layanan/CompLayanan";
-import Container from "@/components/global/Container/Container";
-import Image from "next/image";
-import Footer from "@/components/global/footer/Footer";
 import NoGameFound from "@/components/home/NoGameFound/NoGameFound";
 
 const defaultCategory = [
@@ -42,16 +37,10 @@ const Home = async () => {
   const posts = await sendRequest<{ data: INewsPost[]; totalData: number }>(
     "/v1/newest-articles?limit=3"
   );
-  const youtubeVideo = await sendRequest<INewsVideos[]>("/v1/videos");
+  // const youtubeVideo = await sendRequest<INewsVideos[]>("/v1/videos");
 
   return (
-    <div
-      style={{
-        backgroundImage: "url(/images/red-blurry.png)",
-        backgroundRepeat: "repeat-y",
-        backgroundSize: "100% auto",
-      }}
-    >
+    <div className="bg-blurry-red">
       {slides.data.length > 0 && <Carousel slides={slides.data} />}
 
       {popularGames.data.length > 0 && (
@@ -68,7 +57,7 @@ const Home = async () => {
         <ListGames key={index} title={data.name} data={data.games} />
       ))}
 
-      {youtubeVideo.data.length > 0 && <NewsVideo videos={youtubeVideo.data} />}
+      {/* {youtubeVideo.data.length > 0 && <NewsVideo videos={youtubeVideo.data} />} */}
 
       <NoGameFound />
 

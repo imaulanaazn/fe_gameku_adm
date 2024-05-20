@@ -1,6 +1,4 @@
-import Game from "@/components/global/game/Game";
 import CompLayanan from "@/components/layanan/CompLayanan";
-import ListCategory from "@/components/layanan/ListCategory";
 import Maintenance from "@/components/maintenance/Maintenance";
 import sendRequest from "@/lib/baseApi";
 import { Metadata } from "next";

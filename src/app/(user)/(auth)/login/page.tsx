@@ -4,7 +4,6 @@ import sendRequest from "@/lib/baseApi";
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect } from "react";
 
 const Login = async () => {
   const statusWebsite = await sendRequest<{ value: string }[]>(

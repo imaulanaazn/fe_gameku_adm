@@ -2,15 +2,12 @@
 
 import NotFound from "@/app/(user)/[productKey]/not-found";
 import Container from "@/components/global/Container/Container";
-import sendRequest from "@/lib/baseApi";
 import {
   Typography,
   Box,
   Stack,
   Button,
   Grid,
-  Card,
-  CardContent,
   Avatar,
   Modal,
   Chip,
@@ -19,7 +16,6 @@ import {
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Divider from "@mui/material/Divider";
-import Link from "next/link";
 import { currencyConverter } from "@/@core/utils/currencyConverter";
 import dayjs from "dayjs";
 import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";

@@ -16,7 +16,6 @@ import {
 import ThemeComponent from "@/@core/theme/ThemeComponent";
 import BlankLayout from "@/@core/layouts/BlankLayout";
 import { GoogleAnalytics } from "@next/third-parties/google";
-import Head from "next/head";
 import Script from "next/script";
 import { usePathname } from "next/navigation";
 
@@ -66,7 +65,7 @@ export default function RootLayout({
         }}
       />
 
-      <body className="font-monserrat">
+      <body>
         <ToastContainer
           position="top-right"
           autoClose={3000}

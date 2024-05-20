@@ -216,7 +216,7 @@ const Header = () => {
                       alt="Logo Gasskeun Topup"
                       width="0"
                       height="0"
-                      sizes="100vw"
+                      sizes="10vw"
                       style={{ width: "100%", height: "100%" }}
                       className="object-contain"
                     />
@@ -316,7 +316,9 @@ const Header = () => {
 
               {/* toggle menu button only show on mobile */}
               <button
+                type="button"
                 className="lg:hidden"
+                name="menu toggler"
                 onClick={() => {
                   setActiveSideMenu((prevVal) => !prevVal);
                 }}

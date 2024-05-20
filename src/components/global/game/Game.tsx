@@ -19,7 +19,9 @@ const Game: React.FC<IGameProps> = ({ data }) => {
           alt={`Logo Game Gasskeun Topup ${data.name}`}
           width="100"
           height="100"
-          sizes="100vh"
+          quality={50}
+          sizes="(max-width: 768px) 30vw, (max-width: 1200px) 40vw, 33vw"
+          loading="lazy"
           className="w-full rounded-lg object-cover aspect-square"
         />
         <div className="pt-2 lg:pt-3 text-center">

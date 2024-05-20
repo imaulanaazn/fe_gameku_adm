@@ -3,8 +3,6 @@ import sendRequest from "@/lib/baseApi";
 import NotFound from "./not-found";
 import Invoices from "@/components/payment/Invoices";
 import Maintenance from "@/components/maintenance/Maintenance";
-import { InvoiceArrowRight } from "mdi-material-ui";
-import { useEffect } from "react";
 import Container from "@/components/global/Container/Container";
 import { Box } from "@mui/material";
 

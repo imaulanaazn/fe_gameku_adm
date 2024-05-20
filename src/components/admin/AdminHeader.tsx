@@ -1,4 +1,3 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { usePathname } from "next/navigation";
 import { MENU } from "../global/header/SideBarAdmin";

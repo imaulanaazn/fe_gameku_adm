@@ -129,9 +129,13 @@ const Footer = () => {
               </Link>
             </a>
             <div className="flex-1 flex justify-end mt-8">
-              <button className="w-full md:w-max bg-primary-900 py-3 px-5 text-white rounded-full font-semibold hover:bg-white hover:text-black">
-                Join reseller
-              </button>
+              <a
+                href="https://reseller.gasskeuntopup.com/"
+                target="_blank"
+                className="w-full md:w-max bg-primary-900 py-3 px-5 text-white rounded-full font-semibold hover:bg-white hover:text-black"
+              >
+                Menjadi Reseller
+              </a>
             </div>
           </div>
 

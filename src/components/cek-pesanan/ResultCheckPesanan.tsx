@@ -124,8 +124,8 @@ const ResultCheckPesanan = () => {
             onClick={() => handleClick("previous")}
             className={`${
               disablePrevious
-                ? "bg-slate-400 cursor-not-allowed"
-                : "bg-slate-300 cursor-pointer"
+                ? "bg-slate-200 cursor-not-allowed text-slate-400"
+                : "bg-red-100 text-primary-900 cursor-pointer hover:bg-primary-900 hover:text-white"
             } w-7 h-7 flex justify-center items-center rounded-md`}
           >
             <FontAwesomeIcon icon={faArrowLeft} size="1x" />
@@ -139,8 +139,8 @@ const ResultCheckPesanan = () => {
             onClick={() => handleClick("continues")}
             className={`${
               disableContinues
-                ? "bg-slate-400 cursor-not-allowed"
-                : "bg-slate-300 cursor-pointer"
+                ? "bg-slate-200 cursor-not-allowed text-slate-400"
+                : "bg-red-100 text-primary-900 cursor-pointer hover:bg-primary-900 hover:text-white"
             } w-7 h-7 flex justify-center items-center rounded-md`}
           >
             <FontAwesomeIcon icon={faArrowRight} size="1x" />

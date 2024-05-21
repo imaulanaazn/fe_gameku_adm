@@ -83,7 +83,7 @@ export default function ResultCekPesananTable({
                         <span className="flex items-center justify-center lg:justify-end shrink-0 mx-auto">
                           <FontAwesomeIcon
                             icon={faChevronCircleRight}
-                            className="text-xl lg:text-2xl text-gray-400 hover:text-primary-900 transition-all"
+                            className="text-xl lg:text-2xl text-slate-300 hover:text-primary-900 transition-all"
                           />
                         </span>
                       </Link>

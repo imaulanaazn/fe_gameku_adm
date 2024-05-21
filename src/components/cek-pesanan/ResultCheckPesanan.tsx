@@ -16,7 +16,6 @@ const ResultCheckPesanan = () => {
   const [haveData, setHaveData] = useState(false);
 
   const getOrderHistory = async (p: number) => {
-    const toastId = toast.loading("Mengecek pesanan...");
     const querySearch = orderHistory.keySearch + "&page=" + p;
     const result = await fetch(
       process.env.NEXT_PUBLIC_BASE_URL + "/v1/order-history?" + querySearch,
@@ -40,23 +39,15 @@ const ResultCheckPesanan = () => {
 
         return data;
       });
-      toast.update(toastId, {
-        render: "Berhasil mendapatkan riwayat transaksi",
-        type: "success",
-        isLoading: false,
-        position: "top-right",
-        autoClose: 3000,
-      });
     } else {
-      toast.update(toastId, {
-        render:
-          res.message ||
+      toast.error(
+        res.message ||
           "Kesalahan dalam mengambil riwayat transaksi, silahkan coba lagi",
-        type: "error",
-        isLoading: false,
-        position: "top-right",
-        autoClose: 3000,
-      });
+        {
+          position: "top-right",
+          autoClose: 3000,
+        }
+      );
     }
   };
 

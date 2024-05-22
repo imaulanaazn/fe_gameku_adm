@@ -6,14 +6,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 
 const ListGames: React.FC<ListGameProps> = ({ title, data }) => {
-  const [limit, setLimit] = useState(24);
+  const [limit, setLimit] = useState(12);
   const slicedGames = data.slice(0, limit);
 
   const handleClickExpandGame = () => {
     if (limit > data.length) {
-      setLimit(24);
+      setLimit(12);
     } else {
-      setLimit((prevLimit) => prevLimit + 24);
+      setLimit((prevLimit) => prevLimit + 12);
     }
   };
   return (

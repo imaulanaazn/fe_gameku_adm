@@ -10,14 +10,14 @@ import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 const GameLayanan: React.FC<{ games: IGame[] }> = ({ games }) => {
   const category = useRecoilValue(layananState);
   const [filteredGames, setFilteredGames] = useState<IGame[] | []>(games);
-  const [limit, setLimit] = useState(24);
+  const [limit, setLimit] = useState(12);
   const slicedGames = filteredGames.slice(0, limit);
 
   const handleClickExpandGame = () => {
     if (limit > games.length) {
-      setLimit(24);
+      setLimit(12);
     } else {
-      setLimit((prevLimit) => prevLimit + 24);
+      setLimit((prevLimit) => prevLimit + 12);
     }
   };
 

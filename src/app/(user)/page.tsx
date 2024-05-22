@@ -8,6 +8,8 @@ import sendRequest from "@/lib/baseApi";
 import { Metadata } from "next";
 import CompLayanan from "@/components/layanan/CompLayanan";
 import NoGameFound from "@/components/home/NoGameFound/NoGameFound";
+import NewsVideo from "@/components/home/newsVideo/NewsVideo";
+import { INewsVideos } from "@/interfaces/newsVideo";
 
 const defaultCategory = [
   {
@@ -37,7 +39,7 @@ const Home = async () => {
   const posts = await sendRequest<{ data: INewsPost[]; totalData: number }>(
     "/v1/newest-articles?limit=3"
   );
-  // const youtubeVideo = await sendRequest<INewsVideos[]>("/v1/videos");
+  const youtubeVideo = await sendRequest<INewsVideos[]>("/v1/videos");
 
   return (
     <div className="bg-blurry-red">
@@ -57,7 +59,7 @@ const Home = async () => {
         <ListGames key={index} title={data.name} data={data.games} />
       ))}
 
-      {/* {youtubeVideo.data.length > 0 && <NewsVideo videos={youtubeVideo.data} />} */}
+      {youtubeVideo.data.length > 0 && <NewsVideo videos={youtubeVideo.data} />}
 
       <NoGameFound />
 

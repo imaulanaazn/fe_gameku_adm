@@ -74,22 +74,22 @@ function useDateRange(
 
 export function useSocketEvents(
   socket: Socket,
-  onOrderSuccess: (orderId: string) => void,
-  onOrderNew: (data: IOrderHistory) => void,
-  onCountRegister: () => void
+  // onOrderSuccess: (orderId: string) => void,
+  onOrderNew: (data: IOrderHistory) => void
+  // onCountRegister: () => void
 ) {
   useEffect(() => {
-    socket.on("order:success", onOrderSuccess);
+    // socket.on("order:success", onOrderSuccess);
     socket.on("order:new", onOrderNew);
-    socket.on("count:register", onCountRegister);
+    // socket.on("count:register", onCountRegister);
 
     // Cleanup the socket listeners when the component unmounts
     return () => {
-      socket.off("order:success", onOrderSuccess);
+      // socket.off("order:success", onOrderSuccess);
       socket.off("order:new", onOrderNew);
-      socket.off("count:register", onCountRegister);
+      // socket.off("count:register", onCountRegister);
     };
-  }, [socket, onOrderSuccess, onOrderNew, onCountRegister]);
+  }, [socket, onOrderNew]);
 }
 
 export default useDateRange;

@@ -107,7 +107,7 @@ const Admin = () => {
     registration: "bg-white",
   });
   const [bgColorsLatestOrder, setBgColorsLatestOrders] = useState("bg-white");
-  const [updateOrderId, setUpdateOrderId] = useState("");
+  // const [updateOrderId, setUpdateOrderId] = useState("");
 
   const socket = io(
     process.env.NEXT_PUBLIC_SOCKET_BASE_URL || "http://localhost:3001",
@@ -118,19 +118,19 @@ const Admin = () => {
     }
   );
 
-  const handleOrderSuccess = useCallback((orderId: string) => {
-    setLatestOrder((prev) => {
-      return prev.map((order) => {
-        if (order.id === orderId) {
-          return { ...order, status: "success" };
-        }
-        return order;
-      });
-    });
-  }, []);
+  // const handleOrderSuccess = useCallback((orderId: string) => {
+  //   setLatestOrder((prev) => {
+  //     return prev.map((order) => {
+  //       if (order.id === orderId) {
+  //         return { ...order, status: "success" };
+  //       }
+  //       return order;
+  //     });
+  //   });
+  // }, []);
 
   const handleOrderNew = useCallback((data: IOrderHistory) => {
-    getUpdateData("totalOrders", "orders");
+    // getUpdateData("totalOrders", "orders");
 
     setLatestOrder((prev) => [data, ...prev].slice(0, 10));
 
@@ -156,51 +156,51 @@ const Admin = () => {
     }, 500);
   }, []);
 
-  const handleCountRegister = useCallback(() => {
-    getUpdateData("totalCustomers", "registration");
-  }, []);
+  // const handleCountRegister = useCallback(() => {
+  //   getUpdateData("totalCustomers", "registration");
+  // }, []);
 
   // Use custom hooks
   useSocketEvents(
     socket,
-    handleOrderSuccess,
-    handleOrderNew,
-    handleCountRegister
+    // handleOrderSuccess,
+    handleOrderNew
+    // handleCountRegister
   );
 
-  const getUpdateData = (fieldUpdateData: string, fieldUpdateColor: string) => {
-    setData((prev) => {
-      if (prev && prev.data) {
-        const newData: IResponseApiAnalytics = { ...prev };
-        const dateNow = dayjs().format("YYYY-MM-DD");
+  // const getUpdateData = (fieldUpdateData: string, fieldUpdateColor: string) => {
+  //   setData((prev) => {
+  //     if (prev && prev.data) {
+  //       const newData: IResponseApiAnalytics = { ...prev };
+  //       const dateNow = dayjs().format("YYYY-MM-DD");
 
-        const checkData = newData.data.find((item) => item.date === dateNow);
-        if (checkData) {
-          checkData[fieldUpdateData]++;
-        }
+  //       const checkData = newData.data.find((item) => item.date === dateNow);
+  //       if (checkData) {
+  //         checkData[fieldUpdateData]++;
+  //       }
 
-        setBgColors((prev) => {
-          return {
-            ...prev,
-            [fieldUpdateColor]: "bg-green-200 bg-opacity-30",
-          };
-        });
+  //       setBgColors((prev) => {
+  //         return {
+  //           ...prev,
+  //           [fieldUpdateColor]: "bg-green-200 bg-opacity-30",
+  //         };
+  //       });
 
-        setTimeout(() => {
-          setBgColors((prev) => {
-            return {
-              ...prev,
-              [fieldUpdateColor]: "bg-white",
-            };
-          });
-        }, 500);
+  //       setTimeout(() => {
+  //         setBgColors((prev) => {
+  //           return {
+  //             ...prev,
+  //             [fieldUpdateColor]: "bg-white",
+  //           };
+  //         });
+  //       }, 500);
 
-        return newData;
-      }
+  //       return newData;
+  //     }
 
-      return prev;
-    });
-  };
+  //     return prev;
+  //   });
+  // };
 
   const getLatestOrder = async () => {
     setLoading(true);

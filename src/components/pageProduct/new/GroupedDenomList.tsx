@@ -46,27 +46,29 @@ const GroupedDenomList = ({ position, data, onChange, value }: any) => {
         }}
       >
         <TabContext value={value.tabActive}>
-          <Tabs
-            value={value.tabActive}
-            onChange={(e, val) => onChange("tabActive", val)}
-            variant="scrollable"
-            scrollButtons="auto"
-            aria-label="scrollable auto tabs example"
-            sx={{
-              backgroundColor: "white",
-              marginTop: -6,
-            }}
-          >
-            {data.groupedDenoms?.length > 0 &&
-              data.groupedDenoms?.map((category: any) => (
-                <Tab
-                  sx={{ fontWeight: "600", color: "#4B5563" }}
-                  key={category.id}
-                  label={category.name}
-                  value={category.id}
-                />
-              ))}
-          </Tabs>
+          <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+            <Tabs
+              value={value.tabActive}
+              onChange={(e, val) => onChange("tabActive", val)}
+              variant="scrollable"
+              scrollButtons="auto"
+              aria-label="scrollable auto tabs example"
+              sx={{
+                backgroundColor: "white",
+                marginTop: -6,
+              }}
+            >
+              {data.groupedDenoms?.length > 0 &&
+                data.groupedDenoms?.map((category: any) => (
+                  <Tab
+                    sx={{ fontWeight: "600", color: "#4B5563" }}
+                    key={category.id}
+                    label={category.name}
+                    value={category.id}
+                  />
+                ))}
+            </Tabs>
+          </Box>
           {data.groupedDenoms?.length > 0 &&
             data.groupedDenoms?.map((category: any) => (
               <TabPanel

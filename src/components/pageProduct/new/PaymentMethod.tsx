@@ -113,7 +113,21 @@ const PaymentMethod = ({ value, data, onChange, position }: any) => {
                 }
               }}
               sx={{
-                width: { xs: "100%", sm: "auto" },
+                width: {
+                  xs: "100%",
+                  sm:
+                    !value.totalAmountBeforeFee ||
+                    value.totalAmountBeforeFee > method.maxAmount ||
+                    value.totalAmountBeforeFee < method.minAmount
+                      ? "100%"
+                      : "47%",
+                  md:
+                    !value.totalAmountBeforeFee ||
+                    value.totalAmountBeforeFee > method.maxAmount ||
+                    value.totalAmountBeforeFee < method.minAmount
+                      ? "48%"
+                      : "auto",
+                },
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",

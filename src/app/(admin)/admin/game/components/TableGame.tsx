@@ -658,6 +658,7 @@ const TableGame: React.FC<{ game: IGamePagination }> = ({ game }) => {
 
                 <div className="relative">
                   <div
+                    onClick={() => handleSetBulkPopular(false)}
                     className="cursor-pointer"
                     data-tooltip-id="tooltip-unpopular"
                     data-tooltip-content="Hapus dari populer"

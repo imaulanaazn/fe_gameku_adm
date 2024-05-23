@@ -330,11 +330,7 @@ const TableGame: React.FC<{ game: IGamePagination }> = ({ game }) => {
       {loading ? (
         <Loading />
       ) : (
-        <div className="w-full bg-white rounded-xl p-6 lg:p-8">
-          <h1 className="font-medium text-xl md:text-2xl text-neutral-800 mb-4">
-            Game
-          </h1>
-
+        <>
           <div className="flex gap-4 items-center justify-between flex-wrap">
             <div className="relative w-full md:w-max border border-primary-900 bg-primary-50 rounded-md overflow-hidden flex items-center">
               <input
@@ -867,7 +863,7 @@ const TableGame: React.FC<{ game: IGamePagination }> = ({ game }) => {
             total={games.total}
             totalPage={games.totalPage}
           />
-        </div>
+        </>
       )}
     </>
   );

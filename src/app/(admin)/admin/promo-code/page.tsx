@@ -36,8 +36,6 @@ const PromoCode = () => {
     getData();
   }, []);
 
-  console.log(data);
-
   return (
     <>
       {loading && <Loading />}

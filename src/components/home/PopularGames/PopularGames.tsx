@@ -11,16 +11,17 @@ interface IPopularGamesProps {
 }
 
 const PopularGames: React.FC<IPopularGamesProps> = ({ popularGames }) => {
-  const [limit, setLimit] = useState(6);
+  const [limit, setLimit] = useState(12);
   const limitedPopularGames = popularGames.slice(0, limit);
 
   const handleClickExpandGame = () => {
     if (limit > popularGames.length) {
-      setLimit(6);
+      setLimit(12);
     } else {
-      setLimit((prevLimit) => prevLimit + 6);
+      setLimit((prevLimit) => prevLimit + 12);
     }
   };
+
   return (
     <Container className="mt-14 md:mt-16 lg:mt-24">
       <div>
@@ -28,7 +29,7 @@ const PopularGames: React.FC<IPopularGamesProps> = ({ popularGames }) => {
           Sedang Populer
         </h1>
         {/* <p className="text-neutral-800 lg:text-lg md:w-3/4 lg:w-2/3 mx-auto text-center mt-4">
-          mainkan game terpopuler saat ini dan segera top up di gasskeun top up
+          mainkan game terpopuler saat ini dan segera top up 
         </p> */}
 
         <div className="mt-10 grid grid-cols-auto-sm md:grid-cols-auto-md lg:grid-cols-auto-lg gap-3 lg:gap-6 pb-6 md:pb-10">

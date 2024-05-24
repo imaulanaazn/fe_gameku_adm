@@ -52,7 +52,6 @@ async function notifyReseller({
       }
     );
 
-    console.log(req);
     if (!req.ok) {
       throw new Error(`HTTP error! status: ${req.status}`);
     }

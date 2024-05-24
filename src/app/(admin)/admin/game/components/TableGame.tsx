@@ -285,17 +285,17 @@ const TableGame: React.FC<{ game: IGamePagination }> = ({ game }) => {
     }
   };
 
-  const handleSetBulkPopular = (isPopular: boolean) => {
-    const duplicateGames = games.data.map((data) => ({ ...data }));
-    const newData = duplicateGames.map((data) => {
-      if (selected.includes(data.id)) {
-        data.isPopular = isPopular;
-      }
+  // const handleSetBulkPopular = (isPopular: boolean) => {
+  //   const duplicateGames = games.data.map((data) => ({ ...data }));
+  //   const newData = duplicateGames.map((data) => {
+  //     if (selected.includes(data.id)) {
+  //       data.isPopular = isPopular;
+  //     }
 
-      return data;
-    });
-    setPopular(isPopular, newData);
-  };
+  //     return data;
+  //   });
+  //   setPopular(isPopular, newData);
+  // };
 
   useEffect(() => {
     setGames({ ...games, ...game });
@@ -630,50 +630,6 @@ const TableGame: React.FC<{ game: IGamePagination }> = ({ game }) => {
               </h2>
 
               <div className="flex gap-4 items-center">
-                <div className="relative">
-                  <div
-                    onClick={() => handleSetBulkPopular(true)}
-                    className="cursor-pointer"
-                    data-tooltip-id="tooltip-popular"
-                    data-tooltip-content="Tambahkan ke populer"
-                  >
-                    <FontAwesomeIcon
-                      icon={faStar}
-                      size="xl"
-                      className="text-primary-900"
-                    />
-                  </div>
-                  <ReactTooltip
-                    id="tooltip-popular"
-                    style={{
-                      fontSize: "12px",
-                      padding: "10px",
-                    }}
-                  />
-                </div>
-
-                <div className="relative">
-                  <div
-                    onClick={() => handleSetBulkPopular(false)}
-                    className="cursor-pointer"
-                    data-tooltip-id="tooltip-unpopular"
-                    data-tooltip-content="Hapus dari populer"
-                  >
-                    <FontAwesomeIcon
-                      icon={faTimesCircle}
-                      size="xl"
-                      className="text-primary-900"
-                    />
-                  </div>
-                  <ReactTooltip
-                    id="tooltip-unpopular"
-                    style={{
-                      fontSize: "12px",
-                      padding: "10px",
-                    }}
-                  />
-                </div>
-
                 <div className="relative">
                   <div
                     onClick={() => setShowDelete(true)}

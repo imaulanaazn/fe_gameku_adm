@@ -37,7 +37,7 @@ const AdminGame = () => {
         <>
           <AdminNavbar />
           <AdminHeader />
-          {showPopularGamesModal && (
+          {showPopularGamesModal && games && (
             <PopularGameModal
               setShowPopularGamesModal={setShowPopularGamesModal}
             />

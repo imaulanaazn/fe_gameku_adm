@@ -7,44 +7,21 @@ import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import Pagination from "@/components/admin/Pagination";
 import Loading from "@/app/(admin)/admin/user/loading";
-import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCircleExclamation,
+  faMagnifyingGlass,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { currencyConverter } from "@/lib/currencyConverter";
 import Select from "react-select";
-
-const optionsSortBy: { label: string; value: string }[] = [
-  {
-    label: "Created At",
-    value: "createdAt",
-  },
-  {
-    label: "Name",
-    value: "name",
-  },
-  {
-    label: "Email",
-    value: "email",
-  },
-  {
-    label: "Mobile Number",
-    value: "mobileNumber",
-  },
-];
-
-const optionsOrder: { label: string; value: string }[] = [
-  {
-    label: "ASCENDING",
-    value: "ASC",
-  },
-  {
-    label: "DESCENDING",
-    value: "DESC",
-  },
-];
+import { Tooltip as ReactTooltip } from "react-tooltip";
+import { notifyReseller, optionsOrder, optionsSortBy } from "../utils";
+import { toast } from "react-toastify";
 
 const TableUser: React.FC<{ user: IUserPaginationWithSearch }> = ({ user }) => {
   const [customer, setCustomer] = useRecoilState(userAdmin);
   const [loading, setLoading] = useState(false);
+  const [buttonDisabled, setButtonDisabled] = useState("");
   const [searchQuery, setSearchQuery] = useState(customer.keySearch || "");
   const [selectedOptionSortBy, setSelectedOptionSortBy] = useState<{
     label: string;
@@ -111,6 +88,24 @@ const TableUser: React.FC<{ user: IUserPaginationWithSearch }> = ({ user }) => {
   ) => {
     setSearchQuery(event.target.value);
   };
+
+  function handleNotifyReseller(resellerId: string) {
+    setButtonDisabled(resellerId);
+
+    setTimeout(() => {
+      setButtonDisabled("");
+    }, 1000);
+
+    notifyReseller({
+      resellerId: resellerId,
+      onSuccess: () => {
+        toast.success("berhasil mengirim pesan");
+      },
+      onError: () => {
+        toast.error("gagal mengirim pesan");
+      },
+    });
+  }
 
   useEffect(() => {
     setCustomer({ ...user, keySearch: "" });
@@ -278,6 +273,12 @@ const TableUser: React.FC<{ user: IUserPaginationWithSearch }> = ({ user }) => {
                   >
                     Tanggal Pendaftaran
                   </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-left"
+                  >
+                    Aksi
+                  </th>
                 </tr>
               </thead>
               {customer.data.length > 0 && (
@@ -311,6 +312,41 @@ const TableUser: React.FC<{ user: IUserPaginationWithSearch }> = ({ user }) => {
                       </td>
                       <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap text-left">
                         {dayjs(data.createdAt).format("YYYY-MM-DD HH:mm:ss")}
+                      </td>
+                      <td className="px-4 py-4 text-gray-500 whitespace-nowrap text-left relative">
+                        {data.balance && data.balance > 0 ? (
+                          <button
+                            className={` px-3 py-2 rounded-md  cursor-pointer group ${
+                              buttonDisabled === data.id
+                                ? "bg-slate-300 text-slate-200"
+                                : "bg-yellow-100 hover:bg-yellow-400 text-yellow-700"
+                            }`}
+                            data-tooltip-id="tooltip-notify"
+                            data-tooltip-content="Peringatkan Saldo Hampir Habis"
+                            disabled={Boolean(buttonDisabled)}
+                            onClick={() => {
+                              handleNotifyReseller(data.id);
+                            }}
+                          >
+                            <FontAwesomeIcon
+                              icon={faCircleExclamation}
+                              className={`text-xl group-hover:text-white ${
+                                buttonDisabled === data.id
+                                  ? "text-white"
+                                  : " text-yellow-400"
+                              }`}
+                            />
+                            <ReactTooltip
+                              id="tooltip-notify"
+                              style={{
+                                fontSize: "12px",
+                                padding: "10px",
+                              }}
+                            />
+                          </button>
+                        ) : (
+                          <></>
+                        )}
                       </td>
                     </tr>
                   ))}

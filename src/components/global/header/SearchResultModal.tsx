@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import Game from "../game/Game";
 import PopularGames from "@/components/home/PopularGames/PopularGames";
-import GameListItem from "../game/GameListItem";
+import GameListItem from "./GameListItem";
 import Link from "next/link";
 
 const SearchResultModal = ({

@@ -15,23 +15,22 @@ const NewsVideo: React.FC<NewsVideoProps> = ({ videos }) => {
   }, []);
 
   return (
-    <div className="py-20 bg-black text-white mt-14 md:mt-16 lg:mt-24">
+    <div className="py-20 bg-black text-white">
       <Container>
-        <>
-          <div className="flex flex-col items-center gap-3 text-center">
-            <p className="tracking-widest text-sm">YOUTUBE CHANNEL</p>
-            <h2 className="white text-2xl lg:text-4xl font-bold lg:mt-4">
-              Video on this week
-            </h2>
-            <div className="h-px bg-[#B72025] w-10"></div>
-          </div>
-          <div className="pt-20 ">
-            <div className=" max-w-4xl mx-auto ">
-              <iframe
-                src={`https://www.youtube.com/embed/${videoId}`}
-                className="w-full h-96 mx-auto"
-              ></iframe>
-              {/* <Swiper
+        <div className="flex flex-col items-center gap-3 text-center">
+          <p className="tracking-widest text-sm">YOUTUBE CHANNEL</p>
+          <h2 className="white text-2xl lg:text-4xl font-bold lg:mt-4">
+            Video on this week
+          </h2>
+          <div className="h-px bg-[#B72025] w-10"></div>
+        </div>
+        <div className="pt-20 ">
+          <div className=" max-w-4xl mx-auto ">
+            <iframe
+              src={`https://www.youtube.com/embed/${videoId}`}
+              className="w-full h-96 mx-auto"
+            ></iframe>
+            {/* <Swiper
                                 slidesPerView={3}
                                 freeMode={true}
                                 loop={false}
@@ -53,9 +52,8 @@ const NewsVideo: React.FC<NewsVideoProps> = ({ videos }) => {
                                     </SwiperSlide>
                                 ))}
                             </Swiper> */}
-            </div>
           </div>
-        </>
+        </div>
       </Container>
     </div>
   );

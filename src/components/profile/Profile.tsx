@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { useRecoilState } from "recoil";
 import { userState } from "@/atom/userState";
-import Loading from "@/app/(user)/loading";
+import Loading from "@/app/(user)/(home)/loading";
 
 const Profile = () => {
   const [loading, setLoading] = useState(true);

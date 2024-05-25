@@ -1,7 +1,7 @@
 import CompLoading from "@/components/global/loading/CompLoading";
 
 const Loading = () => {
-    return <CompLoading />;
+  return <CompLoading />;
 };
 
 export default Loading;

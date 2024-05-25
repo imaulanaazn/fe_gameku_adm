@@ -1,17 +1,18 @@
-import Carousel from "@/components/home/carousel/Carousel";
-import ListGames from "@/components/home/listGame/ListGames";
-import PopularGames from "@/components/home/PopularGames/PopularGames";
-import NewsPost from "@/components/home/newsPost/NewsPost";
+import Carousel from "./components/Carousel";
+import ListGames from "./components/ListGames";
+import PopularGames from "./components/PopularGames";
+import NewsPost from "./components/NewsPost";
 import Maintenance from "@/components/maintenance/Maintenance";
 import { IImageCarousel } from "@/interfaces/carousels";
 import sendRequest from "@/lib/baseApi";
 import { Metadata } from "next";
 import CompLayanan from "@/components/layanan/CompLayanan";
-import NoGameFound from "@/components/home/NoGameFound/NoGameFound";
-import NewsVideo from "@/components/home/newsVideo/NewsVideo";
+import NoGameFound from "./components/NoGameFound";
+import NewsVideo from "./components/NewsVideo";
 import { INewsVideos } from "@/interfaces/newsVideo";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
+import AboutGasskeun from "./components/AboutGasskeun";
 
 const defaultCategory = [
   {
@@ -60,6 +61,8 @@ const Home = async () => {
       {categoriesAndGames.data.map((data, index) => (
         <ListGames key={index} title={data.name} data={data.games} />
       ))}
+
+      <AboutGasskeun />
 
       {youtubeVideo.data.length > 0 && <NewsVideo videos={youtubeVideo.data} />}
 

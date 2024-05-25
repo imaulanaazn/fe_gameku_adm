@@ -23,16 +23,16 @@ const PopularGames: React.FC<IPopularGamesProps> = ({ popularGames }) => {
   };
 
   return (
-    <Container className="mt-14 md:mt-16 lg:mt-24">
+    <Container className="mt-10 md:mt-12 lg:mt-20">
       <div>
-        <h1 className="text-neutral-900 text-4xl lg:text-5xl font-bold text-center">
-          Sedang Populer
-        </h1>
+        <h2 className="text-neutral-900 text-2xl md:text-4xl lg:text-5xl font-bold text-center">
+          🔥 Sedang Populer 🔥
+        </h2>
         {/* <p className="text-neutral-800 lg:text-lg md:w-3/4 lg:w-2/3 mx-auto text-center mt-4">
           mainkan game terpopuler saat ini dan segera top up 
         </p> */}
 
-        <div className="mt-10 grid grid-cols-auto-sm md:grid-cols-auto-md lg:grid-cols-auto-lg gap-3 lg:gap-6 pb-6 md:pb-10">
+        <div className="mt-4 md:mt-6 lg:mt-10 grid grid-cols-auto-sm md:grid-cols-auto-md lg:grid-cols-auto-lg gap-3 lg:gap-6">
           {limitedPopularGames.map((data) => (
             <>
               <Game data={data} />
@@ -40,7 +40,7 @@ const PopularGames: React.FC<IPopularGamesProps> = ({ popularGames }) => {
           ))}
         </div>
 
-        <div className="show-more-btn w-full flex justify-center">
+        <div className="show-more-btn w-full flex justify-center mt-4 md:mt-6 lg:mt-10">
           {limit < popularGames.length && (
             <button
               onClick={handleClickExpandGame}

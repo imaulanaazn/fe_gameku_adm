@@ -56,13 +56,13 @@ const GameLayanan: React.FC<{ games: IGame[] }> = ({ games }) => {
 
   return (
     <>
-      <div className="overflow-x-hidden pb-6 md:pb-10">
+      <div className="mt-4 md:mt-6">
         <div className="grid grid-cols-auto-sm md:grid-cols-auto-md lg:grid-cols-auto-lg gap-3 lg:gap-6">
           {slicedGames &&
             slicedGames.map((data) => <Game data={data} key={data.id} />)}
         </div>
       </div>
-      <div className="show-more-btn w-full flex justify-center">
+      <div className="show-more-btn w-full flex justify-center mt-4 md:mt-6 lg:mt-10">
         {limit < filteredGames.length && (
           <button
             onClick={handleClickExpandGame}

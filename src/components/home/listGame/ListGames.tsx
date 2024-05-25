@@ -18,18 +18,18 @@ const ListGames: React.FC<ListGameProps> = ({ title, data }) => {
   };
   return (
     <Container>
-      <section className="mt-16 lg:mt-24">
-        <h2 className="text-center text-neutral-900 text-2xl lg:text-4xl font-bold">
+      <section className="mt-10 md:mt-12 lg:mt-20">
+        <h2 className="text-neutral-900 text-2xl md:text-3xl lg:text-4xl font-bold text-center">
           {title}
         </h2>
-        <div className="pb-6 md:pb-10 text-center w-full">
-          <div className="mt-10 grid grid-cols-auto-sm md:grid-cols-auto-md lg:grid-cols-auto-lg gap-3 lg:gap-6">
+        <div className="text-center w-full">
+          <div className="mt-4 md:mt-6 lg:mt-10 grid grid-cols-auto-sm md:grid-cols-auto-md lg:grid-cols-auto-lg gap-3 lg:gap-6">
             {slicedGames.map((game) => (
               <Game data={game} key={game.id} />
             ))}
           </div>
         </div>
-        <div className="show-more-btn w-full flex justify-center">
+        <div className="show-more-btn w-full flex justify-center mt-4 md:mt-6 lg:mt-10">
           {limit < data.length && (
             <button
               onClick={handleClickExpandGame}

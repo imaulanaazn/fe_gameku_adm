@@ -25,7 +25,7 @@ const Carousel = ({ slides }: { slides: IImageCarousel[] }) => {
     }
   }, [slides]);
   return (
-    <div className="py-5 px-4 md:px-0 mx-auto">
+    <div className="lg:py-5 px-4 md:px-0 mx-auto">
       {loading && (
         <Skeleton classes="lg:h-60 sm:h-52 h-40 lg:mx-20 mx-5 rounded-md" />
       )}
@@ -96,7 +96,7 @@ const Carousel = ({ slides }: { slides: IImageCarousel[] }) => {
         </Swiper>
       )}
 
-      <div className="flex justify-center items-center mt-5">
+      <div className="flex justify-center items-center mt-3 md:mt-4">
         {loading && <Skeleton classes="h-3 w-52" />}
         {!loading && (
           <>

@@ -206,7 +206,7 @@ const Header = () => {
     <>
       <header className="sticky top-0 w-full z-50 bg-white">
         <Container>
-          <div className="flex justify-between items-center gap-4 md:gap-6 h-20">
+          <div className="flex justify-between items-center gap-4 md:gap-6 h-[4.5rem]">
             <div className="left-side flex items-center gap-6 xl:gap-8">
               <div className="logo">
                 <Link href="/" className="flex items-center w-12 h-12">

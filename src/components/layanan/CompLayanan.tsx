@@ -21,17 +21,17 @@ const CompLayanan: React.FC<ICompLayananProps> = ({
   }
   return (
     <>
-      <div className="mt-14 md:mt-16 lg:mt-24" id="layanan">
-        <h1 className="text-neutral-900 text-4xl lg:text-5xl font-bold text-center">
+      <div className="mt-10 md:mt-12 lg:mt-20" id="layanan">
+        <h2 className="text-neutral-900 text-2xl md:text-4xl lg:text-5xl font-bold text-center">
           Layanan
-        </h1>
-        <p className="text-neutral-800 lg:text-lg md:w-3/4 lg:w-2/3 mx-auto text-center mt-4">
-          Kami menyediakan berbagai layanan untuk memenuhi segala kebutuhan
-          digitalmu hanya dengan satu platform yang terintegrasi
+        </h2>
+        <p className="text-neutral-800 text-sm md:text-base lg:text-lg md:w-3/4 lg:w-1/2 mx-auto text-center mt-4">
+          Top up game, voucher, pulsa, e-wallet dan berbagai kebutuhan lainnya
+          dengan beragam metode pembayaran
         </p>
       </div>
-      <Container className="sticky top-20 z-40 bg-[rgba(255,255,255,0.2)] backdrop-blur-3xl my-4">
-        <div className="mt-8 flex items-center justify-between flex-col-reverse lg:flex-row items-center">
+      <Container className="sticky top-[4.5rem] z-40 bg-[rgba(255,255,255,0.2)] backdrop-blur-3xl">
+        <div className="mt-6 lg:mt-8 flex items-center justify-between flex-col-reverse lg:flex-row items-center">
           <div className="w-full flex flex-no-wrap lg:flex-wrap gap-3 lg:gap-3 overflow-x-scroll lg:overflow-x-hidden py-2 md:py-3">
             {defaultCategory.map((data) => (
               <ListCategory data={data} key={data.id} />

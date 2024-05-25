@@ -10,6 +10,8 @@ import CompLayanan from "@/components/layanan/CompLayanan";
 import NoGameFound from "@/components/home/NoGameFound/NoGameFound";
 import NewsVideo from "@/components/home/newsVideo/NewsVideo";
 import { INewsVideos } from "@/interfaces/newsVideo";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 
 const defaultCategory = [
   {
@@ -64,6 +66,17 @@ const Home = async () => {
       <NoGameFound />
 
       {posts.data.data.length > 0 && <NewsPost posts={posts.data.data} />}
+
+      <a
+        href="https://api.whatsapp.com/send?phone=628112065672"
+        target="_blank"
+        className="w-12 h-12 md:w-16 md:h-16 lg:w-14 lg:h-14 bg-green-500 rounded-full fixed bottom-4 right-4 md:bottom-6 md:right-6 z-50 flex items-center justify-center"
+      >
+        <FontAwesomeIcon
+          icon={faWhatsapp}
+          className="text-white text-3xl md:text-4xl lg:text-4xl"
+        />
+      </a>
     </div>
   );
 };

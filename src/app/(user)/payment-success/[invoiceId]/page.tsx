@@ -41,7 +41,7 @@ export default function PaymentSuccess({ params }: IParams) {
       setIsLoading(true);
       try {
         const req = await fetch(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/v1/order-detail/${params.invoiceId}`,
+          `${process.env.NEXT_PUBLIC_BASE_URL}/v2/order-detail/${params.invoiceId}`,
           {
             headers: {
               "ngrok-skip-browser-warning": "true",
@@ -69,7 +69,7 @@ export default function PaymentSuccess({ params }: IParams) {
     return <Loading />;
   } else if (!isLoading && !invoice) {
     return <NotFound />;
-  } else if (!isLoading && invoice?.status !== OrderStatuses.SUCCESS) {
+  } else if (!isLoading && invoice?.order.status !== OrderStatuses.SUCCESS) {
     return <NotFound />;
   }
 
@@ -82,7 +82,10 @@ export default function PaymentSuccess({ params }: IParams) {
         aria-describedby="modal-modal-description"
         sx={{ display: "flex" }}
       >
-        <FeedbackModal handleClose={handleClose} orderId={invoice?.id} />
+        <FeedbackModal
+          handleClose={handleClose}
+          orderId={invoice?.order.invoiceId}
+        />
       </Modal>
 
       <Box sx={{ backgroundColor: "#38e08b" }}>
@@ -117,14 +120,14 @@ export default function PaymentSuccess({ params }: IParams) {
                   variant="h6"
                   sx={{ marginBottom: "2rem", textAlign: "center" }}
                 >
-                  Top Up {invoice?.game}
+                  Top Up {invoice?.game.name}
                 </Typography>
 
                 <Box>
                   <Typography variant="body1" fontWeight="500">
                     Item Detail
                   </Typography>
-                  {invoice?.detail?.userId && (
+                  {invoice?.order?.userId && (
                     <Stack
                       direction="row"
                       margin="0.25rem 0"
@@ -133,14 +136,14 @@ export default function PaymentSuccess({ params }: IParams) {
                       <Typography variant="body2" sx={{ fontWeight: 400 }}>
                         User ID
                       </Typography>
-                      {invoice?.detail?.userId && (
+                      {invoice?.order?.userId && (
                         <Typography variant="body2" sx={{ fontWeight: 400 }}>
-                          {invoice?.detail?.userId}
+                          {invoice?.order?.userId}
                         </Typography>
                       )}
                     </Stack>
                   )}
-                  {invoice?.detail?.serverId && (
+                  {invoice?.order?.serverId && (
                     <Stack
                       direction="row"
                       margin="0.25rem 0"
@@ -149,14 +152,14 @@ export default function PaymentSuccess({ params }: IParams) {
                       <Typography variant="body2" sx={{ fontWeight: 400 }}>
                         Server ID
                       </Typography>
-                      {invoice?.detail?.serverId && (
+                      {invoice?.order?.serverId && (
                         <Typography variant="body2" sx={{ fontWeight: 400 }}>
-                          {invoice?.detail?.serverId}
+                          {invoice?.order?.serverId}
                         </Typography>
                       )}
                     </Stack>
                   )}
-                  {invoice?.detail?.username && (
+                  {invoice?.order?.username && (
                     <Stack
                       direction="row"
                       margin="0.25rem 0"
@@ -165,9 +168,9 @@ export default function PaymentSuccess({ params }: IParams) {
                       <Typography variant="body2" sx={{ fontWeight: 400 }}>
                         Username
                       </Typography>
-                      {invoice?.detail?.username && (
+                      {invoice?.order?.username && (
                         <Typography variant="body2" sx={{ fontWeight: 400 }}>
-                          {invoice?.detail?.username}
+                          {invoice?.order?.username}
                         </Typography>
                       )}
                     </Stack>
@@ -186,7 +189,7 @@ export default function PaymentSuccess({ params }: IParams) {
                   >
                     <Typography variant="body2">Nomor Invoice</Typography>
                     <Typography variant="body2">
-                      {invoice?.invoiceId}
+                      {invoice?.order.invoiceId}
                     </Typography>
                   </Stack>
                   <Stack
@@ -196,7 +199,7 @@ export default function PaymentSuccess({ params }: IParams) {
                   >
                     <Typography variant="body2">Tanggal Order</Typography>
                     <Typography variant="body2">
-                      {dayjs(invoice?.createdAt).format("DD MMM YYYY")}
+                      {dayjs(invoice?.order.createdAt).format("DD MMM YYYY")}
                     </Typography>
                   </Stack>
                   <Stack
@@ -206,7 +209,7 @@ export default function PaymentSuccess({ params }: IParams) {
                   >
                     <Typography variant="body2">Product</Typography>
                     <Typography variant="body2">
-                      {invoice?.productName}
+                      {invoice?.product.name}
                     </Typography>
                   </Stack>
                   <Stack
@@ -215,7 +218,9 @@ export default function PaymentSuccess({ params }: IParams) {
                     margin="0.25rem 0"
                   >
                     <Typography variant="body2">Kuantitas</Typography>
-                    <Typography variant="body2">{invoice?.quantity}</Typography>
+                    <Typography variant="body2">
+                      {invoice?.order.quantity}
+                    </Typography>
                   </Stack>
                   <Stack
                     direction="row"
@@ -224,9 +229,9 @@ export default function PaymentSuccess({ params }: IParams) {
                   >
                     <Typography variant="body2">Sub Total</Typography>
                     <Typography variant="body2">
-                      {invoice?.detail?.amount && invoice?.detail?.quantity
+                      {invoice?.order?.amount && invoice?.order?.quantity
                         ? currencyConverter(
-                            invoice?.detail.amount * invoice?.detail.quantity
+                            invoice?.order.amount * invoice?.order.quantity
                           )
                         : "N/A"}
                     </Typography>
@@ -238,7 +243,8 @@ export default function PaymentSuccess({ params }: IParams) {
                   >
                     <Typography variant="body2">Biaya Admin</Typography>
                     <Typography variant="body2">
-                      {invoice?.feeAmt && currencyConverter(invoice?.feeAmt)}
+                      {invoice?.order.feeAmt &&
+                        currencyConverter(invoice?.order.feeAmt)}
                     </Typography>
                   </Stack>
                   <Stack
@@ -248,7 +254,8 @@ export default function PaymentSuccess({ params }: IParams) {
                   >
                     <Typography variant="body2">Diskon</Typography>
                     <Typography variant="body2">
-                      {invoice?.discAmt && currencyConverter(invoice?.discAmt)}
+                      {invoice?.order.discAmt &&
+                        currencyConverter(invoice?.order.discAmt)}
                     </Typography>
                   </Stack>
                 </Box>
@@ -260,7 +267,8 @@ export default function PaymentSuccess({ params }: IParams) {
                     Total
                   </Typography>
                   <Typography variant="body1" fontWeight="500">
-                    {invoice?.totalAmt && currencyConverter(invoice?.totalAmt)}
+                    {invoice?.order.totalAmt &&
+                      currencyConverter(invoice?.order.totalAmt)}
                   </Typography>
                 </Stack>
               </Stack>
@@ -281,12 +289,12 @@ export default function PaymentSuccess({ params }: IParams) {
                 Yaaay{" "}
                 <Typography component="span" fontWeight={800} color="white">
                   {" "}
-                  {invoice?.productName}{" "}
+                  {invoice?.product.name}{" "}
                 </Typography>{" "}
                 berhasil dikirim ke akun{" "}
                 <Typography component="span" fontWeight={800} color="white">
                   {" "}
-                  {invoice?.game}{" "}
+                  {invoice?.game.name}{" "}
                 </Typography>{" "}
                 anda Terimakasih telah menggunakan layanan gasskeun top up. kami
                 harap anda puas dengan pelayanan kami
@@ -365,7 +373,7 @@ export default function PaymentSuccess({ params }: IParams) {
                             }}
                           >
                             <Avatar
-                              src={invoice.logoGame}
+                              src={invoice.game.logoUrl}
                               variant="rounded"
                               sx={{ width: 50, height: 50 }}
                             />
@@ -384,7 +392,7 @@ export default function PaymentSuccess({ params }: IParams) {
                                   marginTop: 1.5,
                                 }}
                               >
-                                {invoice.productName}
+                                {invoice.product.name}
                               </Typography>
                               <Typography
                                 variant="body2"
@@ -394,7 +402,7 @@ export default function PaymentSuccess({ params }: IParams) {
                                   marginTop: 1.5,
                                 }}
                               >
-                                {invoice.game}
+                                {invoice.game.name}
                               </Typography>
                             </Box>
                           </Box>
@@ -413,15 +421,15 @@ export default function PaymentSuccess({ params }: IParams) {
                               variant="body2"
                               sx={{ fontWeight: 600, marginTop: 1.5 }}
                             >
-                              {currencyConverter(invoice.totalAmt)}
+                              {currencyConverter(invoice.order.totalAmt)}
                             </Typography>
                           </Box>
                         </Box>
 
                         <Box sx={{ marginTop: 4 }}>
-                          {(invoice.detail?.userId ||
-                            invoice.detail?.serverId ||
-                            invoice.detail?.username) && (
+                          {(invoice.order?.userId ||
+                            invoice.order?.serverId ||
+                            invoice.order?.username) && (
                             <Typography
                               variant="body1"
                               sx={{ fontWeight: 600, color: "#374151" }}
@@ -432,7 +440,7 @@ export default function PaymentSuccess({ params }: IParams) {
                         </Box>
 
                         <Box>
-                          {invoice?.detail?.userId && (
+                          {invoice?.order?.userId && (
                             <Stack
                               direction="row"
                               justifyContent="space-between"
@@ -443,17 +451,17 @@ export default function PaymentSuccess({ params }: IParams) {
                               >
                                 User ID
                               </Typography>
-                              {invoice?.detail?.userId && (
+                              {invoice?.order?.userId && (
                                 <Typography
                                   variant="body2"
                                   sx={{ fontWeight: 500, marginTop: 2 }}
                                 >
-                                  {invoice?.detail?.userId}
+                                  {invoice?.order?.userId}
                                 </Typography>
                               )}
                             </Stack>
                           )}
-                          {invoice?.detail?.serverId && (
+                          {invoice?.order?.serverId && (
                             <Stack
                               direction="row"
                               justifyContent="space-between"
@@ -464,17 +472,17 @@ export default function PaymentSuccess({ params }: IParams) {
                               >
                                 Server ID
                               </Typography>
-                              {invoice?.detail?.serverId && (
+                              {invoice?.order?.serverId && (
                                 <Typography
                                   variant="body2"
                                   sx={{ fontWeight: 500, marginTop: 2 }}
                                 >
-                                  {invoice?.detail?.serverId}
+                                  {invoice?.order?.serverId}
                                 </Typography>
                               )}
                             </Stack>
                           )}
-                          {invoice?.detail?.username && (
+                          {invoice?.order?.username && (
                             <Stack
                               direction="row"
                               justifyContent="space-between"
@@ -485,12 +493,12 @@ export default function PaymentSuccess({ params }: IParams) {
                               >
                                 Username
                               </Typography>
-                              {invoice?.detail?.username && (
+                              {invoice?.order?.username && (
                                 <Typography
                                   variant="body2"
                                   sx={{ fontWeight: 500, marginTop: 2 }}
                                 >
-                                  {invoice?.detail?.username}
+                                  {invoice?.order?.username}
                                 </Typography>
                               )}
                             </Stack>
@@ -530,11 +538,11 @@ export default function PaymentSuccess({ params }: IParams) {
                           }}
                         >
                           <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                            {invoice.productName}
+                            {invoice.product.name}
                           </Typography>
                           <Typography variant="body2">
                             {currencyConverter(
-                              invoice.detail ? invoice.detail.amount : 0
+                              invoice.order ? invoice.order.amount : 0
                             )}
                           </Typography>
                         </Box>
@@ -549,7 +557,7 @@ export default function PaymentSuccess({ params }: IParams) {
                         >
                           <Typography variant="body2">Kuantitas</Typography>
                           <Typography variant="body2">
-                            {invoice.detail?.quantity}
+                            {invoice.order?.quantity}
                           </Typography>
                         </Box>
                         <Box
@@ -565,10 +573,9 @@ export default function PaymentSuccess({ params }: IParams) {
                             Subtotal
                           </Typography>
                           <Typography variant="body2">
-                            {invoice.detail?.amount && invoice.detail?.quantity
+                            {invoice.order?.amount && invoice.order?.quantity
                               ? currencyConverter(
-                                  invoice.detail.amount *
-                                    invoice.detail.quantity
+                                  invoice.order.amount * invoice.order.quantity
                                 )
                               : "N/A"}
                           </Typography>
@@ -586,7 +593,7 @@ export default function PaymentSuccess({ params }: IParams) {
                             Biaya Admin
                           </Typography>
                           <Typography variant="body2">
-                            {currencyConverter(invoice.feeAmt)}
+                            {currencyConverter(invoice.order.feeAmt)}
                           </Typography>
                         </Box>
                         <Box
@@ -602,7 +609,7 @@ export default function PaymentSuccess({ params }: IParams) {
                             Diskon
                           </Typography>
                           <Typography variant="body2">
-                            {currencyConverter(invoice.discAmt)}
+                            {currencyConverter(invoice.order.discAmt)}
                           </Typography>
                         </Box>
                         <Divider />
@@ -625,7 +632,7 @@ export default function PaymentSuccess({ params }: IParams) {
                             variant="body1"
                             sx={{ fontWeight: 600, color: "#374151" }}
                           >
-                            {currencyConverter(invoice.totalAmt)}
+                            {currencyConverter(invoice.order.totalAmt)}
                           </Typography>
                         </Box>
                       </Paper>
@@ -693,7 +700,7 @@ export default function PaymentSuccess({ params }: IParams) {
                               variant="body2"
                               sx={{ fontWeight: 500 }}
                             >
-                              {invoice.invoiceId}
+                              {invoice.order.invoiceId}
                             </Typography>
                           </Stack>
                           <Stack
@@ -712,7 +719,7 @@ export default function PaymentSuccess({ params }: IParams) {
                               variant="body2"
                               sx={{ fontWeight: 500 }}
                             >
-                              {dayjs(invoice.createdAt).format(
+                              {dayjs(invoice.order.createdAt).format(
                                 "DD MMM YYYY HH:mm:ss"
                               )}
                             </Typography>
@@ -733,10 +740,10 @@ export default function PaymentSuccess({ params }: IParams) {
                               variant="body2"
                               sx={{ fontWeight: 500 }}
                             >
-                              {invoice.paymentMethods?.name}
+                              {invoice.payment.name}
                             </Typography>
                           </Stack>
-                          {invoice.cd === "ID_OVO" && (
+                          {invoice.payment.cd === "ID_OVO" && (
                             <Stack
                               direction="row"
                               justifyContent="space-between"
@@ -752,14 +759,15 @@ export default function PaymentSuccess({ params }: IParams) {
                                 variant="body2"
                                 sx={{ fontWeight: 500 }}
                               >
-                                {invoice.payment?.mobileNumber.replace(
-                                  "+62",
-                                  "0"
-                                )}
+                                {"mobileNumber" in invoice.payment.action &&
+                                  invoice.payment.action.mobileNumber.replace(
+                                    "+62",
+                                    "0"
+                                  )}
                               </Typography>
                             </Stack>
                           )}
-                          {invoice.cd === "ID_JENIUSPAY" && (
+                          {invoice.payment.cd === "ID_JENIUSPAY" && (
                             <Stack
                               direction="row"
                               justifyContent="space-between"
@@ -775,7 +783,8 @@ export default function PaymentSuccess({ params }: IParams) {
                                 variant="body2"
                                 sx={{ fontWeight: 500 }}
                               >
-                                {invoice.cashtag}
+                                {"cashtag" in invoice.payment.action &&
+                                  invoice.payment.action.cashtag}
                               </Typography>
                             </Stack>
                           )}

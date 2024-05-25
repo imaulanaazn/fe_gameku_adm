@@ -20,7 +20,7 @@ const Payment = async ({ params }: IParams) => {
     return <Maintenance />;
   }
   const invoice = await sendRequest<IInvoice>(
-    "/v1/order-detail/" + params.invoiceId,
+    "/v2/order-detail/" + params.invoiceId,
     { cache: "no-cache" }
   );
   if (!invoice.ok) {

@@ -743,30 +743,31 @@ export default function PaymentSuccess({ params }: IParams) {
                               {invoice.payment.name}
                             </Typography>
                           </Stack>
-                          {invoice.payment.cd === "ID_OVO" && (
-                            <Stack
-                              direction="row"
-                              justifyContent="space-between"
-                              sx={{ marginBottom: 2 }}
-                            >
-                              <Typography
-                                variant="body2"
-                                sx={{ fontWeight: 500 }}
+                          {invoice.payment.cd === "ID_OVO" ||
+                            (invoice.payment.cd === "OVOPUSH" && (
+                              <Stack
+                                direction="row"
+                                justifyContent="space-between"
+                                sx={{ marginBottom: 2 }}
                               >
-                                Nomor OVO
-                              </Typography>
-                              <Typography
-                                variant="body2"
-                                sx={{ fontWeight: 500 }}
-                              >
-                                {"mobileNumber" in invoice.payment.action &&
-                                  invoice.payment.action.mobileNumber.replace(
-                                    "+62",
-                                    "0"
-                                  )}
-                              </Typography>
-                            </Stack>
-                          )}
+                                <Typography
+                                  variant="body2"
+                                  sx={{ fontWeight: 500 }}
+                                >
+                                  Nomor OVO
+                                </Typography>
+                                <Typography
+                                  variant="body2"
+                                  sx={{ fontWeight: 500 }}
+                                >
+                                  {"mobileNumber" in invoice.payment.action &&
+                                    invoice.payment.action.mobileNumber.replace(
+                                      "+62",
+                                      "0"
+                                    )}
+                                </Typography>
+                              </Stack>
+                            ))}
                           {invoice.payment.cd === "ID_JENIUSPAY" && (
                             <Stack
                               direction="row"

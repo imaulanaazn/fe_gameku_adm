@@ -73,7 +73,20 @@ const getStatusPayment = (status: OrderStatuses, expiredAt: string) => {
   };
 };
 
-const getTitlePayment = (paymentAction: string): string => {
+const getTitlePayment = (paymentActions: any): string => {
+  let paymentAction = "";
+  for (const property in paymentActions) {
+    if (
+      property === "checkoutUrl" ||
+      property === "qrString" ||
+      property === "paymentCode"
+    ) {
+      if (paymentActions[property]) {
+        paymentAction = property;
+      }
+    }
+  }
+
   let str: string;
   switch (paymentAction) {
     case PaymentAction.PAYMENT_CODE:
@@ -81,8 +94,10 @@ const getTitlePayment = (paymentAction: string): string => {
       break;
     case PaymentAction.QR_STRING:
       str = "Scan QR untuk bayar";
+      break;
     case PaymentAction.CHECKOUT_URL:
-      str = "Klik URL berikut untuk melanjutkan";
+      str = "Tekan tombol lanjutkan";
+      break;
     default:
       str = "Pembayaran";
       break;
@@ -501,13 +516,17 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                   </Typography>
                 </Box>
                 {(order.payment.cd === "ID_JENIUSPAY" ||
-                  order.payment.cd === "ID_OVO") &&
+                  order.payment.cd === "ID_OVO" ||
+                  order.payment.cd === "OVOPUSH") &&
                   order.order.status === OrderStatuses.PENDING_PAYMENT && (
                     <Box sx={{ marginBottom: 4 }}>
                       <Alert severity="info">
                         Silahkan cek aplikasi{" "}
-                        {order.payment.cd === "ID_OVO" ? "OVO" : "JENIUS"} mu
-                        untuk melanjutkan pembayaran
+                        {order.payment.cd === "ID_OVO" ||
+                        order.payment.cd === "OVOPUSH"
+                          ? "OVO"
+                          : "JENIUS"}{" "}
+                        mu untuk melanjutkan pembayaran
                       </Alert>
                     </Box>
                   )}
@@ -577,7 +596,8 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                       {order.payment.name}
                     </Typography>
                   </Stack>
-                  {order.payment.cd === "ID_OVO" && (
+                  {(order.payment.cd === "ID_OVO" ||
+                    order.payment.cd === "OVOPUSH") && (
                     <Stack
                       direction="row"
                       justifyContent="space-between"
@@ -600,7 +620,7 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                       sx={{ marginBottom: 2 }}
                     >
                       <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                        Nomor OVO
+                        Cashtag
                       </Typography>
                       <Typography variant="body2" sx={{ fontWeight: 500 }}>
                         {"cashtag" in order.payment.action &&
@@ -613,7 +633,8 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
 
               {!(
                 order.payment.cd === "ID_JENIUSPAY" ||
-                order.payment.cd === "ID_OVO"
+                order.payment.cd === "ID_OVO" ||
+                order.payment.cd === "OVOPUSH"
               ) &&
                 order.order.status === OrderStatuses.PENDING_PAYMENT && (
                   <Paper
@@ -629,9 +650,7 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                         }}
                       >
                         <Typography sx={{ color: "#374151", fontWeight: 600 }}>
-                          {getTitlePayment(
-                            Object.keys(order.payment.action)[0]
-                          )}
+                          {getTitlePayment(order.payment.action)}
                         </Typography>
                         <Box>
                           <Avatar
@@ -651,50 +670,52 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                         </Box>
                       </Box>
 
-                      {PaymentAction.QR_STRING in order.payment.action && (
-                        <Box sx={{ marginTop: 4, textAlign: "center" }}>
-                          <div ref={canvasRef}>
-                            <Avatar
-                              variant="rounded"
-                              sx={{
-                                mr: 3,
-                                width: "auto",
-                                height: "auto",
-                                boxShadow: 3,
-                                color: "common.white",
-                                backgroundColor: `white`,
-                              }}
-                            >
-                              <Canvas
-                                text={order.payment.action.qrString}
-                                options={{
-                                  errorCorrectionLevel: "M",
-                                  margin: 3,
-                                  scale: 4,
-                                  width: 300,
-                                  quality: 1,
+                      {PaymentAction.QR_STRING in order.payment.action &&
+                        order.payment.action.qrString && (
+                          <Box sx={{ marginTop: 4, textAlign: "center" }}>
+                            <div ref={canvasRef}>
+                              <Avatar
+                                variant="rounded"
+                                sx={{
+                                  mr: 3,
+                                  width: "auto",
+                                  height: "auto",
+                                  boxShadow: 3,
+                                  color: "common.white",
+                                  backgroundColor: `white`,
                                 }}
-                                // logo={{
-                                //   src: logoGasskeun as string,
-                                //   options: {
-                                //     width: 50,
-                                //   },
-                                // }}
-                              />
-                            </Avatar>
-                            <Button
-                              variant="contained"
-                              color="primary"
-                              sx={{ marginTop: 4 }}
-                              onClick={onQRDownload}
-                            >
-                              Download QR Code
-                            </Button>
-                          </div>
-                        </Box>
-                      )}
+                              >
+                                <Canvas
+                                  text={order.payment.action.qrString}
+                                  options={{
+                                    errorCorrectionLevel: "M",
+                                    margin: 3,
+                                    scale: 4,
+                                    width: 300,
+                                    quality: 1,
+                                  }}
+                                  // logo={{
+                                  //   src: logoGasskeun as string,
+                                  //   options: {
+                                  //     width: 50,
+                                  //   },
+                                  // }}
+                                />
+                              </Avatar>
+                              <Button
+                                variant="contained"
+                                color="primary"
+                                sx={{ marginTop: 4 }}
+                                onClick={onQRDownload}
+                              >
+                                Download QR Code
+                              </Button>
+                            </div>
+                          </Box>
+                        )}
 
                       {PaymentAction.CHECKOUT_URL in order.payment.action &&
+                        order.payment.action.checkoutUrl &&
                         order.order.status ===
                           OrderStatuses.PENDING_PAYMENT && (
                           <Button
@@ -712,48 +733,49 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                           </Button>
                         )}
 
-                      {PaymentAction.PAYMENT_CODE in order.payment.action && (
-                        <ClickAwayListener
-                          onClickAway={() => {
-                            handleTooltip(false);
-                          }}
-                        >
-                          <div>
-                            <Tooltip
-                              PopperProps={{
-                                disablePortal: true,
-                              }}
-                              onClose={() => {
-                                handleTooltip(false);
-                              }}
-                              open={open}
-                              disableFocusListener
-                              disableHoverListener
-                              disableTouchListener
-                              title="Berhasil Disalin"
-                            >
-                              <Button
-                                variant="outlined"
-                                sx={{ width: "100%", marginTop: 4 }}
-                                onClick={() => {
-                                  navigator.clipboard.writeText(
-                                    PaymentAction.PAYMENT_CODE in
-                                      order.payment.action
-                                      ? order.payment?.action.paymentCode
-                                      : ""
-                                  );
-                                  handleTooltip(true);
+                      {PaymentAction.PAYMENT_CODE in order.payment.action &&
+                        order.payment.action.paymentCode && (
+                          <ClickAwayListener
+                            onClickAway={() => {
+                              handleTooltip(false);
+                            }}
+                          >
+                            <div>
+                              <Tooltip
+                                PopperProps={{
+                                  disablePortal: true,
                                 }}
+                                onClose={() => {
+                                  handleTooltip(false);
+                                }}
+                                open={open}
+                                disableFocusListener
+                                disableHoverListener
+                                disableTouchListener
+                                title="Berhasil Disalin"
                               >
-                                {PaymentAction.PAYMENT_CODE in
-                                order.payment.action
-                                  ? order.payment?.action.paymentCode
-                                  : ""}
-                              </Button>
-                            </Tooltip>
-                          </div>
-                        </ClickAwayListener>
-                      )}
+                                <Button
+                                  variant="outlined"
+                                  sx={{ width: "100%", marginTop: 4 }}
+                                  onClick={() => {
+                                    navigator.clipboard.writeText(
+                                      PaymentAction.PAYMENT_CODE in
+                                        order.payment.action
+                                        ? order.payment?.action.paymentCode
+                                        : ""
+                                    );
+                                    handleTooltip(true);
+                                  }}
+                                >
+                                  {PaymentAction.PAYMENT_CODE in
+                                  order.payment.action
+                                    ? order.payment?.action.paymentCode
+                                    : ""}
+                                </Button>
+                              </Tooltip>
+                            </div>
+                          </ClickAwayListener>
+                        )}
                     </Box>
                   </Paper>
                 )}

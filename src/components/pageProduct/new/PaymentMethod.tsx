@@ -100,18 +100,34 @@ const PaymentMethod = ({ value, data, onChange, position }: any) => {
             <Box
               key={method.id}
               onClick={() => {
+                let feeAmount;
+
+                if (
+                  method.providerCd === "TOKOPAY" &&
+                  method.category === "6"
+                ) {
+                  feeAmount =
+                    method.feeType === FeeType.PERCENTAGE
+                      ? (value.totalAmountBeforeFee * method.fee) / 100
+                      : method.fee;
+                  feeAmount =
+                    Math.ceil((value.totalAmountBeforeFee + feeAmount) / 1000) *
+                      1000 -
+                    value.totalAmountBeforeFee;
+                } else {
+                  feeAmount =
+                    method.feeType === FeeType.PERCENTAGE
+                      ? (value.totalAmountBeforeFee * method.fee) / 100
+                      : method.fee;
+                }
+
                 if (
                   value.totalAmountBeforeFee &&
                   value.totalAmountBeforeFee > method.minAmount &&
                   value.totalAmountBeforeFee < method.maxAmount
                 ) {
                   onChange("paymentMethodId", method.id);
-                  onChange(
-                    "feeAmount",
-                    method.feeType === FeeType.PERCENTAGE
-                      ? (value.totalAmountBeforeFee * method.fee) / 100
-                      : method.fee
-                  );
+                  onChange("feeAmount", feeAmount);
                   onChange("paymentMethodCd", method.cd);
                   onChange("paymentMethod", method);
                   onChange("promoCode", "");
@@ -180,10 +196,19 @@ const PaymentMethod = ({ value, data, onChange, position }: any) => {
                         : "MAX " + currencyConverter(method.maxAmount)
                     })`
                   : currencyConverter(
-                      value.totalAmountBeforeFee +
-                        (method.feeType === FeeType.PERCENTAGE
-                          ? (value.totalAmountBeforeFee * method.fee) / 100
-                          : method.fee)
+                      method.providerCd === "TOKOPAY" && method.category === "6"
+                        ? Math.ceil(
+                            (value.totalAmountBeforeFee +
+                              (method.feeType === FeeType.PERCENTAGE
+                                ? (value.totalAmountBeforeFee * method.fee) /
+                                  100
+                                : method.fee)) /
+                              1000
+                          ) * 1000
+                        : value.totalAmountBeforeFee +
+                            (method.feeType === FeeType.PERCENTAGE
+                              ? (value.totalAmountBeforeFee * method.fee) / 100
+                              : method.fee)
                     )}
               </Typography>
             </Box>

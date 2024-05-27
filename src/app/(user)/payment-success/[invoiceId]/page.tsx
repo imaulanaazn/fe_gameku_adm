@@ -41,7 +41,7 @@ export default function PaymentSuccess({ params }: IParams) {
       setIsLoading(true);
       try {
         const req = await fetch(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/v1/order-detail/${params.invoiceId}`,
+          `${process.env.NEXT_PUBLIC_BASE_URL}/v2/order-detail/${params.invoiceId}`,
           {
             headers: {
               "ngrok-skip-browser-warning": "true",
@@ -69,7 +69,7 @@ export default function PaymentSuccess({ params }: IParams) {
     return <Loading />;
   } else if (!isLoading && !invoice) {
     return <NotFound />;
-  } else if (!isLoading && invoice?.status !== OrderStatuses.SUCCESS) {
+  } else if (!isLoading && invoice?.order.status !== OrderStatuses.SUCCESS) {
     return <NotFound />;
   }
 
@@ -82,7 +82,10 @@ export default function PaymentSuccess({ params }: IParams) {
         aria-describedby="modal-modal-description"
         sx={{ display: "flex" }}
       >
-        <FeedbackModal handleClose={handleClose} orderId={invoice?.id} />
+        <FeedbackModal
+          handleClose={handleClose}
+          orderId={invoice?.order.invoiceId}
+        />
       </Modal>
 
       <Box sx={{ backgroundColor: "#38e08b" }}>
@@ -117,14 +120,14 @@ export default function PaymentSuccess({ params }: IParams) {
                   variant="h6"
                   sx={{ marginBottom: "2rem", textAlign: "center" }}
                 >
-                  Top Up {invoice?.game}
+                  Top Up {invoice?.game.name}
                 </Typography>
 
                 <Box>
                   <Typography variant="body1" fontWeight="500">
                     Item Detail
                   </Typography>
-                  {invoice?.detail?.userId && (
+                  {invoice?.order?.userId && (
                     <Stack
                       direction="row"
                       margin="0.25rem 0"
@@ -133,14 +136,14 @@ export default function PaymentSuccess({ params }: IParams) {
                       <Typography variant="body2" sx={{ fontWeight: 400 }}>
                         User ID
                       </Typography>
-                      {invoice?.detail?.userId && (
+                      {invoice?.order?.userId && (
                         <Typography variant="body2" sx={{ fontWeight: 400 }}>
-                          {invoice?.detail?.userId}
+                          {invoice?.order?.userId}
                         </Typography>
                       )}
                     </Stack>
                   )}
-                  {invoice?.detail?.serverId && (
+                  {invoice?.order?.serverId && (
                     <Stack
                       direction="row"
                       margin="0.25rem 0"
@@ -149,14 +152,14 @@ export default function PaymentSuccess({ params }: IParams) {
                       <Typography variant="body2" sx={{ fontWeight: 400 }}>
                         Server ID
                       </Typography>
-                      {invoice?.detail?.serverId && (
+                      {invoice?.order?.serverId && (
                         <Typography variant="body2" sx={{ fontWeight: 400 }}>
-                          {invoice?.detail?.serverId}
+                          {invoice?.order?.serverId}
                         </Typography>
                       )}
                     </Stack>
                   )}
-                  {invoice?.detail?.username && (
+                  {invoice?.order?.username && (
                     <Stack
                       direction="row"
                       margin="0.25rem 0"
@@ -165,9 +168,9 @@ export default function PaymentSuccess({ params }: IParams) {
                       <Typography variant="body2" sx={{ fontWeight: 400 }}>
                         Username
                       </Typography>
-                      {invoice?.detail?.username && (
+                      {invoice?.order?.username && (
                         <Typography variant="body2" sx={{ fontWeight: 400 }}>
-                          {invoice?.detail?.username}
+                          {invoice?.order?.username}
                         </Typography>
                       )}
                     </Stack>
@@ -186,7 +189,7 @@ export default function PaymentSuccess({ params }: IParams) {
                   >
                     <Typography variant="body2">Nomor Invoice</Typography>
                     <Typography variant="body2">
-                      {invoice?.invoiceId}
+                      {invoice?.order.invoiceId}
                     </Typography>
                   </Stack>
                   <Stack
@@ -196,7 +199,7 @@ export default function PaymentSuccess({ params }: IParams) {
                   >
                     <Typography variant="body2">Tanggal Order</Typography>
                     <Typography variant="body2">
-                      {dayjs(invoice?.createdAt).format("DD MMM YYYY")}
+                      {dayjs(invoice?.order.createdAt).format("DD MMM YYYY")}
                     </Typography>
                   </Stack>
                   <Stack
@@ -206,7 +209,7 @@ export default function PaymentSuccess({ params }: IParams) {
                   >
                     <Typography variant="body2">Product</Typography>
                     <Typography variant="body2">
-                      {invoice?.productName}
+                      {invoice?.product.name}
                     </Typography>
                   </Stack>
                   <Stack
@@ -215,7 +218,9 @@ export default function PaymentSuccess({ params }: IParams) {
                     margin="0.25rem 0"
                   >
                     <Typography variant="body2">Kuantitas</Typography>
-                    <Typography variant="body2">{invoice?.quantity}</Typography>
+                    <Typography variant="body2">
+                      {invoice?.order.quantity}
+                    </Typography>
                   </Stack>
                   <Stack
                     direction="row"
@@ -224,9 +229,9 @@ export default function PaymentSuccess({ params }: IParams) {
                   >
                     <Typography variant="body2">Sub Total</Typography>
                     <Typography variant="body2">
-                      {invoice?.detail?.amount && invoice?.detail?.quantity
+                      {invoice?.order?.amount && invoice?.order?.quantity
                         ? currencyConverter(
-                            invoice?.detail.amount * invoice?.detail.quantity
+                            invoice?.order.amount * invoice?.order.quantity
                           )
                         : "N/A"}
                     </Typography>
@@ -238,7 +243,8 @@ export default function PaymentSuccess({ params }: IParams) {
                   >
                     <Typography variant="body2">Biaya Admin</Typography>
                     <Typography variant="body2">
-                      {invoice?.feeAmt && currencyConverter(invoice?.feeAmt)}
+                      {invoice?.order.feeAmt &&
+                        currencyConverter(invoice?.order.feeAmt)}
                     </Typography>
                   </Stack>
                   <Stack
@@ -248,7 +254,8 @@ export default function PaymentSuccess({ params }: IParams) {
                   >
                     <Typography variant="body2">Diskon</Typography>
                     <Typography variant="body2">
-                      {invoice?.discAmt && currencyConverter(invoice?.discAmt)}
+                      {invoice?.order.discAmt &&
+                        currencyConverter(invoice?.order.discAmt)}
                     </Typography>
                   </Stack>
                 </Box>
@@ -260,7 +267,8 @@ export default function PaymentSuccess({ params }: IParams) {
                     Total
                   </Typography>
                   <Typography variant="body1" fontWeight="500">
-                    {invoice?.totalAmt && currencyConverter(invoice?.totalAmt)}
+                    {invoice?.order.totalAmt &&
+                      currencyConverter(invoice?.order.totalAmt)}
                   </Typography>
                 </Stack>
               </Stack>
@@ -281,12 +289,12 @@ export default function PaymentSuccess({ params }: IParams) {
                 Yaaay{" "}
                 <Typography component="span" fontWeight={800} color="white">
                   {" "}
-                  {invoice?.productName}{" "}
+                  {invoice?.product.name}{" "}
                 </Typography>{" "}
                 berhasil dikirim ke akun{" "}
                 <Typography component="span" fontWeight={800} color="white">
                   {" "}
-                  {invoice?.game}{" "}
+                  {invoice?.game.name}{" "}
                 </Typography>{" "}
                 anda Terimakasih telah menggunakan layanan gasskeun top up. kami
                 harap anda puas dengan pelayanan kami
@@ -313,407 +321,349 @@ export default function PaymentSuccess({ params }: IParams) {
 
       <Box sx={{ backgroundColor: "#FFF3F3", paddingY: { xs: 16, md: 20 } }}>
         <Container>
-          <Typography
-            variant="h4"
-            textAlign="center"
-            marginBottom={{ xs: "1rem", md: "2rem" }}
-            sx={{ color: "#374151" }}
-          >
-            Invoice
-          </Typography>
-          <Grid container spacing={6}>
-            {invoice && (
-              <>
-                <Grid item xs={12} md={7}>
-                  <Stack spacing={6}>
-                    <Paper
-                      sx={{
-                        position: "relative",
-                        padding: 6,
-                        borderRadius: 2,
-                      }}
-                      elevation={0}
-                    >
-                      <Box
+          <>
+            <Typography
+              variant="h4"
+              textAlign="center"
+              marginBottom={{ xs: "1rem", md: "2rem" }}
+              sx={{ color: "#374151" }}
+            >
+              Invoice
+            </Typography>
+            <Grid container spacing={6}>
+              {invoice && (
+                <>
+                  <Grid item xs={12} md={7}>
+                    <Stack spacing={6}>
+                      <Paper
                         sx={{
-                          marginBottom: 4,
-                          backgroundColor: "#FFE4E5",
-                          padding: 4,
-                          borderRadius: 1,
+                          position: "relative",
+                          padding: 6,
+                          borderRadius: 2,
                         }}
-                      >
-                        <Typography
-                          variant="body1"
-                          sx={{ fontWeight: 600, color: "#B72025" }}
-                        >
-                          Informasi Produk
-                        </Typography>
-                      </Box>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                        }}
+                        elevation={0}
                       >
                         <Box
                           sx={{
+                            marginBottom: 4,
+                            backgroundColor: "#FFE4E5",
+                            padding: 4,
+                            borderRadius: 1,
+                          }}
+                        >
+                          <Typography
+                            variant="body1"
+                            sx={{ fontWeight: 600, color: "#B72025" }}
+                          >
+                            Informasi Produk
+                          </Typography>
+                        </Box>
+                        <Box
+                          sx={{
                             display: "flex",
-                            gap: 4,
+                            justifyContent: "space-between",
                             alignItems: "center",
                           }}
                         >
-                          <Avatar
-                            src={invoice.logoGame}
-                            variant="rounded"
-                            sx={{ width: 50, height: 50 }}
-                          />
                           <Box
                             sx={{
                               display: "flex",
-                              flexDirection: "column",
-                              justifyContent: "center",
+                              gap: 4,
+                              alignItems: "center",
                             }}
                           >
+                            <Avatar
+                              src={invoice.game.logoUrl}
+                              variant="rounded"
+                              sx={{ width: 50, height: 50 }}
+                            />
+                            <Box
+                              sx={{
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "center",
+                              }}
+                            >
+                              <Typography
+                                variant="body2"
+                                sx={{
+                                  letterSpacing: "0.25px",
+                                  fontWeight: 600,
+                                  marginTop: 1.5,
+                                }}
+                              >
+                                {invoice.product.name}
+                              </Typography>
+                              <Typography
+                                variant="body2"
+                                sx={{
+                                  letterSpacing: "0.25px",
+                                  fontWeight: 600,
+                                  marginTop: 1.5,
+                                }}
+                              >
+                                {invoice.game.name}
+                              </Typography>
+                            </Box>
+                          </Box>
+                          <Box>
                             <Typography
                               variant="body2"
                               sx={{
-                                letterSpacing: "0.25px",
                                 fontWeight: 600,
+                                color: "gray",
                                 marginTop: 1.5,
                               }}
                             >
-                              {invoice.productName}
+                              Total
                             </Typography>
                             <Typography
                               variant="body2"
-                              sx={{
-                                letterSpacing: "0.25px",
-                                fontWeight: 600,
-                                marginTop: 1.5,
-                              }}
+                              sx={{ fontWeight: 600, marginTop: 1.5 }}
                             >
-                              {invoice.game}
+                              {currencyConverter(invoice.order.totalAmt)}
                             </Typography>
                           </Box>
                         </Box>
+
+                        <Box sx={{ marginTop: 4 }}>
+                          {(invoice.order?.userId ||
+                            invoice.order?.serverId ||
+                            invoice.order?.username) && (
+                            <Typography
+                              variant="body1"
+                              sx={{ fontWeight: 600, color: "#374151" }}
+                            >
+                              Data game :
+                            </Typography>
+                          )}
+                        </Box>
+
                         <Box>
+                          {invoice?.order?.userId && (
+                            <Stack
+                              direction="row"
+                              justifyContent="space-between"
+                            >
+                              <Typography
+                                variant="body2"
+                                sx={{ fontWeight: 500, marginTop: 2 }}
+                              >
+                                User ID
+                              </Typography>
+                              {invoice?.order?.userId && (
+                                <Typography
+                                  variant="body2"
+                                  sx={{ fontWeight: 500, marginTop: 2 }}
+                                >
+                                  {invoice?.order?.userId}
+                                </Typography>
+                              )}
+                            </Stack>
+                          )}
+                          {invoice?.order?.serverId && (
+                            <Stack
+                              direction="row"
+                              justifyContent="space-between"
+                            >
+                              <Typography
+                                variant="body2"
+                                sx={{ fontWeight: 500, marginTop: 2 }}
+                              >
+                                Server ID
+                              </Typography>
+                              {invoice?.order?.serverId && (
+                                <Typography
+                                  variant="body2"
+                                  sx={{ fontWeight: 500, marginTop: 2 }}
+                                >
+                                  {invoice?.order?.serverId}
+                                </Typography>
+                              )}
+                            </Stack>
+                          )}
+                          {invoice?.order?.username && (
+                            <Stack
+                              direction="row"
+                              justifyContent="space-between"
+                            >
+                              <Typography
+                                variant="body2"
+                                sx={{ fontWeight: 500, marginTop: 2 }}
+                              >
+                                Username
+                              </Typography>
+                              {invoice?.order?.username && (
+                                <Typography
+                                  variant="body2"
+                                  sx={{ fontWeight: 500, marginTop: 2 }}
+                                >
+                                  {invoice?.order?.username}
+                                </Typography>
+                              )}
+                            </Stack>
+                          )}
+                        </Box>
+                      </Paper>
+
+                      <Paper
+                        sx={{
+                          position: "relative",
+                          padding: 6,
+                          borderRadius: 2,
+                        }}
+                        elevation={0}
+                      >
+                        <Box
+                          sx={{
+                            marginBottom: 4,
+                            backgroundColor: "#FFE4E5",
+                            padding: 4,
+                            borderRadius: 1,
+                          }}
+                        >
                           <Typography
-                            variant="body2"
-                            sx={{
-                              fontWeight: 600,
-                              color: "gray",
-                              marginTop: 1.5,
-                            }}
+                            variant="body1"
+                            sx={{ fontWeight: 600, color: "#B72025" }}
                           >
-                            Total
-                          </Typography>
-                          <Typography
-                            variant="body2"
-                            sx={{ fontWeight: 600, marginTop: 1.5 }}
-                          >
-                            {currencyConverter(invoice.totalAmt)}
+                            Informasi Pesanan
                           </Typography>
                         </Box>
-                      </Box>
-
-                      <Box sx={{ marginTop: 4 }}>
-                        {(invoice.detail?.userId ||
-                          invoice.detail?.serverId ||
-                          invoice.detail?.username) && (
+                        <Box
+                          sx={{
+                            display: "flex",
+                            gap: 2,
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                          }}
+                        >
+                          <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                            {invoice.product.name}
+                          </Typography>
+                          <Typography variant="body2">
+                            {currencyConverter(
+                              invoice.order ? invoice.order.amount : 0
+                            )}
+                          </Typography>
+                        </Box>
+                        <Divider />
+                        <Box
+                          sx={{
+                            display: "flex",
+                            gap: 2,
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                          }}
+                        >
+                          <Typography variant="body2">Kuantitas</Typography>
+                          <Typography variant="body2">
+                            {invoice.order?.quantity}
+                          </Typography>
+                        </Box>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            gap: 2,
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                            marginTop: 2,
+                          }}
+                        >
+                          <Typography variant="body2" sx={{ fontWeight: 400 }}>
+                            Subtotal
+                          </Typography>
+                          <Typography variant="body2">
+                            {invoice.order?.amount && invoice.order?.quantity
+                              ? currencyConverter(
+                                  invoice.order.amount * invoice.order.quantity
+                                )
+                              : "N/A"}
+                          </Typography>
+                        </Box>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            gap: 2,
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                            marginTop: 2,
+                          }}
+                        >
+                          <Typography variant="body2" sx={{ fontWeight: 400 }}>
+                            Biaya Admin
+                          </Typography>
+                          <Typography variant="body2">
+                            {currencyConverter(invoice.order.feeAmt)}
+                          </Typography>
+                        </Box>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            gap: 2,
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                            marginTop: 2,
+                          }}
+                        >
+                          <Typography variant="body2" sx={{ fontWeight: 400 }}>
+                            Diskon
+                          </Typography>
+                          <Typography variant="body2">
+                            {currencyConverter(invoice.order.discAmt)}
+                          </Typography>
+                        </Box>
+                        <Divider />
+                        <Box
+                          sx={{
+                            display: "flex",
+                            gap: 2,
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                            marginTop: 2,
+                          }}
+                        >
                           <Typography
                             variant="body1"
                             sx={{ fontWeight: 600, color: "#374151" }}
                           >
-                            Data game :
-                          </Typography>
-                        )}
-                      </Box>
-
-                      <Box>
-                        {invoice?.detail?.userId && (
-                          <Stack direction="row" justifyContent="space-between">
-                            <Typography
-                              variant="body2"
-                              sx={{ fontWeight: 500, marginTop: 2 }}
-                            >
-                              User ID
-                            </Typography>
-                            {invoice?.detail?.userId && (
-                              <Typography
-                                variant="body2"
-                                sx={{ fontWeight: 500, marginTop: 2 }}
-                              >
-                                {invoice?.detail?.userId}
-                              </Typography>
-                            )}
-                          </Stack>
-                        )}
-                        {invoice?.detail?.serverId && (
-                          <Stack direction="row" justifyContent="space-between">
-                            <Typography
-                              variant="body2"
-                              sx={{ fontWeight: 500, marginTop: 2 }}
-                            >
-                              Server ID
-                            </Typography>
-                            {invoice?.detail?.serverId && (
-                              <Typography
-                                variant="body2"
-                                sx={{ fontWeight: 500, marginTop: 2 }}
-                              >
-                                {invoice?.detail?.serverId}
-                              </Typography>
-                            )}
-                          </Stack>
-                        )}
-                        {invoice?.detail?.username && (
-                          <Stack direction="row" justifyContent="space-between">
-                            <Typography
-                              variant="body2"
-                              sx={{ fontWeight: 500, marginTop: 2 }}
-                            >
-                              Username
-                            </Typography>
-                            {invoice?.detail?.username && (
-                              <Typography
-                                variant="body2"
-                                sx={{ fontWeight: 500, marginTop: 2 }}
-                              >
-                                {invoice?.detail?.username}
-                              </Typography>
-                            )}
-                          </Stack>
-                        )}
-                      </Box>
-                    </Paper>
-
-                    <Paper
-                      sx={{
-                        position: "relative",
-                        padding: 6,
-                        borderRadius: 2,
-                      }}
-                      elevation={0}
-                    >
-                      <Box
-                        sx={{
-                          marginBottom: 4,
-                          backgroundColor: "#FFE4E5",
-                          padding: 4,
-                          borderRadius: 1,
-                        }}
-                      >
-                        <Typography
-                          variant="body1"
-                          sx={{ fontWeight: 600, color: "#B72025" }}
-                        >
-                          Informasi Pesanan
-                        </Typography>
-                      </Box>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          gap: 2,
-                          alignItems: "center",
-                          justifyContent: "space-between",
-                        }}
-                      >
-                        <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                          {invoice.productName}
-                        </Typography>
-                        <Typography variant="body2">
-                          {currencyConverter(
-                            invoice.detail ? invoice.detail.amount : 0
-                          )}
-                        </Typography>
-                      </Box>
-                      <Divider />
-                      <Box
-                        sx={{
-                          display: "flex",
-                          gap: 2,
-                          alignItems: "center",
-                          justifyContent: "space-between",
-                        }}
-                      >
-                        <Typography variant="body2">Kuantitas</Typography>
-                        <Typography variant="body2">
-                          {invoice.detail?.quantity}
-                        </Typography>
-                      </Box>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          gap: 2,
-                          alignItems: "center",
-                          justifyContent: "space-between",
-                          marginTop: 2,
-                        }}
-                      >
-                        <Typography variant="body2" sx={{ fontWeight: 400 }}>
-                          Subtotal
-                        </Typography>
-                        <Typography variant="body2">
-                          {invoice.detail?.amount && invoice.detail?.quantity
-                            ? currencyConverter(
-                                invoice.detail.amount * invoice.detail.quantity
-                              )
-                            : "N/A"}
-                        </Typography>
-                      </Box>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          gap: 2,
-                          alignItems: "center",
-                          justifyContent: "space-between",
-                          marginTop: 2,
-                        }}
-                      >
-                        <Typography variant="body2" sx={{ fontWeight: 400 }}>
-                          Biaya Admin
-                        </Typography>
-                        <Typography variant="body2">
-                          {currencyConverter(invoice.feeAmt)}
-                        </Typography>
-                      </Box>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          gap: 2,
-                          alignItems: "center",
-                          justifyContent: "space-between",
-                          marginTop: 2,
-                        }}
-                      >
-                        <Typography variant="body2" sx={{ fontWeight: 400 }}>
-                          Diskon
-                        </Typography>
-                        <Typography variant="body2">
-                          {currencyConverter(invoice.discAmt)}
-                        </Typography>
-                      </Box>
-                      <Divider />
-                      <Box
-                        sx={{
-                          display: "flex",
-                          gap: 2,
-                          alignItems: "center",
-                          justifyContent: "space-between",
-                          marginTop: 2,
-                        }}
-                      >
-                        <Typography
-                          variant="body1"
-                          sx={{ fontWeight: 600, color: "#374151" }}
-                        >
-                          Total
-                        </Typography>
-                        <Typography
-                          variant="body1"
-                          sx={{ fontWeight: 600, color: "#374151" }}
-                        >
-                          {currencyConverter(invoice.totalAmt)}
-                        </Typography>
-                      </Box>
-                    </Paper>
-                  </Stack>
-                </Grid>
-                <Grid item xs={12} md={5}>
-                  <Stack spacing={6}>
-                    <Paper
-                      sx={{
-                        position: "relative",
-                        padding: 6,
-                        borderRadius: 2,
-                      }}
-                      elevation={0}
-                    >
-                      <Box
-                        sx={{
-                          marginBottom: 4,
-                          backgroundColor: "#FFE4E5",
-                          padding: 4,
-                          borderRadius: 1,
-                        }}
-                      >
-                        <Typography
-                          variant="body1"
-                          sx={{ fontWeight: 600, color: "#B72025" }}
-                        >
-                          Informasi Pembayaran
-                        </Typography>
-                      </Box>
-                      <Box>
-                        <Stack
-                          direction="row"
-                          justifyContent="space-between"
-                          sx={{ marginBottom: 2 }}
-                        >
-                          <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                            Status
-                          </Typography>
-                          <Chip
-                            label="Berhasil"
-                            sx={{
-                              backgroundColor: "#38e08b",
-                              color: "white",
-                              fontWeight: 600,
-                            }}
-                          />
-                        </Stack>
-                        <Stack
-                          direction="row"
-                          justifyContent="space-between"
-                          sx={{ marginBottom: 2 }}
-                        >
-                          <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                            Nomor Invoice
+                            Total
                           </Typography>
                           <Typography
-                            noWrap
-                            variant="body2"
-                            sx={{ fontWeight: 500 }}
+                            variant="body1"
+                            sx={{ fontWeight: 600, color: "#374151" }}
                           >
-                            {invoice.invoiceId}
+                            {currencyConverter(invoice.order.totalAmt)}
                           </Typography>
-                        </Stack>
-                        <Stack
-                          direction="row"
-                          justifyContent="space-between"
-                          sx={{ marginBottom: 2 }}
+                        </Box>
+                      </Paper>
+                    </Stack>
+                  </Grid>
+                  <Grid item xs={12} md={5}>
+                    <Stack spacing={6}>
+                      <Paper
+                        sx={{
+                          position: "relative",
+                          padding: 6,
+                          borderRadius: 2,
+                        }}
+                        elevation={0}
+                      >
+                        <Box
+                          sx={{
+                            marginBottom: 4,
+                            backgroundColor: "#FFE4E5",
+                            padding: 4,
+                            borderRadius: 1,
+                          }}
                         >
-                          <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                            Tanggal Order
-                          </Typography>
                           <Typography
-                            noWrap
-                            variant="body2"
-                            sx={{ fontWeight: 500 }}
+                            variant="body1"
+                            sx={{ fontWeight: 600, color: "#B72025" }}
                           >
-                            {dayjs(invoice.createdAt).format(
-                              "DD MMM YYYY HH:mm:ss"
-                            )}
+                            Informasi Pembayaran
                           </Typography>
-                        </Stack>
-                        <Stack
-                          direction="row"
-                          justifyContent="space-between"
-                          sx={{ marginBottom: 2 }}
-                        >
-                          <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                            Metode Pembayaran
-                          </Typography>
-                          <Typography
-                            noWrap
-                            variant="body2"
-                            sx={{ fontWeight: 500 }}
-                          >
-                            {invoice.paymentMethods?.name}
-                          </Typography>
-                        </Stack>
-                        {invoice.cd === "ID_OVO" && (
+                        </Box>
+                        <Box>
                           <Stack
                             direction="row"
                             justifyContent="space-between"
@@ -723,20 +673,57 @@ export default function PaymentSuccess({ params }: IParams) {
                               variant="body2"
                               sx={{ fontWeight: 500 }}
                             >
-                              Nomor OVO
+                              Status
                             </Typography>
+                            <Chip
+                              label="Berhasil"
+                              sx={{
+                                backgroundColor: "#38e08b",
+                                color: "white",
+                                fontWeight: 600,
+                              }}
+                            />
+                          </Stack>
+                          <Stack
+                            direction="row"
+                            justifyContent="space-between"
+                            sx={{ marginBottom: 2 }}
+                          >
                             <Typography
                               variant="body2"
                               sx={{ fontWeight: 500 }}
                             >
-                              {invoice.payment?.mobileNumber.replace(
-                                "+62",
-                                "0"
+                              Nomor Invoice
+                            </Typography>
+                            <Typography
+                              noWrap
+                              variant="body2"
+                              sx={{ fontWeight: 500 }}
+                            >
+                              {invoice.order.invoiceId}
+                            </Typography>
+                          </Stack>
+                          <Stack
+                            direction="row"
+                            justifyContent="space-between"
+                            sx={{ marginBottom: 2 }}
+                          >
+                            <Typography
+                              variant="body2"
+                              sx={{ fontWeight: 500 }}
+                            >
+                              Tanggal Order
+                            </Typography>
+                            <Typography
+                              noWrap
+                              variant="body2"
+                              sx={{ fontWeight: 500 }}
+                            >
+                              {dayjs(invoice.order.createdAt).format(
+                                "DD MMM YYYY HH:mm:ss"
                               )}
                             </Typography>
                           </Stack>
-                        )}
-                        {invoice.cd === "ID_JENIUSPAY" && (
                           <Stack
                             direction="row"
                             justifyContent="space-between"
@@ -746,23 +733,70 @@ export default function PaymentSuccess({ params }: IParams) {
                               variant="body2"
                               sx={{ fontWeight: 500 }}
                             >
-                              Nomor OVO
+                              Metode Pembayaran
                             </Typography>
                             <Typography
+                              noWrap
                               variant="body2"
                               sx={{ fontWeight: 500 }}
                             >
-                              {invoice.cashtag}
+                              {invoice.payment.name}
                             </Typography>
                           </Stack>
-                        )}
-                      </Box>
-                    </Paper>
-                  </Stack>
-                </Grid>
-              </>
-            )}
-          </Grid>
+                          {invoice.payment.cd === "ID_OVO" ||
+                            (invoice.payment.cd === "OVOPUSH" && (
+                              <Stack
+                                direction="row"
+                                justifyContent="space-between"
+                                sx={{ marginBottom: 2 }}
+                              >
+                                <Typography
+                                  variant="body2"
+                                  sx={{ fontWeight: 500 }}
+                                >
+                                  Nomor OVO
+                                </Typography>
+                                <Typography
+                                  variant="body2"
+                                  sx={{ fontWeight: 500 }}
+                                >
+                                  {"mobileNumber" in invoice.payment.action &&
+                                    invoice.payment.action.mobileNumber.replace(
+                                      "+62",
+                                      "0"
+                                    )}
+                                </Typography>
+                              </Stack>
+                            ))}
+                          {invoice.payment.cd === "ID_JENIUSPAY" && (
+                            <Stack
+                              direction="row"
+                              justifyContent="space-between"
+                              sx={{ marginBottom: 2 }}
+                            >
+                              <Typography
+                                variant="body2"
+                                sx={{ fontWeight: 500 }}
+                              >
+                                Nomor OVO
+                              </Typography>
+                              <Typography
+                                variant="body2"
+                                sx={{ fontWeight: 500 }}
+                              >
+                                {"cashtag" in invoice.payment.action &&
+                                  invoice.payment.action.cashtag}
+                              </Typography>
+                            </Stack>
+                          )}
+                        </Box>
+                      </Paper>
+                    </Stack>
+                  </Grid>
+                </>
+              )}
+            </Grid>
+          </>
         </Container>
       </Box>
     </>

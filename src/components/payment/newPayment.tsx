@@ -12,19 +12,20 @@ import {
   Alert,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { currencyConverter } from "@/@core/utils/currencyConverter";
 import dayjs from "dayjs";
-import { OrderStatuses, OrderType, PaymentsCategory } from "@/enum";
+import {
+  OrderStatuses,
+  OrderType,
+  PaymentAction,
+  PaymentsCategory,
+} from "@/enum";
 import { useQRCode } from "next-qrcode";
 import Tooltip from "@mui/material/Tooltip";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
 
-const getStatusPayment = (
-  status: OrderStatuses,
-  type: OrderType,
-  expiredAt: string
-) => {
+const getStatusPayment = (status: OrderStatuses, expiredAt: string) => {
   let msg;
   let msgBox;
   let severity;
@@ -72,15 +73,31 @@ const getStatusPayment = (
   };
 };
 
-const getTitlePayment = (category: string): string => {
+const getTitlePayment = (paymentActions: any): string => {
+  let paymentAction = "";
+  for (const property in paymentActions) {
+    if (
+      property === "checkoutUrl" ||
+      property === "qrString" ||
+      property === "paymentCode"
+    ) {
+      if (paymentActions[property]) {
+        paymentAction = property;
+      }
+    }
+  }
+
   let str: string;
-  switch (category) {
-    case PaymentsCategory.RETAIL:
-    case PaymentsCategory.VIRTUAL_ACCOUNT:
+  switch (paymentAction) {
+    case PaymentAction.PAYMENT_CODE:
       str = "Kode Pembayaran";
       break;
-    case PaymentsCategory.QRIS:
+    case PaymentAction.QR_STRING:
       str = "Scan QR untuk bayar";
+      break;
+    case PaymentAction.CHECKOUT_URL:
+      str = "Tekan tombol lanjutkan";
+      break;
     default:
       str = "Pembayaran";
       break;
@@ -96,19 +113,43 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
   const [logoGasskeun, setLogoGasskeun] = useState("");
   const [order, setOrder] = useState<IInvoice | null>(invoices);
   const [isFinished, setIsFinished] = useState(false);
+  const canvasRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     // Handle navigation based on payment status
     if (
-      invoices.status === OrderStatuses.SUCCESS ||
-      order?.status === OrderStatuses.SUCCESS
+      invoices.order.status === OrderStatuses.SUCCESS ||
+      order?.order.status === OrderStatuses.SUCCESS
     ) {
-      router.push(`/payment-success/${invoices.invoiceId}`);
+      router.push(`/payment-success/${invoices.order.invoiceId}`);
     }
-  }, [invoices.status, order?.status, invoices.invoiceId, router]);
+  }, [
+    invoices.order.status,
+    order?.order.status,
+    invoices.order.invoiceId,
+    router,
+  ]);
 
   const handleTooltip = (bool: boolean) => {
     setOpen(bool);
+  };
+
+  const onQRDownload = () => {
+    if (canvasRef.current) {
+      const canvas = canvasRef.current.getElementsByTagName("canvas")[0];
+      canvas.toBlob((blob) => {
+        if (blob) {
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "qr-code.png";
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        }
+      });
+    }
   };
 
   useEffect(() => {
@@ -136,7 +177,7 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
     const getOrder = async (fromInterval: boolean) => {
       try {
         const req = await fetch(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/v1/order-detail/${invoices.invoiceId}`,
+          `${process.env.NEXT_PUBLIC_BASE_URL}/v2/order-detail/${invoices.order.invoiceId}`,
           {
             headers: {
               "ngrok-skip-browser-warning": "true",
@@ -151,7 +192,7 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
         // Stop interval if needed
         if (
           fromInterval &&
-          ["3", "4", "5", "6"].includes(order?.status || "")
+          ["3", "4", "5", "6"].includes(order?.order.status || "")
         ) {
           setIsFinished(true);
         }
@@ -168,7 +209,7 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
 
     // Clean up interval
     return () => clearInterval(interval);
-  }, [order?.status, isFinished, invoices.invoiceId]);
+  }, [order?.order.status, isFinished, invoices.order.invoiceId]);
 
   return (
     <Grid container spacing={6}>
@@ -176,6 +217,7 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
         <>
           <Grid item xs={12} md={7}>
             <Stack spacing={6}>
+              {/* INFORMASI PRODUCT CARD */}
               <Paper
                 sx={{ position: "relative", padding: 6, borderRadius: 2 }}
                 elevation={0}
@@ -204,7 +246,7 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                 >
                   <Box sx={{ display: "flex", gap: 4, alignItems: "center" }}>
                     <Avatar
-                      src={order.logoGame}
+                      src={order.game.logoUrl}
                       variant="rounded"
                       sx={{ width: 50, height: 50 }}
                     />
@@ -223,7 +265,7 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                           marginTop: 1.5,
                         }}
                       >
-                        {order.productName}
+                        {order.product.name}
                       </Typography>
                       <Typography
                         variant="body2"
@@ -233,7 +275,7 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                           marginTop: 1.5,
                         }}
                       >
-                        {order.game}
+                        {order.game.name}
                       </Typography>
                     </Box>
                   </Box>
@@ -248,15 +290,15 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                       variant="body2"
                       sx={{ fontWeight: 600, marginTop: 1.5 }}
                     >
-                      {currencyConverter(order.totalAmt)}
+                      {currencyConverter(order.order.totalAmt)}
                     </Typography>
                   </Box>
                 </Box>
 
                 <Box sx={{ marginTop: 4 }}>
-                  {(order.detail?.userId ||
-                    order.detail?.serverId ||
-                    order.detail?.username) && (
+                  {(order.order?.userId ||
+                    order.order?.serverId ||
+                    order.order?.username) && (
                     <Typography
                       variant="body1"
                       sx={{ fontWeight: 600, color: "#374151" }}
@@ -267,7 +309,7 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                 </Box>
 
                 <Box>
-                  {order?.detail?.userId && (
+                  {order?.order?.userId && (
                     <Stack direction="row" justifyContent="space-between">
                       <Typography
                         variant="body2"
@@ -275,17 +317,17 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                       >
                         User ID
                       </Typography>
-                      {order?.detail?.userId && (
+                      {order?.order?.userId && (
                         <Typography
                           variant="body2"
                           sx={{ fontWeight: 500, marginTop: 2 }}
                         >
-                          {order?.detail?.userId}
+                          {order?.order?.userId}
                         </Typography>
                       )}
                     </Stack>
                   )}
-                  {order?.detail?.serverId && (
+                  {order?.order?.serverId && (
                     <Stack direction="row" justifyContent="space-between">
                       <Typography
                         variant="body2"
@@ -293,17 +335,17 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                       >
                         Server ID
                       </Typography>
-                      {order?.detail?.serverId && (
+                      {order?.order?.serverId && (
                         <Typography
                           variant="body2"
                           sx={{ fontWeight: 500, marginTop: 2 }}
                         >
-                          {order?.detail?.serverId}
+                          {order?.order?.serverId}
                         </Typography>
                       )}
                     </Stack>
                   )}
-                  {order?.detail?.username && (
+                  {order?.order?.username && (
                     <Stack direction="row" justifyContent="space-between">
                       <Typography
                         variant="body2"
@@ -311,12 +353,12 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                       >
                         Username
                       </Typography>
-                      {order?.detail?.username && (
+                      {order?.order?.username && (
                         <Typography
                           variant="body2"
                           sx={{ fontWeight: 500, marginTop: 2 }}
                         >
-                          {order?.detail?.username}
+                          {order?.order?.username}
                         </Typography>
                       )}
                     </Stack>
@@ -324,6 +366,7 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                 </Box>
               </Paper>
 
+              {/* INFROMASI PESANAN CARD */}
               <Paper
                 sx={{ position: "relative", padding: 6, borderRadius: 2 }}
                 elevation={0}
@@ -352,10 +395,10 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                   }}
                 >
                   <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                    {order.productName}
+                    {order.product.name}
                   </Typography>
                   <Typography variant="body2">
-                    {currencyConverter(order.detail ? order.detail.amount : 0)}
+                    {currencyConverter(order.order ? order.order.amount : 0)}
                   </Typography>
                 </Box>
                 <Divider />
@@ -369,7 +412,7 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                 >
                   <Typography variant="body2">Kuantitas</Typography>
                   <Typography variant="body2">
-                    {order.detail?.quantity}
+                    {order.order?.quantity}
                   </Typography>
                 </Box>
                 <Box
@@ -385,9 +428,9 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                     Subtotal
                   </Typography>
                   <Typography variant="body2">
-                    {order.detail?.amount && order.detail?.quantity
+                    {order.order?.amount && order.order?.quantity
                       ? currencyConverter(
-                          order.detail.amount * order.detail.quantity
+                          order.order.amount * order.order.quantity
                         )
                       : "N/A"}
                   </Typography>
@@ -405,7 +448,7 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                     Biaya Admin
                   </Typography>
                   <Typography variant="body2">
-                    {currencyConverter(order.feeAmt)}
+                    {currencyConverter(order.order.feeAmt)}
                   </Typography>
                 </Box>
                 <Box
@@ -421,7 +464,7 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                     Diskon
                   </Typography>
                   <Typography variant="body2">
-                    {currencyConverter(order.discAmt)}
+                    {currencyConverter(order.order.discAmt)}
                   </Typography>
                 </Box>
                 <Divider />
@@ -444,12 +487,13 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                     variant="body1"
                     sx={{ fontWeight: 600, color: "#374151" }}
                   >
-                    {currencyConverter(order.totalAmt)}
+                    {currencyConverter(order.order.totalAmt)}
                   </Typography>
                 </Box>
               </Paper>
             </Stack>
           </Grid>
+
           <Grid item xs={12} md={5}>
             <Stack spacing={6}>
               <Paper
@@ -471,13 +515,18 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                     Informasi Pembayaran
                   </Typography>
                 </Box>
-                {(order.cd === "ID_JENIUSPAY" || order.cd === "ID_OVO") &&
-                  order.status === OrderStatuses.PENDING_PAYMENT && (
+                {(order.payment.cd === "ID_JENIUSPAY" ||
+                  order.payment.cd === "ID_OVO" ||
+                  order.payment.cd === "OVOPUSH") &&
+                  order.order.status === OrderStatuses.PENDING_PAYMENT && (
                     <Box sx={{ marginBottom: 4 }}>
                       <Alert severity="info">
                         Silahkan cek aplikasi{" "}
-                        {order.cd === "ID_OVO" ? "OVO" : "JENIUS"} mu untuk
-                        melanjutkan pembayaran
+                        {order.payment.cd === "ID_OVO" ||
+                        order.payment.cd === "OVOPUSH"
+                          ? "OVO"
+                          : "JENIUS"}{" "}
+                        mu untuk melanjutkan pembayaran
                       </Alert>
                     </Box>
                   )}
@@ -485,9 +534,8 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                 <Box sx={{ marginBottom: 4 }}>
                   {
                     getStatusPayment(
-                      order.status as OrderStatuses,
-                      order.type as OrderType,
-                      order.expiredAt as string
+                      order.order.status as OrderStatuses,
+                      order.payment.expiredAt as string
                     ).alert
                   }
                 </Box>
@@ -503,9 +551,9 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                     <Typography noWrap variant="body2" sx={{ fontWeight: 500 }}>
                       {
                         getStatusPayment(
-                          order.status as OrderStatuses,
-                          order.type as OrderType,
-                          order.expiredAt as string
+                          order.order.status as OrderStatuses,
+
+                          order.payment.expiredAt as string
                         ).box
                       }
                     </Typography>
@@ -519,7 +567,7 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                       Nomor Invoice
                     </Typography>
                     <Typography noWrap variant="body2" sx={{ fontWeight: 500 }}>
-                      {order.invoiceId}
+                      {order.order.invoiceId}
                     </Typography>
                   </Stack>
                   <Stack
@@ -531,7 +579,9 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                       Tanggal Order
                     </Typography>
                     <Typography noWrap variant="body2" sx={{ fontWeight: 500 }}>
-                      {dayjs(order.createdAt).format("DD MMM YYYY HH:mm:ss")}
+                      {dayjs(order.order.createdAt).format(
+                        "DD MMM YYYY HH:mm:ss"
+                      )}
                     </Typography>
                   </Stack>
                   <Stack
@@ -543,10 +593,11 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                       Metode Pembayaran
                     </Typography>
                     <Typography noWrap variant="body2" sx={{ fontWeight: 500 }}>
-                      {order.paymentMethods?.name}
+                      {order.payment.name}
                     </Typography>
                   </Stack>
-                  {order.cd === "ID_OVO" && (
+                  {(order.payment.cd === "ID_OVO" ||
+                    order.payment.cd === "OVOPUSH") && (
                     <Stack
                       direction="row"
                       justifyContent="space-between"
@@ -556,28 +607,36 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                         Nomor OVO
                       </Typography>
                       <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                        {order.payment?.mobileNumber.replace("+62", "0")}
+                        {"mobileNumber" in order.payment.action &&
+                          order.payment.action.mobileNumber.replace("+62", "0")}
                       </Typography>
                     </Stack>
                   )}
-                  {order.cd === "ID_JENIUSPAY" && (
+
+                  {order.payment.cd === "ID_JENIUSPAY" && (
                     <Stack
                       direction="row"
                       justifyContent="space-between"
                       sx={{ marginBottom: 2 }}
                     >
                       <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                        Nomor OVO
+                        Cashtag
                       </Typography>
                       <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                        {order.cashtag}
+                        {"cashtag" in order.payment.action &&
+                          order.payment.action.cashtag}
                       </Typography>
                     </Stack>
                   )}
                 </Box>
               </Paper>
-              {!(order.cd === "ID_JENIUSPAY" || order.cd === "ID_OVO") &&
-                order.status === OrderStatuses.PENDING_PAYMENT && (
+
+              {!(
+                order.payment.cd === "ID_JENIUSPAY" ||
+                order.payment.cd === "ID_OVO" ||
+                order.payment.cd === "OVOPUSH"
+              ) &&
+                order.order.status === OrderStatuses.PENDING_PAYMENT && (
                   <Paper
                     sx={{ position: "relative", padding: 6, borderRadius: 2 }}
                     elevation={0}
@@ -591,12 +650,12 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                         }}
                       >
                         <Typography sx={{ color: "#374151", fontWeight: 600 }}>
-                          {getTitlePayment(order.category)}
+                          {getTitlePayment(order.payment.action)}
                         </Typography>
                         <Box>
                           <Avatar
                             title="Logo Gasskeun Topup"
-                            src={order.paymentMethods?.logo}
+                            src={order.payment?.logo}
                             variant="rounded"
                             sx={{
                               width: 100,
@@ -610,102 +669,113 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                           />
                         </Box>
                       </Box>
-                      {(order.category === PaymentsCategory.QRIS ||
-                        order.cd === "ID_SHOPEEPAY") && (
-                        <Box sx={{ marginTop: 4 }}>
-                          <Avatar
-                            variant="rounded"
-                            sx={{
-                              mr: 3,
-                              width: "auto",
-                              height: "auto",
-                              boxShadow: 3,
-                              color: "common.white",
-                              backgroundColor: `white`,
-                            }}
-                          >
-                            <Canvas
-                              text={
-                                order.payment.qrString ||
-                                order.payment.qrCheckoutString
-                              }
-                              options={{
-                                errorCorrectionLevel: "M",
-                                margin: 3,
-                                scale: 4,
-                                width: 300,
-                                quality: 1,
-                              }}
-                              logo={{
-                                src: logoGasskeun as string,
-                                options: {
-                                  width: 50,
-                                },
-                              }}
-                            />
-                          </Avatar>
-                        </Box>
-                      )}
-                      {order.category === PaymentsCategory.EWALLET &&
-                        !(
-                          order.cd === "ID_JENIUSPAY" || order.cd === "ID_OVO"
-                        ) &&
-                        order.status === OrderStatuses.PENDING_PAYMENT && (
+
+                      {PaymentAction.QR_STRING in order.payment.action &&
+                        order.payment.action.qrString && (
+                          <Box sx={{ marginTop: 4, textAlign: "center" }}>
+                            <div ref={canvasRef}>
+                              <Avatar
+                                variant="rounded"
+                                sx={{
+                                  mr: 3,
+                                  width: "auto",
+                                  height: "auto",
+                                  boxShadow: 3,
+                                  color: "common.white",
+                                  backgroundColor: `white`,
+                                }}
+                              >
+                                <Canvas
+                                  text={order.payment.action.qrString}
+                                  options={{
+                                    errorCorrectionLevel: "M",
+                                    margin: 3,
+                                    scale: 4,
+                                    width: 300,
+                                    quality: 1,
+                                  }}
+                                  // logo={{
+                                  //   src: logoGasskeun as string,
+                                  //   options: {
+                                  //     width: 50,
+                                  //   },
+                                  // }}
+                                />
+                              </Avatar>
+                              <Button
+                                variant="contained"
+                                color="primary"
+                                sx={{ marginTop: 4 }}
+                                onClick={onQRDownload}
+                              >
+                                Download QR Code
+                              </Button>
+                            </div>
+                          </Box>
+                        )}
+
+                      {PaymentAction.CHECKOUT_URL in order.payment.action &&
+                        order.payment.action.checkoutUrl &&
+                        order.order.status ===
+                          OrderStatuses.PENDING_PAYMENT && (
                           <Button
                             variant="contained"
                             fullWidth
                             sx={{ marginTop: 4 }}
                             href={
-                              order.payment?.mobileDeeplinkCheckoutUrl ||
-                              order.payment?.mobileWebCheckoutUrl ||
-                              order.payment?.desktopWebCheckoutUrl ||
+                              (PaymentAction.CHECKOUT_URL in
+                                order.payment.action &&
+                                order.payment.action.checkoutUrl) ||
                               "#"
                             }
                           >
-                            Bayar Disini
+                            Lanjutkan Pembayaran
                           </Button>
                         )}
 
-                      {(order.category === PaymentsCategory.RETAIL ||
-                        order.category ===
-                          PaymentsCategory.VIRTUAL_ACCOUNT) && (
-                        <ClickAwayListener
-                          onClickAway={() => {
-                            handleTooltip(false);
-                          }}
-                        >
-                          <div>
-                            <Tooltip
-                              PopperProps={{
-                                disablePortal: true,
-                              }}
-                              onClose={() => {
-                                handleTooltip(false);
-                              }}
-                              open={open}
-                              disableFocusListener
-                              disableHoverListener
-                              disableTouchListener
-                              title="Berhasil Disalin"
-                            >
-                              <Button
-                                variant="outlined"
-                                sx={{ width: "100%", marginTop: 4 }}
-                                onClick={() => {
-                                  navigator.clipboard.writeText(
-                                    order.payment?.accountNumber ||
-                                      order.payment?.paymentCode
-                                  );
-                                  handleTooltip(true);
+                      {PaymentAction.PAYMENT_CODE in order.payment.action &&
+                        order.payment.action.paymentCode && (
+                          <ClickAwayListener
+                            onClickAway={() => {
+                              handleTooltip(false);
+                            }}
+                          >
+                            <div>
+                              <Tooltip
+                                PopperProps={{
+                                  disablePortal: true,
                                 }}
+                                onClose={() => {
+                                  handleTooltip(false);
+                                }}
+                                open={open}
+                                disableFocusListener
+                                disableHoverListener
+                                disableTouchListener
+                                title="Berhasil Disalin"
                               >
-                                {order.payment?.accountNumber ||
-                                  order.payment?.paymentCode}
-                              </Button>
-                            </Tooltip>
-                          </div>
-                        </ClickAwayListener>
-                      )}
+                                <Button
+                                  variant="outlined"
+                                  sx={{ width: "100%", marginTop: 4 }}
+                                  onClick={() => {
+                                    navigator.clipboard.writeText(
+                                      PaymentAction.PAYMENT_CODE in
+                                        order.payment.action
+                                        ? order.payment?.action.paymentCode
+                                        : ""
+                                    );
+                                    handleTooltip(true);
+                                  }}
+                                >
+                                  {PaymentAction.PAYMENT_CODE in
+                                  order.payment.action
+                                    ? order.payment?.action.paymentCode
+                                    : ""}
+                                </Button>
+                              </Tooltip>
+                            </div>
+                          </ClickAwayListener>
+                        )}
                     </Box>
                   </Paper>
                 )}

@@ -31,6 +31,12 @@ const accordionTitle = (category: string) => {
     case PaymentsCategory.RETAIL:
       title = "Retail";
       break;
+    case PaymentsCategory.INTERNAL:
+      title = "Internal";
+      break;
+    case PaymentsCategory.PULSA:
+      title = "Pulsa";
+      break;
     case PaymentsCategory.VIRTUAL_ACCOUNT:
       title = "Virtual Account";
       break;

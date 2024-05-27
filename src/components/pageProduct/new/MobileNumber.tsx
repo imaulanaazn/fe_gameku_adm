@@ -23,7 +23,8 @@ const MobileNumber = ({ data, value, onChange, position }: any) => {
           },
         }}
         subheader={
-          value.paymentMethodCd === "ID_OVO" ? (
+          value.paymentMethodCd === "ID_OVO" ||
+          value.paymentMethodCd === "OVOPUSH" ? (
             <Alert severity="info">
               Pastikan nomor whatsapp sama dengan nomor OVO!
             </Alert>

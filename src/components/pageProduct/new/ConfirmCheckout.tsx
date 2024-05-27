@@ -63,7 +63,7 @@ const ConfirmCheckout = ({
   const requestCheckout = async () => {
     setStep(2);
     setWaiting(true);
-    const req = await fetch(process.env.NEXT_PUBLIC_BASE_URL + "/v1/order", {
+    const req = await fetch(process.env.NEXT_PUBLIC_BASE_URL + "/v2/order", {
       credentials: "include",
       headers: {
         "content-type": "application/json",
@@ -311,21 +311,22 @@ const ConfirmCheckout = ({
                   {dataCheckout.paymentMethod.name}
                 </Typography>
               </Box>
-              {dataCheckout.paymentMethod.cd === "ID_OVO" && (
-                <Box
-                  sx={{
-                    display: "flex",
-                    gap: 2,
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <Typography variant="body2">Nomor OVO</Typography>
-                  <Typography variant="body2" sx={{ fontWeight: 800 }}>
-                    {dataCheckout.mobileNumber}
-                  </Typography>
-                </Box>
-              )}
+              {dataCheckout.paymentMethod.cd === "ID_OVO" ||
+                (dataCheckout.paymentMethod.cd === "OVOPUSH" && (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      gap: 2,
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <Typography variant="body2">Nomor OVO</Typography>
+                    <Typography variant="body2" sx={{ fontWeight: 800 }}>
+                      {dataCheckout.mobileNumber}
+                    </Typography>
+                  </Box>
+                ))}
               {dataCheckout.paymentMethod.cd === "ID_JENIUSPAY" && (
                 <Box
                   sx={{

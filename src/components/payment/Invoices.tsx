@@ -26,7 +26,9 @@ const Invoices: React.FC<IInvoicesProps> = ({ invoice }) => {
           <Link href="/" className=" text-primary-900">
             Home
           </Link>
-          <Typography color="text.primary">{invoice.invoiceId}</Typography>
+          <Typography color="text.primary">
+            {invoice.order.invoiceId}
+          </Typography>
         </Breadcrumbs>
         <NewPayment invoices={invoice} />
       </Box>

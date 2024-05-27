@@ -1,10 +1,6 @@
 "use client";
-import sendRequest from "@/lib/baseApi";
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
-import Game from "../game/Game";
-import PopularGames from "@/components/home/PopularGames/PopularGames";
+
+import { useEffect, useState } from "react";
 import GameListItem from "./GameListItem";
 import Link from "next/link";
 

@@ -20,6 +20,8 @@ import "react-quill/dist/quill.snow.css";
 import dynamic from "next/dynamic";
 import { Tooltip as ReactTooltip } from "react-tooltip";
 import { borderColor } from "@mui/system";
+import Editor from "./Editor";
+import GameContentForm from "./GameContentForm";
 const ReactQuill = dynamic(import("react-quill"), { ssr: false });
 
 interface IForm {
@@ -128,6 +130,19 @@ const FormGame: React.FC<IForm> = ({
     fileImageLogoUrl: {} as any,
     fileImageLogoDenom: {} as any,
   });
+  const [gameContent, setGameContent] = useState({
+    title: "",
+    description: "",
+    faq: [
+      {
+        question: "",
+        answer: "",
+      },
+    ],
+    fill: "",
+  });
+
+  console.log(newData);
 
   const [typeForm, setTypeForm] = useState("");
   const [loading, setLoading] = useState(false);
@@ -726,7 +741,7 @@ const FormGame: React.FC<IForm> = ({
             <div className="mt-4 flex gap-4">
               <div className="w-1/2">
                 <label
-                  htmlFor="name"
+                  htmlFor="gameCategory"
                   className="font-medium text-base text-neutral-900 inline-block"
                 >
                   Game Kategori{" "}
@@ -792,7 +807,7 @@ const FormGame: React.FC<IForm> = ({
               </div>
               <div className="w-1/2">
                 <label
-                  htmlFor="name"
+                  htmlFor="gameType"
                   className="font-medium text-base text-neutral-900 inline-block"
                 >
                   Tipe Game{" "}
@@ -1091,7 +1106,7 @@ const FormGame: React.FC<IForm> = ({
               {typeForm !== "detail" && (
                 <div className="w-full">
                   <label
-                    htmlFor="desc"
+                    htmlFor="keywords"
                     className="font-medium text-base text-neutral-900 inline-block mb-2"
                   >
                     Keywords{" "}
@@ -1100,6 +1115,7 @@ const FormGame: React.FC<IForm> = ({
                     )}
                   </label>
                   <textarea
+                    id="keywords"
                     ref={textareaRef}
                     value={currentKeyword}
                     onChange={handleInputChange}
@@ -1176,6 +1192,13 @@ const FormGame: React.FC<IForm> = ({
                 } focus:ring-2 focus:ring-gray-600 focus:outline-none rounded-md mt-4 w-full min-h-[10rem]`}
               />
             </div>
+            <GameContentForm
+              typeForm={typeForm}
+              newData={newData}
+              setNewData={setNewData}
+              gameContent={gameContent}
+              setGameContent={setGameContent}
+            />
             {typeForm === "detail" && !hideEdit && (
               <div className="flex justify-end space-x-2 bg-white py-5">
                 <button

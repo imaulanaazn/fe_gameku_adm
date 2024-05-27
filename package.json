@@ -42,6 +42,7 @@
         "next-qrcode": "^2.5.1",
         "next-sitemap": "^4.2.3",
         "postcss": "^8.4.31",
+        "quill-image-uploader": "^1.3.0",
         "react": "18.2.0",
         "react-apexcharts": "^1.4.1",
         "react-beautiful-dnd": "^13.1.1",

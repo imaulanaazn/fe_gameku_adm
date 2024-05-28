@@ -42,7 +42,7 @@ const DefaultPalette = (mode: PaletteMode, themeColor: ThemeColor) => {
       contrastText: "#FFF",
     },
     secondary: {
-      light: "#B72025",
+      light: "#FFF3F3",
       main: "#B72025",
       dark: "#B72025",
       contrastText: "#FFF",

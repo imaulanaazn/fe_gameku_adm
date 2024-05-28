@@ -3,14 +3,15 @@ import ReactQuill, { Quill } from "react-quill";
 
 interface IEditor {
   value: string;
-  setValue: React.Dispatch<React.SetStateAction<string>>;
+  setValue: (val: string) => void;
+  typeForm: string;
 }
 
 function Editor(props: IEditor) {
-  const { value, setValue } = props;
+  const { value, setValue, typeForm } = props;
   const reactQuillRef = useRef<any>(null);
 
-  const handleChange = (html: React.SetStateAction<string>) => {
+  const handleChange = (html: string) => {
     setValue(html);
   };
 
@@ -51,14 +52,16 @@ function Editor(props: IEditor) {
 
   return (
     <>
-      {/* <div dangerouslySetInnerHTML={{ __html: editorHtml }} /> */}
       <ReactQuill
         ref={reactQuillRef}
         onChange={handleChange}
         theme="snow"
-        style={{
-          minHeight: "25vh",
-        }}
+        readOnly={typeForm === "detail"}
+        className={`${
+          typeForm === "detail"
+            ? "cursor-not-allowed bg-gray-100"
+            : "edit bg-primary-50 bg-opacity-100"
+        } focus:ring-2 focus:ring-gray-600 focus:outline-none rounded-md mt-2 w-full`}
         modules={modules}
         formats={formats}
         value={value}

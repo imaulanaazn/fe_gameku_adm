@@ -131,18 +131,11 @@ const FormGame: React.FC<IForm> = ({
     fileImageLogoDenom: {} as any,
   });
   const [gameContent, setGameContent] = useState({
-    title: "",
-    description: "",
-    faq: [
-      {
-        question: "",
-        answer: "",
-      },
-    ],
-    fill: "",
+    title: "default content",
+    description: "default content description",
+    faq: [{ question: "defaut question", answer: "default answer" }],
+    fill: "<h1>This is Heading</h1>",
   });
-
-  console.log(newData);
 
   const [typeForm, setTypeForm] = useState("");
   const [loading, setLoading] = useState(false);
@@ -453,7 +446,7 @@ const FormGame: React.FC<IForm> = ({
 
         <div className="h-[80vh] overflow-y-scroll">
           <form onSubmit={(e) => handleFormSubmit(e)}>
-            <div className="w-full flex mt-4 gap-4">
+            <div className="w-full flex mt-5 gap-4">
               <div className="w-1/2">
                 <label
                   htmlFor="name"
@@ -670,7 +663,7 @@ const FormGame: React.FC<IForm> = ({
                 </div>
               </div>
             </div>
-            <div className="mt-4 flex gap-4">
+            <div className="mt-5 flex gap-4">
               <div className="w-1/2">
                 <label
                   htmlFor="name"
@@ -738,7 +731,7 @@ const FormGame: React.FC<IForm> = ({
                 </div>
               </div>
             </div>
-            <div className="mt-4 flex gap-4">
+            <div className="mt-5 flex gap-4">
               <div className="w-1/2">
                 <label
                   htmlFor="gameCategory"
@@ -873,7 +866,7 @@ const FormGame: React.FC<IForm> = ({
               </div>
             </div>
             {newData.type === "voucher" && (
-              <div className="mt-4 flex gap-4 items-center">
+              <div className="mt-5 flex gap-4 items-center">
                 <input
                   type="checkbox"
                   name="voucherInternal"
@@ -895,7 +888,7 @@ const FormGame: React.FC<IForm> = ({
             )}
             {newData.type === "topup" && (
               <>
-                <div className="mt-4 flex gap-4 items-center">
+                <div className="mt-5 flex gap-4 items-center">
                   <input
                     type="checkbox"
                     name="needServerId"
@@ -994,7 +987,7 @@ const FormGame: React.FC<IForm> = ({
               </>
             )}
             {newData.needServerId && newData.typeServerId === "list" && (
-              <div className="w-full mt-4">
+              <div className="w-full mt-5">
                 <label
                   htmlFor="listServerId"
                   className="font-medium text-base text-neutral-900 inline-block"
@@ -1006,7 +999,7 @@ const FormGame: React.FC<IForm> = ({
                 </label>
                 <div className="p-4 bg-gray-100 rounded">
                   {inputData.map((data, index) => (
-                    <div className="mt-4 flex gap-4" key={index}>
+                    <div className="mt-5 flex gap-4" key={index}>
                       <div className="w-1/2">
                         <label
                           htmlFor={`name${index}`}
@@ -1102,7 +1095,7 @@ const FormGame: React.FC<IForm> = ({
                 </button>
               </div>
             )}
-            <div className="w-full mt-4 gap-4 items-end">
+            <div className="w-full mt-5 gap-4 items-end">
               {typeForm !== "detail" && (
                 <div className="w-full">
                   <label
@@ -1138,9 +1131,7 @@ const FormGame: React.FC<IForm> = ({
                 )}
                 <div
                   className={`rounded-md p-3 px-4 h-40 overflow-y-auto border ${
-                    typeForm !== "detail"
-                      ? "bg-primary-50 border-primary-900"
-                      : "bg-gray-100"
+                    typeForm !== "detail" ? "bg-primary-50" : "bg-gray-100"
                   }`}
                 >
                   {newData.keywords.map((keyword, index) => (
@@ -1168,7 +1159,7 @@ const FormGame: React.FC<IForm> = ({
                 </div>
               </div>
             </div>
-            <div className="w-full mt-4">
+            <div className="w-full mt-5">
               <label
                 htmlFor="desc"
                 className="font-medium text-base text-neutral-900 inline-block"
@@ -1189,7 +1180,7 @@ const FormGame: React.FC<IForm> = ({
                   typeForm === "detail"
                     ? "cursor-not-allowed bg-gray-100"
                     : "edit bg-primary-50 bg-opacity-100"
-                } focus:ring-2 focus:ring-gray-600 focus:outline-none rounded-md mt-4 w-full min-h-[10rem]`}
+                } focus:ring-2 focus:ring-gray-600 focus:outline-none rounded-md mt-2 w-full min-h-[10rem]`}
               />
             </div>
             <GameContentForm

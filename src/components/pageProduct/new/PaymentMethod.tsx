@@ -246,12 +246,9 @@ const PaymentMethod = ({ value, data, onChange, position }: any) => {
             value={selectedTab}
             onChange={handleTabChange}
             aria-label="payment methods tabs"
-            sx={{
-              "& .MuiTabs-flexContainer": {
-                maxWidth: "100%",
-                overflowX: "auto",
-              },
-            }}
+            variant="scrollable"
+            scrollButtons="auto"
+            allowScrollButtonsMobile
           >
             {categoryTabs}
           </Tabs>

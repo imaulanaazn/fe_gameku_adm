@@ -88,12 +88,15 @@ const PaymentMethod = ({ value, data, onChange, position }: any) => {
     groupedPaymentMethods[unifiedCategory].push(method);
   });
 
-  const categoryTabs = Object.keys(groupedPaymentMethods).map(
-    (category, index) => <Tab key={category} label={accordionTitle(category)} />
-  );
+  const categoryTabs = Object.keys(groupedPaymentMethods)
+    .sort()
+    .map((category, index) => {
+      return <Tab key={category} label={accordionTitle(category)} />;
+    });
 
-  const tabPanels = Object.entries(groupedPaymentMethods).map(
-    ([category, methods], index) => (
+  const tabPanels = Object.entries(groupedPaymentMethods)
+    .sort()
+    .map(([category, methods], index) => (
       <TabPanel value={selectedTab} index={index} key={category}>
         <Box sx={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
           {methods.map((method) => (
@@ -215,8 +218,7 @@ const PaymentMethod = ({ value, data, onChange, position }: any) => {
           ))}
         </Box>
       </TabPanel>
-    )
-  );
+    ));
 
   return (
     <Card
@@ -244,12 +246,9 @@ const PaymentMethod = ({ value, data, onChange, position }: any) => {
             value={selectedTab}
             onChange={handleTabChange}
             aria-label="payment methods tabs"
-            sx={{
-              "& .MuiTabs-flexContainer": {
-                maxWidth: "100%",
-                overflowX: "auto",
-              },
-            }}
+            variant="scrollable"
+            scrollButtons="auto"
+            allowScrollButtonsMobile
           >
             {categoryTabs}
           </Tabs>

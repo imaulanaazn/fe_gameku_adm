@@ -210,7 +210,7 @@ const NewFormTopup: React.FC<IFormProps> = ({ products, paymentsMethod }) => {
                 data={products}
                 onChange={(key: any, value: any) => handleChange(key, value)}
               />
-              <Grid container spacing={{ xs: 0, md: 6 }}>
+              <Grid container spacing={6}>
                 <Grid item xs={12} md={6}>
                   <MobileNumber
                     position={

@@ -29,7 +29,7 @@ const BlankLayoutWrapper = styled(Box)<BoxProps>(({ theme }) => ({
 
 const BlankLayout = ({ children }: BlankLayoutProps) => {
   return (
-    <BlankLayoutWrapper className="layout-wrapper">
+    <BlankLayoutWrapper className="layout-wrapper overflow-x-hidden">
       <Box
         className="app-content"
         sx={{ minHeight: "100vh", position: "relative" }} //overflowX hidden is deleted because it makes the children position sticky not working

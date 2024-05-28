@@ -110,9 +110,9 @@ const Footer = () => {
         <div>
           {/* UPPER FOOTER */}
           <div className="md:flex justify-between items-end">
-            <h1 className="flex-1 text-white text-2xl lg:text-3xl font-bold">
+            <h2 className="flex-1 text-white text-2xl lg:text-3xl font-bold">
               Top-up Lebih Mudah Di Gasskeun Top-up
-            </h1>
+            </h2>
             <a
               href="/#"
               className="hidden lg:block flex-1 flex items-center justify-center"

@@ -17,7 +17,14 @@ import Image from "next/image";
 
 const ProfileGame = ({ denoms }: { denoms: IGameDetail }) => {
   return (
-    <Card sx={{ position: "relative", borderRadius: "0.75rem" }}>
+    <Card
+      sx={{
+        position: "relative",
+        borderRadius: "0.75rem",
+        backgroundColor: "rgba(255,255,255,0.8)",
+        backdropFilter: "blur(40px)",
+      }}
+    >
       <CardContent>
         <Stack
           direction={{ xs: "row", sm: "column", lg: "row" }}
@@ -58,27 +65,35 @@ const ProfileGame = ({ denoms }: { denoms: IGameDetail }) => {
           <Stack gap={2}>
             <Stack direction="row" gap={2} alignItems="center">
               <FontAwesomeIcon fontSize="0.75rem" icon={faHeadphones} />
-              <Typography variant="caption">Layanan Pelanggan 24/7</Typography>
+              <Typography variant="caption" sx={{ color: "#4B5563" }}>
+                Layanan Pelanggan 24/7
+              </Typography>
             </Stack>
             <Stack direction="row" gap={2} alignItems="center">
               <FontAwesomeIcon fontSize="0.75rem" icon={faUserShield} />
-              <Typography variant="caption">Jaminan Layanan</Typography>
+              <Typography variant="caption" sx={{ color: "#4B5563" }}>
+                Jaminan Layanan
+              </Typography>
             </Stack>
           </Stack>
           <Stack gap={2}>
             <Stack direction="row" gap={2} alignItems="center">
               <FontAwesomeIcon fontSize="0.75rem" icon={faCreditCard} />
-              <Typography variant="caption">Pembayaran yang Aman</Typography>
+              <Typography variant="caption" sx={{ color: "#4B5563" }}>
+                Pembayaran yang Aman
+              </Typography>
             </Stack>
             <Stack direction="row" gap={2} alignItems="center">
               <FontAwesomeIcon fontSize="0.75rem" icon={faBolt} />
-              <Typography variant="caption">Pengiriman Instan</Typography>
+              <Typography variant="caption" sx={{ color: "#4B5563" }}>
+                Pengiriman Instan
+              </Typography>
             </Stack>
           </Stack>
         </Stack>
         <Typography
           variant="body2"
-          sx={{ letterSpacing: "0.25px", marginTop: 1.5 }}
+          sx={{ letterSpacing: "0.25px", marginTop: 1.5, color: "#4B5563" }}
           dangerouslySetInnerHTML={{ __html: denoms.description }}
         ></Typography>
       </CardContent>

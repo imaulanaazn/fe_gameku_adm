@@ -29,6 +29,7 @@ import { Container } from "@mui/system";
 import useDevice from "@/@core/hooks/useDevice";
 import ProductReview from "./ProductReview/ProductReview";
 import FAQ from "./faq/FAQ";
+import GameContent from "./gameContent/GameContent";
 
 interface IFormProps {
   products: IGameDetail;
@@ -272,12 +273,14 @@ const NewFormTopup: React.FC<IFormProps> = ({ products, paymentsMethod }) => {
             />
           </Grid>
           <Grid item xs={12} md={8}>
-            <Box sx={{ display: { xs: "block", sm: "none" } }}>
+            <Stack sx={{ display: { xs: "flex", sm: "none" } }} gap={6}>
               <ProductReview gameId={products.id} />
               <FAQ />
-            </Box>
+            </Stack>
           </Grid>
         </Grid>
+
+        <GameContent />
       </Box>
     )
   );

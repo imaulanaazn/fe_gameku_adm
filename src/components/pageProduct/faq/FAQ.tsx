@@ -67,10 +67,13 @@ export default function FAQ() {
                 aria-controls={`panel${index}-content`}
                 id={`panel${index}-header`}
               >
-                <Typography pt={2}>{faq.summary}</Typography>
+                <Typography>{faq.summary}</Typography>
               </AccordionSummary>
               <AccordionDetails sx={{ backgroundColor: "#FFE4E5" }}>
-                <Typography sx={{ color: "#4B5563", fontSize: 15 }}>
+                <Typography
+                  paddingTop={4}
+                  sx={{ color: "#4B5563", fontSize: 15 }}
+                >
                   {faq.details}
                 </Typography>
               </AccordionDetails>

@@ -132,7 +132,7 @@ const Footer = () => {
               <a
                 href="https://reseller.gasskeuntopup.com/"
                 target="_blank"
-                className="w-full md:w-max bg-primary-900 py-3 px-5 text-white rounded-full font-semibold hover:bg-white hover:text-black"
+                className="w-full md:w-max bg-primary-900 py-3 px-5 text-white rounded-full font-semibold hover:bg-white hover:text-black text-center"
               >
                 Menjadi Reseller
               </a>

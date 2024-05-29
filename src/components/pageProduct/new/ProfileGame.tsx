@@ -5,14 +5,7 @@ import {
   faUserShield,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  CardContent,
-  Avatar,
-  Typography,
-  Card,
-  Box,
-  Stack,
-} from "@mui/material";
+import { CardContent, Typography, Card, Box, Stack } from "@mui/material";
 import Image from "next/image";
 
 const ProfileGame = ({ denoms }: { denoms: IGameDetail }) => {
@@ -63,29 +56,113 @@ const ProfileGame = ({ denoms }: { denoms: IGameDetail }) => {
           gap={2}
         >
           <Stack gap={2}>
-            <Stack direction="row" gap={2} alignItems="center">
-              <FontAwesomeIcon fontSize="0.75rem" icon={faHeadphones} />
-              <Typography variant="caption" sx={{ color: "#4B5563" }}>
+            <Stack
+              direction="row"
+              gap={2}
+              alignItems="center"
+              sx={{
+                backgroundColor: "grey.200",
+                padding: 2,
+                borderRadius: 10,
+                justifyContent: "center",
+              }}
+            >
+              <FontAwesomeIcon
+                fontSize="0.75rem"
+                className="text-neutral-600"
+                icon={faHeadphones}
+              />
+              <Typography
+                variant="caption"
+                sx={{
+                  color: "#4B5563",
+                  fontWeight: 500,
+                  fontSize: "0.725rem",
+                }}
+              >
                 Layanan Pelanggan 24/7
               </Typography>
             </Stack>
-            <Stack direction="row" gap={2} alignItems="center">
-              <FontAwesomeIcon fontSize="0.75rem" icon={faUserShield} />
-              <Typography variant="caption" sx={{ color: "#4B5563" }}>
-                Jaminan Layanan
+            <Stack
+              direction="row"
+              gap={2}
+              alignItems="center"
+              sx={{
+                backgroundColor: "grey.200",
+                padding: 2,
+                borderRadius: 10,
+                justifyContent: "center",
+              }}
+            >
+              <FontAwesomeIcon
+                fontSize="0.75rem"
+                className="text-neutral-600"
+                icon={faUserShield}
+              />
+              <Typography
+                variant="caption"
+                sx={{
+                  color: "#4B5563",
+                  fontWeight: 500,
+                  fontSize: "0.725rem",
+                }}
+              >
+                Garansi Layanan
               </Typography>
             </Stack>
           </Stack>
           <Stack gap={2}>
-            <Stack direction="row" gap={2} alignItems="center">
-              <FontAwesomeIcon fontSize="0.75rem" icon={faCreditCard} />
-              <Typography variant="caption" sx={{ color: "#4B5563" }}>
+            <Stack
+              direction="row"
+              gap={2}
+              alignItems="center"
+              sx={{
+                backgroundColor: "grey.200",
+                padding: 2,
+                borderRadius: 10,
+                justifyContent: "center",
+              }}
+            >
+              <FontAwesomeIcon
+                fontSize="0.75rem"
+                className="text-neutral-600"
+                icon={faCreditCard}
+              />
+              <Typography
+                variant="caption"
+                sx={{
+                  color: "#4B5563",
+                  fontWeight: 500,
+                  fontSize: "0.725rem",
+                }}
+              >
                 Pembayaran yang Aman
               </Typography>
             </Stack>
-            <Stack direction="row" gap={2} alignItems="center">
-              <FontAwesomeIcon fontSize="0.75rem" icon={faBolt} />
-              <Typography variant="caption" sx={{ color: "#4B5563" }}>
+            <Stack
+              direction="row"
+              gap={2}
+              alignItems="center"
+              sx={{
+                backgroundColor: "grey.200",
+                padding: 2,
+                borderRadius: 10,
+                justifyContent: "center",
+              }}
+            >
+              <FontAwesomeIcon
+                fontSize="0.75rem"
+                className="text-neutral-600"
+                icon={faBolt}
+              />
+              <Typography
+                variant="caption"
+                sx={{
+                  color: "#4B5563",
+                  fontWeight: 500,
+                  fontSize: "0.725rem",
+                }}
+              >
                 Pengiriman Instan
               </Typography>
             </Stack>

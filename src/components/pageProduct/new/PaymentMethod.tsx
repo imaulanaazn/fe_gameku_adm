@@ -98,7 +98,14 @@ const PaymentMethod = ({ value, data, onChange, position }: any) => {
     .sort()
     .map(([category, methods], index) => (
       <TabPanel value={selectedTab} index={index} key={category}>
-        <Box sx={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: 4,
+            justifyContent: "center",
+          }}
+        >
           {methods.map((method) => (
             <Box
               key={method.id}
@@ -144,22 +151,21 @@ const PaymentMethod = ({ value, data, onChange, position }: any) => {
                     !value.totalAmountBeforeFee ||
                     value.totalAmountBeforeFee > method.maxAmount ||
                     value.totalAmountBeforeFee < method.minAmount
-                      ? "100%"
-                      : "47%",
-                  md:
+                      ? "48%"
+                      : "48%",
+                  lg:
                     !value.totalAmountBeforeFee ||
                     value.totalAmountBeforeFee > method.maxAmount ||
                     value.totalAmountBeforeFee < method.minAmount
-                      ? "48%"
-                      : "auto",
+                      ? "31%"
+                      : "31%",
                 },
                 display: "flex",
-                justifyContent: "center",
+                justifyContent: "space-between",
                 alignItems: "center",
                 gap: 2,
-                padding: 2,
+                padding: 4,
                 borderRadius: "0.4rem",
-                flexWrap: "wrap",
                 border: "1px solid #B72025",
                 ...(method.id === value.paymentMethodId && {
                   outline: "2px solid #B72025",
@@ -182,21 +188,32 @@ const PaymentMethod = ({ value, data, onChange, position }: any) => {
                 />
               </Box>
               <Typography
-                variant="caption"
+                variant="body2"
                 sx={{
                   color: "#1F2937",
                   ...(method.id === value.paymentMethodId && {
-                    fontWeight: "600",
+                    fontWeight: "700",
                   }),
+                  textAlign: "right",
+                  maxWidth: "55%",
+                  ...(value.totalAmountBeforeFee ||
+                  value.totalAmountBeforeFee > method.maxAmount ||
+                  value.totalAmountBeforeFee < method.minAmount
+                    ? {
+                        fontWeight: "500",
+                      }
+                    : {
+                        fontWeight: "600",
+                      }),
                 }}
               >
                 {!value.totalAmountBeforeFee ||
                 value.totalAmountBeforeFee > method.maxAmount ||
                 value.totalAmountBeforeFee < method.minAmount
-                  ? `Tidak memenuhi syarat (${
+                  ? ` (${
                       value.totalAmountBeforeFee < method.minAmount
-                        ? "MIN " + currencyConverter(method.minAmount)
-                        : "MAX " + currencyConverter(method.maxAmount)
+                        ? "Minimal " + currencyConverter(method.minAmount)
+                        : "Maximal " + currencyConverter(method.maxAmount)
                     })`
                   : currencyConverter(
                       method.providerCd === "TOKOPAY" && method.category === "6"

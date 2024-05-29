@@ -6,7 +6,9 @@ import {
   Rating,
   CircularProgress,
   Button,
+  CardContent,
   LinearProgress,
+  Card,
   Stack,
 } from "@mui/material";
 import { faArrowRight, faPercentage } from "@fortawesome/free-solid-svg-icons";
@@ -74,132 +76,135 @@ function ProductReview({ gameId }: { gameId: string }) {
   }, [gameId]);
 
   return (
-    <Container
-      maxWidth="sm"
+    <Card
       sx={{
-        textAlign: "center",
         bgcolor: "white",
-        boxShadow: 3,
-        borderRadius: 2,
-        px: 4,
-        py: 6,
+        borderRadius: "0.75rem",
+        px: 2,
+        py: 4,
+        textAlign: "center",
       }}
+      elevation={1}
     >
-      <Box>
-        <Typography
-          variant="h6"
-          sx={{
-            fontWeight: "500",
-            mb: 2,
-            color: "#1F2937",
-          }}
-        >
-          Ulasan Pengguna
-        </Typography>
-        <Box sx={{ mt: 4 }}>
-          <Stack
-            alignItems="center"
-            paddingX={3}
-            paddingY={2}
+      <CardContent>
+        <Box>
+          <Typography
+            variant="h6"
             sx={{
-              bgcolor: "#FFE4E5",
-              borderRadius: "0.5rem",
-              width: "max-content",
-              margin: "0.5rem auto",
+              fontWeight: "500",
+              mb: 2,
+              color: "#1F2937",
             }}
           >
-            <Typography
-              variant="body1"
-              sx={{ fontWeight: "bold", ml: 2, fontSize: "2rem" }}
-              color="#B72025"
+            Ulasan Pengguna
+          </Typography>
+          <Box sx={{ mt: 4 }}>
+            <Stack
+              alignItems="center"
+              paddingX={3}
+              paddingY={2}
+              sx={{
+                bgcolor: "#FFE4E5",
+                borderRadius: "0.5rem",
+                width: "max-content",
+                margin: "0.5rem auto",
+              }}
             >
-              {reviews.averageRating?.toFixed(1) || 0}/5
-            </Typography>
-          </Stack>
-          <Rating value={reviews.averageRating} precision={0.1} readOnly />
-        </Box>
-        {reviews.reviews.length > 0 ? (
-          <Typography variant="body2" sx={{ mt: 1 }}>
-            {reviews.totalRating} Ulasan
-          </Typography>
-        ) : (
-          <Typography variant="body1" sx={{ mt: 1 }}>
-            Belum ada ulasan
-          </Typography>
-        )}
-        <Stack pt={6}>
-          <ul style={{ width: "100%", listStyle: "none", padding: 0 }}>
-            {allReviews.map((item: { rating: string; totalRating: number }) => (
-              <li
-                key={item.rating}
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  gap: "0.75rem",
-                  padding: "8px",
-                }}
+              <Typography
+                variant="body1"
+                sx={{ fontWeight: "bold", ml: 2, fontSize: "2rem" }}
+                color="#B72025"
               >
-                <Stack
-                  direction="row"
-                  justifyContent="center"
-                  alignItems="center"
-                >
-                  <Typography variant="body2" sx={{ flexGrow: 0, mr: 1 }}>
-                    {item.rating}
-                  </Typography>
-                  <Rating
-                    value={1}
-                    precision={1}
-                    readOnly
-                    max={1}
-                    size="small"
-                  />
-                </Stack>
-                <Box sx={{ width: { xs: "70%", sm: "80%", md: "60%" } }}>
-                  <Box
-                    sx={{
-                      height: "8px",
-                      borderRadius: "4px",
+                {reviews.averageRating?.toFixed(1) || 0}/5
+              </Typography>
+            </Stack>
+            <Rating value={reviews.averageRating} precision={0.1} readOnly />
+          </Box>
+          {reviews.reviews.length > 0 ? (
+            <Typography variant="body2" sx={{ mt: 1 }}>
+              {reviews.totalRating} Ulasan
+            </Typography>
+          ) : (
+            <Typography variant="body1" sx={{ mt: 1 }}>
+              Belum ada ulasan
+            </Typography>
+          )}
+          <Stack pt={6}>
+            <ul style={{ width: "100%", listStyle: "none", padding: 0 }}>
+              {allReviews.map(
+                (item: { rating: string; totalRating: number }) => (
+                  <li
+                    key={item.rating}
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      gap: "0.75rem",
+                      padding: "8px",
                     }}
                   >
-                    <LinearProgress
-                      variant="determinate"
-                      value={(item.totalRating / reviews.totalRating) * 100}
-                    />
-                  </Box>
-                </Box>
-                <Typography variant="body2">{item.totalRating}</Typography>
-              </li>
+                    <Stack
+                      direction="row"
+                      justifyContent="center"
+                      alignItems="center"
+                    >
+                      <Typography variant="body2" sx={{ flexGrow: 0, mr: 1 }}>
+                        {item.rating}
+                      </Typography>
+                      <Rating
+                        value={1}
+                        precision={1}
+                        readOnly
+                        max={1}
+                        size="small"
+                      />
+                    </Stack>
+                    <Box sx={{ width: { xs: "70%", sm: "80%", md: "60%" } }}>
+                      <Box
+                        sx={{
+                          height: "8px",
+                          borderRadius: "4px",
+                        }}
+                      >
+                        <LinearProgress
+                          variant="determinate"
+                          value={(item.totalRating / reviews.totalRating) * 100}
+                        />
+                      </Box>
+                    </Box>
+                    <Typography variant="body2">{item.totalRating}</Typography>
+                  </li>
+                )
+              )}
+            </ul>
+          </Stack>
+
+          {reviews.reviews.length > 0 &&
+            reviews.reviews.map((review: IReview) => (
+              <ProductCommentCard review={review} key={review.createdAt} />
             ))}
-          </ul>
-        </Stack>
 
-        {reviews.reviews.length > 0 &&
-          reviews.reviews.map((review: IReview) => (
-            <ProductCommentCard review={review} key={review.createdAt} />
-          ))}
-
-        {reviews.reviews.length > 0 && (
-          <Link href="/testimoni">
-            <Stack
-              direction="row"
-              alignItems="center"
-              justifyContent="center"
-              gap={4}
-              width="max-content"
-              margin="auto"
-              color="#B72025"
-              flexWrap="wrap"
-              sx={{ mt: 3 }}
-            >
-              <Typography>Lihat semua</Typography>
-              <FontAwesomeIcon icon={faArrowRight} />
-            </Stack>
-          </Link>
-        )}
-      </Box>
-    </Container>
+          {reviews.reviews.length > 0 && (
+            <Link href="/testimoni">
+              <Stack
+                direction="row"
+                alignItems="center"
+                justifyContent="center"
+                gap={4}
+                width="max-content"
+                margin="auto"
+                color="#B72025"
+                flexWrap="wrap"
+                sx={{ mt: 3 }}
+              >
+                <Typography>Lihat semua</Typography>
+                <FontAwesomeIcon icon={faArrowRight} />
+              </Stack>
+            </Link>
+          )}
+        </Box>
+      </CardContent>
+    </Card>
   );
 }
 

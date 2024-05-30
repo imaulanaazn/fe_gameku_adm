@@ -22,7 +22,7 @@ const Invoices: React.FC<IInvoicesProps> = ({ invoice }) => {
   return (
     <>
       <Box maxWidth="lg" marginX={"auto"}>
-        <Breadcrumbs aria-label="breadcrumb" sx={{ pb: 8 }}>
+        <Breadcrumbs aria-label="breadcrumb" sx={{ pb: { xs: 0, lg: 8 } }}>
           <Link href="/" className=" text-primary-900">
             Home
           </Link>

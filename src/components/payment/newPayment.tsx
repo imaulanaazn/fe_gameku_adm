@@ -9,6 +9,7 @@ import {
   Typography,
   Divider,
   Button,
+  Chip,
   Alert,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
@@ -24,6 +25,10 @@ import {
 import { useQRCode } from "next-qrcode";
 import Tooltip from "@mui/material/Tooltip";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMoneyBill1Wave } from "@fortawesome/free-solid-svg-icons";
+import PaymentInstructionModal from "./PaymentInstructionModal";
+import { faCopy } from "@fortawesome/free-regular-svg-icons";
 
 const getStatusPayment = (status: OrderStatuses, expiredAt: string) => {
   let msg;
@@ -69,7 +74,7 @@ const getStatusPayment = (status: OrderStatuses, expiredAt: string) => {
 
   return {
     alert: <Alert severity={severity as any}>{msg}</Alert>,
-    box: msgBox,
+    box: <Chip label={msgBox} color={severity as any} variant="outlined" />,
   };
 };
 
@@ -114,6 +119,7 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
   const [order, setOrder] = useState<IInvoice | null>(invoices);
   const [isFinished, setIsFinished] = useState(false);
   const canvasRef = useRef<HTMLDivElement>(null);
+  const [openModal, setOpenModal] = React.useState(false);
 
   useEffect(() => {
     // Handle navigation based on payment status
@@ -212,579 +218,760 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
   }, [order?.order.status, isFinished, invoices.order.invoiceId]);
 
   return (
-    <Grid container spacing={6}>
-      {order && (
-        <>
-          <Grid item xs={12} md={7}>
-            <Stack spacing={6}>
-              {/* INFORMASI PRODUCT CARD */}
-              <Paper
-                sx={{ position: "relative", padding: 6, borderRadius: 2 }}
-                elevation={0}
-              >
-                <Box
-                  sx={{
-                    marginBottom: 4,
-                    backgroundColor: "#FFE4E5",
-                    padding: 4,
-                    borderRadius: 1,
-                  }}
+    <>
+      <PaymentInstructionModal
+        setOpen={() => setOpenModal(false)}
+        open={openModal}
+        paymentName={invoices.payment.name}
+        paymentGuide={invoices.payment.paymentGuide}
+      />
+
+      {order?.order.status === OrderStatuses.PENDING_PAYMENT && (
+        <Box display={{ xs: "none", sm: "block" }}>
+          <PaymentPendingCountdown
+            expiredAt={order?.payment.expiredAt}
+            createdAt={order?.order.createdAt}
+          />
+        </Box>
+      )}
+
+      <Grid
+        container
+        spacing={6}
+        mt={1}
+        flexDirection={{ xs: "column-reverse", md: "row" }}
+      >
+        {order && (
+          <>
+            <Grid item xs={12} md={7}>
+              <Stack spacing={6}>
+                {/* INFORMASI PRODUCT CARD */}
+                <Paper
+                  sx={{ position: "relative", padding: 6, borderRadius: 2 }}
+                  elevation={0}
                 >
-                  <Typography
-                    variant="body1"
-                    sx={{ fontWeight: 600, color: "#B72025" }}
+                  <Box
+                    sx={{
+                      marginBottom: 4,
+                      backgroundColor: "#FFE4E5",
+                      padding: 4,
+                      borderRadius: 1,
+                    }}
                   >
-                    Informasi Produk
-                  </Typography>
-                </Box>
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
-                  <Box sx={{ display: "flex", gap: 4, alignItems: "center" }}>
-                    <Avatar
-                      src={order.game.logoUrl}
-                      variant="rounded"
-                      sx={{ width: 50, height: 50 }}
-                    />
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        justifyContent: "center",
-                      }}
+                    <Typography
+                      variant="body1"
+                      sx={{ fontWeight: 600, color: "#B72025" }}
                     >
+                      Informasi Produk
+                    </Typography>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Box sx={{ display: "flex", gap: 4, alignItems: "center" }}>
+                      <Avatar
+                        src={order.game.logoUrl}
+                        variant="rounded"
+                        sx={{ width: 50, height: 50 }}
+                      />
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <Typography
+                          variant="body2"
+                          sx={{
+                            letterSpacing: "0.25px",
+                            fontWeight: 600,
+                            marginTop: 1.5,
+                          }}
+                        >
+                          {order.product.name}
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          sx={{
+                            letterSpacing: "0.25px",
+                            fontWeight: 600,
+                            marginTop: 1.5,
+                          }}
+                        >
+                          {order.game.name}
+                        </Typography>
+                      </Box>
+                    </Box>
+                    <Box>
                       <Typography
                         variant="body2"
                         sx={{
-                          letterSpacing: "0.25px",
                           fontWeight: 600,
+                          color: "gray",
                           marginTop: 1.5,
                         }}
                       >
-                        {order.product.name}
+                        Total
                       </Typography>
                       <Typography
                         variant="body2"
-                        sx={{
-                          letterSpacing: "0.25px",
-                          fontWeight: 600,
-                          marginTop: 1.5,
-                        }}
+                        sx={{ fontWeight: 600, marginTop: 1.5 }}
                       >
-                        {order.game.name}
+                        {currencyConverter(order.order.totalAmt)}
                       </Typography>
                     </Box>
                   </Box>
+
+                  <Box sx={{ marginTop: 4 }}>
+                    {(order.order?.userId ||
+                      order.order?.serverId ||
+                      order.order?.username) && (
+                      <Typography
+                        variant="body1"
+                        sx={{ fontWeight: 600, color: "#374151" }}
+                      >
+                        Data game :
+                      </Typography>
+                    )}
+                  </Box>
+
                   <Box>
+                    {order?.order?.userId && (
+                      <Stack direction="row" justifyContent="space-between">
+                        <Typography
+                          variant="body2"
+                          sx={{ fontWeight: 500, marginTop: 2 }}
+                        >
+                          User ID
+                        </Typography>
+                        {order?.order?.userId && (
+                          <Typography
+                            variant="body2"
+                            sx={{ fontWeight: 500, marginTop: 2 }}
+                          >
+                            {order?.order?.userId}
+                          </Typography>
+                        )}
+                      </Stack>
+                    )}
+                    {order?.order?.serverId && (
+                      <Stack direction="row" justifyContent="space-between">
+                        <Typography
+                          variant="body2"
+                          sx={{ fontWeight: 500, marginTop: 2 }}
+                        >
+                          Server ID
+                        </Typography>
+                        {order?.order?.serverId && (
+                          <Typography
+                            variant="body2"
+                            sx={{ fontWeight: 500, marginTop: 2 }}
+                          >
+                            {order?.order?.serverId}
+                          </Typography>
+                        )}
+                      </Stack>
+                    )}
+                    {order?.order?.username && (
+                      <Stack direction="row" justifyContent="space-between">
+                        <Typography
+                          variant="body2"
+                          sx={{ fontWeight: 500, marginTop: 2 }}
+                        >
+                          Username
+                        </Typography>
+                        {order?.order?.username && (
+                          <Typography
+                            variant="body2"
+                            sx={{ fontWeight: 500, marginTop: 2 }}
+                          >
+                            {order?.order?.username}
+                          </Typography>
+                        )}
+                      </Stack>
+                    )}
+                  </Box>
+                </Paper>
+
+                {/* INFROMASI PESANAN CARD */}
+                <Paper
+                  sx={{ position: "relative", padding: 6, borderRadius: 2 }}
+                  elevation={0}
+                >
+                  <Box
+                    sx={{
+                      marginBottom: 4,
+                      backgroundColor: "#FFE4E5",
+                      padding: 4,
+                      borderRadius: 1,
+                    }}
+                  >
                     <Typography
-                      variant="body2"
-                      sx={{ fontWeight: 600, color: "gray", marginTop: 1.5 }}
+                      variant="body1"
+                      sx={{ fontWeight: 600, color: "#B72025" }}
                     >
-                      Total
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      sx={{ fontWeight: 600, marginTop: 1.5 }}
-                    >
-                      {currencyConverter(order.order.totalAmt)}
+                      Informasi Pesanan
                     </Typography>
                   </Box>
-                </Box>
-
-                <Box sx={{ marginTop: 4 }}>
-                  {(order.order?.userId ||
-                    order.order?.serverId ||
-                    order.order?.username) && (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      gap: 2,
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                      {order.product.name}
+                    </Typography>
+                    <Typography variant="body2">
+                      {currencyConverter(order.order ? order.order.amount : 0)}
+                    </Typography>
+                  </Box>
+                  <Divider />
+                  <Box
+                    sx={{
+                      display: "flex",
+                      gap: 2,
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <Typography variant="body2">Kuantitas</Typography>
+                    <Typography variant="body2">
+                      {order.order?.quantity}
+                    </Typography>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      gap: 2,
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      marginTop: 2,
+                    }}
+                  >
+                    <Typography variant="body2" sx={{ fontWeight: 400 }}>
+                      Subtotal
+                    </Typography>
+                    <Typography variant="body2">
+                      {order.order?.amount && order.order?.quantity
+                        ? currencyConverter(
+                            order.order.amount * order.order.quantity
+                          )
+                        : "N/A"}
+                    </Typography>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      gap: 2,
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      marginTop: 2,
+                    }}
+                  >
+                    <Typography variant="body2" sx={{ fontWeight: 400 }}>
+                      Biaya Admin
+                    </Typography>
+                    <Typography variant="body2">
+                      {currencyConverter(order.order.feeAmt)}
+                    </Typography>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      gap: 2,
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      marginTop: 2,
+                    }}
+                  >
+                    <Typography variant="body2" sx={{ fontWeight: 400 }}>
+                      Diskon
+                    </Typography>
+                    <Typography variant="body2">
+                      {currencyConverter(order.order.discAmt)}
+                    </Typography>
+                  </Box>
+                  <Divider />
+                  <Box
+                    sx={{
+                      display: "flex",
+                      gap: 2,
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      marginTop: 2,
+                    }}
+                  >
                     <Typography
                       variant="body1"
                       sx={{ fontWeight: 600, color: "#374151" }}
                     >
-                      Data game :
+                      Total
                     </Typography>
-                  )}
-                </Box>
-
-                <Box>
-                  {order?.order?.userId && (
-                    <Stack direction="row" justifyContent="space-between">
-                      <Typography
-                        variant="body2"
-                        sx={{ fontWeight: 500, marginTop: 2 }}
-                      >
-                        User ID
-                      </Typography>
-                      {order?.order?.userId && (
-                        <Typography
-                          variant="body2"
-                          sx={{ fontWeight: 500, marginTop: 2 }}
-                        >
-                          {order?.order?.userId}
-                        </Typography>
-                      )}
-                    </Stack>
-                  )}
-                  {order?.order?.serverId && (
-                    <Stack direction="row" justifyContent="space-between">
-                      <Typography
-                        variant="body2"
-                        sx={{ fontWeight: 500, marginTop: 2 }}
-                      >
-                        Server ID
-                      </Typography>
-                      {order?.order?.serverId && (
-                        <Typography
-                          variant="body2"
-                          sx={{ fontWeight: 500, marginTop: 2 }}
-                        >
-                          {order?.order?.serverId}
-                        </Typography>
-                      )}
-                    </Stack>
-                  )}
-                  {order?.order?.username && (
-                    <Stack direction="row" justifyContent="space-between">
-                      <Typography
-                        variant="body2"
-                        sx={{ fontWeight: 500, marginTop: 2 }}
-                      >
-                        Username
-                      </Typography>
-                      {order?.order?.username && (
-                        <Typography
-                          variant="body2"
-                          sx={{ fontWeight: 500, marginTop: 2 }}
-                        >
-                          {order?.order?.username}
-                        </Typography>
-                      )}
-                    </Stack>
-                  )}
-                </Box>
-              </Paper>
-
-              {/* INFROMASI PESANAN CARD */}
-              <Paper
-                sx={{ position: "relative", padding: 6, borderRadius: 2 }}
-                elevation={0}
-              >
-                <Box
-                  sx={{
-                    marginBottom: 4,
-                    backgroundColor: "#FFE4E5",
-                    padding: 4,
-                    borderRadius: 1,
-                  }}
-                >
-                  <Typography
-                    variant="body1"
-                    sx={{ fontWeight: 600, color: "#B72025" }}
-                  >
-                    Informasi Pesanan
-                  </Typography>
-                </Box>
-                <Box
-                  sx={{
-                    display: "flex",
-                    gap: 2,
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                    {order.product.name}
-                  </Typography>
-                  <Typography variant="body2">
-                    {currencyConverter(order.order ? order.order.amount : 0)}
-                  </Typography>
-                </Box>
-                <Divider />
-                <Box
-                  sx={{
-                    display: "flex",
-                    gap: 2,
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <Typography variant="body2">Kuantitas</Typography>
-                  <Typography variant="body2">
-                    {order.order?.quantity}
-                  </Typography>
-                </Box>
-                <Box
-                  sx={{
-                    display: "flex",
-                    gap: 2,
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    marginTop: 2,
-                  }}
-                >
-                  <Typography variant="body2" sx={{ fontWeight: 400 }}>
-                    Subtotal
-                  </Typography>
-                  <Typography variant="body2">
-                    {order.order?.amount && order.order?.quantity
-                      ? currencyConverter(
-                          order.order.amount * order.order.quantity
-                        )
-                      : "N/A"}
-                  </Typography>
-                </Box>
-                <Box
-                  sx={{
-                    display: "flex",
-                    gap: 2,
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    marginTop: 2,
-                  }}
-                >
-                  <Typography variant="body2" sx={{ fontWeight: 400 }}>
-                    Biaya Admin
-                  </Typography>
-                  <Typography variant="body2">
-                    {currencyConverter(order.order.feeAmt)}
-                  </Typography>
-                </Box>
-                <Box
-                  sx={{
-                    display: "flex",
-                    gap: 2,
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    marginTop: 2,
-                  }}
-                >
-                  <Typography variant="body2" sx={{ fontWeight: 400 }}>
-                    Diskon
-                  </Typography>
-                  <Typography variant="body2">
-                    {currencyConverter(order.order.discAmt)}
-                  </Typography>
-                </Box>
-                <Divider />
-                <Box
-                  sx={{
-                    display: "flex",
-                    gap: 2,
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    marginTop: 2,
-                  }}
-                >
-                  <Typography
-                    variant="body1"
-                    sx={{ fontWeight: 600, color: "#374151" }}
-                  >
-                    Total
-                  </Typography>
-                  <Typography
-                    variant="body1"
-                    sx={{ fontWeight: 600, color: "#374151" }}
-                  >
-                    {currencyConverter(order.order.totalAmt)}
-                  </Typography>
-                </Box>
-              </Paper>
-            </Stack>
-          </Grid>
-
-          <Grid item xs={12} md={5}>
-            <Stack spacing={6}>
-              <Paper
-                sx={{ position: "relative", padding: 6, borderRadius: 2 }}
-                elevation={0}
-              >
-                <Box
-                  sx={{
-                    marginBottom: 4,
-                    backgroundColor: "#FFE4E5",
-                    padding: 4,
-                    borderRadius: 1,
-                  }}
-                >
-                  <Typography
-                    variant="body1"
-                    sx={{ fontWeight: 600, color: "#B72025" }}
-                  >
-                    Informasi Pembayaran
-                  </Typography>
-                </Box>
-                {(order.payment.cd === "ID_JENIUSPAY" ||
-                  order.payment.cd === "ID_OVO" ||
-                  order.payment.cd === "OVOPUSH") &&
-                  order.order.status === OrderStatuses.PENDING_PAYMENT && (
-                    <Box sx={{ marginBottom: 4 }}>
-                      <Alert severity="info">
-                        Silahkan cek aplikasi{" "}
-                        {order.payment.cd === "ID_OVO" ||
-                        order.payment.cd === "OVOPUSH"
-                          ? "OVO"
-                          : "JENIUS"}{" "}
-                        mu untuk melanjutkan pembayaran
-                      </Alert>
-                    </Box>
-                  )}
-
-                <Box sx={{ marginBottom: 4 }}>
-                  {
-                    getStatusPayment(
-                      order.order.status as OrderStatuses,
-                      order.payment.expiredAt as string
-                    ).alert
-                  }
-                </Box>
-                <Box>
-                  <Stack
-                    direction="row"
-                    justifyContent="space-between"
-                    sx={{ marginBottom: 2 }}
-                  >
-                    <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                      Status
+                    <Typography
+                      variant="body1"
+                      sx={{
+                        fontWeight: 700,
+                        color: "#374151",
+                        fontSize: "1rem",
+                      }}
+                    >
+                      {currencyConverter(order.order.totalAmt)}
                     </Typography>
-                    <Typography noWrap variant="body2" sx={{ fontWeight: 500 }}>
+                  </Box>
+                </Paper>
+              </Stack>
+            </Grid>
+
+            <Grid item xs={12} md={5}>
+              <Stack
+                gap={6}
+                flexDirection={{ xs: "column-reverse", md: "column" }}
+              >
+                <Paper
+                  sx={{ position: "relative", padding: 6, borderRadius: 2 }}
+                  elevation={0}
+                >
+                  <Box
+                    sx={{
+                      marginBottom: 4,
+                      backgroundColor: "#FFE4E5",
+                      padding: 4,
+                      borderRadius: 1,
+                    }}
+                  >
+                    <Typography
+                      variant="body1"
+                      sx={{ fontWeight: 600, color: "#B72025" }}
+                    >
+                      Informasi Pembayaran
+                    </Typography>
+                  </Box>
+                  {(order.payment.cd === "ID_JENIUSPAY" ||
+                    order.payment.cd === "ID_OVO" ||
+                    order.payment.cd === "OVOPUSH") &&
+                    order.order.status === OrderStatuses.PENDING_PAYMENT && (
+                      <Box sx={{ marginBottom: 4 }}>
+                        <Alert severity="info">
+                          Silahkan cek aplikasi{" "}
+                          {order.payment.cd === "ID_OVO" ||
+                          order.payment.cd === "OVOPUSH"
+                            ? "OVO"
+                            : "JENIUS"}{" "}
+                          mu untuk melanjutkan pembayaran
+                        </Alert>
+                      </Box>
+                    )}
+
+                  <Box sx={{ marginBottom: 4 }}>
+                    {
+                      getStatusPayment(
+                        order.order.status as OrderStatuses,
+                        order.payment.expiredAt as string
+                      ).alert
+                    }
+                  </Box>
+                  <Box>
+                    <Stack
+                      direction="row"
+                      justifyContent="space-between"
+                      sx={{ marginBottom: 2 }}
+                    >
+                      <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                        Status
+                      </Typography>
                       {
                         getStatusPayment(
                           order.order.status as OrderStatuses,
-
                           order.payment.expiredAt as string
                         ).box
                       }
-                    </Typography>
-                  </Stack>
-                  <Stack
-                    direction="row"
-                    justifyContent="space-between"
-                    sx={{ marginBottom: 2 }}
-                  >
-                    <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                      Nomor Invoice
-                    </Typography>
-                    <Typography noWrap variant="body2" sx={{ fontWeight: 500 }}>
-                      {order.order.invoiceId}
-                    </Typography>
-                  </Stack>
-                  <Stack
-                    direction="row"
-                    justifyContent="space-between"
-                    sx={{ marginBottom: 2 }}
-                  >
-                    <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                      Tanggal Order
-                    </Typography>
-                    <Typography noWrap variant="body2" sx={{ fontWeight: 500 }}>
-                      {dayjs(order.order.createdAt).format(
-                        "DD MMM YYYY HH:mm:ss"
-                      )}
-                    </Typography>
-                  </Stack>
-                  <Stack
-                    direction="row"
-                    justifyContent="space-between"
-                    sx={{ marginBottom: 2 }}
-                  >
-                    <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                      Metode Pembayaran
-                    </Typography>
-                    <Typography noWrap variant="body2" sx={{ fontWeight: 500 }}>
-                      {order.payment.name}
-                    </Typography>
-                  </Stack>
-                  {(order.payment.cd === "ID_OVO" ||
-                    order.payment.cd === "OVOPUSH") && (
+                    </Stack>
                     <Stack
                       direction="row"
                       justifyContent="space-between"
                       sx={{ marginBottom: 2 }}
                     >
                       <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                        Nomor OVO
+                        Nomor Invoice
                       </Typography>
-                      <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                        {"mobileNumber" in order.payment.action &&
-                          order.payment.action.mobileNumber.replace("+62", "0")}
-                      </Typography>
-                    </Stack>
-                  )}
-
-                  {order.payment.cd === "ID_JENIUSPAY" && (
-                    <Stack
-                      direction="row"
-                      justifyContent="space-between"
-                      sx={{ marginBottom: 2 }}
-                    >
-                      <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                        Cashtag
-                      </Typography>
-                      <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                        {"cashtag" in order.payment.action &&
-                          order.payment.action.cashtag}
-                      </Typography>
-                    </Stack>
-                  )}
-                </Box>
-              </Paper>
-
-              {!(
-                order.payment.cd === "ID_JENIUSPAY" ||
-                order.payment.cd === "ID_OVO" ||
-                order.payment.cd === "OVOPUSH"
-              ) &&
-                order.order.status === OrderStatuses.PENDING_PAYMENT && (
-                  <Paper
-                    sx={{ position: "relative", padding: 6, borderRadius: 2 }}
-                    elevation={0}
-                  >
-                    <Box>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                        }}
+                      <Typography
+                        noWrap
+                        variant="body2"
+                        sx={{ fontWeight: 500 }}
                       >
-                        <Typography sx={{ color: "#374151", fontWeight: 600 }}>
-                          {getTitlePayment(order.payment.action)}
+                        {order.order.invoiceId}
+                      </Typography>
+                    </Stack>
+                    <Stack
+                      direction="row"
+                      justifyContent="space-between"
+                      sx={{ marginBottom: 2 }}
+                    >
+                      <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                        Tanggal Order
+                      </Typography>
+                      <Typography
+                        noWrap
+                        variant="body2"
+                        sx={{ fontWeight: 500 }}
+                      >
+                        {dayjs(order.order.createdAt).format(
+                          "DD MMM YYYY HH:mm:ss"
+                        )}
+                      </Typography>
+                    </Stack>
+                    <Stack
+                      direction="row"
+                      justifyContent="space-between"
+                      sx={{ marginBottom: 2 }}
+                    >
+                      <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                        Metode Pembayaran
+                      </Typography>
+                      <Typography
+                        noWrap
+                        variant="body2"
+                        sx={{ fontWeight: 500 }}
+                      >
+                        {order.payment.name}
+                      </Typography>
+                    </Stack>
+                    {(order.payment.cd === "ID_OVO" ||
+                      order.payment.cd === "OVOPUSH") && (
+                      <Stack
+                        direction="row"
+                        justifyContent="space-between"
+                        sx={{ marginBottom: 2 }}
+                      >
+                        <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                          Nomor OVO
                         </Typography>
-                        <Box>
-                          <Avatar
-                            title="Logo Gasskeun Topup"
-                            src={order.payment?.logo}
-                            variant="rounded"
-                            sx={{
-                              width: 100,
+                        <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                          {"mobileNumber" in order.payment.action &&
+                            order.payment.action.mobileNumber.replace(
+                              "+62",
+                              "0"
+                            )}
+                        </Typography>
+                      </Stack>
+                    )}
 
-                              img: {
-                                width: "100%",
-                                height: "100%",
-                                objectFit: "contain",
-                              },
-                            }}
-                          />
-                        </Box>
-                      </Box>
+                    {order.payment.cd === "ID_JENIUSPAY" && (
+                      <Stack
+                        direction="row"
+                        justifyContent="space-between"
+                        sx={{ marginBottom: 2 }}
+                      >
+                        <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                          Cashtag
+                        </Typography>
+                        <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                          {"cashtag" in order.payment.action &&
+                            order.payment.action.cashtag}
+                        </Typography>
+                      </Stack>
+                    )}
+                  </Box>
+                </Paper>
 
-                      {PaymentAction.QR_STRING in order.payment.action &&
-                        order.payment.action.qrString && (
-                          <Box sx={{ marginTop: 4, textAlign: "center" }}>
-                            <div ref={canvasRef}>
-                              <Avatar
-                                variant="rounded"
-                                sx={{
-                                  mr: 3,
-                                  width: "auto",
-                                  height: "auto",
-                                  boxShadow: 3,
-                                  color: "common.white",
-                                  backgroundColor: `white`,
-                                }}
-                              >
-                                <Canvas
-                                  text={order.payment.action.qrString}
-                                  options={{
-                                    errorCorrectionLevel: "M",
-                                    margin: 3,
-                                    scale: 4,
-                                    width: 300,
-                                    quality: 1,
-                                  }}
-                                  // logo={{
-                                  //   src: logoGasskeun as string,
-                                  //   options: {
-                                  //     width: 50,
-                                  //   },
-                                  // }}
-                                />
-                              </Avatar>
-                              <Button
-                                variant="contained"
-                                color="primary"
-                                sx={{ marginTop: 4 }}
-                                onClick={onQRDownload}
-                              >
-                                Download QR Code
-                              </Button>
-                            </div>
+                {!(
+                  order.payment.cd === "ID_JENIUSPAY" ||
+                  order.payment.cd === "ID_OVO" ||
+                  order.payment.cd === "OVOPUSH"
+                ) &&
+                  order.order.status === OrderStatuses.PENDING_PAYMENT && (
+                    <Paper
+                      sx={{ position: "relative", padding: 6, borderRadius: 2 }}
+                      elevation={0}
+                    >
+                      <Box>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Typography
+                            sx={{ color: "#374151", fontWeight: 600 }}
+                          >
+                            {getTitlePayment(order.payment.action)}
+                          </Typography>
+                          <Box>
+                            <Avatar
+                              title="Logo Gasskeun Topup"
+                              src={order.payment?.logo}
+                              variant="rounded"
+                              sx={{
+                                width: 100,
+
+                                img: {
+                                  width: "100%",
+                                  height: "100%",
+                                  objectFit: "contain",
+                                },
+                              }}
+                            />
                           </Box>
-                        )}
+                        </Box>
 
-                      {PaymentAction.CHECKOUT_URL in order.payment.action &&
-                        order.payment.action.checkoutUrl &&
-                        order.order.status ===
-                          OrderStatuses.PENDING_PAYMENT && (
-                          <Button
-                            variant="contained"
-                            fullWidth
-                            sx={{ marginTop: 4 }}
-                            href={
-                              (PaymentAction.CHECKOUT_URL in
-                                order.payment.action &&
-                                order.payment.action.checkoutUrl) ||
-                              "#"
-                            }
-                          >
-                            Lanjutkan Pembayaran
-                          </Button>
-                        )}
-
-                      {PaymentAction.PAYMENT_CODE in order.payment.action &&
-                        order.payment.action.paymentCode && (
-                          <ClickAwayListener
-                            onClickAway={() => {
-                              handleTooltip(false);
-                            }}
-                          >
-                            <div>
-                              <Tooltip
-                                PopperProps={{
-                                  disablePortal: true,
-                                }}
-                                onClose={() => {
-                                  handleTooltip(false);
-                                }}
-                                open={open}
-                                disableFocusListener
-                                disableHoverListener
-                                disableTouchListener
-                                title="Berhasil Disalin"
-                              >
-                                <Button
-                                  variant="outlined"
-                                  sx={{ width: "100%", marginTop: 4 }}
-                                  onClick={() => {
-                                    navigator.clipboard.writeText(
-                                      PaymentAction.PAYMENT_CODE in
-                                        order.payment.action
-                                        ? order.payment?.action.paymentCode
-                                        : ""
-                                    );
-                                    handleTooltip(true);
+                        {PaymentAction.QR_STRING in order.payment.action &&
+                          order.payment.action.qrString && (
+                            <Box sx={{ marginTop: 4, textAlign: "center" }}>
+                              <div ref={canvasRef}>
+                                <Avatar
+                                  variant="rounded"
+                                  sx={{
+                                    mr: 3,
+                                    width: "auto",
+                                    height: "auto",
+                                    boxShadow: 3,
+                                    color: "common.white",
+                                    backgroundColor: `white`,
                                   }}
                                 >
-                                  {PaymentAction.PAYMENT_CODE in
-                                  order.payment.action
-                                    ? order.payment?.action.paymentCode
-                                    : ""}
+                                  <Canvas
+                                    text={order.payment.action.qrString}
+                                    options={{
+                                      errorCorrectionLevel: "M",
+                                      margin: 3,
+                                      scale: 4,
+                                      width: 300,
+                                      quality: 1,
+                                    }}
+                                    // logo={{
+                                    //   src: logoGasskeun as string,
+                                    //   options: {
+                                    //     width: 50,
+                                    //   },
+                                    // }}
+                                  />
+                                </Avatar>
+                                <Button
+                                  variant="contained"
+                                  color="primary"
+                                  sx={{ marginTop: 4 }}
+                                  onClick={onQRDownload}
+                                >
+                                  Download QR Code
                                 </Button>
-                              </Tooltip>
-                            </div>
-                          </ClickAwayListener>
+                              </div>
+                            </Box>
+                          )}
+
+                        {PaymentAction.CHECKOUT_URL in order.payment.action &&
+                          order.payment.action.checkoutUrl &&
+                          order.order.status ===
+                            OrderStatuses.PENDING_PAYMENT && (
+                            <Button
+                              variant="contained"
+                              fullWidth
+                              sx={{ marginTop: 4 }}
+                              href={
+                                (PaymentAction.CHECKOUT_URL in
+                                  order.payment.action &&
+                                  order.payment.action.checkoutUrl) ||
+                                "#"
+                              }
+                            >
+                              Lanjutkan Pembayaran
+                            </Button>
+                          )}
+
+                        {PaymentAction.PAYMENT_CODE in order.payment.action &&
+                          order.payment.action.paymentCode && (
+                            <>
+                              <ClickAwayListener
+                                onClickAway={() => {
+                                  handleTooltip(false);
+                                }}
+                              >
+                                <div>
+                                  <Tooltip
+                                    PopperProps={{
+                                      disablePortal: true,
+                                    }}
+                                    onClose={() => {
+                                      handleTooltip(false);
+                                    }}
+                                    open={open}
+                                    disableFocusListener
+                                    disableHoverListener
+                                    disableTouchListener
+                                    title="Berhasil Disalin"
+                                  >
+                                    <Box mt={4}>
+                                      <Button
+                                        variant="outlined"
+                                        sx={{
+                                          width: "100%",
+                                          backgroundColor: "#FFE4E5",
+                                          display: "flex",
+                                          gap: 2,
+                                        }}
+                                        onClick={() => {
+                                          navigator.clipboard.writeText(
+                                            PaymentAction.PAYMENT_CODE in
+                                              order.payment.action
+                                              ? order.payment?.action
+                                                  .paymentCode
+                                              : ""
+                                          );
+                                          handleTooltip(true);
+                                        }}
+                                      >
+                                        {PaymentAction.PAYMENT_CODE in
+                                        order.payment.action
+                                          ? order.payment?.action.paymentCode
+                                          : ""}
+                                        <FontAwesomeIcon icon={faCopy} />
+                                      </Button>
+                                    </Box>
+                                  </Tooltip>
+                                </div>
+                              </ClickAwayListener>
+                            </>
+                          )}
+
+                        {order.payment.paymentGuide && (
+                          <Stack alignItems={"flex-end"} mt={2}>
+                            <Button
+                              onClick={() => setOpenModal(true)}
+                              size="small"
+                              sx={{
+                                color: "primary.main",
+                                borderRadius: 10,
+                              }}
+                            >
+                              Cara Membayar ?
+                            </Button>
+                          </Stack>
                         )}
-                    </Box>
-                  </Paper>
+                      </Box>
+                    </Paper>
+                  )}
+
+                {order.order.status === OrderStatuses.PENDING_PAYMENT && (
+                  <Box display={{ xs: "block", sm: "none" }}>
+                    <PaymentPendingCountdown
+                      expiredAt={order.payment.expiredAt}
+                      createdAt={order.order.createdAt}
+                    />
+                  </Box>
                 )}
-            </Stack>
-          </Grid>
-        </>
-      )}
-    </Grid>
+              </Stack>
+            </Grid>
+          </>
+        )}
+      </Grid>
+    </>
   );
 };
+
+function PaymentPendingCountdown({
+  expiredAt,
+  createdAt,
+}: {
+  expiredAt: string;
+  createdAt: string;
+}) {
+  const [timeRemaining, setTimeRemaining] = useState({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  });
+
+  useEffect(() => {
+    const calculateTimeRemaining = () => {
+      const expired = new Date(expiredAt).getTime();
+      const now = new Date().getTime();
+      const distance = expired - now;
+
+      if (distance < 0) {
+        setTimeRemaining({
+          days: 0,
+          hours: 0,
+          minutes: 0,
+          seconds: 0,
+        });
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor(
+        (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+      );
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      setTimeRemaining({ days, hours, minutes, seconds });
+    };
+
+    calculateTimeRemaining();
+    const interval = setInterval(calculateTimeRemaining, 1000);
+    return () => clearInterval(interval);
+  }, [expiredAt]);
+
+  return (
+    <Stack
+      flexDirection={"row"}
+      alignItems={"center"}
+      justifyContent={"center"}
+      gap={4}
+      sx={{
+        padding: 4,
+        borderRadius: { xs: 1, md: 2 },
+        backgroundColor: "rgb(255 237 213)",
+      }}
+    >
+      <Box
+        borderRadius={10}
+        sx={{
+          backgroundColor: "rgb(253 186 116)",
+          display: "flex",
+          flexShrink: "0",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+        width={50}
+        height={50}
+      >
+        <FontAwesomeIcon
+          icon={faMoneyBill1Wave}
+          className="text-white text-2xl"
+        />
+      </Box>
+      <Box>
+        <Typography
+          fontWeight={600}
+          fontSize={{ xs: 14, lg: 16 }}
+          color={"#374151"}
+        >
+          Gass Selesaikan Transaksimu!!
+        </Typography>
+        <Typography fontSize={{ xs: 14, lg: 16 }} color={"gray.900"}>
+          Waktu Tersisa{"  "}
+          <Typography
+            variant="caption"
+            sx={{ color: "#B72025", fontWeight: 600, fontSize: "inherit" }}
+          >
+            {" "}
+            {timeRemaining.days}d {timeRemaining.hours}h {timeRemaining.minutes}
+            m {timeRemaining.seconds}s{" "}
+          </Typography>
+        </Typography>
+      </Box>
+    </Stack>
+  );
+}
 
 export default NewPayment;

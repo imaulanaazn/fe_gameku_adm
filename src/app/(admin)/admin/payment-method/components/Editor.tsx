@@ -1,5 +1,8 @@
-import React, { useState, useRef } from "react";
-import ReactQuill, { Quill } from "react-quill";
+import React, { useState, useRef, useCallback } from "react";
+import "quill/dist/quill.snow.css";
+import "react-quill/dist/quill.snow.css";
+import dynamic from "next/dynamic";
+const ReactQuill = dynamic(import("react-quill"), { ssr: false });
 
 interface IEditor {
   value?: string;
@@ -7,31 +10,28 @@ interface IEditor {
   typeForm: string;
 }
 
-function Editor(props: IEditor) {
+const Editor = React.memo((props: IEditor) => {
   const { value, setValue, typeForm } = props;
-  const reactQuillRef = useRef<any>(null);
 
-  const handleChange = (html: string) => {
-    setValue(html);
-  };
-
-  // const handleSubmit = () => {
-  //   const editor = reactQuillRef?.current?.getEditor();
-  //   setEditorHtml(editor);
-  // };
+  const handleChange = useCallback(
+    (html: string) => {
+      setValue(html);
+    },
+    [setValue]
+  );
 
   const modules = {
     toolbar: [
-      [{ header: [1, 2, 3, false] }],
+      [{ header: [2] }],
       ["bold", "italic", "underline", "strike", "blockquote"],
-      //   [
-      //     { list: "ordered" },
-      //     { list: "bullet" },
-      //     { indent: "-1" },
-      //     { indent: "+1" },
-      //   ],
-      //   ["link"],
-      //   ["clean"],
+      [
+        { list: "ordered" },
+        { list: "bullet" },
+        { indent: "-1" },
+        { indent: "+1" },
+      ],
+      ["link"],
+      ["clean"],
     ],
   };
 
@@ -51,23 +51,22 @@ function Editor(props: IEditor) {
   ];
 
   return (
-    <>
-      <ReactQuill
-        ref={reactQuillRef}
-        onChange={handleChange}
-        theme="snow"
-        readOnly={typeForm === "detail"}
-        className={`${
-          typeForm === "detail"
-            ? "cursor-not-allowed bg-gray-100"
-            : "edit bg-primary-50 bg-opacity-100"
-        } focus:ring-2 focus:ring-gray-600 focus:outline-none rounded-md mt-2 w-full`}
-        modules={modules}
-        formats={formats}
-        value={value || ""}
-      />
-    </>
+    <ReactQuill
+      onChange={handleChange}
+      theme="snow"
+      readOnly={typeForm === "detail"}
+      placeholder=""
+      className={`${
+        typeForm === "detail"
+          ? "cursor-not-allowed bg-gray-100"
+          : "edit bg-primary-50 bg-opacity-100"
+      } focus:ring-2 focus:ring-gray-600 focus:outline-none rounded-md mt-2 w-full`}
+      modules={modules}
+      formats={formats}
+      value={value}
+    />
   );
-}
+});
 
+Editor.displayName = "Editor";
 export default Editor;

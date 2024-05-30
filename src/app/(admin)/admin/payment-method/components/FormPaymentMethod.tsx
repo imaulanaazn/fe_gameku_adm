@@ -2,7 +2,7 @@
 
 import { faSpinner, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useState, useRef } from "react";
 import { toast } from "react-toastify";
 import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -14,20 +14,30 @@ import dayjs from "dayjs";
 import formatter from "@/lib/formatter";
 import Image from "next/image";
 import Editor from "./Editor";
+
 registerLocale("id", id);
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 interface IForm {
   handleShowForm: (defaultValue: boolean) => void;
   type: string;
-  data: IPaymentMethod;
+  paymentMethodData: IPaymentMethod;
+  setPaymentMethodData: (paymentMethodData: IPaymentMethod) => void;
 }
 
-const FormPaymentMethod: React.FC<IForm> = ({ handleShowForm, type, data }) => {
-  const [paymentGuide, setPaymentGuide] = useState(data.paymentGuide);
+const FormPaymentMethod: React.FC<IForm> = ({
+  handleShowForm,
+  type,
+  paymentMethodData,
+  setPaymentMethodData,
+}) => {
   const [typeForm, setTypeForm] = useState<"edit" | "detail">("detail");
+  const [paymentGuide, setPaymentGuide] = useState<string>(
+    paymentMethodData.paymentGuide || ""
+  );
 
   let categ;
-  switch (data.category) {
+  switch (paymentMethodData?.category) {
     case "1":
       categ = "EWallet";
       break;
@@ -45,7 +55,7 @@ const FormPaymentMethod: React.FC<IForm> = ({ handleShowForm, type, data }) => {
   }
 
   let strTime;
-  switch (data.durationCd) {
+  switch (paymentMethodData?.durationCd) {
     case "s":
       strTime = "Detik";
       break;
@@ -69,12 +79,45 @@ const FormPaymentMethod: React.FC<IForm> = ({ handleShowForm, type, data }) => {
       break;
   }
 
+  const handleFormSubmit = async (e: any) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch(
+        `${BASE_URL}/v1/payment/${paymentMethodData.id}`,
+        {
+          method: "PUT",
+          cache: "no-cache",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            paymentGuide: paymentGuide,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      setPaymentMethodData({ ...paymentMethodData, paymentGuide });
+
+      toast.success("Berhasil menyimpan petunjuk pembayaran");
+    } catch (error) {
+      toast.error("Gagal menyimpan petunjuk pembayaran");
+      console.error("Failed to post payment guide:", error);
+    }
+    setTypeForm("detail");
+  };
+
   return (
     <div className="w-full h-screen bg-gray-800 bg-opacity-70 absolute top-0 left-0 flex items-center justify-center z-50 py-8">
       <div className="md:w-3/4 lg:w-2/5 md:max-h-full w-full bg-white p-8 rounded-xl overflow-y-auto relative">
         <div className="flex justify-between border-b-2 pb-4 border-gray-200 items-center">
           <h1 className="text-xl font-medium text-2xl text-neutral-800">
-            Detail {data?.name}
+            Detail {paymentMethodData?.name}
           </h1>
           <div
             onClick={() => handleShowForm(false)}
@@ -86,7 +129,11 @@ const FormPaymentMethod: React.FC<IForm> = ({ handleShowForm, type, data }) => {
             />
           </div>
         </div>
-        <form>
+        <form
+          onSubmit={(e) => {
+            handleFormSubmit(e);
+          }}
+        >
           <div className="w-full mt-4 gap-4">
             <label
               htmlFor="name"
@@ -96,7 +143,7 @@ const FormPaymentMethod: React.FC<IForm> = ({ handleShowForm, type, data }) => {
             </label>
             <div className="w-[140px] aspect-square mt-4">
               <Image
-                src={data.logo}
+                src={paymentMethodData?.logo || ""}
                 alt={"Logo Metode Pembayaran"}
                 width="0"
                 height="0"
@@ -122,7 +169,7 @@ const FormPaymentMethod: React.FC<IForm> = ({ handleShowForm, type, data }) => {
                   name="name"
                   id="name"
                   autoComplete="off"
-                  defaultValue={data.name}
+                  defaultValue={paymentMethodData?.name}
                   className={
                     "cursor-not-allowed bg-gray-100 border-none text-neutral-600 w-full py-3 px-4 rounded-md text-sm placeholder:text-sm overflow-hidden"
                   }
@@ -144,7 +191,7 @@ const FormPaymentMethod: React.FC<IForm> = ({ handleShowForm, type, data }) => {
                   name="minAmount"
                   id="minAmount"
                   autoComplete="off"
-                  defaultValue={formatter(data.minAmount)}
+                  defaultValue={formatter(paymentMethodData?.minAmount || 0)}
                   className={
                     "cursor-not-allowed bg-gray-100 border-none text-neutral-600 w-full py-3 px-4 rounded-md text-sm placeholder:text-sm overflow-hidden"
                   }
@@ -168,7 +215,7 @@ const FormPaymentMethod: React.FC<IForm> = ({ handleShowForm, type, data }) => {
                   name="maxAmount"
                   id="maxAmount"
                   autoComplete="off"
-                  defaultValue={formatter(data.maxAmount)}
+                  defaultValue={formatter(paymentMethodData?.maxAmount || 0)}
                   className={
                     "cursor-not-allowed bg-gray-100 border-none text-neutral-600 w-full py-3 px-4 rounded-md text-sm placeholder:text-sm overflow-hidden"
                   }
@@ -191,9 +238,9 @@ const FormPaymentMethod: React.FC<IForm> = ({ handleShowForm, type, data }) => {
                   id="fee"
                   autoComplete="off"
                   defaultValue={
-                    data.feeType === FeeType.AMOUNT
-                      ? formatter(data.fee)
-                      : data.fee + " %"
+                    paymentMethodData?.feeType === FeeType.AMOUNT
+                      ? formatter(paymentMethodData?.fee)
+                      : paymentMethodData?.fee + " %"
                   }
                   className={
                     "cursor-not-allowed bg-gray-100 border-none text-neutral-600 w-full py-3 px-4 rounded-md text-sm placeholder:text-sm overflow-hidden"
@@ -240,7 +287,9 @@ const FormPaymentMethod: React.FC<IForm> = ({ handleShowForm, type, data }) => {
                   name="fee"
                   id="fee"
                   autoComplete="off"
-                  defaultValue={data.isActive ? "Aktif" : "Tidak Aktif"}
+                  defaultValue={
+                    paymentMethodData?.isActive ? "Aktif" : "Tidak Aktif"
+                  }
                   className={
                     "cursor-not-allowed bg-gray-100 border-none text-neutral-600 w-full py-3 px-4 rounded-md text-sm placeholder:text-sm overflow-hidden"
                   }
@@ -263,12 +312,14 @@ const FormPaymentMethod: React.FC<IForm> = ({ handleShowForm, type, data }) => {
                 name="duration"
                 id="duration"
                 autoComplete="off"
-                defaultValue={data.durationExpired + " " + strTime}
+                defaultValue={
+                  paymentMethodData?.durationExpired + " " + strTime
+                }
                 className="cursor-not-allowed bg-gray-100 border-none text-neutral-60 w-full py-3 px-4 rounded-md text-sm placeholder:text-sm overflow-hidden"
               />
             </div>
           </div>
-          <div className="w-full mt-4 gap-4">
+          <div className="w-full mt-4">
             <label
               htmlFor="payment-guide"
               className="font-medium text-base text-neutral-900 inline-block"
@@ -276,25 +327,43 @@ const FormPaymentMethod: React.FC<IForm> = ({ handleShowForm, type, data }) => {
               Payment Guide
             </label>
             <Editor
-              value={data.paymentGuide ? data.paymentGuide : ""}
+              value={paymentGuide}
               setValue={function (value: string): void {
                 setPaymentGuide(value);
               }}
               typeForm={typeForm}
             />
+            <p className="text-neutral-600 text-xs mt-2">
+              Note: gunakan heading 2 sebagai judul instruksi dan list sebagai
+              isi instruksi pembayaran{" "}
+            </p>
           </div>
+          {typeForm === "edit" && (
+            <div className="flex justify-end space-x-2 bg-white py-5">
+              <button
+                type="submit"
+                className={
+                  "bg-primary-900 hover:bg-red-600 text-white font-medium w-24 py-3 rounded-md transition-all"
+                }
+              >
+                Simpan
+              </button>
+            </div>
+          )}
         </form>
-        <div className="flex justify-end space-x-2 bg-white py-5">
-          <button
-            onClick={() => setTypeForm("edit")}
-            type="button"
-            className={
-              "bg-primary-900 hover:bg-red-600 text-white font-medium w-24 py-3 rounded-md transition-all"
-            }
-          >
-            Edit
-          </button>
-        </div>
+        {typeForm === "detail" && (
+          <div className="flex justify-end space-x-2 bg-white py-5">
+            <button
+              onClick={() => setTypeForm("edit")}
+              type="button"
+              className={
+                "bg-primary-900 hover:bg-red-600 text-white font-medium w-24 py-3 rounded-md transition-all"
+              }
+            >
+              Edit
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -222,11 +222,16 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
       <PaymentInstructionModal
         setOpen={() => setOpenModal(false)}
         open={openModal}
+        paymentName={invoices.payment.name}
+        paymentGuide={invoices.payment.paymentGuide}
       />
 
       {order?.order.status === OrderStatuses.PENDING_PAYMENT && (
-        <Box display={{ xs: "none", lg: "block" }}>
-          <PaymentPendingCountdown expiredAt={order?.payment.expiredAt} />
+        <Box display={{ xs: "none", sm: "block" }}>
+          <PaymentPendingCountdown
+            expiredAt={order?.payment.expiredAt}
+            createdAt={order?.order.createdAt}
+          />
         </Box>
       )}
 
@@ -833,29 +838,32 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                                   </Tooltip>
                                 </div>
                               </ClickAwayListener>
-
-                              <Stack alignItems={"flex-end"} mt={2}>
-                                <Button
-                                  onClick={() => setOpenModal(true)}
-                                  size="small"
-                                  sx={{
-                                    color: "primary.main",
-                                    borderRadius: 10,
-                                  }}
-                                >
-                                  Cara Membayar ?
-                                </Button>
-                              </Stack>
                             </>
                           )}
+
+                        {order.payment.paymentGuide && (
+                          <Stack alignItems={"flex-end"} mt={2}>
+                            <Button
+                              onClick={() => setOpenModal(true)}
+                              size="small"
+                              sx={{
+                                color: "primary.main",
+                                borderRadius: 10,
+                              }}
+                            >
+                              Cara Membayar ?
+                            </Button>
+                          </Stack>
+                        )}
                       </Box>
                     </Paper>
                   )}
 
                 {order.order.status === OrderStatuses.PENDING_PAYMENT && (
-                  <Box display={{ lg: "none" }}>
+                  <Box display={{ xs: "block", sm: "none" }}>
                     <PaymentPendingCountdown
                       expiredAt={order.payment.expiredAt}
+                      createdAt={order.order.createdAt}
                     />
                   </Box>
                 )}
@@ -868,8 +876,14 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
   );
 };
 
-function PaymentPendingCountdown({ expiredAt }: { expiredAt: string }) {
-  const [timeElapsed, setTimeElapsed] = useState({
+function PaymentPendingCountdown({
+  expiredAt,
+  createdAt,
+}: {
+  expiredAt: string;
+  createdAt: string;
+}) {
+  const [timeRemaining, setTimeRemaining] = useState({
     days: 0,
     hours: 0,
     minutes: 0,
@@ -877,10 +891,20 @@ function PaymentPendingCountdown({ expiredAt }: { expiredAt: string }) {
   });
 
   useEffect(() => {
-    const calculateTimeElapsed = () => {
-      const now = new Date().getTime();
+    const calculateTimeRemaining = () => {
       const expired = new Date(expiredAt).getTime();
-      const distance = now - expired;
+      const now = new Date().getTime();
+      const distance = expired - now;
+
+      if (distance < 0) {
+        setTimeRemaining({
+          days: 0,
+          hours: 0,
+          minutes: 0,
+          seconds: 0,
+        });
+        return;
+      }
 
       const days = Math.floor(distance / (1000 * 60 * 60 * 24));
       const hours = Math.floor(
@@ -889,12 +913,14 @@ function PaymentPendingCountdown({ expiredAt }: { expiredAt: string }) {
       const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-      setTimeElapsed({ days, hours, minutes, seconds });
+      setTimeRemaining({ days, hours, minutes, seconds });
     };
 
-    const interval = setInterval(calculateTimeElapsed, 1000);
+    calculateTimeRemaining();
+    const interval = setInterval(calculateTimeRemaining, 1000);
     return () => clearInterval(interval);
   }, [expiredAt]);
+
   return (
     <Stack
       flexDirection={"row"}
@@ -933,8 +959,15 @@ function PaymentPendingCountdown({ expiredAt }: { expiredAt: string }) {
           Gass Selesaikan Transaksimu!!
         </Typography>
         <Typography fontSize={{ xs: 14, lg: 16 }} color={"gray.900"}>
-          Waktu Tersisa {timeElapsed.days}d {timeElapsed.hours}h{" "}
-          {timeElapsed.minutes}m {timeElapsed.seconds}s
+          Waktu Tersisa{"  "}
+          <Typography
+            variant="caption"
+            sx={{ color: "#B72025", fontWeight: 600, fontSize: "inherit" }}
+          >
+            {" "}
+            {timeRemaining.days}d {timeRemaining.hours}h {timeRemaining.minutes}
+            m {timeRemaining.seconds}s{" "}
+          </Typography>
         </Typography>
       </Box>
     </Stack>

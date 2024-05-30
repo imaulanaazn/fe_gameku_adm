@@ -150,7 +150,9 @@ const TablePaymentMethod: React.FC<{ data: IPaymentMethodPagination }> = ({
 
   const [showForm, setShowForm] = useState(false);
   const [typeForm, setTypeForm] = useState("");
-  const [detailData, setDetailData] = useState<IPaymentMethod | undefined>();
+  const [paymentDetail, setPaymentDetail] = useState<
+    IPaymentMethod | undefined
+  >();
 
   const [loading, setLoading] = useState(false);
   const [selectAll, setSelectAll] = useState(false);
@@ -314,10 +316,24 @@ const TablePaymentMethod: React.FC<{ data: IPaymentMethodPagination }> = ({
 
   return (
     <>
-      {showForm && detailData && (
+      {showForm && paymentDetail?.id && (
         <FormPaymentMethod
           handleShowForm={(value: boolean) => setShowForm(value)}
-          data={detailData}
+          paymentMethodData={paymentDetail}
+          setPaymentMethodData={(paymentMethodData: IPaymentMethod) => {
+            const paymentMethodDataPosition = paymentsMethod.data.findIndex(
+              (data) => data.id === paymentMethodData.id
+            );
+            const newPaymentMethodData = [...paymentsMethod.data];
+            paymentMethodDataPosition >= 0 &&
+              (newPaymentMethodData[paymentMethodDataPosition] =
+                paymentMethodData);
+            paymentMethodDataPosition >= 0 &&
+              setPaymentsMethod((prev) => ({
+                ...prev,
+                data: newPaymentMethodData,
+              }));
+          }}
           type={typeForm}
         />
       )}
@@ -746,7 +762,7 @@ const TablePaymentMethod: React.FC<{ data: IPaymentMethodPagination }> = ({
                                   e.stopPropagation();
                                   setShowForm(true);
                                   setTypeForm("detail");
-                                  setDetailData(data);
+                                  setPaymentDetail(data);
                                 }}
                                 className="bg-primary-900 px-4 py-2 rounded-md text-white cursor-pointer hover:bg-red-600"
                               >

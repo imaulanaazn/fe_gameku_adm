@@ -15,6 +15,7 @@ interface IPaymentMethod {
   logo: string;
   createdAt: string | Date;
   updatedAt: string | Date;
+  paymentGuide: string | null;
 }
 
 interface IPaymentMethodPagination extends IPagination {

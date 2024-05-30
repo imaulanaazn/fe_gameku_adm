@@ -13,6 +13,7 @@ import Select from "react-select";
 import dayjs from "dayjs";
 import formatter from "@/lib/formatter";
 import Image from "next/image";
+import Editor from "./Editor";
 registerLocale("id", id);
 
 interface IForm {
@@ -22,6 +23,9 @@ interface IForm {
 }
 
 const FormPaymentMethod: React.FC<IForm> = ({ handleShowForm, type, data }) => {
+  const [paymentGuide, setPaymentGuide] = useState(data.paymentGuide);
+  const [typeForm, setTypeForm] = useState<"edit" | "detail">("detail");
+
   let categ;
   switch (data.category) {
     case "1":
@@ -264,7 +268,33 @@ const FormPaymentMethod: React.FC<IForm> = ({ handleShowForm, type, data }) => {
               />
             </div>
           </div>
+          <div className="w-full mt-4 gap-4">
+            <label
+              htmlFor="payment-guide"
+              className="font-medium text-base text-neutral-900 inline-block"
+            >
+              Payment Guide
+            </label>
+            <Editor
+              value={data.paymentGuide ? data.paymentGuide : ""}
+              setValue={function (value: string): void {
+                setPaymentGuide(value);
+              }}
+              typeForm={typeForm}
+            />
+          </div>
         </form>
+        <div className="flex justify-end space-x-2 bg-white py-5">
+          <button
+            onClick={() => setTypeForm("edit")}
+            type="button"
+            className={
+              "bg-primary-900 hover:bg-red-600 text-white font-medium w-24 py-3 rounded-md transition-all"
+            }
+          >
+            Edit
+          </button>
+        </div>
       </div>
     </div>
   );

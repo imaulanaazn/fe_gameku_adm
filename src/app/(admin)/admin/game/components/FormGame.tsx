@@ -1183,13 +1183,13 @@ const FormGame: React.FC<IForm> = ({
                 } focus:ring-2 focus:ring-gray-600 focus:outline-none rounded-md mt-2 w-full min-h-[10rem]`}
               />
             </div>
-            <GameContentForm
+            {/* <GameContentForm
               typeForm={typeForm}
               newData={newData}
               setNewData={setNewData}
               gameContent={gameContent}
               setGameContent={setGameContent}
-            />
+            /> */}
             {typeForm === "detail" && !hideEdit && (
               <div className="flex justify-end space-x-2 bg-white py-5">
                 <button

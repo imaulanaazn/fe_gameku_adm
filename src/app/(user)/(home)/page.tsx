@@ -73,7 +73,7 @@ const Home = async () => {
       <a
         href="https://api.whatsapp.com/send?phone=628112065672"
         target="_blank"
-        className="w-12 h-12 md:w-16 md:h-16 lg:w-14 lg:h-14 bg-green-500 rounded-full fixed bottom-6 right-6 md:bottom-8 md:right-8 xl:bottom-10 xl:right-10 z-50 flex items-center justify-center"
+        className="w-12 h-12 md:w-16 md:h-16 lg:w-14 lg:h-14 bg-green-500 rounded-full fixed bottom-10 right-10 md:bottom-8 md:right-8 xl:bottom-10 xl:right-10 z-50 flex items-center justify-center"
       >
         <FontAwesomeIcon
           icon={faWhatsapp}

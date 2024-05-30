@@ -161,7 +161,7 @@ const PaymentMethod = ({ value, data, onChange, position }: any) => {
                       : "31%",
                 },
                 display: "flex",
-                justifyContent: "space-between",
+                justifyContent: { xs: "center", md: "space-between" },
                 alignItems: "center",
                 gap: 2,
                 padding: 4,

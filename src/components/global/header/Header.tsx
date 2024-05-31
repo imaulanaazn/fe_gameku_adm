@@ -335,8 +335,8 @@ const Header = () => {
         {/* Mobile menu */}
         <div
           className={`mobile-menu ${
-            !activeSideMenu && "hidden"
-          } lg:hidden absolute top-20 right-0 w-10/12 md:w-1/2 h-screen bg-white z-10 text-left px-12 shadow-sm`}
+            !activeSideMenu && "translate-x-full opacity-0"
+          } lg:hidden absolute translate-x-0 opacity-100 top-18 right-0 w-10/12 md:w-1/2 h-screen bg-white z-10 text-left px-12 shadow-sm transition-all duration-400`}
         >
           <nav>
             <ul>

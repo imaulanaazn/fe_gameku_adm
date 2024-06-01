@@ -2,24 +2,15 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { useRecoilState, useSetRecoilState } from "recoil";
-import ReactPaginate from "react-paginate";
-import { msgState } from "@/atom/msgState";
+import { useRecoilState } from "recoil";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowDown,
   faArrowUp,
   faCheckCircle,
   faCircleXmark,
-  faInfo,
-  faInfoCircle,
   faMagnifyingGlass,
-  faPencil,
-  faPlus,
-  faSearch,
   faTimes,
-  faTimesCircle,
-  faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import Loading from "@/app/(admin)/admin/game/loading";
 import { paymentMethodAdminState } from "@/atom/paymentMethodAdminState";
@@ -27,16 +18,12 @@ import { FeeType } from "@/enum";
 import Pagination from "@/components/admin/Pagination";
 import { IActionBulk } from "@/interfaces/actionBulk";
 import { selectedAdminState } from "@/atom/selectedAdminState";
-import ActionBulk from "@/components/admin/ActionBulk";
 import { toast } from "react-toastify";
-import Link from "next/link";
 import { Tooltip as ReactTooltip } from "react-tooltip";
 import formatter from "@/lib/formatter";
-import ConfirmDelete from "@/components/admin/ConfirmDelete";
 import { showDeleteState } from "@/atom/showDeleteState";
 import FormPaymentMethod from "./FormPaymentMethod";
 import Select from "react-select";
-import { IPromotion } from "@/interfaces/promotion";
 const column = [
   {
     id: "name",
@@ -111,6 +98,14 @@ const optionPaymentCategory = [
   {
     label: "Retail",
     value: "4",
+  },
+  {
+    label: "Internal",
+    value: "5",
+  },
+  {
+    label: "Pulsa",
+    value: "6",
   },
 ];
 
@@ -348,7 +343,7 @@ const TablePaymentMethod: React.FC<{ data: IPaymentMethodPagination }> = ({
           <div className="flex gap-4 items-center justify-between items-center flex-wrap">
             <div className="relative w-full lg:w-max border border-primary-900 bg-primary-50 rounded-md overflow-hidden flex items-center">
               <input
-                placeholder={`Cari voucher`}
+                placeholder={`Cari Pembayaran`}
                 value={inputSearch}
                 onChange={(e) => setInputSearch(e.target.value)}
                 className="w-full py-2 border-none bg-transparent text-primary-900 placeholder:text-primary-900 focus:ring-transparent"

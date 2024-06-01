@@ -10,24 +10,17 @@ const Posts = async () => {
   if (statusWebsite.data[0].value === "maintenance") {
     return <Maintenance />;
   }
-  const bg = await sendRequest<{ value: string }[]>(
-    "/v1/config?type=bg_profile"
-  );
+  // const bg = await sendRequest<{ value: string }[]>(
+  //   "/v1/config?type=bg_profile"
+  // );
   return (
-    <div
-      style={{
-        backgroundImage: `url('${bg.data[0].value}')`,
-        backgroundColor: "black",
-        backgroundSize: "cover",
-        backgroundRepeat: "no-repeat",
-        backgroundPosition: "center",
-      }}
-      className="w-full h-fit mx-auto grid align-middle"
-    >
+    <div className="w-full h-fit mx-auto grid align-middle">
       <Profile />
     </div>
   );
 };
+
+
 
 export const generateMetadata: () => Promise<
   Metadata | undefined

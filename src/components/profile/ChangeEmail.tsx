@@ -65,57 +65,71 @@ const ChangeEmail = () => {
   };
   return (
     <>
-      <div className="flex flex-col items-center gap-3 my-10">
-        <h1 className=" font-semibold text-2xl">Ganti Email</h1>
-      </div>
-      <form
-        onSubmit={handleSubmitChangeEmail}
-        className="w-full max-w-md text-xs text-black"
-      >
-        <div className="mb-4">
-          <input
-            type="email"
-            id="oldEmail"
-            className="w-full p-4 border"
-            value={data.oldEmail}
-            onChange={(e) =>
-              setData((prev) => ({ ...prev, oldEmail: e.target.value }))
-            }
-            required
-            placeholder="Email Lama"
-          />
-        </div>
-        <div className="mb-4">
-          <input
-            type="email"
-            id="newEmail"
-            className="w-full p-4 border"
-            value={data.newEmail}
-            onChange={(e) =>
-              setData((prev) => ({ ...prev, newEmail: e.target.value }))
-            }
-            required
-            placeholder="Email Baru"
-          />
-        </div>
-        {loading ? (
-          <div className="w-full py-5 bg-gray-400 text-black cursor-wait">
-            <FontAwesomeIcon icon={faSpinner} size="2x" spinPulse />
+      <div className="w-full h-full md:h-max px-6 py-8 md:px-10 md:py-10 xl:px-16 xl:py-16 flex flex-col justify-center shadow-md rounded-xl bg-white">
+        <h2 className="font-semibold text-2xl mb-8 xl:mb-10 text-center">
+          Ganti Email
+        </h2>
+        <form
+          onSubmit={handleSubmitChangeEmail}
+          className="w-full text-xs text-black text-left"
+        >
+          <div className="mb-4">
+            <label
+              htmlFor="oldEmail"
+              className="font-medium text-base text-neutral-900 inline-block mb-1.5"
+            >
+              Email Lama
+            </label>
+            <input
+              type="email"
+              id="oldEmail"
+              className="w-full py-3 px-4 bg-slate-100 rounded-md text-sm placeholder:text-sm overflow-hidden border border-solid border-white focus:bg-white focus:ring-0 focus:border-primary-900"
+              value={data.oldEmail}
+              onChange={(e) =>
+                setData((prev) => ({ ...prev, oldEmail: e.target.value }))
+              }
+              required
+              placeholder="Email Lama"
+            />
           </div>
-        ) : (
-          <button
-            type="submit"
-            disabled={!data.newEmail || !data.oldEmail}
-            className={`${
-              !data.newEmail || !data.oldEmail
-                ? "bg-gray-400 text-black cursor-not-allowed"
-                : "bg-[#B72025] text-white hover:bg-[#c5474c] cursor-pointer"
-            } w-full py-5`}
-          >
-            Update
-          </button>
-        )}
-      </form>
+          <div className="mb-6">
+            <label
+              htmlFor="newEmail"
+              className="font-medium text-base text-neutral-900 inline-block mb-1.5"
+            >
+              Email Baru
+            </label>
+            <input
+              type="email"
+              id="newEmail"
+              className="w-full py-3 px-4 bg-slate-100 rounded-md text-sm placeholder:text-sm overflow-hidden border border-solid border-white focus:bg-white focus:ring-0 focus:border-primary-900"
+              value={data.newEmail}
+              onChange={(e) =>
+                setData((prev) => ({ ...prev, newEmail: e.target.value }))
+              }
+              required
+              placeholder="Email Baru"
+            />
+          </div>
+          {loading ? (
+            <div className="w-full py-3 bg-gray-300 text-black cursor-wait rounded-md text-center">
+              <FontAwesomeIcon icon={faSpinner} size="2x" spinPulse />
+            </div>
+          ) : (
+            <button
+              type="submit"
+              disabled={!data.newEmail || !data.oldEmail}
+              className={`${
+                !data.newEmail || !data.oldEmail
+                  ? "bg-primary-300 text-slate-100 cursor-not-allowed"
+                  : "bg-primary-900 text-white hover:bg-black hover:text-white transition-all "
+              } w-full text-center w-full py-3 px-4 rounded-md text-base font-semibold`}
+            >
+              Update
+            </button>
+          )}
+        </form>
+      </div>
     </>
   );
 };

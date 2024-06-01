@@ -2,7 +2,11 @@
 
 import { userState } from "@/atom/userState";
 import formatter from "@/lib/formatter";
-import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import {
+  faChevronLeft,
+  faChevronRight,
+  faSpinner,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FormEvent, useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
@@ -10,11 +14,20 @@ import { toast } from "react-toastify";
 import { useRecoilState } from "recoil";
 
 const HistoryTopup = () => {
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const [orderHistory, setOrderHistory] =
     useState<IOrderWithAnalitycsPagination | null>(null);
   const [page, setPage] = useState(1);
   const [user, setUser] = useRecoilState(userState);
+
+  // const prevPaginationBtn =
+  //   page + 1 === 1
+  //     ? "bg-slate-200 border-2 border-gray-200 rounded-md px-3 py-2 text-slate-400 cursor-not-allowed"
+  //     : "bg-primary-100 border-2 border-primary-100 hover:border-primary-900 text-rose-700 rounded-md px-3 py-2 transition-all";
+  // const nextPaginationBtn =
+  //   page + 1 === totalPage
+  //     ? "bg-slate-200 border-2 border-gray-200 rounded-md px-3 py-2 text-slate-400 cursor-not-allowed"
+  //     : "bg-primary-100 border-2 border-primary-100 hover:border-primary-900 text-rose-700 rounded-md px-3 py-2 transition-all";
 
   const getOrderHistory = async (pageNumber?: number) => {
     const result = await fetch(
@@ -41,15 +54,35 @@ const HistoryTopup = () => {
 
   const checkStatus = (status: string) => {
     if (status === "1") {
-      return "Belum Dibayar";
+      return (
+        <div className="py-1 px-3 lg:py-3 lg:px-4 text-sm font-medium bg-rose-100 text-rose-700 rounded-full">
+          Belum Dibayar
+        </div>
+      );
     } else if (status === "2") {
-      return "Belum diproses game";
+      return (
+        <div className="py-1 px-3 lg:py-3 lg:px-4 text-sm font-medium bg-sky-100 text-sky-700 rounded-full">
+          Belum Diproses Game
+        </div>
+      );
     } else if (status === "3") {
-      return "Berhasil";
+      return (
+        <div className="py-1 px-3 lg:py-3 lg:px-4 text-sm font-medium bg-emerald-100 text-emerald-700 rounded-full">
+          Berhasil
+        </div>
+      );
     } else if (status === "4") {
-      return "Gagal";
+      return (
+        <div className="py-1 px-3 lg:py-3 lg:px-4 text-sm font-medium bg-rose-100 text-rose-700 rounded-full ">
+          Gagal
+        </div>
+      );
     } else if (status === "5") {
-      return "Kadaluarsa";
+      return (
+        <div className="py-1 px-3 lg:py-3 lg:px-4 text-sm font-medium bg-gray-100 text-gray-700 rounded-full">
+          Kadaluarsa
+        </div>
+      );
     }
   };
 
@@ -75,52 +108,65 @@ const HistoryTopup = () => {
       window.removeEventListener("resize", checkScreenSize);
     };
   }, []);
+
   return (
     <>
-      <div className="flex flex-col items-center gap-3 my-10">
-        <h1 className=" font-semibold text-2xl">History Topup</h1>
+      <div className="flex flex-col items-center gap-3 mt-10  mb-6 md:mt-12 lg:mt-6 xl:mb-10 ">
+        <h1 className="font-semibold text-xl xl:text-2xl text-neutral-800">
+          Riwayat Topup
+        </h1>
       </div>
-      <div className="w-full rounded shadow relative">
+      <div className="w-full">
         {isMobile && (
-          <div className="w-full rounded shadow">
+          <div className="w-full rounded-xl shadow-md py-2">
             {orderHistory &&
               orderHistory.data.map((item, index) => (
                 <div className="bg-white text-black p-4 mb-2" key={index}>
-                  <div className="flex justify-between">
+                  <div className="flex justify-between mt-2">
                     <div>
-                      <strong>No:</strong>
+                      <p className="text-neutral-600 text-sm">No</p>
                     </div>
-                    <div>{index + 1}</div>
+                    <div className="text-neutral-600 text-sm">{index + 1}</div>
                   </div>
-                  <div className="flex justify-between">
+                  <div className="flex justify-between mt-2">
                     <div>
-                      <strong>Kode Transaksi:</strong>
+                      <p className="text-neutral-600 text-sm">Kode Transaksi</p>
                     </div>
-                    <div>{item.invoiceId}</div>
+                    <div className="text-neutral-600 text-sm">
+                      {item.invoiceId}
+                    </div>
                   </div>
-                  <div className="flex justify-between">
+                  <div className="flex justify-between mt-2">
                     <div>
-                      <strong>Produk:</strong>
+                      <p className="text-neutral-600 text-sm">Produk</p>
                     </div>
-                    <div>{item.game}</div>
+                    <div className="text-neutral-600 text-sm">{item.game}</div>
                   </div>
-                  <div className="flex justify-between">
+                  <div className="flex justify-between mt-2">
                     <div>
-                      <strong>Denom:</strong>
+                      <p className="text-neutral-600 text-sm">Denom</p>
                     </div>
-                    <div>{item.productName}</div>
+                    <div className="text-neutral-600 text-sm">
+                      {item.productName}
+                    </div>
                   </div>
-                  <div className="flex justify-between">
+                  <div className="flex justify-between mt-2">
                     <div>
-                      <strong>Harga:</strong>
+                      <p className="text-neutral-600 text-sm">Harga</p>
                     </div>
-                    <div>{formatter(item.totalAmt)}</div>
+                    <div className="text-neutral-600 text-sm">
+                      {formatter(item.totalAmt)}
+                    </div>
                   </div>
-                  <div className="flex justify-between">
+                  <div className="flex justify-between mt-2">
                     <div>
-                      <strong>Status Pembayaran:</strong>
+                      <p className="text-neutral-600 text-sm">
+                        Status Pembayaran
+                      </p>
                     </div>
-                    <div>{checkStatus(item.status)}</div>
+                    <div className="text-neutral-600 text-sm">
+                      {checkStatus(item.status)}
+                    </div>
                   </div>
                 </div>
               ))}
@@ -130,22 +176,22 @@ const HistoryTopup = () => {
           <table className="w-full text-gray-600 text-sm">
             <thead>
               <tr className="bg-white">
-                <th className="py-2 px-4 sm:py-2 sm:px-6 md:py-3 md:px-8 lg:py-4 lg:px-10">
+                <th className="py-2 px-4 sm:py-2 sm:px-6 md:py-3 md:px-4 lg:py-2 lg:px-6 text-neutral-600 xl:text-base">
                   No
                 </th>
-                <th className="py-2 px-4 sm:py-2 sm:px-6 md:py-3 md:px-8 lg:py-4 lg:px-10">
+                <th className="py-2 px-4 sm:py-2 sm:px-6 md:py-3 md:px-4 lg:py-2 lg:px-6 text-neutral-600 xl:text-base">
                   Kode Transaksi
                 </th>
-                <th className="py-2 px-4 sm:py-2 sm:px-6 md:py-3 md:px-8 lg:py-4 lg:px-10">
+                <th className="py-2 px-4 sm:py-2 sm:px-6 md:py-3 md:px-4 lg:py-2 lg:px-6 text-neutral-600 xl:text-base">
                   Produk
                 </th>
-                <th className="py-2 px-4 sm:py-2 sm:px-6 md:py-3 md:px-8 lg:py-4 lg:px-10">
+                <th className="py-2 px-4 sm:py-2 sm:px-6 md:py-3 md:px-4 lg:py-2 lg:px-6 text-neutral-600 xl:text-base">
                   Denom
                 </th>
-                <th className="py-2 px-4 sm:py-2 sm:px-6 md:py-3 md:px-8 lg:py-4 lg:px-10">
+                <th className="py-2 px-4 sm:py-2 sm:px-6 md:py-3 md:px-4 lg:py-2 lg:px-6 text-neutral-600 xl:text-base">
                   Harga
                 </th>
-                <th className="py-2 px-4 sm:py-2 sm:px-6 md:py-3 md:px-8 lg:py-4 lg:px-10">
+                <th className="py-2 px-4 sm:py-2 sm:px-6 md:py-3 md:px-4 lg:py-2 lg:px-6 text-neutral-600 xl:text-base">
                   Status Pembayaran
                 </th>
               </tr>
@@ -154,22 +200,22 @@ const HistoryTopup = () => {
               {orderHistory &&
                 orderHistory.data.map((item, index) => (
                   <tr className="bg-white" key={index}>
-                    <td className="py-2 px-4 sm:py-2 sm:px-6 md:py-3 md:px-8 lg:py-4 lg:px-10">
+                    <td className="py-2 px-4 sm:py-2 sm:px-6 md:py-3 md:px-4 lg:py-2 lg:px-6 text-neutral-500 xl:text-base">
                       {index + 1}
                     </td>
-                    <td className="py-2 px-4 sm:py-2 sm:px-6 md:py-3 md:px-8 lg:py-4 lg:px-10">
+                    <td className="py-2 px-4 sm:py-2 sm:px-6 md:py-3 md:px-4 lg:py-2 lg:px-6 text-neutral-500 xl:text-base">
                       {item.invoiceId}
                     </td>
-                    <td className="py-2 px-4 sm:py-2 sm:px-6 md:py-3 md:px-8 lg:py-4 lg:px-10">
+                    <td className="py-2 px-4 sm:py-2 sm:px-6 md:py-3 md:px-4 lg:py-2 lg:px-6 text-neutral-500 xl:text-base">
                       {item.game}
                     </td>
-                    <td className="py-2 px-4 sm:py-2 sm:px-6 md:py-3 md:px-8 lg:py-4 lg:px-10">
+                    <td className="py-2 px-4 sm:py-2 sm:px-6 md:py-3 md:px-4 lg:py-2 lg:px-6 text-neutral-500 xl:text-base">
                       {item.productName}
                     </td>
-                    <td className="py-2 px-4 sm:py-2 sm:px-6 md:py-3 md:px-8 lg:py-4 lg:px-10">
+                    <td className="py-2 px-4 sm:py-2 sm:px-6 md:py-3 md:px-4 lg:py-2 lg:px-6 text-neutral-500 xl:text-base">
                       {formatter(item.totalAmt)}
                     </td>
-                    <td className="py-2 px-4 sm:py-2 sm:px-6 md:py-3 md:px-8 lg:py-4 lg:px-10">
+                    <td className="py-2 px-4 sm:py-2 sm:px-6 md:py-3 md:px-4 lg:py-2 lg:px-6 text-neutral-500 xl:text-base">
                       {checkStatus(item.status)}
                     </td>
                   </tr>
@@ -180,26 +226,28 @@ const HistoryTopup = () => {
       </div>
 
       {orderHistory && (
-        <div className="w-full flex justify-center my-10">
+        <div className="w-full flex justify-center mt-6 md:mt-10 lg:mt-6">
           <ReactPaginate
-            previousLabel={"<"}
-            nextLabel={">"}
+            previousLabel={<FontAwesomeIcon icon={faChevronLeft} />}
+            nextLabel={<FontAwesomeIcon icon={faChevronRight} />}
             breakLabel={"..."}
             pageCount={
               orderHistory.totalPage
                 ? parseInt(orderHistory.totalPage.toString())
                 : 1
             }
-            marginPagesDisplayed={3}
-            pageRangeDisplayed={3}
+            marginPagesDisplayed={2}
+            pageRangeDisplayed={2}
             onPageChange={(e) => getOrderHistory(e.selected + 1)}
-            forcePage={orderHistory.totalPage - 1}
+            forcePage={page - 1}
             containerClassName={"flex space-x-2 items-center"}
-            pageLinkClassName="font-semibold rounded-md px-3 py-2"
+            pageLinkClassName="font-semibold rounded-md px-2 py-2"
             nextLinkClassName="bg-white border-2 border-gray-400 text-gray-800 rounded-md px-3 py-2"
             previousLinkClassName="bg-white border-2 border-gray-400 text-gray-800 rounded-md px-3 py-2"
+            // nextLinkClassName={nextPaginationBtn}
+            // previousLinkClassName={prevPaginationBtn}
             activeClassName={
-              "bg-[#B72025] text-white font-semibold rounded-md py-2"
+              "bg-[#B72025] text-white font-semibold rounded-md p-2"
             }
           />
         </div>

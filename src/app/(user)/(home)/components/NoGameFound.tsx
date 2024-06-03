@@ -7,9 +7,9 @@ const NoGameFound = () => {
       <Container>
         <div className="flex gap-20 flex-col-reverse lg:flex-row items-center">
           <div className="left-side flex-1">
-            <h3 className="font-bold text-white text-4xl lg:text-5xl">
+            <h2 className="font-bold text-white text-4xl lg:text-5xl">
               Gak nemuin yang kamu cari?
-            </h3>
+            </h2>
             <p className="mt-3 lg:mt4 text-white max-w-lg">
               Yuk segera hubungi kami dan beritahu kami tentang keluhan /
               saranmu kepada gasskeun top up agar kami bisa melayani pelanggan

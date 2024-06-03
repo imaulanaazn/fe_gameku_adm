@@ -25,9 +25,9 @@ const Game: React.FC<IGameProps> = ({ data }) => {
           className="w-full rounded-lg object-cover aspect-square"
         />
         <div className="pt-2 lg:pt-3 text-center">
-          <p className="md:font-semibold text-xs md:text-sm text-neutral-900">
+          <h3 className="md:font-semibold text-xs md:text-sm text-neutral-900">
             {data.name}
-          </p>
+          </h3>
         </div>
       </div>
     </Link>

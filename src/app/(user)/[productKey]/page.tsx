@@ -64,7 +64,7 @@ const page = async ({ params }: IParams) => {
   return (
     <>
       <Script
-        id="show-banner"
+        id="aggregate-schema"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaMarkup) }}
       />

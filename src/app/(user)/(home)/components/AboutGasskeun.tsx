@@ -33,28 +33,39 @@ export default function AboutGasskeun() {
           </p>
           <ul className="list-disc mt-2 mt-2 list-inside">
             <li className="text-sm">
-              <strong>Beragam Metode Pembayaran:</strong> Kami menyediakan
-              banyak pilihan pembayaran, termasuk transfer bank ( BCA, Mandiri,
-              BRI, BNI, Permata, CIMB Niaga, Danamon, Maybank, Neo Commerce,
-              BSI, BJB), e-wallet (Dana, Gopay, Ovo, QRIS, ShopeePay, LinkAja),
-              Pulsa (XL, TRI, TELKOMSEL), Retail (ALFAMART, INDOMART) dan
-              lain-lain.
+              <h3 className="inline-block">
+                <strong> Beragam Metode Pembayaran: </strong>
+              </h3>{" "}
+              Kami menyediakan banyak pilihan pembayaran, termasuk transfer bank
+              ( BCA, Mandiri, BRI, BNI, Permata, CIMB Niaga, Danamon, Maybank,
+              Neo Commerce, BSI, BJB), e-wallet (Dana, Gopay, Ovo, QRIS,
+              ShopeePay, LinkAja), Pulsa (XL, TRI, TELKOMSEL), Retail (ALFAMART,
+              INDOMART) dan lain-lain.
             </li>
             <li className="text-sm">
-              <strong>Proses Cepat dan Mudah:</strong> Top up segera diproses
-              setelah pembayaran berhasil.
+              <h3 className="inline-block">
+                <strong> Proses Cepat dan Mudah: </strong>
+              </h3>{" "}
+              Top up segera diproses setelah pembayaran berhasil.
             </li>
             <li className="text-sm">
-              <strong>Keamanan Terjamin:</strong> Sistem kami dilengkapi dengan
-              keamanan tinggi untuk melindungi setiap transaksi.
+              <h3 className="inline-block">
+                <strong> Keamanan Terjamin: </strong>
+              </h3>{" "}
+              Sistem kami dilengkapi dengan keamanan tinggi untuk melindungi
+              setiap transaksi.
             </li>
             <li className="text-sm">
-              <strong>Harga Murah:</strong> Dapatkan harga terbaik dan berbagai
-              penawaran menarik.
+              <h3 className="inline-block">
+                <strong> Harga Murah: </strong>
+              </h3>{" "}
+              Dapatkan harga terbaik dan berbagai penawaran menarik.
             </li>
             <li className="text-sm">
-              <strong>Layanan Pelanggan Responsif:</strong> Tim kami siap
-              membantu Anda 24/7.
+              <h3 className="inline-block">
+                <strong> Layanan Pelanggan Responsif: </strong>
+              </h3>{" "}
+              Tim kami siap membantu Anda 24/7.
             </li>
           </ul>
         </section>
@@ -67,26 +78,53 @@ export default function AboutGasskeun() {
           </p>
           <ol className="list-decimal mt-2 list-inside">
             <li className="text-sm">
-              Masuk ke website{" "}
-              <a href="https://gasskeuntopup.com">gasskeuntopup.com</a>
+              {" "}
+              <h3 className="inline-block">
+                Masuk ke website{" "}
+                <a href="https://gasskeuntopup.com">gasskeuntopup.com</a>
+              </h3>
             </li>
-            <li className="text-sm">Pilih game yang ingin Anda top up.</li>
-            <li className="text-sm">Masukkan detail akun game Anda.</li>
-            <li className="text-sm">Pilih produk yang mau anda beli.</li>
-            <li className="text-sm">Pilih jumlah top up yang diinginkan.</li>
             <li className="text-sm">
-              Pilih metode pembayaran yang anda inginkan.
+              <h3 className="inline-block">
+                Pilih game yang ingin Anda top up.
+              </h3>
             </li>
-            <li className="text-sm">Masukan kode promo (opsional)</li>
             <li className="text-sm">
-              Lalu klik “Beli Sekarang”. Anda akan diarahkan pada halaman
-              pembayaran dengan informasi detail bagaimana cara melakukan
-              pembayaran
+              <h3 className="inline-block"> Masukkan detail akun game Anda.</h3>
             </li>
-            <li className="text-sm">Lakukan pembayaran sesuai instruksi.</li>
             <li className="text-sm">
-              Saldo atau voucher akan langsung masuk ke akun game Anda setelah
-              pembayaran selesai.
+              <h3 className="inline-block">Pilih produk yang mau anda beli.</h3>
+            </li>
+            <li className="text-sm">
+              <h3 className="inline-block">
+                Pilih jumlah top up yang diinginkan.
+              </h3>
+            </li>
+            <li className="text-sm">
+              <h3 className="inline-block">
+                Pilih metode pembayaran yang anda inginkan.
+              </h3>
+            </li>
+            <li className="text-sm">
+              <h3 className="inline-block"> Masukan kode promo (opsional)</h3>
+            </li>
+            <li className="text-sm">
+              <h3 className="inline-block">
+                Lalu klik “Beli Sekarang”. Anda akan diarahkan pada halaman
+                pembayaran dengan informasi detail bagaimana cara melakukan
+                pembayaran
+              </h3>
+            </li>
+            <li className="text-sm">
+              <h3 className="inline-block">
+                Lakukan pembayaran sesuai instruksi.
+              </h3>
+            </li>
+            <li className="text-sm">
+              <h3 className="inline-block">
+                Saldo atau voucher akan langsung masuk ke akun game Anda setelah
+                pembayaran selesai.
+              </h3>
             </li>
           </ol>
         </section>
@@ -99,18 +137,42 @@ export default function AboutGasskeun() {
             termasuk:
           </p>
           <ul className="list-disc mt-2 list-inside">
-            <li className="text-sm">Mobile Legends</li>
-            <li className="text-sm">Free Fire</li>
-            <li className="text-sm">PUBG Mobile</li>
-            <li className="text-sm">Clash of Clans</li>
-            <li className="text-sm">Highs Domino</li>
-            <li className="text-sm">Bigo Live</li>
-            <li className="text-sm">Free Fire Max</li>
-            <li className="text-sm">Valorant</li>
-            <li className="text-sm">Genshin Crystal</li>
-            <li className="text-sm">Honor of Kings</li>
-            <li className="text-sm">Moonlight Blade</li>
-            <li className="text-sm">Garena Undawn</li>
+            <li className="text-sm">
+              <h3 className="inline-block">Mobile Legends</h3>
+            </li>
+            <li className="text-sm">
+              <h3 className="inline-block">Free Fire</h3>
+            </li>
+            <li className="text-sm">
+              <h3 className="inline-block">PUBG Mobile</h3>
+            </li>
+            <li className="text-sm">
+              <h3 className="inline-block">Clash of Clans</h3>
+            </li>
+            <li className="text-sm">
+              <h3 className="inline-block">Highs Domino</h3>
+            </li>
+            <li className="text-sm">
+              <h3 className="inline-block">Bigo Live</h3>
+            </li>
+            <li className="text-sm">
+              <h3 className="inline-block">Free Fire Max</h3>
+            </li>
+            <li className="text-sm">
+              <h3 className="inline-block">Valorant</h3>
+            </li>
+            <li className="text-sm">
+              <h3 className="inline-block">Genshin Crystal</h3>
+            </li>
+            <li className="text-sm">
+              <h3 className="inline-block">Honor of Kings</h3>
+            </li>
+            <li className="text-sm">
+              <h3 className="inline-block">Moonlight Blade</h3>
+            </li>
+            <li className="text-sm">
+              <h3 className="inline-block">Garena Undawn</h3>
+            </li>
           </ul>
         </section>
         <section id="advantages" className="mt-8">
@@ -123,28 +185,40 @@ export default function AboutGasskeun() {
           </p>
           <ul className="list-disc mt-2 list-inside">
             <li className="text-sm">
-              <strong>Harga Termurah:</strong> Kami menawarkan harga terbaik di
-              pasaran.
+              <h3 className="inline-block">
+                <strong>Harga Termurah:</strong> Kami menawarkan harga terbaik
+                di pasaran.
+              </h3>
             </li>
             <li className="text-sm">
-              <strong>Pembayaran Mudah:</strong> Banyak pilihan metode
-              pembayaran.
+              <h3 className="inline-block">
+                <strong>Pembayaran Mudah:</strong> Banyak pilihan metode
+                pembayaran.
+              </h3>
             </li>
             <li className="text-sm">
-              <strong>Transaksi Cepat:</strong> Proses top up instan dan tanpa
-              hambatan.
+              <h3 className="inline-block">
+                <strong>Transaksi Cepat:</strong> Proses top up instan dan tanpa
+                hambatan.
+              </h3>
             </li>
             <li className="text-sm">
-              <strong>Garansi Uang Kembali:</strong> Jaminan uang kembali jika
-              terjadi masalah.
+              <h3 className="inline-block">
+                <strong>Garansi Uang Kembali:</strong> Jaminan uang kembali jika
+                terjadi masalah.
+              </h3>
             </li>
             <li className="text-sm">
-              <strong>Promo dan Penawaran:</strong> Berbagai promo menarik yang
-              bisa Anda manfaatkan.
+              <h3 className="inline-block">
+                <strong>Promo dan Penawaran:</strong> Berbagai promo menarik
+                yang bisa Anda manfaatkan.
+              </h3>
             </li>
             <li className="text-sm">
-              <strong>Layanan Pelanggan 24/7:</strong> Tim kami siap membantu
-              kapan saja.
+              <h3 className="inline-block">
+                <strong>Layanan Pelanggan 24/7:</strong> Tim kami siap membantu
+                kapan saja.
+              </h3>
             </li>
           </ul>
         </section>
@@ -166,7 +240,11 @@ export default function AboutGasskeun() {
           <dl className="divide-y dark:divide-gray-300">
             <div className="py-2 space-y-2 md:grid md:grid-cols-12 md:gap-8 md:space-y-0">
               <dt className="text-sm md:col-span-5">
-                <strong>Bagaimana cara melakukan top up?</strong>
+                <strong>
+                  <h3 className="inline-block">
+                    Bagaimana cara melakukan top up?{" "}
+                  </h3>
+                </strong>
               </dt>
               <dd className="text-sm md:pl-0 md:col-span-7">
                 Ikuti panduan di atas untuk melakukan top up di Gasskeuntopup.
@@ -174,7 +252,11 @@ export default function AboutGasskeun() {
             </div>
             <div className="py-2 space-y-2 md:grid md:grid-cols-12 md:gap-8 md:space-y-0">
               <dt className="text-sm md:col-span-5">
-                <strong>Metode pembayaran apa saja yang tersedia?</strong>
+                <strong>
+                  <h3 className="inline-block">
+                    Metode pembayaran apa saja yang tersedia?{" "}
+                  </h3>
+                </strong>
               </dt>
               <dd className="text-sm md:pl-0 md:col-span-7">
                 Kami menerima berbagai metode pembayaran, termasuk transfer
@@ -183,7 +265,9 @@ export default function AboutGasskeun() {
             </div>
             <div className="py-2 space-y-2 md:grid md:grid-cols-12 md:gap-8 md:space-y-0">
               <dt className="text-sm md:col-span-5">
-                <strong>Berapa lama proses top up?</strong>
+                <strong>
+                  <h3 className="inline-block">Berapa lama proses top up? </h3>
+                </strong>
               </dt>
               <dd className="text-sm md:pl-0 md:col-span-7">
                 Proses top up biasanya instan setelah pembayaran berhasil. jika
@@ -193,7 +277,11 @@ export default function AboutGasskeun() {
             </div>
             <div className="py-2 space-y-2 md:grid md:grid-cols-12 md:gap-8 md:space-y-0">
               <dt className="text-sm md:col-span-5">
-                <strong>Apakah ada garansi uang kembali?</strong>
+                <strong>
+                  <h3 className="inline-block">
+                    Apakah ada garansi uang kembali?{" "}
+                  </h3>
+                </strong>
               </dt>
               <dd className="text-sm md:pl-0 md:col-span-7">
                 Ya, kami memberikan garansi uang kembali jika terjadi masalah
@@ -202,7 +290,11 @@ export default function AboutGasskeun() {
             </div>
             <div className="py-2 space-y-2 md:grid md:grid-cols-12 md:gap-8 md:space-y-0">
               <dt className="text-sm md:col-span-5">
-                <strong>Bagaimana cara menghubungi layanan pelanggan?</strong>
+                <strong>
+                  <h3 className="inline-block">
+                    Bagaimana cara menghubungi layanan pelanggan?{" "}
+                  </h3>
+                </strong>
               </dt>
               <dd className="text-sm md:pl-0 md:col-span-7">
                 Anda bisa menghubungi kami melalui whatsapp kami di{" "}

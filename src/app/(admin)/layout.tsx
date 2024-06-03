@@ -56,7 +56,7 @@ export default function RootLayout({
   }, [pathname]);
 
   return (
-    <html lang="en">
+    <html lang="id">
       <body className="overflow-y-hidden">
         <RecoilRoot>
           <ToastContainer

@@ -13,6 +13,7 @@ import { INewsVideos } from "@/interfaces/newsVideo";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import AboutGasskeun from "./components/AboutGasskeun";
+import Script from "next/script";
 
 const defaultCategory = [
   {
@@ -44,43 +45,83 @@ const Home = async () => {
   );
   const youtubeVideo = await sendRequest<INewsVideos[]>("/v1/videos");
 
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Mobile Legends",
+        item: "https://gasskeuntopup.com/mobile-legends",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Free Fire",
+        item: "https://gasskeuntopup.com/free-fire",
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: "PUBG Mobile",
+        item: `https://gasskeuntopup.com/pubg-mobile`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: "Clash of Clans",
+        item: `https://gasskeuntopup.com/clash-of-clans-id-number`,
+      },
+    ],
+  };
+
   return (
-    <div className="bg-blurry-red">
-      {slides.data.length > 0 && <Carousel slides={slides.data} />}
-
-      {popularGames.data.length > 0 && (
-        <PopularGames popularGames={popularGames.data} />
-      )}
-
-      <CompLayanan
-        defaultCategory={defaultCategory}
-        games={games.data}
-        gameCategories={gameCategories.data}
+    <>
+      <Script
+        id="breadcrumb"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
+      <div className="bg-blurry-red">
+        {slides.data.length > 0 && <Carousel slides={slides.data} />}
 
-      {categoriesAndGames.data.map((data, index) => (
-        <ListGames key={index} title={data.name} data={data.games} />
-      ))}
+        {popularGames.data.length > 0 && (
+          <PopularGames popularGames={popularGames.data} />
+        )}
 
-      <AboutGasskeun />
-
-      {youtubeVideo.data.length > 0 && <NewsVideo videos={youtubeVideo.data} />}
-
-      <NoGameFound />
-
-      {posts.data.data.length > 0 && <NewsPost posts={posts.data.data} />}
-
-      <a
-        href="https://api.whatsapp.com/send?phone=628112065672"
-        target="_blank"
-        className="w-12 h-12 md:w-16 md:h-16 lg:w-14 lg:h-14 bg-green-500 rounded-full fixed bottom-10 right-10 md:bottom-8 md:right-8 xl:bottom-10 xl:right-10 z-50 flex items-center justify-center"
-      >
-        <FontAwesomeIcon
-          icon={faWhatsapp}
-          className="text-white text-3xl md:text-4xl lg:text-4xl"
+        <CompLayanan
+          defaultCategory={defaultCategory}
+          games={games.data}
+          gameCategories={gameCategories.data}
         />
-      </a>
-    </div>
+
+        {categoriesAndGames.data.map((data, index) => (
+          <ListGames key={index} title={data.name} data={data.games} />
+        ))}
+
+        <AboutGasskeun />
+
+        {youtubeVideo.data.length > 0 && (
+          <NewsVideo videos={youtubeVideo.data} />
+        )}
+
+        <NoGameFound />
+
+        {posts.data.data.length > 0 && <NewsPost posts={posts.data.data} />}
+
+        <a
+          href="https://api.whatsapp.com/send?phone=628112065672"
+          target="_blank"
+          className="w-12 h-12 md:w-16 md:h-16 lg:w-14 lg:h-14 bg-green-500 rounded-full fixed bottom-10 right-10 md:bottom-8 md:right-8 xl:bottom-10 xl:right-10 z-50 flex items-center justify-center"
+        >
+          <FontAwesomeIcon
+            icon={faWhatsapp}
+            className="text-white text-3xl md:text-4xl lg:text-4xl"
+          />
+        </a>
+      </div>
+    </>
   );
 };
 

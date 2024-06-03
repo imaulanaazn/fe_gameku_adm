@@ -50,7 +50,7 @@ export default function RootLayout({
   }, []);
 
   return (
-    <html lang="en">
+    <html lang="id">
       <Script
         strategy="lazyOnload"
         id="gtm"

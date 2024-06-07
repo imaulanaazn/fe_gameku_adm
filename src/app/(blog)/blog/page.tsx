@@ -445,7 +445,7 @@ export default function page() {
               </div>
             </div>
 
-            <div className="w-full lg:w-1/3 px-4 md:px-0 md:pl-8">
+            <div className="w-full lg:w-1/3 px-4 md:px-0 lg:pl-8">
               <div className="space-y-8">
                 <div className="">
                   <div className="mb-4">

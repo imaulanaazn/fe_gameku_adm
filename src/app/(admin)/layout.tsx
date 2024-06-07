@@ -57,6 +57,12 @@ export default function RootLayout({
 
   return (
     <html lang="id">
+      <head>
+        <meta
+          name="google-site-verification"
+          content="KL7H3ffvol9INrM6-tucVmtIyHc5yalcGNcv_sfq37s"
+        />
+      </head>
       <body className="overflow-y-hidden">
         <RecoilRoot>
           <ToastContainer

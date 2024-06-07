@@ -51,6 +51,12 @@ const writerMenu = [
     link: "/writer",
     quote: "temukan ringkasan bisnismu disini",
   },
+  {
+    name: "Manage Blog",
+    icon: faPenToSquare,
+    link: "/writer/manage",
+    quote: "temukan ringkasan bisnismu disini",
+  },
 ];
 
 export const adminMenu = [

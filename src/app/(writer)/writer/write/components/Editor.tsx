@@ -1,4 +1,5 @@
-import React, { useState, useCallback, useRef } from "react";
+"use client";
+import React, { useState, useCallback, useRef, useEffect } from "react";
 import "react-quill/dist/quill.snow.css";
 import EditorToolbar from "./EditorToolbar";
 import ReactQuill, { Quill } from "react-quill";
@@ -35,12 +36,22 @@ export const formats = [
   "color",
 ];
 
-const Editor: React.FC = () => {
-  const [html, setHtml] = useState("");
+interface IEditorProps {
+  setValue: (val: string) => void;
+  value: string;
+}
+
+const Editor: React.FC<IEditorProps> = (props: IEditorProps) => {
+  const { setValue, value } = props;
   const reactQuillRef = useRef<ReactQuill>(null);
+  const [isClient, setIsClient] = useState(false);
 
   const handleChange = useCallback((value: string) => {
-    setHtml(value);
+    setValue(value);
+  }, []);
+
+  useEffect(() => {
+    setIsClient(true); // Set to true when the component is mounted on the client side
   }, []);
 
   const imageHandler = useCallback(() => {
@@ -93,12 +104,16 @@ const Editor: React.FC = () => {
     },
   };
 
+  if (!isClient) {
+    return null; // Render nothing on the server
+  }
+
   return (
     <div>
       <EditorToolbar />
       <ReactQuill
         ref={reactQuillRef}
-        value={html}
+        value={value}
         onChange={handleChange}
         placeholder={"Write content"}
         modules={modules}

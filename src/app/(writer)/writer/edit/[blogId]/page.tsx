@@ -15,18 +15,36 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Editor from "./components/Editor";
 
+const initialConent = {
+  title: "title",
+  image: "",
+  content: "<p>content</p>",
+};
+
+const dummyCategories = [
+  { id: "1", name: "Games" },
+  { id: "2", name: "Valorant" },
+  { id: "3", name: "AOT" },
+];
+
+const initialContentSetting = {
+  permalink: "perma",
+  categories: [{ id: "1", name: "ada" }],
+  actionBtn: {
+    name: "button",
+    destination: "gasskeunt",
+  },
+};
+
 export default function Page() {
   const [isAuthorized, seIsAuthorized] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [content, setContent] = useState("");
-  const [label, setLabel] = useState("");
-  const [publishDate, setPublishDate] = useState("");
-  const [permalink, setPermalink] = useState("");
-  const [permalinkType, setPermalinkType] = useState("custom");
+  const [content, setContent] = useState(initialConent);
+  const [contentSettings, setContentSettings] = useState(initialContentSetting);
   const [checked, setChecked] = useState("");
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
-  const [displayImage, setDisplayImage] = useState("");
   const [showOptions, setShowOptions] = useState(false);
+  const [categories, setCategories] = useState(dummyCategories);
 
   const handleFileSelected = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files && event.target.files[0];
@@ -67,13 +85,53 @@ export default function Page() {
   useEffect(() => {
     if (selectedImage) {
       const imgUrl = URL.createObjectURL(selectedImage);
-      setDisplayImage(imgUrl);
+      setContent((prev) => ({ ...prev, image: imgUrl }));
     } else {
-      setDisplayImage("");
+      setContent((prev) => ({ ...prev, image: "" }));
     }
   }, [selectedImage]);
 
-  console.log({ isLoading, isAuthorized });
+  const handleSubmit = async () => {
+    if (!selectedImage) {
+      alert("Please select an image.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("image", selectedImage);
+
+    console.log({ contentSettings, content });
+    try {
+      const response = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        console.log("Blog uploaded successfully:", data.imageUrl);
+      } else {
+        console.error("Blog upload failed:", data.message);
+      }
+    } catch (error) {
+      console.error("Error uploading blog:", error);
+    }
+  };
+
+  const handleCategory = (category: { id: string; name: string }) => {
+    setContentSettings((prev) => {
+      const isSelected = prev.categories.some((cat) => cat.id === category.id);
+      const newCategories = isSelected
+        ? prev.categories.filter((cat) => cat.id !== category.id)
+        : [...prev.categories, category];
+
+      return { ...prev, categories: newCategories };
+    });
+  };
+
+  const isCategorySelected = (categoryId: string) => {
+    return contentSettings.categories.some((cat) => cat.id === categoryId);
+  };
 
   // if (!isAuthorized && !isLoading)
   //   return <div>you dont have permission to access this page</div>;
@@ -99,8 +157,12 @@ export default function Page() {
               type="text"
               id="title"
               name="title"
+              value={content.title}
               className="w-full px-0 py-2 palceholder:text-gray-100 font-bold text-4xl placeholder:text-4xl border-0"
               placeholder="|Tambah Judul"
+              onChange={(e) => {
+                setContent((prev) => ({ ...prev, title: e.target.value }));
+              }}
             />
           </div>
           <div className="w-full h-auto aspect-video bg-slate-100 flex items-center justify-center relative hover:brightness-90">
@@ -114,9 +176,9 @@ export default function Page() {
               icon={faMountainSun}
               className="text-4xl text-gray-400 "
             />
-            {displayImage && (
+            {content.image && (
               <Image
-                src={displayImage}
+                src={content.image}
                 fill={true}
                 alt="blog-banner"
                 objectFit="cover"
@@ -125,11 +187,10 @@ export default function Page() {
           </div>
           <div>
             <Editor
-            // setValue={(val: string) => {
-            //   setContent(val);
-            // }}
-            // typeForm={"edit"}
-            // value={content}
+              setValue={(val: string) => {
+                setContent((prev) => ({ ...prev, content: val }));
+              }}
+              value={content.content}
             />
           </div>
         </form>
@@ -176,12 +237,17 @@ export default function Page() {
           </label>
           <div className="peer-checked:max-h-max max-h-0 basis-full border-b peer-checked:py-3 overflow-hidden transition-all select-text">
             <p className="text-gray-500">
-              https://gasskeuntopup.com/{permalink}
+              https://gasskeuntopup.com/{contentSettings.permalink}
             </p>
             <input
               type="text"
-              value={permalink}
-              onChange={(e) => setPermalink(e.target.value)}
+              value={contentSettings.permalink}
+              onChange={(e) =>
+                setContentSettings((prev) => ({
+                  ...prev,
+                  permalink: e.target.value,
+                }))
+              }
               className="w-full p-2 mt-2 rounded-md border-slate-300 focus:border-slate-500 text-sm"
               placeholder="Custom permalink"
             />
@@ -211,15 +277,19 @@ export default function Page() {
             <p className="text-gray-500 text-base">Kategori</p>
           </label>
           <div className="w-full peer-checked:max-h-max max-h-0 basis-full border-b peer-checked:py-3 overflow-hidden transition-all select-text flex flex-wrap gap-2">
-            <div className="bg-emerald-100 w-max py-2 px-4 rounded-full hover:cursor-pointer text-emerald-700">
-              <p className="text-sm">Game</p>
-            </div>
-            <div className="bg-emerald-100 w-max py-2 px-4 rounded-full hover:cursor-pointer text-emerald-700">
-              <p className="text-sm">E-Sport</p>
-            </div>
-            <div className="bg-slate-100 w-max py-2 px-4 rounded-full hover:cursor-pointer text-slate-600">
-              <p className="text-sm">Mobile Legend</p>
-            </div>
+            {categories.map((category) => (
+              <div
+                key={category.id}
+                className={`${
+                  isCategorySelected(category.id)
+                    ? "bg-emerald-100 text-emerald-700"
+                    : "bg-gray-100 text-gray-600"
+                } w-max py-2 px-4 rounded-full hover:cursor-pointer`}
+                onClick={() => handleCategory(category)}
+              >
+                <p className="text-sm">{category.name}</p>
+              </div>
+            ))}
             <input
               type="text"
               onChange={() => {}}
@@ -256,11 +326,25 @@ export default function Page() {
               type="text"
               className="w-full p-2 rounded-md border-slate-300 focus:border-slate-500 text-sm"
               placeholder="nama button"
+              value={contentSettings.actionBtn.name}
+              onChange={(e) =>
+                setContentSettings((prev) => ({
+                  ...prev,
+                  actionBtn: { ...prev.actionBtn, name: e.target.value },
+                }))
+              }
             />
             <input
               type="text"
               className="w-full p-2 rounded-md border-slate-300 focus:border-slate-500 text-sm mt-3"
               placeholder="destinasi"
+              value={contentSettings.actionBtn.destination}
+              onChange={(e) =>
+                setContentSettings((prev) => ({
+                  ...prev,
+                  actionBtn: { ...prev.actionBtn, destination: e.target.value },
+                }))
+              }
             />
           </div>
         </div>
@@ -269,7 +353,10 @@ export default function Page() {
           <button className="py-2 px-4 text-primary-900 border border-primary-900 rounded-md text-center">
             Save as Draft
           </button>
-          <button className="py-2 px-4 bg-primary-900 text-white rounded-md text-center">
+          <button
+            className="py-2 px-4 bg-primary-900 text-white rounded-md text-center"
+            onClick={handleSubmit}
+          >
             Save
           </button>
         </div>

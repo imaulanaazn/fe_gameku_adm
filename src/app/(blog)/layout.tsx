@@ -2,7 +2,6 @@
 import "../globals.css";
 import BlankLayout from "@/@core/layouts/BlankLayout";
 import Maintenance from "@/components/maintenance/Maintenance";
-import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { ToastContainer } from "react-toastify";
 import BlogHeader from "./components/BlogHeader";

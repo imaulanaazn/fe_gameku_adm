@@ -35,12 +35,17 @@ export const formats = [
   "color",
 ];
 
-const Editor: React.FC = () => {
-  const [html, setHtml] = useState("");
+interface IEditorProps {
+  setValue: (val: string) => void;
+  value: string;
+}
+
+const Editor: React.FC<IEditorProps> = (props: IEditorProps) => {
+  const { setValue, value } = props;
   const reactQuillRef = useRef<ReactQuill>(null);
 
   const handleChange = useCallback((value: string) => {
-    setHtml(value);
+    setValue(value);
   }, []);
 
   const imageHandler = useCallback(() => {
@@ -98,7 +103,7 @@ const Editor: React.FC = () => {
       <EditorToolbar />
       <ReactQuill
         ref={reactQuillRef}
-        value={html}
+        value={value}
         onChange={handleChange}
         placeholder={"Write content"}
         modules={modules}

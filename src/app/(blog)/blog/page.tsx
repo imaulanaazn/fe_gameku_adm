@@ -1,10 +1,5 @@
 "use client";
 import { faCalendarDays, faClock } from "@fortawesome/free-regular-svg-icons";
-import {
-  faCalendar,
-  faCalendarDay,
-  faMagnifyingGlass,
-} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import React from "react";
@@ -13,7 +8,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
-export const carouselBreakpoints = {
+const carouselBreakpoints = {
   0: {
     slidesPerView: 1,
   },
@@ -29,9 +24,6 @@ export const carouselBreakpoints = {
   1280: {
     slidesPerView: 3,
   },
-  1536: {
-    slidesPerView: 3,
-  },
 };
 
 export default function page() {
@@ -41,6 +33,7 @@ export default function page() {
         <Swiper
           spaceBetween={28}
           slidesPerView={1}
+          centeredSlides={true}
           breakpoints={carouselBreakpoints}
           freeMode={true}
           className="flex items-center"

@@ -4,8 +4,10 @@ import Loading from "@/components/global/loading/CompLoading";
 import { ROLES } from "@/enum";
 import {
   faChevronDown,
+  faGear,
   faMountainSun,
   faPaperPlane,
+  faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
@@ -23,6 +25,7 @@ export default function Writer() {
   const [checked, setChecked] = useState("");
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [displayImage, setDisplayImage] = useState("");
+  const [showOptions, setShowOptions] = useState(false);
 
   const handleFileSelected = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files && event.target.files[0];
@@ -79,8 +82,17 @@ export default function Writer() {
   return (
     <div className="min-h-screen bg-gray-100 w-full flex relative">
       {/* BLOG EDITOR */}
-      <main className="w-9/12 xl mx-auto py-6 px-6">
-        <form className="bg-white p-8 shadow-lg rounded-lg flex flex-col gap-4">
+      <main className="w-full lg:w-9/12 xl mx-auto py-6 px-6">
+        <form className="bg-white p-4 md:p-8 shadow-md rounded-lg flex flex-col gap-4">
+          <button
+            type="button"
+            className="self-end lg:hidden"
+            onClick={() => {
+              setShowOptions((prev) => !prev);
+            }}
+          >
+            <FontAwesomeIcon icon={faGear} className="text-xl text-gray-600" />
+          </button>
           <div>
             <input
               type="text"
@@ -123,8 +135,22 @@ export default function Writer() {
       </main>
 
       {/* OPTIONS ASIDE */}
-      <div className="options w-3/12 px-4 py-6 bg-white h-[91vh] sticky top-16 right-0">
-        <p className="text-gray-600 text-base">Setelan Postingan</p>
+      <div
+        className={`options w-3/4 md:w-2/5 lg:w-3/12 px-4 py-8 md:py-6 bg-white h-[91vh] fixed lg:sticky top-16 right-0 transition-all duration-400 ${
+          showOptions ? "translate-x-0" : "translate-x-full lg:translate-x-0"
+        }`}
+      >
+        <div className="flex justify-between items-center">
+          <p className="text-gray-600 text-base">Setelan Postingan</p>
+          <button
+            className="lg:hidden"
+            onClick={() => {
+              setShowOptions((prev) => !prev);
+            }}
+          >
+            <FontAwesomeIcon icon={faXmark} className="text-xl text-gray-600" />
+          </button>
+        </div>
         <div className="w-full text-xs sm:text-sm flex items-center gap-x-3 flex-wrap select-none">
           <input
             type="checkbox"
@@ -238,11 +264,11 @@ export default function Writer() {
           </div>
         </div>
 
-        <div className="buttons flex gap-4 justify-center mt-4">
-          <button className="py-2 px-4 text-primary-900 border border-primary-900 rounded-md">
+        <div className="buttons flex lg:flex-col xl:flex-row gap-4 lg:gap-3 xl:gap-4 justify-center mt-4">
+          <button className="py-2 px-4 text-primary-900 border border-primary-900 rounded-md text-center">
             Save as Draft
           </button>
-          <button className="py-2 px-4 bg-primary-900 text-white rounded-md flex gap-2 items-center">
+          <button className="py-2 px-4 bg-primary-900 text-white rounded-md flex gap-2 items-center justify-center text-center">
             Publish
             <FontAwesomeIcon icon={faPaperPlane} />
           </button>

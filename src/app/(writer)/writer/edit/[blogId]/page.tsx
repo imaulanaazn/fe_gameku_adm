@@ -94,7 +94,7 @@ export default function Page() {
           >
             <FontAwesomeIcon icon={faGear} className="text-xl text-gray-600" />
           </button>
-          <div className="flex">
+          <div>
             <input
               type="text"
               id="title"

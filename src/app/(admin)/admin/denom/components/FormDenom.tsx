@@ -365,7 +365,7 @@ const FormDenom: React.FC<IForm> = ({
                     ) : (
                       <div
                         onClick={(e) => handleClick("logoDenom")}
-                        className="w-[140px] aspect-square mt-4 border-2 border-dashed border-primary-900 flex justify-center items-center bg-primary-50"
+                        className="w-[140px] aspect-square mt-4 border-2 border-dashed border-primary-900 flex justify-center items-center rounded-md hover:cursor-pointer"
                       >
                         <input
                           type="file"
@@ -425,8 +425,13 @@ const FormDenom: React.FC<IForm> = ({
                       paddingTop: "3px",
                       paddingBottom: "3px",
                       color: "#4B5563",
+                      boxShadow: "none",
                       backgroundColor:
-                        typeForm === "detail" ? "#f3f4f6" : "#FFF3F3",
+                        typeForm === "detail"
+                          ? "#f3f4f6"
+                          : state.isFocused
+                          ? "#FFF3F3"
+                          : "white",
                       "&:hover": {
                         backgroundColor:
                           typeForm === "detail" ? "#f3f4f6" : "#FFF3F3",
@@ -483,9 +488,9 @@ const FormDenom: React.FC<IForm> = ({
                   }}
                   className={`${
                     typeForm === "detail"
-                      ? "cursor-not-allowed bg-gray-100 border-none text-neutral-600"
-                      : "bg-primary-50 text-primary-900 bg-opacity-100 border border-solid border-primary-900 focus:bg-white focus:ring-0 focus:border-primary-900"
-                  } w-full py-3 px-4 rounded-md text-sm placeholder:text-sm overflow-hidden`}
+                      ? "cursor-not-allowed text-neutral-600 bg-gray-100 border-0"
+                      : "focus:bg-primary-50 text-primary-900 border-primary-900 focus:border-primary-900"
+                  } py-3 px-2 w-full border rounded-md text-sm placeholder:text-sm`}
                 />
               </div>
             </div>
@@ -511,9 +516,9 @@ const FormDenom: React.FC<IForm> = ({
                   }
                   className={`${
                     typeForm === "detail"
-                      ? "cursor-not-allowed bg-gray-100 border-none text-neutral-600"
-                      : "bg-primary-50 text-primary-900 bg-opacity-100 border border-solid border-primary-900 focus:bg-white focus:ring-0 focus:border-primary-900"
-                  } w-full py-3 px-4 rounded-md text-sm placeholder:text-sm overflow-hidden`}
+                      ? "cursor-not-allowed text-neutral-600 bg-gray-100 border-0"
+                      : "focus:bg-primary-50 text-primary-900 border-primary-900 focus:border-primary-900"
+                  } py-3 px-2 w-full border rounded-md text-sm placeholder:text-sm`}
                 />
               </div>
             </div>
@@ -549,9 +554,9 @@ const FormDenom: React.FC<IForm> = ({
                   }}
                   className={`${
                     typeForm === "detail"
-                      ? "cursor-not-allowed bg-gray-100 border-none text-neutral-600"
-                      : "bg-primary-50 text-primary-900 bg-opacity-100 border border-solid border-primary-900 focus:bg-white focus:ring-0 focus:border-primary-900"
-                  } w-full py-3 px-4 rounded-md text-sm placeholder:text-sm overflow-hidden`}
+                      ? "cursor-not-allowed text-neutral-600 bg-gray-100 border-0"
+                      : "focus:bg-primary-50 text-primary-900 border-primary-900 focus:border-primary-900"
+                  } py-3 px-2 w-full border rounded-md text-sm placeholder:text-sm`}
                 />
               </div>
             </div>
@@ -585,9 +590,9 @@ const FormDenom: React.FC<IForm> = ({
                   }}
                   className={`${
                     typeForm === "detail"
-                      ? "cursor-not-allowed bg-gray-100 border-none text-neutral-600"
-                      : "bg-primary-50 text-primary-900 bg-opacity-100 border border-solid border-primary-900 focus:bg-white focus:ring-0 focus:border-primary-900"
-                  } w-full py-3 px-4 rounded-md text-sm placeholder:text-sm overflow-hidden`}
+                      ? "cursor-not-allowed text-neutral-600 bg-gray-100 border-0"
+                      : "focus:bg-primary-50 text-primary-900 border-primary-900 focus:border-primary-900"
+                  } py-3 px-2 w-full border rounded-md text-sm placeholder:text-sm`}
                 />
               </div>
             </div>
@@ -728,7 +733,7 @@ const FormDenom: React.FC<IForm> = ({
                   <button
                     onClick={() => handleShowForm(false)}
                     type="button"
-                    className="bg-primary-50 hover:bg-primary-900 hover:text-white text-primary-900 font-medium w-24 py-3 rounded-md border border-primary-900 transition-all"
+                    className="hover:bg-primary-900 hover:text-white text-primary-900 font-medium w-24 py-3 rounded-md border border-primary-900 transition-all"
                   >
                     Batalkan
                   </button>

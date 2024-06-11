@@ -208,7 +208,7 @@ const FormVoucherGame: React.FC<IFormAdmin> = ({
 
   return (
     <div className="w-full h-screen bg-gray-800 bg-opacity-30 absolute top-0 left-0 flex items-center justify-center z-50">
-      <div className="md:w-2/5 h-screen md:max-h-full w-full bg-white p-6 lg:p-8 md:rounded-xl overflow-y-auto relative">
+      <div className="md:w-2/5 h-screen md:h-max w-full bg-white p-6 lg:p-8 md:rounded-xl overflow-y-auto relative">
         <div className="flex justify-between border-b-2 pb-4 border-gray-200 items-center">
           <h1 className="text-xl font-medium text-2xl text-neutral-800">
             {typeForm === "add"
@@ -251,7 +251,7 @@ const FormVoucherGame: React.FC<IFormAdmin> = ({
                       setData((prev) => ({ ...prev, code: e.target.value }))
                     }
                     placeholder={`XXXXXXXXXXXXXXXXXX\nXXXXXXXXXXXXXXXXXX\nXXXXXXXXXXXXXXXXXX`}
-                    className="bg-primary-50 text-primary-900 bg-opacity-100 border border-solid border-primary-900 focus:bg-white focus:ring-0 focus:border-primary-900 w-full h-full py-3 px-4 rounded-md text-sm placeholder:text-sm overflow-y-auto resize-none"
+                    className="focus:bg-primary-50 text-primary-900 border border-primary-900 focus:ring-0 focus:border-primary-900 w-full h-full py-3 px-4 rounded-md text-sm placeholder:text-sm overflow-y-auto resize-none"
                   />
                 </div>
               )}
@@ -315,11 +315,20 @@ const FormVoucherGame: React.FC<IFormAdmin> = ({
                         paddingTop: "3px",
                         paddingBottom: "3px",
                         color: "#4B5563",
+                        boxShadow: "none",
                         backgroundColor:
-                          typeForm === "detail" ? "#f3f4f6" : "#FFF3F3",
+                          typeForm === "detail"
+                            ? "#f3f4f6"
+                            : state.isFocused
+                            ? "#FFF3F3"
+                            : "white",
                         "&:hover": {
                           backgroundColor:
-                            typeForm === "detail" ? "#f3f4f6" : "#FFF3F3",
+                            typeForm === "detail"
+                              ? "#f3f4f6"
+                              : state.isFocused
+                              ? "#FFF3F3"
+                              : "white",
                         },
                         cursor:
                           typeForm === "detail" ? "not-allowed" : "pointer",
@@ -383,11 +392,20 @@ const FormVoucherGame: React.FC<IFormAdmin> = ({
                         paddingTop: "3px",
                         paddingBottom: "3px",
                         color: "#4B5563",
+                        boxShadow: "none",
                         backgroundColor:
-                          typeForm === "detail" ? "#f3f4f6" : "#FFF3F3",
+                          typeForm === "detail"
+                            ? "#f3f4f6"
+                            : state.isFocused
+                            ? "#FFF3F3"
+                            : "white",
                         "&:hover": {
                           backgroundColor:
-                            typeForm === "detail" ? "#f3f4f6" : "#FFF3F3",
+                            typeForm === "detail"
+                              ? "#f3f4f6"
+                              : state.isFocused
+                              ? "#FFF3F3"
+                              : "white",
                         },
                         cursor:
                           typeForm === "detail" ? "not-allowed" : "pointer",
@@ -448,7 +466,7 @@ const FormVoucherGame: React.FC<IFormAdmin> = ({
                   <button
                     onClick={() => handleShowForm(false)}
                     type="button"
-                    className="bg-primary-50 hover:bg-primary-900 hover:text-white text-primary-900 font-medium w-24 py-3 rounded-md border border-primary-900 transition-all"
+                    className="hover:bg-primary-900 hover:text-white text-primary-900 font-medium w-24 py-3 rounded-md border border-primary-900 transition-all"
                   >
                     Batalkan
                   </button>

@@ -532,7 +532,7 @@ const FormGame: React.FC<IForm> = ({
                 ) : (
                   <div
                     onClick={(e) => handleClick("logoUrl")}
-                    className="w-[140px] aspect-square mt-4 border-2 border-dashed border-primary-900 flex justify-center items-center bg-primary-50"
+                    className="w-[140px] aspect-square mt-4 border-2 border-dashed border-primary-900 flex justify-center items-center"
                   >
                     <input
                       type="file"
@@ -639,7 +639,7 @@ const FormGame: React.FC<IForm> = ({
                       ) : (
                         <div
                           onClick={(e) => handleClick("logoDenom")}
-                          className="w-[140px] aspect-square mt-4 border-2 border-dashed border-primary-900 flex justify-center items-center bg-primary-50"
+                          className="w-[140px] aspect-square mt-4 border-2 border-dashed border-primary-900 flex justify-center items-center"
                         >
                           <input
                             type="file"
@@ -693,9 +693,9 @@ const FormGame: React.FC<IForm> = ({
                     }}
                     className={`${
                       typeForm === "detail"
-                        ? "cursor-not-allowed bg-gray-100 border-none text-neutral-600"
-                        : "bg-primary-50 text-primary-900 bg-opacity-100 border border-solid border-primary-900 focus:bg-white focus:ring-0 focus:border-primary-900"
-                    } w-full py-3 px-4 rounded-md text-sm placeholder:text-sm overflow-hidden`}
+                        ? "cursor-not-allowed text-neutral-600 bg-gray-100 border-0"
+                        : "focus:bg-primary-50 text-primary-900 border-primary-900 focus:border-primary-900"
+                    } py-3 px-2 w-full border rounded-md text-sm placeholder:text-sm`}
                   />
                 </div>
               </div>
@@ -724,9 +724,9 @@ const FormGame: React.FC<IForm> = ({
                     }
                     className={`${
                       typeForm === "detail"
-                        ? "cursor-not-allowed bg-gray-100 border-none text-neutral-600"
-                        : "bg-primary-50 text-primary-900 bg-opacity-100 border border-solid border-primary-900 focus:bg-white focus:ring-0 focus:border-primary-900"
-                    } w-full py-3 px-4 rounded-md text-sm placeholder:text-sm overflow-hidden`}
+                        ? "cursor-not-allowed text-neutral-600 bg-gray-100 border-0"
+                        : "focus:bg-primary-50 text-primary-900 border-primary-900 focus:border-primary-900"
+                    } py-3 px-2 w-full border rounded-md text-sm placeholder:text-sm`}
                   />
                 </div>
               </div>
@@ -767,11 +767,20 @@ const FormGame: React.FC<IForm> = ({
                         paddingTop: "3px",
                         paddingBottom: "3px",
                         color: "#4B5563",
+                        boxShadow: "none",
                         backgroundColor:
-                          typeForm === "detail" ? "#f3f4f6" : "#FFF3F3",
+                          typeForm === "detail"
+                            ? "#f3f4f6"
+                            : state.isFocused
+                            ? "#FFF3F3"
+                            : "white",
                         "&:hover": {
                           backgroundColor:
-                            typeForm === "detail" ? "#f3f4f6" : "#FFF3F3",
+                            typeForm === "detail"
+                              ? "#f3f4f6"
+                              : state.isFocused
+                              ? "#FFF3F3"
+                              : "white",
                         },
                         cursor:
                           typeForm === "detail" ? "not-allowed" : "pointer",
@@ -833,11 +842,16 @@ const FormGame: React.FC<IForm> = ({
                         paddingTop: "3px",
                         paddingBottom: "3px",
                         color: "#4B5563",
+                        boxShadow: "none",
                         backgroundColor:
-                          typeForm === "detail" ? "#f3f4f6" : "#FFF3F3",
+                          typeForm === "detail" ? "#f3f4f6" : "white",
                         "&:hover": {
                           backgroundColor:
-                            typeForm === "detail" ? "#f3f4f6" : "#FFF3F3",
+                            typeForm === "detail"
+                              ? "#f3f4f6"
+                              : state.isFocused
+                              ? "#FFF3F3"
+                              : "white",
                         },
                         cursor:
                           typeForm === "detail" ? "not-allowed" : "pointer",
@@ -866,13 +880,13 @@ const FormGame: React.FC<IForm> = ({
               </div>
             </div>
             {newData.type === "voucher" && (
-              <div className="mt-5 flex gap-4 items-center">
+              <div className="mt-5 ml-1 flex gap-2 items-center">
                 <input
                   type="checkbox"
                   name="voucherInternal"
                   id="voucherInternal"
                   disabled={typeForm === "detail"}
-                  className="cursor-pointer"
+                  className="cursor-pointer rounded text-primary-900 focus:ring-primary-900"
                   checked={isCheckedVoucherInternal}
                   onChange={(e) => {
                     setNewData((prev) => ({
@@ -893,7 +907,7 @@ const FormGame: React.FC<IForm> = ({
                     type="checkbox"
                     name="needServerId"
                     id="needServerId"
-                    className="cursor-pointer"
+                    className="cursor-pointer ml-1 rounded"
                     checked={newData.needServerId}
                     disabled={typeForm === "detail"}
                     onChange={(e) =>
@@ -947,11 +961,16 @@ const FormGame: React.FC<IForm> = ({
                             paddingTop: "3px",
                             paddingBottom: "3px",
                             color: "#4B5563",
+                            boxShadow: "none",
                             backgroundColor:
-                              typeForm === "detail" ? "#f3f4f6" : "#FFF3F3",
+                              typeForm === "detail" ? "#f3f4f6" : "white",
                             "&:hover": {
                               backgroundColor:
-                                typeForm === "detail" ? "#f3f4f6" : "#FFF3F3",
+                                typeForm === "detail"
+                                  ? "#f3f4f6"
+                                  : state.isFocused
+                                  ? "#FFF3F3"
+                                  : "white",
                             },
                             cursor:
                               typeForm === "detail" ? "not-allowed" : "pointer",
@@ -1118,7 +1137,7 @@ const FormGame: React.FC<IForm> = ({
                     className={`${
                       typeForm === "detail"
                         ? "cursor-not-allowed bg-gray-100 border-none text-neutral-600"
-                        : "bg-primary-50 text-primary-900 bg-opacity-100 border border-solid border-primary-900 focus:bg-white focus:ring-0 focus:border-primary-900"
+                        : "focus:bg-primary-50 text-primary-900 border border-solid border-primary-900 focus:ring-0 focus:border-primary-900"
                     } w-full h-12 max-h-40 py-3 px-4 rounded-md text-sm placeholder:text-sm overflow-y-auto resize-none`}
                   />
                 </div>
@@ -1130,7 +1149,7 @@ const FormGame: React.FC<IForm> = ({
                   </p>
                 )}
                 <div
-                  className={`rounded-md p-3 px-4 h-40 overflow-y-auto border ${
+                  className={`rounded-md p-3 px-4 h-40 overflow-y-auto border mt-2 ${
                     typeForm !== "detail" ? "bg-primary-50" : "bg-gray-100"
                   }`}
                 >
@@ -1141,7 +1160,7 @@ const FormGame: React.FC<IForm> = ({
                         typeForm !== "detail"
                           ? "bg-[#B72025] cursor-pointer text-white"
                           : "bg-gray-200 cursor-not-allowed text-black"
-                      }  rounded px-2 py-1 m-1 inline-block `}
+                      }  rounded px-2 py-1 m-1 inline-block`}
                       onClick={() => {
                         if (typeForm !== "detail") {
                           const updatedKeywords = [...newData.keywords];
@@ -1179,8 +1198,8 @@ const FormGame: React.FC<IForm> = ({
                 className={`${
                   typeForm === "detail"
                     ? "cursor-not-allowed bg-gray-100"
-                    : "edit bg-primary-50 bg-opacity-100"
-                } focus:ring-2 focus:ring-gray-600 focus:outline-none rounded-md mt-2 w-full min-h-[10rem]`}
+                    : "edit focus:bg-primary-50 bg-opacity-100"
+                } focus:ring-gray-600 focus:outline-none rounded-md mt-2 w-full min-h-[10rem]`}
               />
             </div>
             {/* <GameContentForm
@@ -1219,7 +1238,7 @@ const FormGame: React.FC<IForm> = ({
                     <button
                       onClick={() => handleShowForm(false)}
                       type="button"
-                      className="bg-primary-50 hover:bg-primary-900 hover:text-white text-primary-900 font-medium w-24 py-3 rounded-md border border-primary-900 transition-all"
+                      className="hover:bg-primary-900 hover:text-white text-primary-900 font-medium w-24 py-3 rounded-md border border-primary-900 transition-all"
                     >
                       Batalkan
                     </button>

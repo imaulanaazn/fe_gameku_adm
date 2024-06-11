@@ -319,9 +319,9 @@ const FormAddBanner: React.FC<IFormAddBanner> = ({
                     }
                     className={`${
                       typeForm === "detail"
-                        ? "cursor-not-allowed text-neutral-700"
-                        : "bg-primary-50 text-primary-900"
-                    } py-3 px-2 w-full border mt-2 rounded-md border-primary-900 text-sm placeholder:text-sm`}
+                        ? "cursor-not-allowed text-neutral-600 bg-gray-100 border-0"
+                        : "focus:bg-primary-50 text-primary-900 border-primary-900 focus:border-primary-900"
+                    } py-3 px-2 w-full border mt-2 rounded-md text-sm placeholder:text-sm`}
                   />
                 </div>
               </div>
@@ -346,9 +346,9 @@ const FormAddBanner: React.FC<IFormAddBanner> = ({
                     }
                     className={`${
                       typeForm === "detail"
-                        ? "cursor-not-allowed bg-gray-100"
-                        : "bg-primary-50 text-primary-900"
-                    } py-3 px-2 w-full border mt-2 rounded-md border-primary-900 text-sm placeholder:text-sm`}
+                        ? "cursor-not-allowed text-neutral-600 bg-gray-100 border-0"
+                        : "focus:bg-primary-50 text-primary-900 border-primary-900 focus:border-primary-900"
+                    } py-3 px-2 w-full border mt-2 rounded-md text-sm placeholder:text-sm`}
                   />
                 </div>
               </div>
@@ -381,7 +381,7 @@ const FormAddBanner: React.FC<IFormAddBanner> = ({
                   <button
                     onClick={() => handleShowForm(false)}
                     type="button"
-                    className="bg-primary-50 hover:bg-primary-900 hover:text-white text-primary-900 font-medium w-24 py-3 rounded-md border border-primary-900 transition-all"
+                    className="hover:bg-primary-900 hover:text-white text-primary-900 font-medium w-24 py-3 rounded-md border border-primary-900 transition-all"
                   >
                     Batalkan
                   </button>

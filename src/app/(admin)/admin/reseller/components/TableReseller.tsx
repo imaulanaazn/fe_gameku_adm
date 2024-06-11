@@ -127,7 +127,7 @@ const TableUser: React.FC<{ user: IUserPaginationWithSearch }> = ({ user }) => {
               type="text"
               placeholder="Search people"
               onChange={handleSearchInputChange}
-              className="inline-flex items-center px-6 py-2 rounded-md gap-x-2 bg-rose-100/60 text-primary-900 placeholder:text-primary-900 border-primary-900"
+              className="w-full items-center px-6 py-2 rounded-md gap-x-2 focus:bg-primary-50 text-primary-900 placeholder:text-primary-900 border-primary-900 focus:border-primary-900"
             />
             <FontAwesomeIcon
               icon={faMagnifyingGlass}
@@ -163,7 +163,8 @@ const TableUser: React.FC<{ user: IUserPaginationWithSearch }> = ({ user }) => {
                   borderColor: "#b72025",
                   "&:hover": { borderColor: "#b72025" },
                   borderRadius: "0.4rem",
-                  backgroundColor: "#fff3f3",
+                  backgroundColor: state.isFocused ? "#fff3f3" : "white",
+                  boxShadow: "none",
                 }),
                 singleValue: (provided, state) => ({
                   ...provided,
@@ -210,7 +211,8 @@ const TableUser: React.FC<{ user: IUserPaginationWithSearch }> = ({ user }) => {
                   borderColor: "#b72025",
                   "&:hover": { borderColor: "#b72025" },
                   borderRadius: "0.4rem",
-                  backgroundColor: "#fff3f3",
+                  backgroundColor: state.isFocused ? "#fff3f3" : "white",
+                  boxShadow: "none",
                 }),
                 singleValue: (provided, state) => ({
                   ...provided,

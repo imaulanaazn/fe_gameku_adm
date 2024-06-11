@@ -153,24 +153,26 @@ const Xendit = () => {
                     api: e.target.value,
                   }))
                 }
-                className={`border rounded px-3 py-2 w-full focus:outline-none focus:border-blue-500 ${
+                className={`border rounded px-3 py-2 w-full focus:outline-none focus:border-primary-900 focus:bg-primary-50 text-neutral-600 ${
                   !isDisabled["api"]
                     ? "border-primary-900"
                     : "border-transparent"
                 }`}
               />
             </th>
-            <th
-              scope="row"
-              className="py-2 font-medium text-gray-900 whitespace-nowrap text-start"
-            >
-              <div
-                className="font-bold text-blue-800 cursor-pointer select-none w-max ml-4"
-                onClick={() => handleClickEdit("api")}
+            {isDisabled["api"] && (
+              <th
+                scope="row"
+                className="py-2 font-medium text-gray-900 whitespace-nowrap text-start"
               >
-                <p>Edit</p>
-              </div>
-            </th>
+                <div
+                  className="font-bold text-blue-800 cursor-pointer select-none w-max ml-4"
+                  onClick={() => handleClickEdit("api")}
+                >
+                  <p className="text-primary-900">Edit</p>
+                </div>
+              </th>
+            )}
           </tr>
           <tr>
             <th
@@ -193,24 +195,26 @@ const Xendit = () => {
                     webhook: e.target.value,
                   }))
                 }
-                className={`border rounded px-3 py-2 w-full focus:outline-none focus:border-blue-500 ${
+                className={`border rounded px-3 py-2 w-full focus:outline-none focus:border-primary-900 focus:bg-primary-50 text-neutral-600 ${
                   !isDisabled["webhook"]
                     ? "border-primary-900"
                     : "border-transparent"
                 }`}
               />
             </th>
-            <th
-              scope="row"
-              className="py-2 font-medium text-gray-900 whitespace-nowrap text-start"
-            >
-              <div
-                className="font-montserrat font-bold text-blue-800 cursor-pointer select-none w-max ml-4"
-                onClick={() => handleClickEdit("webhook")}
+            {isDisabled["webhook"] && (
+              <th
+                scope="row"
+                className="py-2 font-medium text-gray-900 whitespace-nowrap text-start"
               >
-                <p>Edit</p>
-              </div>
-            </th>
+                <div
+                  className="font-montserrat font-bold text-blue-800 cursor-pointer select-none w-max ml-4"
+                  onClick={() => handleClickEdit("webhook")}
+                >
+                  <p className="text-primary-900">Edit</p>
+                </div>
+              </th>
+            )}
           </tr>
         </tbody>
       </table>

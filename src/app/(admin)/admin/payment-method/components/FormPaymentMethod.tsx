@@ -113,8 +113,8 @@ const FormPaymentMethod: React.FC<IForm> = ({
   };
 
   return (
-    <div className="w-full h-screen bg-gray-800 bg-opacity-70 absolute top-0 left-0 flex items-center justify-center z-50 py-8">
-      <div className="md:w-3/4 lg:w-2/5 md:max-h-full w-full bg-white p-8 rounded-xl overflow-y-auto relative">
+    <div className="w-full h-full bg-gray-800 bg-opacity-70 absolute top-0 left-0 flex items-center justify-center z-50">
+      <div className="md:w-3/4 xl:w-2/5 w-full h-screen md:h-max bg-white shadow p-6 lg:p-8 md:rounded-xl overflow-y-hidden relative">
         <div className="flex justify-between border-b-2 pb-4 border-gray-200 items-center">
           <h1 className="text-xl font-medium text-2xl text-neutral-800">
             Detail {paymentMethodData?.name}
@@ -129,241 +129,244 @@ const FormPaymentMethod: React.FC<IForm> = ({
             />
           </div>
         </div>
-        <form
-          onSubmit={(e) => {
-            handleFormSubmit(e);
-          }}
-        >
-          <div className="w-full mt-4 gap-4">
-            <label
-              htmlFor="name"
-              className="font-medium text-base text-neutral-900 inline-block"
-            >
-              Logo
-            </label>
-            <div className="w-[140px] aspect-square mt-4">
-              <Image
-                src={paymentMethodData?.logo || ""}
-                alt={"Logo Metode Pembayaran"}
-                width="0"
-                height="0"
-                sizes="100vw"
-                style={{ width: "100%", height: "100%" }}
-                className="rounded-lg object-contain"
-              />
-            </div>
-          </div>
-          <div className="mt-4 flex gap-4">
-            <div className="w-1/2">
+
+        <div className="h-[80vh] overflow-y-scroll">
+          <form
+            onSubmit={(e) => {
+              handleFormSubmit(e);
+            }}
+          >
+            <div className="w-full mt-4 gap-4">
               <label
                 htmlFor="name"
                 className="font-medium text-base text-neutral-900 inline-block"
               >
-                Nama
+                Logo
               </label>
-              <div className="w-full mt-2">
-                <input
-                  disabled={type === "detail"}
-                  required
-                  type="text"
-                  name="name"
-                  id="name"
-                  autoComplete="off"
-                  defaultValue={paymentMethodData?.name}
-                  className={
-                    "cursor-not-allowed bg-gray-100 border-none text-neutral-600 w-full py-3 px-4 rounded-md text-sm placeholder:text-sm overflow-hidden"
-                  }
+              <div className="w-[140px] aspect-square mt-4">
+                <Image
+                  src={paymentMethodData?.logo || ""}
+                  alt={"Logo Metode Pembayaran"}
+                  width="0"
+                  height="0"
+                  sizes="100vw"
+                  style={{ width: "100%", height: "100%" }}
+                  className="rounded-lg object-contain"
                 />
               </div>
             </div>
-            <div className="w-1/2">
-              <label
-                htmlFor="minAmount"
-                className="font-medium text-base text-neutral-900 inline-block"
-              >
-                Minimal Pembelian
-              </label>
-              <div className="w-full mt-2">
-                <input
-                  disabled={type === "detail"}
-                  required
-                  type="text"
-                  name="minAmount"
-                  id="minAmount"
-                  autoComplete="off"
-                  defaultValue={formatter(paymentMethodData?.minAmount || 0)}
-                  className={
-                    "cursor-not-allowed bg-gray-100 border-none text-neutral-600 w-full py-3 px-4 rounded-md text-sm placeholder:text-sm overflow-hidden"
-                  }
-                />
+            <div className="mt-4 flex gap-4">
+              <div className="w-1/2">
+                <label
+                  htmlFor="name"
+                  className="font-medium text-base text-neutral-900 inline-block"
+                >
+                  Nama
+                </label>
+                <div className="w-full mt-2">
+                  <input
+                    disabled={type === "detail"}
+                    required
+                    type="text"
+                    name="name"
+                    id="name"
+                    autoComplete="off"
+                    defaultValue={paymentMethodData?.name}
+                    className={
+                      "cursor-not-allowed bg-gray-100 border-none text-neutral-600 w-full py-3 px-4 rounded-md text-sm placeholder:text-sm overflow-hidden"
+                    }
+                  />
+                </div>
+              </div>
+              <div className="w-1/2">
+                <label
+                  htmlFor="minAmount"
+                  className="font-medium text-base text-neutral-900 inline-block"
+                >
+                  Minimal Pembelian
+                </label>
+                <div className="w-full mt-2">
+                  <input
+                    disabled={type === "detail"}
+                    required
+                    type="text"
+                    name="minAmount"
+                    id="minAmount"
+                    autoComplete="off"
+                    defaultValue={formatter(paymentMethodData?.minAmount || 0)}
+                    className={
+                      "cursor-not-allowed bg-gray-100 border-none text-neutral-600 w-full py-3 px-4 rounded-md text-sm placeholder:text-sm overflow-hidden"
+                    }
+                  />
+                </div>
               </div>
             </div>
-          </div>
-          <div className="mt-4 flex gap-4">
-            <div className="w-1/2">
-              <label
-                htmlFor="maxAmount"
-                className="font-medium text-base text-neutral-900 inline-block"
-              >
-                Maximal Pembelian
-              </label>
-              <div className="w-full mt-2">
-                <input
-                  disabled={type === "detail"}
-                  required
-                  type="text"
-                  name="maxAmount"
-                  id="maxAmount"
-                  autoComplete="off"
-                  defaultValue={formatter(paymentMethodData?.maxAmount || 0)}
-                  className={
-                    "cursor-not-allowed bg-gray-100 border-none text-neutral-600 w-full py-3 px-4 rounded-md text-sm placeholder:text-sm overflow-hidden"
-                  }
-                />
+            <div className="mt-4 flex gap-4">
+              <div className="w-1/2">
+                <label
+                  htmlFor="maxAmount"
+                  className="font-medium text-base text-neutral-900 inline-block"
+                >
+                  Maximal Pembelian
+                </label>
+                <div className="w-full mt-2">
+                  <input
+                    disabled={type === "detail"}
+                    required
+                    type="text"
+                    name="maxAmount"
+                    id="maxAmount"
+                    autoComplete="off"
+                    defaultValue={formatter(paymentMethodData?.maxAmount || 0)}
+                    className={
+                      "cursor-not-allowed bg-gray-100 border-none text-neutral-600 w-full py-3 px-4 rounded-md text-sm placeholder:text-sm overflow-hidden"
+                    }
+                  />
+                </div>
+              </div>
+              <div className="w-1/2">
+                <label
+                  htmlFor="fee"
+                  className="font-medium text-base text-neutral-900 inline-block"
+                >
+                  Fee
+                </label>
+                <div className="w-full mt-2">
+                  <input
+                    disabled={type === "detail"}
+                    required
+                    type="text"
+                    name="fee"
+                    id="fee"
+                    autoComplete="off"
+                    defaultValue={
+                      paymentMethodData?.feeType === FeeType.AMOUNT
+                        ? formatter(paymentMethodData?.fee)
+                        : paymentMethodData?.fee + " %"
+                    }
+                    className={
+                      "cursor-not-allowed bg-gray-100 border-none text-neutral-600 w-full py-3 px-4 rounded-md text-sm placeholder:text-sm overflow-hidden"
+                    }
+                  />
+                </div>
               </div>
             </div>
-            <div className="w-1/2">
+            <div className="mt-4 flex gap-4">
+              <div className="w-1/2">
+                <label
+                  htmlFor="category"
+                  className="font-medium text-base text-neutral-900 inline-block"
+                >
+                  Kategori
+                </label>
+                <div className="w-full mt-2">
+                  <input
+                    disabled={type === "detail"}
+                    required
+                    type="text"
+                    name="category"
+                    id="category"
+                    autoComplete="off"
+                    defaultValue={categ}
+                    className={
+                      "cursor-not-allowed bg-gray-100 border-none text-neutral-600 w-full py-3 px-4 rounded-md text-sm placeholder:text-sm overflow-hidden"
+                    }
+                  />
+                </div>
+              </div>
+              <div className="w-1/2">
+                <label
+                  htmlFor="fee"
+                  className="font-medium text-base text-neutral-900 inline-block"
+                >
+                  Status
+                </label>
+                <div className="w-full mt-2">
+                  <input
+                    disabled={type === "detail"}
+                    required
+                    type="text"
+                    name="fee"
+                    id="fee"
+                    autoComplete="off"
+                    defaultValue={
+                      paymentMethodData?.isActive ? "Aktif" : "Tidak Aktif"
+                    }
+                    className={
+                      "cursor-not-allowed bg-gray-100 border-none text-neutral-600 w-full py-3 px-4 rounded-md text-sm placeholder:text-sm overflow-hidden"
+                    }
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="w-full mt-4 gap-4">
               <label
-                htmlFor="fee"
+                htmlFor="duration"
                 className="font-medium text-base text-neutral-900 inline-block"
               >
-                Fee
+                Durasi Kadaluarsa
               </label>
               <div className="w-full mt-2">
                 <input
                   disabled={type === "detail"}
                   required
                   type="text"
-                  name="fee"
-                  id="fee"
+                  name="duration"
+                  id="duration"
                   autoComplete="off"
                   defaultValue={
-                    paymentMethodData?.feeType === FeeType.AMOUNT
-                      ? formatter(paymentMethodData?.fee)
-                      : paymentMethodData?.fee + " %"
+                    paymentMethodData?.durationExpired + " " + strTime
                   }
-                  className={
-                    "cursor-not-allowed bg-gray-100 border-none text-neutral-600 w-full py-3 px-4 rounded-md text-sm placeholder:text-sm overflow-hidden"
-                  }
+                  className="cursor-not-allowed bg-gray-100 border-none text-neutral-60 w-full py-3 px-4 rounded-md text-sm placeholder:text-sm overflow-hidden"
                 />
               </div>
             </div>
-          </div>
-          <div className="mt-4 flex gap-4">
-            <div className="w-1/2">
+            <div className="w-full mt-4">
               <label
-                htmlFor="category"
+                htmlFor="payment-guide"
                 className="font-medium text-base text-neutral-900 inline-block"
               >
-                Kategori
+                Payment Guide
               </label>
-              <div className="w-full mt-2">
-                <input
-                  disabled={type === "detail"}
-                  required
-                  type="text"
-                  name="category"
-                  id="category"
-                  autoComplete="off"
-                  defaultValue={categ}
-                  className={
-                    "cursor-not-allowed bg-gray-100 border-none text-neutral-600 w-full py-3 px-4 rounded-md text-sm placeholder:text-sm overflow-hidden"
-                  }
-                />
-              </div>
-            </div>
-            <div className="w-1/2">
-              <label
-                htmlFor="fee"
-                className="font-medium text-base text-neutral-900 inline-block"
-              >
-                Status
-              </label>
-              <div className="w-full mt-2">
-                <input
-                  disabled={type === "detail"}
-                  required
-                  type="text"
-                  name="fee"
-                  id="fee"
-                  autoComplete="off"
-                  defaultValue={
-                    paymentMethodData?.isActive ? "Aktif" : "Tidak Aktif"
-                  }
-                  className={
-                    "cursor-not-allowed bg-gray-100 border-none text-neutral-600 w-full py-3 px-4 rounded-md text-sm placeholder:text-sm overflow-hidden"
-                  }
-                />
-              </div>
-            </div>
-          </div>
-          <div className="w-full mt-4 gap-4">
-            <label
-              htmlFor="duration"
-              className="font-medium text-base text-neutral-900 inline-block"
-            >
-              Durasi Kadaluarsa
-            </label>
-            <div className="w-full mt-2">
-              <input
-                disabled={type === "detail"}
-                required
-                type="text"
-                name="duration"
-                id="duration"
-                autoComplete="off"
-                defaultValue={
-                  paymentMethodData?.durationExpired + " " + strTime
-                }
-                className="cursor-not-allowed bg-gray-100 border-none text-neutral-60 w-full py-3 px-4 rounded-md text-sm placeholder:text-sm overflow-hidden"
+              <Editor
+                value={paymentGuide}
+                setValue={function (value: string): void {
+                  setPaymentGuide(value);
+                }}
+                typeForm={typeForm}
               />
+              <p className="text-neutral-600 text-xs mt-2">
+                Note: gunakan heading 2 sebagai judul instruksi dan list sebagai
+                isi instruksi pembayaran{" "}
+              </p>
             </div>
-          </div>
-          <div className="w-full mt-4">
-            <label
-              htmlFor="payment-guide"
-              className="font-medium text-base text-neutral-900 inline-block"
-            >
-              Payment Guide
-            </label>
-            <Editor
-              value={paymentGuide}
-              setValue={function (value: string): void {
-                setPaymentGuide(value);
-              }}
-              typeForm={typeForm}
-            />
-            <p className="text-neutral-600 text-xs mt-2">
-              Note: gunakan heading 2 sebagai judul instruksi dan list sebagai
-              isi instruksi pembayaran{" "}
-            </p>
-          </div>
-          {typeForm === "edit" && (
+            {typeForm === "edit" && (
+              <div className="flex justify-end space-x-2 bg-white py-5">
+                <button
+                  type="submit"
+                  className={
+                    "bg-primary-900 hover:bg-red-600 text-white font-medium w-24 py-3 rounded-md transition-all"
+                  }
+                >
+                  Simpan
+                </button>
+              </div>
+            )}
+          </form>
+          {typeForm === "detail" && (
             <div className="flex justify-end space-x-2 bg-white py-5">
               <button
-                type="submit"
+                onClick={() => setTypeForm("edit")}
+                type="button"
                 className={
                   "bg-primary-900 hover:bg-red-600 text-white font-medium w-24 py-3 rounded-md transition-all"
                 }
               >
-                Simpan
+                Edit
               </button>
             </div>
           )}
-        </form>
-        {typeForm === "detail" && (
-          <div className="flex justify-end space-x-2 bg-white py-5">
-            <button
-              onClick={() => setTypeForm("edit")}
-              type="button"
-              className={
-                "bg-primary-900 hover:bg-red-600 text-white font-medium w-24 py-3 rounded-md transition-all"
-              }
-            >
-              Edit
-            </button>
-          </div>
-        )}
+        </div>
       </div>
     </div>
   );

@@ -151,7 +151,7 @@ const BackgroungImages = () => {
   return (
     <>
       <div className="flex justify-between flex-wrap items-end mb-4 mt-6 lg:mt-0">
-        <h1 className="mb-4 font-medium text-xl md:text-2xl text-neutral-800">
+        <h1 className="font-medium text-xl md:text-2xl text-neutral-800">
           Background Image
         </h1>
         <div className="bg-gray-100 flex items-center justify-center w-max">
@@ -164,7 +164,7 @@ const BackgroungImages = () => {
               onClick={() => {
                 setIsDropDownOpen((prev) => !prev);
               }}
-              className="flex gap-2 w-full items-center px-4 py-2 text-sm text-neutral-600 bg-slate-200 rounded-lg focus:bg-primary-100 focus:text-primary-900"
+              className="flex gap-2 w-full items-center px-4 py-2 text-sm text-neutral-600 border border-primary-900 rounded-md focus:bg-primary-50 text-primary-900"
             >
               {activeBackgroundImage?.name}
               <FontAwesomeIcon
@@ -233,13 +233,13 @@ const BackgroungImages = () => {
         {selectedImage && (
           <div className="w-full flex gap-2 mt-2">
             <button
-              className="py-2 bg-emerald-500 text-white px-4 text-center border rounded-md hover:bg-emerald-600 text-white font-medium"
+              className="py-2 flex-1 bg-primary-900 text-white px-4 text-center border rounded-md hover:bg-red-600 text-white font-medium"
               onClick={handleUpload}
             >
               Save
             </button>
             <button
-              className="py-2 bg-primary-600 px-4 text-center border rounded-md hover:bg-primary-900 text-white font-medium"
+              className="py-2 flex-1 hover:bg-primary-100 px-4 text-center border rounded-md border-primary-900 text-primary-900 font-medium"
               onClick={() => {
                 setSelectedImage(null);
                 setDisplayImage("");

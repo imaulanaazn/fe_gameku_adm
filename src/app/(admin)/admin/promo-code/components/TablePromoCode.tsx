@@ -308,18 +308,19 @@ const TablePromoCode: React.FC<{ data: IPromotionPagination }> = ({ data }) => {
 
           <div className="flex flex-col xl:flex-row justify-between xl:items-center gap-4 w-full bg-white mb-4">
             <div className="flex gap-4 items-center">
-              <div className="relative w-full border border-primary-900 bg-primary-50 rounded-md overflow-hidden flex items-center">
+              <div className="relative md:w-max w-full">
                 <input
-                  placeholder={`Cari berdasarkan ${selectedOptionSearchBy.label}`}
+                  type="text"
+                  placeholder={`${selectedOptionSearchBy.label}`}
                   value={inputSearch}
                   onChange={(e) => setInputSearch(e.target.value)}
-                  className="w-full py-2 border-none bg-transparent text-primary-900 placeholder:text-primary-900 focus:ring-transparent"
+                  className="peer inline-flex items-center w-full md:w-auto px-6 py-2 rounded-md gap-x-2 focus:bg-primary-50 text-primary-900 placeholder:text-primary-900 border-primary-900 focus:border-primary-900"
                 />
                 <button
                   type="button"
                   disabled={!inputSearch}
                   onClick={(e) => handleClickSearch()}
-                  className="pr-4 hover:cursor-pointer"
+                  className="absolute top-1/2 right-3 -translate-y-1/2 peer-focus:bg-primary-50 h-[97%] w-auto aspect-square rounded-r-md"
                 >
                   <FontAwesomeIcon
                     icon={faMagnifyingGlass}
@@ -327,7 +328,6 @@ const TablePromoCode: React.FC<{ data: IPromotionPagination }> = ({ data }) => {
                   />
                 </button>
               </div>
-
               <Select
                 id="filterSearchBy"
                 value={selectedOptionSearchBy}
@@ -361,7 +361,8 @@ const TablePromoCode: React.FC<{ data: IPromotionPagination }> = ({ data }) => {
                     borderColor: "#b72025",
                     "&:hover": { borderColor: "#b72025" },
                     borderRadius: "0.4rem",
-                    backgroundColor: "#fff3f3",
+                    backgroundColor: state.isFocused ? "#fff3f3" : "white",
+                    boxShadow: "none",
                     minWidth: "10rem",
                   }),
                   singleValue: (provided, state) => ({
@@ -430,7 +431,8 @@ const TablePromoCode: React.FC<{ data: IPromotionPagination }> = ({ data }) => {
                     borderColor: "#b72025",
                     "&:hover": { borderColor: "#b72025" },
                     borderRadius: "0.4rem",
-                    backgroundColor: "#fff3f3",
+                    backgroundColor: state.isFocused ? "#fff3f3" : "white",
+                    boxShadow: "none",
                   }),
                   singleValue: (provided, state) => ({
                     ...provided,
@@ -481,7 +483,8 @@ const TablePromoCode: React.FC<{ data: IPromotionPagination }> = ({ data }) => {
                         borderColor: "#b72025",
                         "&:hover": { borderColor: "#b72025" },
                         borderRadius: "0.4rem",
-                        backgroundColor: "#fff3f3",
+                        backgroundColor: state.isFocused ? "#fff3f3" : "white",
+                        boxShadow: "none",
                       }),
                       singleValue: (provided, state) => ({
                         ...provided,
@@ -503,9 +506,9 @@ const TablePromoCode: React.FC<{ data: IPromotionPagination }> = ({ data }) => {
               )}
               <button
                 onClick={() => handleClickClearButton()}
-                className="px-4 py-2 aspect-square rounded-md text-white bg-primary-900 hover:bg-red-600 cursor-pointer"
+                className="px-2 py-2 rounded-md text-primary-900 cursor-pointer"
               >
-                <FontAwesomeIcon icon={faTimes} />
+                Clear Filter
               </button>
             </div>
           </div>
@@ -545,7 +548,7 @@ const TablePromoCode: React.FC<{ data: IPromotionPagination }> = ({ data }) => {
               <div className="w-full inline-block align-middle">
                 <div className="overflow-hidden overflow-x-auto">
                   <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
+                    <thead className="bg-slate-100">
                       <tr>
                         <th scope="col" className="py-3 pl-4">
                           <div className="flex items-center h-5 relative">

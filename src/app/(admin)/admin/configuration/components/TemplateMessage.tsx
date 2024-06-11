@@ -174,7 +174,7 @@ const TemplateMessage = () => {
                 id="content"
                 cols={30}
                 rows={10}
-                className="resize-none h-[30rem] max-h-[25rem] lg:max-h-[30rem] p-4 w-full lg:w-3/4 bg-rose-50 border-none rounded-lg text-neutral-800"
+                className="resize-none h-[30rem] max-h-[25rem] lg:max-h-[30rem] p-4 w-full lg:w-3/4 focus:bg-primary-50 border border-primary-900 focus:border-primary-900 rounded-md text-neutral-800"
                 onChange={(e) =>
                   setContent(e.target.value.replace(/\\n/g, "\n"))
                 }
@@ -182,13 +182,13 @@ const TemplateMessage = () => {
                 value={content}
               />
               <div className="w-full lg:w-1/4">
-                <div className="flex flex-col gap-2 h-max md:h-[30rem] max-h-[30rem]">
-                  <div className="flex flex-row md:flex-col gap-2 h-auto md:h-3/4 max-h-3/5 overflow-auto md:flex-nowrap flex-wrap">
+                <div className="flex flex-col gap-3 h-max md:h-[30rem] max-h-[30rem]">
+                  <div className="flex flex-row md:flex-col gap-3 h-auto md:h-3/4 max-h-3/5 overflow-auto md:flex-nowrap flex-wrap">
                     {template.map((data) => (
                       <>
                         <button
                           key={data.key}
-                          className="px-5 py-3 rounded-md border border-primary-900 text-primary-900 hover:bg-primary-100 hover:border-white transition-all flex flex-wrap gap-2 items-center justify-between"
+                          className="px-5 py-3 rounded-md border border-primary-900 text-primary-900 hover:bg-primary-50 transition-all flex flex-wrap gap-2 items-center justify-between"
                           onClick={() => addText(`[${data.key}]`)}
                           onDoubleClick={() =>
                             clearCommands(new RegExp(`\\[${data.key}\\]`, "g"))
@@ -201,7 +201,7 @@ const TemplateMessage = () => {
                     ))}
                   </div>
                   <button
-                    className="mt-5 py-2 bg-primary-600 px-4 text-center border rounded-md hover:bg-primary-900 text-white font-medium"
+                    className="mt-5 py-2 hover:bg-primary-100 px-4 text-center border rounded-md border-primary-900 text-primary-900 font-medium"
                     onClick={() => {
                       const dataContent = listTemplate.find(
                         (data) => data.id === preview
@@ -213,18 +213,18 @@ const TemplateMessage = () => {
                   >
                     Revert
                   </button>
-                  <div className="flex justify-between gap-2">
+                  <div className="flex justify-between gap-3">
                     <button
-                      className="flex-1 py-2 bg-primary-600 px-4 text-center border rounded-md hover:bg-primary-900 text-white font-medium"
+                      className="flex-1 py-2 hover:bg-primary-100 px-4 text-center border rounded-md border-primary-900 text-primary-900 font-medium"
                       onClick={() => setPreview("")}
                     >
                       Cancel
                     </button>
                     <button
                       disabled={disabledButtonSave}
-                      className={`flex-1 py-2 bg-emerald-500 text-white px-4 text-center border rounded-md hover:bg-emerald-600 text-white font-medium ${
+                      className={`flex-1 py-2 bg-primary-900 text-white px-4 text-center border rounded-md hover:bg-red-600 text-white font-medium ${
                         disabledButtonSave &&
-                        "opacity-50 hover:bg-green-600 cursor-not-allowed"
+                        "opacity-50 bg-red-400 cursor-not-allowed"
                       }`}
                       onClick={handleSaveNewTemplate}
                     >
@@ -257,7 +257,7 @@ const TemplateMessage = () => {
               </div>
               <button
                 onClick={() => setPreview(data.id)}
-                className="w-max bg-primary-900 text-white px-4 py-2 text-center border rounded-md hover:bg-rose-900 text-white font-medium"
+                className="w-max bg-primary-900 text-white px-4 py-2 text-center border rounded-md hover:bg-red-600 text-white font-medium"
               >
                 Preview
               </button>

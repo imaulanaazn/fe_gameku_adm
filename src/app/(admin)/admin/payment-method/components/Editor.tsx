@@ -57,10 +57,8 @@ const Editor = React.memo((props: IEditor) => {
       readOnly={typeForm === "detail"}
       placeholder=""
       className={`${
-        typeForm === "detail"
-          ? "cursor-not-allowed bg-gray-100"
-          : "edit bg-primary-50 bg-opacity-100"
-      } focus:ring-2 focus:ring-gray-600 focus:outline-none rounded-md mt-2 w-full`}
+        typeForm === "detail" ? "cursor-not-allowed bg-gray-100" : "edit"
+      } focus:ring-gray-600 focus:outline-none rounded-md mt-2 w-full`}
       modules={modules}
       formats={formats}
       value={value}

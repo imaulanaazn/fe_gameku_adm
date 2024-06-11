@@ -155,13 +155,13 @@ const ChangeLogo = () => {
       {selectedImage && (
         <div className="flex gap-2 mt-2">
           <button
-            className="py-2 flex-1 bg-emerald-500 text-white px-4 text-center border rounded-md hover:bg-emerald-600 text-white font-medium"
+            className="py-2 flex-1 bg-primary-900 text-white px-4 text-center border rounded-md hover:bg-red-600 text-white font-medium"
             onClick={handleChangeImage}
           >
             Save
           </button>
           <button
-            className="py-2 flex-1 bg-primary-600 px-4 text-center border rounded-md hover:bg-primary-900 text-white font-medium"
+            className="py-2 flex-1 hover:bg-primary-100 px-4 text-center border rounded-md border-primary-900 text-primary-900 font-medium"
             onClick={() => {
               setSelectedImage(null);
               setDisplayLogo(logo?.value || "");

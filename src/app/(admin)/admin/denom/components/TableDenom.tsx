@@ -369,18 +369,19 @@ const TableDenom: React.FC<{ denom: IProductPagination }> = ({ denom }) => {
           </div>
 
           <div className="flex gap-4 items-center justify-between flex-wrap">
-            <div className="relative w-full md:w-max border border-primary-900 bg-primary-50 rounded-md overflow-hidden flex items-center">
+            <div className="relative md:w-max w-full">
               <input
-                placeholder={`Cari berdasarkan ${selectedOptionSearchBy.label}`}
+                type="text"
+                placeholder={`${selectedOptionSearchBy.label}`}
                 value={inputSearch}
                 onChange={(e) => setInputSearch(e.target.value)}
-                className="w-full py-2 border-none bg-transparent text-primary-900 placeholder:text-primary-900 focus:ring-transparent"
+                className="peer inline-flex items-center w-full md:w-auto px-6 py-2 rounded-md gap-x-2 focus:bg-primary-50 text-primary-900 placeholder:text-primary-900 border-primary-900 focus:border-primary-900"
               />
               <button
                 type="button"
                 disabled={!inputSearch}
                 onClick={(e) => handleClickSearch()}
-                className="pr-4 hover:cursor-pointer"
+                className="absolute top-1/2 right-3 -translate-y-1/2 peer-focus:bg-primary-50 h-[97%] w-auto aspect-square rounded-r-md"
               >
                 <FontAwesomeIcon
                   icon={faMagnifyingGlass}
@@ -425,7 +426,8 @@ const TableDenom: React.FC<{ denom: IProductPagination }> = ({ denom }) => {
                       borderColor: "#b72025",
                       "&:hover": { borderColor: "#b72025" },
                       borderRadius: "0.4rem",
-                      backgroundColor: "#fff3f3",
+                      boxShadow: "none",
+                      backgroundColor: state.isFocused ? "#fff3f3" : "white",
                     }),
                     singleValue: (provided, state) => ({
                       ...provided,
@@ -494,7 +496,8 @@ const TableDenom: React.FC<{ denom: IProductPagination }> = ({ denom }) => {
                         borderColor: "#b72025",
                         "&:hover": { borderColor: "#b72025" },
                         borderRadius: "0.4rem",
-                        backgroundColor: "#fff3f3",
+                        boxShadow: "none",
+                        backgroundColor: state.isFocused ? "#fff3f3" : "white",
                         minWidth: "10rem",
                       }),
                       singleValue: (provided, state) => ({
@@ -564,7 +567,8 @@ const TableDenom: React.FC<{ denom: IProductPagination }> = ({ denom }) => {
                         borderColor: "#b72025",
                         "&:hover": { borderColor: "#b72025" },
                         borderRadius: "0.4rem",
-                        backgroundColor: "#fff3f3",
+                        boxShadow: "none",
+                        backgroundColor: state.isFocused ? "#fff3f3" : "white",
                       }),
                       singleValue: (provided, state) => ({
                         ...provided,
@@ -598,7 +602,7 @@ const TableDenom: React.FC<{ denom: IProductPagination }> = ({ denom }) => {
                       });
                     }}
                     options={optionLimit}
-                    placeholder="Limit PerPage"
+                    placeholder="Limit / Page"
                     styles={{
                       placeholder: (base) => ({
                         ...base,
@@ -618,7 +622,8 @@ const TableDenom: React.FC<{ denom: IProductPagination }> = ({ denom }) => {
                         borderColor: "#b72025",
                         "&:hover": { borderColor: "#b72025" },
                         borderRadius: "0.4rem",
-                        backgroundColor: "#fff3f3",
+                        boxShadow: "none",
+                        backgroundColor: state.isFocused ? "#fff3f3" : "white",
                       }),
                       singleValue: (provided, state) => ({
                         ...provided,
@@ -641,9 +646,9 @@ const TableDenom: React.FC<{ denom: IProductPagination }> = ({ denom }) => {
               )}
               <button
                 onClick={() => handleClickClearButton()}
-                className="px-4 py-2 aspect-square rounded-md text-white bg-primary-900 hover:bg-red-600 cursor-pointer"
+                className="px-2 py-2 text-primary-900 cursor-pointer"
               >
-                <FontAwesomeIcon icon={faTimes} />
+                Clear Filter
               </button>
             </div>
           </div>
@@ -800,7 +805,7 @@ const TableDenom: React.FC<{ denom: IProductPagination }> = ({ denom }) => {
                         </th>
                         <th
                           scope="col"
-                          className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase"
+                          className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-right text-neutral-600 uppercase"
                         >
                           Aksi
                         </th>

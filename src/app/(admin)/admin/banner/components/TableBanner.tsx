@@ -256,16 +256,17 @@ const TableBanner: React.FC<{ banner: IImageCarouselPagination }> = ({
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="relative md:w-max w-full">
               <input
+                type="text"
                 placeholder="Cari Nama..."
                 value={inputSearch}
                 onChange={(e) => setInputSearch(e.target.value)}
-                className="inline-flex items-center w-full md:w-auto px-6 py-2 rounded-md gap-x-2 bg-rose-100/60 text-primary-900 placeholder:text-primary-900 border-primary-900"
+                className="peer inline-flex items-center w-full md:w-auto px-6 py-2 rounded-md gap-x-2 focus:bg-primary-50 text-primary-900 placeholder:text-primary-900 border-primary-900 focus:border-primary-900"
               />
               <button
                 type="button"
                 disabled={!inputSearch}
                 onClick={(e) => handleClickSearch()}
-                className="absolute top-1/2 right-6 -translate-y-1/2"
+                className="absolute top-1/2 right-3 -translate-y-1/2 peer-focus:bg-primary-50 h-[97%] w-auto aspect-square rounded-r-md"
               >
                 <FontAwesomeIcon
                   icon={faMagnifyingGlass}
@@ -323,7 +324,10 @@ const TableBanner: React.FC<{ banner: IImageCarouselPagination }> = ({
                           borderColor: "#b72025",
                           "&:hover": { borderColor: "#b72025" },
                           borderRadius: "0.4rem",
-                          backgroundColor: "#fff3f3",
+                          backgroundColor: state.isFocused
+                            ? "#fff3f3"
+                            : "white",
+                          boxShadow: "none",
                         }),
                         singleValue: (provided, state) => ({
                           ...provided,
@@ -348,9 +352,9 @@ const TableBanner: React.FC<{ banner: IImageCarouselPagination }> = ({
               </div>
               <button
                 onClick={() => handleClickClearButton()}
-                className="px-4 py-2 aspect-square rounded-md text-white bg-primary-900 hover:bg-red-600 cursor-pointer"
+                className="px-2 py-2 rounded-md text-primary-900 cursor-pointer"
               >
-                <FontAwesomeIcon icon={faTimes} />
+                Clear Filter
               </button>
             </div>
           </div>

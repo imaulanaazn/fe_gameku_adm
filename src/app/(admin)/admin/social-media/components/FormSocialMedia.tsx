@@ -160,7 +160,7 @@ const FormSocialMedia: React.FC<IForm> = ({
               <div
                 className={`w-full border h-52 ${
                   typeForm !== "detail"
-                    ? "border-primary-900 bg-primary-50"
+                    ? "border-primary-900 hover:bg-primary-50"
                     : "bg-gray-100 border-transparent"
                 } flex items-center justify-center rounded-md flex-wrap overflow-y-scroll`}
               >
@@ -175,11 +175,11 @@ const FormSocialMedia: React.FC<IForm> = ({
                       }}
                       className={`${
                         item === data.icon
-                          ? "bg-[#B72025] text-white"
+                          ? "bg-primary-900 text-white"
                           : "bg-transparent"
                       } w-10 h-10 rounded flex items-center justify-center ${
                         typeForm !== "detail" &&
-                        "hover:bg-gray-400 cursor-pointer"
+                        "hover:bg-primary-100 cursor-pointer"
                       }`}
                     >
                       <FontAwesomeIcon icon={svgBrandsIcon[item]} size="xl" />
@@ -213,7 +213,7 @@ const FormSocialMedia: React.FC<IForm> = ({
                     className={`${
                       typeForm === "detail"
                         ? "cursor-not-allowed bg-gray-100 border-none text-neutral-600"
-                        : "bg-primary-50 text-primary-900 bg-opacity-100 border border-solid border-primary-900 focus:bg-white focus:ring-0 focus:border-primary-900"
+                        : "focus:bg-primary-50 text-primary-900 border border-solid border-primary-900 focus:ring-0 focus:border-primary-900"
                     } w-full py-3 px-4 rounded-md text-sm placeholder:text-sm overflow-hidden`}
                   />
                 </div>
@@ -244,7 +244,7 @@ const FormSocialMedia: React.FC<IForm> = ({
                     className={`${
                       typeForm === "detail"
                         ? "cursor-not-allowed bg-gray-100 border-none text-neutral-600"
-                        : "bg-primary-50 text-primary-900 bg-opacity-100 border border-solid border-primary-900 focus:bg-white focus:ring-0 focus:border-primary-900"
+                        : "focus:bg-primary-50 text-primary-900 border border-solid border-primary-900 focus:ring-0 focus:border-primary-900"
                     } w-full py-3 px-4 rounded-md text-sm placeholder:text-sm overflow-hidden`}
                   />
                 </div>
@@ -255,7 +255,7 @@ const FormSocialMedia: React.FC<IForm> = ({
                 </p>
                 {data.icon && (
                   <div
-                    className={`mt-2 bg-[#B72025] text-white w-10 h-10 rounded flex items-center justify-center`}
+                    className={`mt-2 bg-primary-900 text-white w-10 h-10 rounded flex items-center justify-center`}
                   >
                     <FontAwesomeIcon
                       icon={svgBrandsIcon[data.icon]}
@@ -295,7 +295,7 @@ const FormSocialMedia: React.FC<IForm> = ({
                   <button
                     onClick={() => handleShowForm(false)}
                     type="button"
-                    className="bg-primary-50 hover:bg-primary-900 hover:text-white text-primary-900 font-medium w-24 py-3 rounded-md border border-primary-900 transition-all"
+                    className="hover:bg-primary-900 hover:text-white text-primary-900 font-medium w-24 py-3 rounded-md border border-primary-900 transition-all"
                   >
                     Batalkan
                   </button>

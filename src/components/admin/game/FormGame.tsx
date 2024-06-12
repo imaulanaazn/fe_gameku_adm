@@ -86,7 +86,18 @@ const FormGame: React.FC<IForm> = ({
   hideEdit,
 }) => {
   const modules = {
-    toolbar: [["bold", "italic", "underline"]],
+    toolbar: [
+      [{ header: [1, 2, 3, false] }],
+      ["bold", "italic", "underline", "strike", "blockquote"],
+      [
+        { list: "ordered" },
+        { list: "bullet" },
+        { indent: "-1" },
+        { indent: "+1" },
+      ],
+      ["link"],
+      ["clean"],
+    ],
   };
 
   const [currentKeyword, setCurrentKeyword] = useState<string>("");
@@ -1193,6 +1204,18 @@ const FormGame: React.FC<IForm> = ({
                 value={newData.desc}
                 onChange={(e) => setNewData((prev) => ({ ...prev, desc: e }))}
                 modules={modules}
+                formats={[
+                  "header",
+                  "bold",
+                  "italic",
+                  "underline",
+                  "strike",
+                  "blockquote",
+                  "list",
+                  "bullet",
+                  "indent",
+                  "link",
+                ]}
                 id="desc"
                 readOnly={typeForm === "detail"}
                 className={`${

@@ -14,14 +14,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import AboutGasskeun from "../../../components/user/home/AboutGasskeun";
 import Script from "next/script";
-
-const defaultCategory = [
-  {
-    id: "all",
-    name: "Semua Game",
-  },
-  { id: "popular", name: "Game Popular" },
-];
+import { breadcrumbSchema, defaultCategory } from "./constants";
 
 const Home = async () => {
   const statusWebsite = await sendRequest<{ value: string }[]>(
@@ -44,37 +37,6 @@ const Home = async () => {
     "/v1/newest-articles?limit=3"
   );
   const youtubeVideo = await sendRequest<INewsVideos[]>("/v1/videos");
-
-  const breadcrumbSchema = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: "Mobile Legends",
-        item: "https://gasskeuntopup.com/mobile-legends",
-      },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: "Free Fire",
-        item: "https://gasskeuntopup.com/free-fire",
-      },
-      {
-        "@type": "ListItem",
-        position: 3,
-        name: "PUBG Mobile",
-        item: `https://gasskeuntopup.com/pubg-mobile`,
-      },
-      {
-        "@type": "ListItem",
-        position: 3,
-        name: "Clash of Clans",
-        item: `https://gasskeuntopup.com/clash-of-clans-id-number`,
-      },
-    ],
-  };
 
   return (
     <>

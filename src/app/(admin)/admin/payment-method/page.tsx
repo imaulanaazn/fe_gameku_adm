@@ -1,7 +1,7 @@
 "use client";
 import TablePaymentMethod from "../../../../components/admin/payment-method/TablePaymentMethode";
 import React, { useEffect, useState } from "react";
-import Loading from "./loading";
+import Loading from "@/components/global/loading/CompLoading";
 import AdminNavbar from "@/components/admin/dashboard/AdminNavbar";
 import AdminHeader from "@/components/admin/AdminHeader";
 

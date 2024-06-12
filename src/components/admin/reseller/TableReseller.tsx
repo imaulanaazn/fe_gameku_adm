@@ -6,7 +6,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import Pagination from "@/components/admin/Pagination";
-import Loading from "@/app/(admin)/admin/user/loading";
+import Loading from "@/components/global/loading/CompLoading";
 import {
   faCircleExclamation,
   faFilter,

@@ -13,6 +13,7 @@ import { faAngleRight, faAngleLeft } from "@fortawesome/free-solid-svg-icons";
 import { faCircle } from "@fortawesome/free-regular-svg-icons";
 import Skeleton from "@/components/global/skeleton/Skeleton";
 import Image from "next/image";
+import { carouselBreakpoints } from "./constants";
 
 const Carousel = ({ slides }: { slides: IImageCarousel[] }) => {
   const [loading, setLoading] = useState(true);
@@ -34,20 +35,7 @@ const Carousel = ({ slides }: { slides: IImageCarousel[] }) => {
           modules={[Navigation, Pagination, Autoplay]}
           spaceBetween={20}
           slidesPerView={1}
-          breakpoints={{
-            0: {
-              slidesPerView: 1,
-            },
-            640: {
-              slidesPerView: 1.5,
-            },
-            768: {
-              slidesPerView: 2,
-            },
-            1440: {
-              slidesPerView: 3,
-            },
-          }}
+          breakpoints={carouselBreakpoints}
           freeMode={true}
           centeredSlides={true}
           loop={slides.length > 3}

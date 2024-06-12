@@ -2,11 +2,11 @@
 
 import TableOrders from "../../../../components/admin/orders/TableOrders";
 import "react-datepicker/dist/react-datepicker.css";
-import Loading from "./loading";
+import Loading from "@/components/global/loading/CompLoading";
 import { useEffect, useRef, useState } from "react";
 import AdminNavbar from "@/components/admin/dashboard/AdminNavbar";
 import Select from "react-select";
-import { initialRevenue, optionsStatsDate } from "./utils";
+import { initialRevenue, optionsStatsDate } from "./constants";
 import DisplayTotal from "@/components/admin/dashboard/DisplayTotal";
 import {
   faArrowRotateRight,

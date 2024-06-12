@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Loading from "./loading";
+import Loading from "@/components/global/loading/CompLoading";
 import AdminNavbar from "@/components/admin/dashboard/AdminNavbar";
 import TableGame from "../../../../components/admin/game/TableGame";
 import AdminHeader from "@/components/admin/AdminHeader";

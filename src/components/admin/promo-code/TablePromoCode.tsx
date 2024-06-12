@@ -15,7 +15,7 @@ import {
   faTimes,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
-import Loading from "@/app/(admin)/admin/game/loading";
+import Loading from "@/components/global/loading/CompLoading";
 import { DiscountType } from "@/enum";
 import { IPromotion, IPromotionPagination } from "@/interfaces/promotion";
 import { promoCodeAdminState } from "@/atom/promoCodeAdminState";

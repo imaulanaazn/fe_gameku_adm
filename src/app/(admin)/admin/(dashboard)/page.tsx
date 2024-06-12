@@ -16,16 +16,17 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import dayjs from "dayjs";
-import Loading from "./loading";
+import Loading from "@/components/global/loading/CompLoading";
 import { io } from "socket.io-client";
 import AdminNavbar from "@/components/admin/dashboard/AdminNavbar";
 import { Swiper, SwiperSlide } from "swiper/react";
 import DatePicker from "react-datepicker";
 import {
+  bgColorsInitState,
   carouselBreakpoints,
   initialStatusCounts,
   optionsStatsDate,
-} from "./utils";
+} from "./constants";
 import Select from "react-select";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -98,14 +99,7 @@ const Admin = () => {
   const [refresh, setRefresh] = useState(0);
   const [loading, setLoading] = useState(true);
   const [statsLoading, setStatsLoading] = useState(false);
-  const [bgColors, setBgColors] = useState({
-    orders: "bg-white",
-    ordersFailed: "bg-white",
-    ordersPending: "bg-white",
-    ordersExpired: "bg-white",
-    ordersSuccess: "bg-white",
-    registration: "bg-white",
-  });
+  const [bgColors, setBgColors] = useState(bgColorsInitState);
   const [bgColorsLatestOrder, setBgColorsLatestOrders] = useState("bg-white");
   // const [updateOrderId, setUpdateOrderId] = useState("");
 

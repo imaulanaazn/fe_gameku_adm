@@ -1,17 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import ListDenom from "./listDenom/ListDenom";
-import Quantity from "./Quantity/Quantity";
-import ListPaymentsMethod from "./listPaymentsMethod/ListPaymentsMethod";
-import DetailAccount from "./detailAccount/DetailAccount";
-import NomorWhatsapp from "./nomorWhatsapp/NomorWhatsapp";
-import CodePromo from "./codePromo/CodePromo";
-import TotalPayments from "./totalPayments/TotalPayments";
-import DescProduct from "./descProduct/DescProduct";
+import ListDenom from "./ListDenom";
+import Quantity from "./Quantity";
+import ListPaymentsMethod from "./ListPaymentsMethod";
+import DetailAccount from "./DetailAccount";
+import NomorWhatsapp from "./NomorWhatsapp";
+import CodePromo from "./CodePromo";
+import TotalPayments from "./TotalPayments";
+import DescProduct from "./DescProduct";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { cartState } from "@/atom/cartState";
-import CashTag from "./inputCashTag/CashTag";
+import CashTag from "./CashTag";
 import { formCashtag } from "@/atom/formCashtag";
 import Link from "next/link";
 

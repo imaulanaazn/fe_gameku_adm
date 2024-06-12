@@ -1,35 +1,24 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import ListDenom from "./listDenom/ListDenom";
-import ListPaymentsMethod from "./listPaymentsMethod/ListPaymentsMethod";
-import DetailAccount from "./detailAccount/DetailAccount";
-import NomorWhatsapp from "./nomorWhatsapp/NomorWhatsapp";
-import CodePromo from "./codePromo/CodePromo";
-import TotalPayments from "./totalPayments/TotalPayments";
-import DescProduct from "./descProduct/DescProduct";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { cartState } from "@/atom/cartState";
-import CashTag from "./inputCashTag/CashTag";
 import { formCashtag } from "@/atom/formCashtag";
 import { Box, Breadcrumbs, Button, Grid, Typography, Stack } from "@/lib/mui";
-import AdditionalData from "./new/AdditionalData";
-import ConfirmCheckout from "./new/ConfirmCheckout";
-import DenomList from "./new/DenomList";
-import GameData from "./new/GameData";
-import GroupedDenomList from "./new/GroupedDenomList";
-import PaymentMethod from "./new/PaymentMethod";
-import ProfileGame from "./new/ProfileGame";
-import PromoCode from "./new/PromoCode";
+import AdditionalData from "./AdditionalData";
+import ConfirmCheckout from "./ConfirmCheckout";
+import DenomList from "./DenomList";
+import GameData from "./GameData";
+import GroupedDenomList from "./GroupedDenomList";
+import PaymentMethod from "./PaymentMethod";
+import ProfileGame from "./ProfileGame";
+import PromoCode from "./PromoCode";
 import { useRouter } from "next/navigation";
-import Quantity from "./new/Quantity";
+import Quantity from "./Quantity";
 import Link from "next/link";
-import MobileNumber from "./new/MobileNumber";
-import { Container } from "@mui/system";
+import MobileNumber from "./MobileNumber";
 import useDevice from "@/@core/hooks/useDevice";
-import ProductReview from "./ProductReview/ProductReview";
-import FAQ from "./faq/FAQ";
-import GameContent from "./gameContent/GameContent";
+import ProductReview from "./ProductReview";
 
 interface IFormProps {
   products: IGameDetail;

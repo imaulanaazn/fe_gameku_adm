@@ -1,11 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import DetailPembelian from "./DetailPembelian";
-import DetailInformation from "./DetailInformation";
-import ActionPayment from "./ActionPayment";
-import DetailPembayaran from "./DetailPembayaran";
-import InfoTransaksi from "./InfoTransaksi";
+import DetailPembelian from "./unused/DetailPembelian";
+import DetailInformation from "./unused/DetailInformation";
+import ActionPayment from "./unused/ActionPayment";
+import DetailPembayaran from "./unused/DetailPembayaran";
+import InfoTransaksi from "./unused/InfoTransaksi";
 import { useEffect, useState } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { invoiceState } from "@/atom/invoice";

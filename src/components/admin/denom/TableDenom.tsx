@@ -21,7 +21,7 @@ import {
   faTimes,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
-import Loading from "@/app/(admin)/admin/game/loading";
+import Loading from "@/components/global/loading/CompLoading";
 import { productAdminState } from "@/atom/denomAdminState";
 import Pagination from "@/components/admin/Pagination";
 import { selectedAdminState } from "@/atom/selectedAdminState";

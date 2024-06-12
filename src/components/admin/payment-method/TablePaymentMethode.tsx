@@ -13,7 +13,7 @@ import {
   faMagnifyingGlass,
   faTimes,
 } from "@fortawesome/free-solid-svg-icons";
-import Loading from "@/app/(admin)/admin/game/loading";
+import Loading from "@/components/global/loading/CompLoading";
 import { paymentMethodAdminState } from "@/atom/paymentMethodAdminState";
 import { FeeType } from "@/enum";
 import Pagination from "@/components/admin/Pagination";

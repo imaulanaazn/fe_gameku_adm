@@ -7,7 +7,7 @@ import Header from "@/components/admin/Header";
 import TableSocialMedia from "@/components/admin/social-media/TableSocialMedia";
 import { IPromotionPagination } from "@/interfaces/promotion";
 import { INewsVideosPagination } from "@/interfaces/newsVideo";
-import Loading from "../(dashboard)/loading";
+import Loading from "@/components/global/loading/CompLoading";
 import { ISocialMediaPagination } from "@/interfaces/socialMedia";
 import AdminNavbar from "@/components/admin/dashboard/AdminNavbar";
 import AdminHeader from "@/components/admin/AdminHeader";

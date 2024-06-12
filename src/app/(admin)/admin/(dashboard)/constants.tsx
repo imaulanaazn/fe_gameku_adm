@@ -50,3 +50,12 @@ export const initialStatusCounts = {
     percentageChange: 0,
   },
 };
+
+export const bgColorsInitState = {
+  orders: "bg-white",
+  ordersFailed: "bg-white",
+  ordersPending: "bg-white",
+  ordersExpired: "bg-white",
+  ordersSuccess: "bg-white",
+  registration: "bg-white",
+};

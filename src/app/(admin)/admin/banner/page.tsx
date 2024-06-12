@@ -4,7 +4,7 @@ import TableBanner from "@/components/admin/banner/TableBanner";
 import Header from "@/components/admin/Header";
 import { IImageCarouselPagination } from "@/interfaces/carousels";
 import { useEffect, useState } from "react";
-import Loading from "./loading";
+import Loading from "@/components/global/loading/CompLoading";
 import AdminNavbar from "@/components/admin/dashboard/AdminNavbar";
 import Select from "react-select";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

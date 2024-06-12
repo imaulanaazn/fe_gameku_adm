@@ -1,7 +1,7 @@
 "use client";
 
 import "react-datepicker/dist/react-datepicker.css";
-import Loading from "./loading";
+import Loading from "@/components/global/loading/CompLoading";
 import { useEffect, useState } from "react";
 import TableDeposit from "@/components/admin/deposit-history/TableDeposit";
 import AdminNavbar from "@/components/admin/dashboard/AdminNavbar";

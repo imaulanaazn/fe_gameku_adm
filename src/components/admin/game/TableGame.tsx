@@ -18,7 +18,7 @@ import {
   faTimesCircle,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
-import Loading from "@/app/(admin)/admin/game/loading";
+import Loading from "@/components/global/loading/CompLoading";
 import ConfirmDelete from "@/components/admin/ConfirmDelete";
 import { selectedAdminState } from "@/atom/selectedAdminState";
 import { showDeleteState } from "@/atom/showDeleteState";

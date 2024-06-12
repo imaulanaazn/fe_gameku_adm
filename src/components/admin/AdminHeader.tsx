@@ -1,13 +1,13 @@
 import React from "react";
 import { usePathname } from "next/navigation";
-import { MENU } from "../global/header/SideBarAdmin";
+import { SIDEBAR_MENU } from "../global/header/constants";
 export default function AdminHeader({
   children,
 }: {
   children?: React.JSX.Element;
 }) {
   const path: string = usePathname();
-  const pageName = MENU.find((menu) => menu.link === path);
+  const pageName = SIDEBAR_MENU.find((menu) => menu.link === path);
   return (
     <div className="navbar-header lg:h-48 bg-[url('/images/bg-header-abstract.jpg')] bg-auto md:bg-cover rounded-b-2xl md:rounded-b-3xl text-white px-10 md:px-12 py-10 md:pt-10">
       <div className="flex flex-col lg:flex-row gap-4 justify-between lg:items-center">

@@ -2,7 +2,7 @@
 
 import Header from "@/components/admin/Header";
 import React, { useEffect, useState } from "react";
-import Loading from "./loading";
+import Loading from "@/components/global/loading/CompLoading";
 import { IPromotionPagination } from "@/interfaces/promotion";
 import TablePromoCode from "@/components/admin/promo-code/TablePromoCode";
 import AdminNavbar from "@/components/admin/dashboard/AdminNavbar";

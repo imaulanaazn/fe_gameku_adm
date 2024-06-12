@@ -21,11 +21,11 @@ import {
   IImageCarouselPagination,
 } from "@/interfaces/carousels";
 import { carouselAdminState } from "@/atom/carouselAdminState";
-import ConfirmDelete from "../../../../../components/admin/ConfirmDelete";
+import ConfirmDelete from "../ConfirmDelete";
 import { selectedAdminState } from "@/atom/selectedAdminState";
 import { showDeleteState } from "@/atom/showDeleteState";
 import { IActionBulk } from "@/interfaces/actionBulk";
-import Pagination from "../../../../../components/admin/Pagination";
+import Pagination from "../Pagination";
 import FormAddBanner from "./FormAddBanner";
 import { Tooltip as ReactTooltip } from "react-tooltip";
 const column = [

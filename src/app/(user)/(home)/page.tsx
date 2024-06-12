@@ -1,18 +1,18 @@
-import Carousel from "./components/Carousel";
-import ListGames from "./components/ListGames";
-import PopularGames from "./components/PopularGames";
-import NewsPost from "./components/NewsPost";
-import Maintenance from "@/components/maintenance/Maintenance";
+import Carousel from "../../../components/user/home/Carousel";
+import ListGames from "../../../components/user/home/ListGames";
+import PopularGames from "../../../components/user/home/PopularGames";
+import NewsPost from "../../../components/user/home/NewsPost";
+import Maintenance from "@/components/global/maintenance/Maintenance";
 import { IImageCarousel } from "@/interfaces/carousels";
 import sendRequest from "@/lib/baseApi";
 import { Metadata } from "next";
-import CompLayanan from "@/components/layanan/CompLayanan";
-import NoGameFound from "./components/NoGameFound";
-import NewsVideo from "./components/NewsVideo";
+import CompLayanan from "@/components/user/layanan/CompLayanan";
+import NoGameFound from "../../../components/user/home/NoGameFound";
+import NewsVideo from "../../../components/user/home/NewsVideo";
 import { INewsVideos } from "@/interfaces/newsVideo";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
-import AboutGasskeun from "./components/AboutGasskeun";
+import AboutGasskeun from "../../../components/user/home/AboutGasskeun";
 import Script from "next/script";
 
 const defaultCategory = [

@@ -1,13 +1,13 @@
 "use client";
 
-import TableOrders from "./components/TableOrders";
+import TableOrders from "../../../../components/admin/orders/TableOrders";
 import "react-datepicker/dist/react-datepicker.css";
 import Loading from "./loading";
 import { useEffect, useRef, useState } from "react";
-import AdminNavbar from "@/app/(admin)/admin/(dashboard)/components/AdminNavbar";
+import AdminNavbar from "@/components/admin/dashboard/AdminNavbar";
 import Select from "react-select";
 import { initialRevenue, optionsStatsDate } from "./utils";
-import DisplayTotal from "@/app/(admin)/admin/(dashboard)/components/DisplayTotal";
+import DisplayTotal from "@/components/admin/dashboard/DisplayTotal";
 import {
   faArrowRotateRight,
   faCheckCircle,

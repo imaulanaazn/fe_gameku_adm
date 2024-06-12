@@ -16,7 +16,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { currencyConverter } from "@/lib/currencyConverter";
 import Select from "react-select";
 import { Tooltip as ReactTooltip } from "react-tooltip";
-import { notifyReseller, optionsOrder, optionsSortBy } from "../utils";
+import {
+  notifyReseller,
+  optionsOrder,
+  optionsSortBy,
+} from "../../../app/(admin)/admin/reseller/utils";
 import { toast } from "react-toastify";
 
 const TableUser: React.FC<{ user: IUserPaginationWithSearch }> = ({ user }) => {

@@ -1,11 +1,11 @@
 "use client";
 
-import TableBanner from "@/app/(admin)/admin/banner/components/TableBanner";
+import TableBanner from "@/components/admin/banner/TableBanner";
 import Header from "@/components/admin/Header";
 import { IImageCarouselPagination } from "@/interfaces/carousels";
 import { useEffect, useState } from "react";
 import Loading from "./loading";
-import AdminNavbar from "@/app/(admin)/admin/(dashboard)/components/AdminNavbar";
+import AdminNavbar from "@/components/admin/dashboard/AdminNavbar";
 import Select from "react-select";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import AdminHeader from "@/components/admin/AdminHeader";

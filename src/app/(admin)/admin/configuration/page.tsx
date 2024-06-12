@@ -1,16 +1,16 @@
 "use client";
 
 import { whatsappTemplateState } from "@/atom/whatsappTemplateState";
-import ChangeLogo from "./components/ChangeLogo";
-import StatusWebsite from "./components/StatusWebsite";
-import TemplateMessage from "./components/TemplateMessage";
-import Whatsapp from "./components/Whatsapp";
-import Xendit from "./components/Xendit";
+import ChangeLogo from "../../../../components/admin/configuration/ChangeLogo";
+import StatusWebsite from "../../../../components/admin/configuration/StatusWebsite";
+import TemplateMessage from "../../../../components/admin/configuration/TemplateMessage";
+import Whatsapp from "../../../../components/admin/configuration/Whatsapp";
+import Xendit from "../../../../components/admin/configuration/Xendit";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
-import BackgroungImages from "./components/BackgroungImages";
-import ChangeLogoFooter from "./components/ChangeLogoFooter";
-import AdminNavbar from "@/app/(admin)/admin/(dashboard)/components/AdminNavbar";
+import BackgroungImages from "../../../../components/admin/configuration/BackgroungImages";
+import ChangeLogoFooter from "../../../../components/admin/configuration/ChangeLogoFooter";
+import AdminNavbar from "@/components/admin/dashboard/AdminNavbar";
 import AdminHeader from "@/components/admin/AdminHeader";
 
 const Configuration = () => {

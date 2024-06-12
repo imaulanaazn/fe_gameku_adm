@@ -1,7 +1,7 @@
 "use client";
 
 import { use, useEffect, useState } from "react";
-import Game from "../global/game/Game";
+import Game from "../../global/game/Game";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { layananState } from "@/atom/layananState";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

@@ -20,13 +20,13 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import Loading from "@/app/(admin)/admin/game/loading";
 import { productAdminState } from "@/atom/denomAdminState";
-import Pagination from "../../../../../components/admin/Pagination";
+import Pagination from "../Pagination";
 import { selectedAdminState } from "@/atom/selectedAdminState";
 import { showDeleteState } from "@/atom/showDeleteState";
 import { Tooltip as ReactTooltip } from "react-tooltip";
 import formatter from "@/lib/formatter";
 import Select from "react-select";
-import ConfirmDelete from "../../../../../components/admin/ConfirmDelete";
+import ConfirmDelete from "../ConfirmDelete";
 import FormDenom from "./FormCategoryProduct";
 import { toast } from "react-toastify";
 import { productCategoryAton } from "@/atom/productCategoryAdminState";

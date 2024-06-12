@@ -1,9 +1,9 @@
 "use client";
 
-import ChartOrderHistory from "@/app/(admin)/admin/(dashboard)/components/ChartOrderHistory";
-import ChartPopulargame from "@/app/(admin)/admin/(dashboard)/components/ChartPopulargame";
-import DisplayTotal from "@/app/(admin)/admin/(dashboard)/components/DisplayTotal";
-import TableRecentOrders from "@/app/(admin)/admin/(dashboard)/components/TableRecentOrders";
+import ChartOrderHistory from "@/components/admin/dashboard/ChartOrderHistory";
+import ChartPopulargame from "@/components/admin/dashboard/ChartPopulargame";
+import DisplayTotal from "@/components/admin/dashboard/DisplayTotal";
+import TableRecentOrders from "@/components/admin/dashboard/TableRecentOrders";
 import Header from "@/components/admin/Header";
 import {
   faArrowRotateRight,
@@ -18,7 +18,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import dayjs from "dayjs";
 import Loading from "./loading";
 import { io } from "socket.io-client";
-import AdminNavbar from "@/app/(admin)/admin/(dashboard)/components/AdminNavbar";
+import AdminNavbar from "@/components/admin/dashboard/AdminNavbar";
 import { Swiper, SwiperSlide } from "swiper/react";
 import DatePicker from "react-datepicker";
 import {

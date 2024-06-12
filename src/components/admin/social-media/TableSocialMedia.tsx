@@ -13,10 +13,10 @@ import {
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import Loading from "@/app/(admin)/admin/game/loading";
-import ConfirmDelete from "../../../../../components/admin/ConfirmDelete";
+import ConfirmDelete from "../ConfirmDelete";
 import { selectedAdminState } from "@/atom/selectedAdminState";
 import { showDeleteState } from "@/atom/showDeleteState";
-import Pagination from "../../../../../components/admin/Pagination";
+import Pagination from "../Pagination";
 import { Tooltip as ReactTooltip } from "react-tooltip";
 import { ISocialMedia, ISocialMediaPagination } from "@/interfaces/socialMedia";
 import { socialMediaAdminState } from "@/atom/socialMediaState";

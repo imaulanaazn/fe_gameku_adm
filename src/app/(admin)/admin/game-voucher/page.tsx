@@ -2,8 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import Loading from "./loading";
-import TableVoucherGame from "./components/TableVoucherGame";
-import AdminNavbar from "@/app/(admin)/admin/(dashboard)/components/AdminNavbar";
+import TableVoucherGame from "../../../../components/admin/game-voucher/TableVoucherGame";
+import AdminNavbar from "@/components/admin/dashboard/AdminNavbar";
 import AdminHeader from "@/components/admin/AdminHeader";
 
 const PromoCode = () => {

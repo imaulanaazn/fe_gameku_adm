@@ -1,5 +1,5 @@
-import Maintenance from "@/components/maintenance/Maintenance";
-import FormRegister from "@/components/register/FormRegister";
+import Maintenance from "@/components/global/maintenance/Maintenance";
+import FormRegister from "@/components/user/register/FormRegister";
 import sendRequest from "@/lib/baseApi";
 import { Metadata } from "next";
 import Image from "next/image";

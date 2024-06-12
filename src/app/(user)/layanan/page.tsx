@@ -1,5 +1,5 @@
-import CompLayanan from "@/components/layanan/CompLayanan";
-import Maintenance from "@/components/maintenance/Maintenance";
+import CompLayanan from "@/components/user/layanan/CompLayanan";
+import Maintenance from "@/components/global/maintenance/Maintenance";
 import sendRequest from "@/lib/baseApi";
 import { Metadata } from "next";
 

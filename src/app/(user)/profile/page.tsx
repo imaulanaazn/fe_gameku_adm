@@ -1,5 +1,5 @@
-import Maintenance from "@/components/maintenance/Maintenance";
-import Profile from "@/components/profile/Profile";
+import Maintenance from "@/components/global/maintenance/Maintenance";
+import Profile from "@/components/user/profile/Profile";
 import sendRequest from "@/lib/baseApi";
 import { Metadata } from "next/types";
 

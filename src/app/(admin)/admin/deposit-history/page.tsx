@@ -3,8 +3,8 @@
 import "react-datepicker/dist/react-datepicker.css";
 import Loading from "./loading";
 import { useEffect, useState } from "react";
-import TableDeposit from "@/app/(admin)/admin/deposit-history/components/TableDeposit";
-import AdminNavbar from "@/app/(admin)/admin/(dashboard)/components/AdminNavbar";
+import TableDeposit from "@/components/admin/deposit-history/TableDeposit";
+import AdminNavbar from "@/components/admin/dashboard/AdminNavbar";
 import AdminHeader from "@/components/admin/AdminHeader";
 
 const Orders = () => {

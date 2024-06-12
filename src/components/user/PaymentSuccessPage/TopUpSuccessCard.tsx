@@ -1,6 +1,6 @@
 import { Box, Stack } from "@mui/system";
 import React from "react";
-import Container from "../global/Container/Container";
+import Container from "../../global/Container/Container";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
 import { Typography, Divider, Button } from "@mui/material";

@@ -150,11 +150,11 @@ const BackgroungImages = () => {
 
   return (
     <>
-      <div className="flex justify-between flex-wrap items-end mb-4 mt-6 lg:mt-0">
+      <div className="flex justify-between flex-wrap items-end mb-4 mt-6 gap-2 lg:mt-0">
         <h1 className="font-medium text-xl md:text-2xl text-neutral-800">
           Background Image
         </h1>
-        <div className="bg-gray-100 flex items-center justify-center w-max">
+        <div className="flex items-center justify-center w-max">
           <div
             className="relative inline-block text-left w-max"
             ref={dropDownRef}
@@ -202,7 +202,7 @@ const BackgroungImages = () => {
         </div>
       </div>
       <div>
-        <div className="h-64 flex items-center relative group">
+        <div className="w-full flex aspect-video items-center relative group">
           <div
             className={`w-full h-full absolute scale-0 opacity-0 group-hover:scale-100 group-hover:opacity-100 bg-gray-400 bg-opacity-30 flex items-center justify-center transition-all`}
           >

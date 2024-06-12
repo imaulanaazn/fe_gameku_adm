@@ -275,24 +275,34 @@ const TableBanner: React.FC<{ banner: IImageCarouselPagination }> = ({
               </button>
             </div>
 
-            <button
-              className="flex justify-end items-center gap-2 text-primary-900 md:hidden w-full"
-              onClick={() => {
-                setShowFilter((prev) => !prev);
-              }}
-            >
-              {showFilter ? "Close" : "Filter"}
-              <FontAwesomeIcon icon={faFilter} />
-            </button>
+            <div className="flex justify-between md:hidden md:hidden w-full">
+              <button
+                className="flex-1 flex justify-start items-center gap-2 text-primary-900 "
+                onClick={() => {
+                  setShowFilter((prev) => !prev);
+                }}
+              >
+                <FontAwesomeIcon icon={faFilter} />
+                {showFilter ? "Close" : "Filter"}
+              </button>
+              {showFilter && (
+                <button
+                  onClick={() => handleClickClearButton()}
+                  className="flex-1 py-2 rounded-md text-primary-900 cursor-pointer text-right"
+                >
+                  Clear Filter
+                </button>
+              )}
+            </div>
 
             <div
               className={`gap-4 items-center ${
                 showFilter ? "flex" : "hidden md:flex"
               }`}
             >
-              <div className="flex gap-2 items-center">
+              <div className="w-full flex gap-2 items-center">
                 {optionLimit && (
-                  <div>
+                  <div className="w-full">
                     <Select
                       id="filterLimit"
                       value={selectedFilterLimit}
@@ -352,7 +362,7 @@ const TableBanner: React.FC<{ banner: IImageCarouselPagination }> = ({
               </div>
               <button
                 onClick={() => handleClickClearButton()}
-                className="px-2 py-2 rounded-md text-primary-900 cursor-pointer"
+                className="px-2 py-2 rounded-md text-primary-900 cursor-pointer hidden md:inline-block shrink-0"
               >
                 Clear Filter
               </button>

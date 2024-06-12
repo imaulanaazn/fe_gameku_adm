@@ -9,6 +9,7 @@ import {
   faArrowUp,
   faCheckCircle,
   faCircleXmark,
+  faFilter,
   faMagnifyingGlass,
   faTimes,
 } from "@fortawesome/free-solid-svg-icons";
@@ -158,6 +159,7 @@ const TablePaymentMethod: React.FC<{ data: IPaymentMethodPagination }> = ({
     paymentMethodAdminState
   );
   const [showDelete, setShowDelete] = useRecoilState(showDeleteState);
+  const [showFilter, setShowFilter] = useState(false);
 
   const getPaymentsMethod = async () => {
     setLoading(true);
@@ -362,10 +364,34 @@ const TablePaymentMethod: React.FC<{ data: IPaymentMethodPagination }> = ({
               </button>
             </div>
 
-            <div className="flex justify-between items-center">
-              <div className="flex gap-4 items-center flex-wrap">
+            <div className="flex justify-between md:hidden md:hidden w-full">
+              <button
+                className="flex-1 flex justify-start items-center gap-2 text-primary-900 "
+                onClick={() => {
+                  setShowFilter((prev) => !prev);
+                }}
+              >
+                <FontAwesomeIcon icon={faFilter} />
+                {showFilter ? "Close" : "Filter"}
+              </button>
+              {showFilter && (
+                <button
+                  onClick={() => handleClickClearButton()}
+                  className="flex-1 py-2 rounded-md text-primary-900 cursor-pointer text-right"
+                >
+                  Clear Filter
+                </button>
+              )}
+            </div>
+
+            <div
+              className={`${
+                showFilter ? "flex flex-col md:flex-row" : "hidden md:flex"
+              } justify-between items-center w-full md:w-max`}
+            >
+              <div className="flex gap-4 items-center flex-wrap w-full md:w-max">
                 {optionStatus && (
-                  <div>
+                  <div className="w-full md:w-max">
                     <Select
                       id="filterStatus"
                       value={selectedFilterStatus}
@@ -438,7 +464,7 @@ const TablePaymentMethod: React.FC<{ data: IPaymentMethodPagination }> = ({
                   </div>
                 )}
                 {optionPaymentCategory && (
-                  <div>
+                  <div className="w-full md:w-max">
                     <Select
                       id="filterPaymentCategory"
                       value={selectedPaymentCategory}
@@ -509,7 +535,7 @@ const TablePaymentMethod: React.FC<{ data: IPaymentMethodPagination }> = ({
                   </div>
                 )}
                 {optionLimit && (
-                  <div>
+                  <div className="w-full md:w-max">
                     <Select
                       id="filterLimit"
                       value={selectedFilterLimit}
@@ -568,7 +594,7 @@ const TablePaymentMethod: React.FC<{ data: IPaymentMethodPagination }> = ({
                 )}
                 <button
                   onClick={() => handleClickClearButton()}
-                  className="px-2 py-2 text-primary-900 cursor-pointer"
+                  className="px-2 py-2 text-primary-900 cursor-pointer hidden md:inline-block"
                 >
                   Clear Filter
                 </button>

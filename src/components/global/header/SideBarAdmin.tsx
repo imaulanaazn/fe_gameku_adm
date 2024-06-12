@@ -282,7 +282,9 @@ const SideBarAdmin = () => {
                   currentPath === menu.link
                     ? "bg-primary-900"
                     : "bg-transparent hover:bg-primary-100"
-                } w-full py-3 px-4 rounded-md flex gap-4 items-center group duration-500`}
+                } w-full py-3 px-4 rounded-md flex gap-4 items-center group duration-500 ${
+                  !showFullSidebar && "justify-center"
+                }`}
               >
                 <div
                   className={`icon text-base transition-all duration-500 ${
@@ -296,7 +298,8 @@ const SideBarAdmin = () => {
 
                 <p
                   className={`font-base text-base transition-all duration-500 whitespace-nowrap ${
-                    !showFullSidebar && "scale-0 opacity-0 -translate-x-full"
+                    !showFullSidebar &&
+                    "absolute right-0 scale-0 opacity-0 -translate-x-full"
                   } ${
                     currentPath === menu.link
                       ? "text-white"

@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowDown,
   faArrowUp,
+  faFilter,
   faMagnifyingGlass,
   faPlus,
   faSearch,
@@ -129,6 +130,7 @@ const TableVoucherGame: React.FC<{ data: IVoucherGamePagination }> = ({
   const [newData, setNewData] = useRecoilState(voucherAdminState);
   const [selected, setSelected] = useRecoilState(selectedAdminState);
   const [showDelete, setShowDelete] = useRecoilState(showDeleteState);
+  const [showFilter, setShowFilter] = useState(false);
 
   const getNewData = async () => {
     setLoading(true);
@@ -406,9 +408,33 @@ const TableVoucherGame: React.FC<{ data: IVoucherGamePagination }> = ({
               </button>
             </div>
 
-            <div className="flex gap-4 items-center flex-wrap">
+            <div className="flex justify-between md:hidden md:hidden w-full">
+              <button
+                className="flex-1 flex justify-start items-center gap-2 text-primary-900 "
+                onClick={() => {
+                  setShowFilter((prev) => !prev);
+                }}
+              >
+                <FontAwesomeIcon icon={faFilter} />
+                {showFilter ? "Close" : "Filter"}
+              </button>
+              {showFilter && (
+                <button
+                  onClick={() => handleClickClearButton()}
+                  className="flex-1 py-2 rounded-md text-primary-900 cursor-pointer text-right"
+                >
+                  Clear Filter
+                </button>
+              )}
+            </div>
+
+            <div
+              className={`${
+                showFilter ? "flex flex-col md:flex-row" : "hidden md:flex"
+              } gap-4 items-center flex-wrap w-full md:w-max`}
+            >
               {optionsFilterStatus && (
-                <div>
+                <div className="w-full md:w-max">
                   <Select
                     id="filterStatus"
                     value={selectedFilterStatus}
@@ -477,7 +503,7 @@ const TableVoucherGame: React.FC<{ data: IVoucherGamePagination }> = ({
                 </div>
               )}
               {optionsFilterGame && (
-                <div>
+                <div className="w-full md:w-max">
                   <Select
                     id="filterGame"
                     value={selectedFilterGame}
@@ -544,7 +570,7 @@ const TableVoucherGame: React.FC<{ data: IVoucherGamePagination }> = ({
                 </div>
               )}
               {optionsFilterProduct && (
-                <div>
+                <div className="w-full md:w-max">
                   <Select
                     id="filterDenom"
                     value={selectedFilterProduct}
@@ -611,7 +637,7 @@ const TableVoucherGame: React.FC<{ data: IVoucherGamePagination }> = ({
                 </div>
               )}
               {optionLimit && (
-                <div>
+                <div className="w-full md:w-max">
                   <Select
                     id="filterLimit"
                     value={selectedFilterLimit}
@@ -666,7 +692,7 @@ const TableVoucherGame: React.FC<{ data: IVoucherGamePagination }> = ({
               )}
               <button
                 onClick={() => handleClickClearButton()}
-                className="px-2 py-2 text-primary-600 cursor-pointer"
+                className="px-2 py-2 text-primary-600 cursor-pointer hidden md:inline-block"
               >
                 Clear Filter
               </button>

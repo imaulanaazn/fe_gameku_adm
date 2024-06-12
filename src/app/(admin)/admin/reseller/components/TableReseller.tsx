@@ -9,6 +9,7 @@ import Pagination from "@/components/admin/Pagination";
 import Loading from "@/app/(admin)/admin/user/loading";
 import {
   faCircleExclamation,
+  faFilter,
   faMagnifyingGlass,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -23,6 +24,7 @@ const TableUser: React.FC<{ user: IUserPaginationWithSearch }> = ({ user }) => {
   const [loading, setLoading] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState("");
   const [searchQuery, setSearchQuery] = useState(customer.keySearch || "");
+  const [showFilter, setShowFilter] = useState(false);
   const [selectedOptionSortBy, setSelectedOptionSortBy] = useState<{
     label: string;
     value: string;
@@ -89,6 +91,11 @@ const TableUser: React.FC<{ user: IUserPaginationWithSearch }> = ({ user }) => {
     setSearchQuery(event.target.value);
   };
 
+  const handleClickClearButton = () => {
+    setSelectedOptionSortBy(null);
+    setSelectedOptionOrder(null);
+  };
+
   function handleNotifyReseller(resellerId: string) {
     setButtonDisabled(resellerId);
 
@@ -134,7 +141,32 @@ const TableUser: React.FC<{ user: IUserPaginationWithSearch }> = ({ user }) => {
               className="absolute top-1/2 right-6 -translate-y-1/2 text-primary-900 text-lg"
             />
           </div>
-          <div className="w-full filter flex gap-3 w-max flex-wrap">
+
+          <div className="flex justify-between md:hidden w-full">
+            <button
+              className="flex-1 flex justify-start items-center gap-2 text-primary-900 "
+              onClick={() => {
+                setShowFilter((prev) => !prev);
+              }}
+            >
+              <FontAwesomeIcon icon={faFilter} />
+              {showFilter ? "Close" : "Filter"}
+            </button>
+            {showFilter && (
+              <button
+                onClick={() => handleClickClearButton()}
+                className="flex-1 py-2 rounded-md text-primary-900 cursor-pointer text-right"
+              >
+                Clear Filter
+              </button>
+            )}
+          </div>
+
+          <div
+            className={`${
+              showFilter ? "flex flex-col md:flex-row" : "hidden md:flex"
+            } w-full gap-3 md:gap-4 flex-wrap justify-end`}
+          >
             <Select
               id="sort_by"
               value={selectedOptionSortBy}
@@ -231,6 +263,12 @@ const TableUser: React.FC<{ user: IUserPaginationWithSearch }> = ({ user }) => {
                 }),
               }}
             />
+            <button
+              onClick={() => handleClickClearButton()}
+              className="px-2 py-2 rounded-md text-primary-900 cursor-pointer hidden md:inline-block"
+            >
+              Clear Filter
+            </button>
           </div>
         </div>
       </div>

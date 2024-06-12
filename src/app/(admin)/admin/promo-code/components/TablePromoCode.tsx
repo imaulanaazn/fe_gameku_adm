@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowDown,
   faArrowUp,
+  faFilter,
   faInfo,
   faMagnifyingGlass,
   faPencil,
@@ -146,6 +147,7 @@ const TablePromoCode: React.FC<{ data: IPromotionPagination }> = ({ data }) => {
   const [showForm, setShowForm] = useState(false);
   const [selectAll, setSelectAll] = useState(false);
   const [detailData, setDetailData] = useState<IPromotion | undefined>();
+  const [showFilter, setShowFilter] = useState(false);
 
   const [selected, setSelected] = useRecoilState(selectedAdminState);
   const [showDelete, setShowDelete] = useRecoilState(showDeleteState);
@@ -303,7 +305,7 @@ const TablePromoCode: React.FC<{ data: IPromotionPagination }> = ({ data }) => {
       ) : (
         <div className="w-full bg-white rounded-xl overflow-x-scroll md:overflow-x-auto overflow-y-hidden p-6 lg:p-8">
           <h1 className="mb-4 font-medium text-xl md:text-2xl text-neutral-800">
-            Banner
+            Kode Promo
           </h1>
 
           <div className="flex flex-col xl:flex-row justify-between xl:items-center gap-4 w-full bg-white mb-4">
@@ -314,13 +316,13 @@ const TablePromoCode: React.FC<{ data: IPromotionPagination }> = ({ data }) => {
                   placeholder={`${selectedOptionSearchBy.label}`}
                   value={inputSearch}
                   onChange={(e) => setInputSearch(e.target.value)}
-                  className="peer inline-flex items-center w-full md:w-auto px-6 py-2 rounded-md gap-x-2 focus:bg-primary-50 text-primary-900 placeholder:text-primary-900 border-primary-900 focus:border-primary-900"
+                  className="peer inline-flex items-center w-full md:w-auto px-4 md:px-6 py-2 rounded-md gap-x-2 focus:bg-primary-50 text-primary-900 placeholder:text-primary-900 border-primary-900 focus:border-primary-900"
                 />
                 <button
                   type="button"
                   disabled={!inputSearch}
                   onClick={(e) => handleClickSearch()}
-                  className="absolute top-1/2 right-3 -translate-y-1/2 peer-focus:bg-primary-50 h-[97%] w-auto aspect-square rounded-r-md"
+                  className="absolute top-1/2 right-1 md:right-3 -translate-y-1/2 bg-white peer-focus:bg-primary-50 h-[95%] w-auto aspect-square rounded-r-md"
                 >
                   <FontAwesomeIcon
                     icon={faMagnifyingGlass}
@@ -384,7 +386,31 @@ const TablePromoCode: React.FC<{ data: IPromotionPagination }> = ({ data }) => {
               />
             </div>
 
-            <div className="flex gap-4">
+            <div className="flex justify-between md:hidden md:hidden w-full">
+              <button
+                className="flex-1 flex justify-start items-center gap-2 text-primary-900 "
+                onClick={() => {
+                  setShowFilter((prev) => !prev);
+                }}
+              >
+                <FontAwesomeIcon icon={faFilter} />
+                {showFilter ? "Close" : "Filter"}
+              </button>
+              {showFilter && (
+                <button
+                  onClick={() => handleClickClearButton()}
+                  className="flex-1 py-2 rounded-md text-primary-900 cursor-pointer text-right"
+                >
+                  Clear Filter
+                </button>
+              )}
+            </div>
+
+            <div
+              className={`${
+                showFilter ? "flex flex-col md:flex-row" : "hidden md:flex"
+              } gap-4`}
+            >
               <Select
                 id="filterStatus"
                 value={selectedFilterStatus}
@@ -506,7 +532,7 @@ const TablePromoCode: React.FC<{ data: IPromotionPagination }> = ({ data }) => {
               )}
               <button
                 onClick={() => handleClickClearButton()}
-                className="px-2 py-2 rounded-md text-primary-900 cursor-pointer"
+                className="px-2 py-2 rounded-md text-primary-900 cursor-pointer hidden md:inline-block"
               >
                 Clear Filter
               </button>

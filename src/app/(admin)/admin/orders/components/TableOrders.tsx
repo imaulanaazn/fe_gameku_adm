@@ -8,6 +8,7 @@ import {
   faArrowRotateRight,
   faArrowUp,
   faCheckCircle,
+  faFilter,
   faMagnifyingGlass,
   faMoneyBill,
   faSearch,
@@ -175,6 +176,7 @@ const TableOrders: React.FC<{
     value: number;
   } | null>(null);
 
+  const [showFilter, setShowFilter] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [typeForm, setTypeForm] = useState("");
@@ -591,7 +593,7 @@ const TableOrders: React.FC<{
             </div>
 
             <div className="flex justify-between flex-wrap gap-4">
-              <div className="flex gap-4 items-center justify-between flex-wrap">
+              <div className="flex gap-4 items-center justify-between flex-wrap w-full md:w-max">
                 <div className="w-full flex gap-4 items-center flex-wrap">
                   <div className="relative md:w-max w-full">
                     <input
@@ -614,63 +616,93 @@ const TableOrders: React.FC<{
                     </button>
                   </div>
 
-                  <Select
-                    id="filterSearchBy"
-                    value={selectedOptionSearchBy}
-                    onChange={(e: any) => {
-                      const check = query.search.find(
-                        (item) => item.key === selectedOptionSearchBy.value
-                      );
-                      if (check) {
-                        setSelectedOptionSearchByBefore(check);
-                      }
-                      setSelectedOptionSearchBy(e);
-                    }}
-                    options={optionsSearchBy}
-                    placeholder="Cari Berdasarkan"
-                    styles={{
-                      placeholder: (base) => ({
-                        ...base,
-                        color: "#b72025",
-                      }),
-                      dropdownIndicator: (base) => ({
-                        ...base,
-                        color: "#b72025",
-                        "&:hover": { color: "#b72025" },
-                      }),
-                      control: (provided, state) => ({
-                        ...provided,
-                        paddingTop: "2px",
-                        paddingBottom: "2px",
-                        cursor: "pointer",
-                        color: "#b72025",
-                        borderColor: "#b72025",
-                        "&:hover": { borderColor: "#b72025" },
-                        borderRadius: "0.4rem",
-                        boxShadow: "none",
-                        backgroundColor: state.isFocused ? "#fff3f3" : "white",
-                      }),
-                      singleValue: (provided, state) => ({
-                        ...provided,
-                        color: "#b72025",
-                        cursor: "pointer",
-                      }),
-                      option: (provided, state) => ({
-                        ...provided,
-                        whiteSpace: "nowrap",
-                        backgroundColor: state.isSelected ? "#b72025" : "white",
-                        color: state.isSelected ? "white" : "#333",
-                        cursor: "pointer",
-                        ":hover": {
-                          backgroundColor: "#f0f0f0",
-                        },
-                      }),
-                    }}
-                  />
+                  <div className="w-full md:w-max">
+                    <Select
+                      id="filterSearchBy"
+                      value={selectedOptionSearchBy}
+                      onChange={(e: any) => {
+                        const check = query.search.find(
+                          (item) => item.key === selectedOptionSearchBy.value
+                        );
+                        if (check) {
+                          setSelectedOptionSearchByBefore(check);
+                        }
+                        setSelectedOptionSearchBy(e);
+                      }}
+                      options={optionsSearchBy}
+                      placeholder="Cari Berdasarkan"
+                      styles={{
+                        placeholder: (base) => ({
+                          ...base,
+                          color: "#b72025",
+                        }),
+                        dropdownIndicator: (base) => ({
+                          ...base,
+                          color: "#b72025",
+                          "&:hover": { color: "#b72025" },
+                        }),
+                        control: (provided, state) => ({
+                          ...provided,
+                          paddingTop: "2px",
+                          paddingBottom: "2px",
+                          cursor: "pointer",
+                          color: "#b72025",
+                          borderColor: "#b72025",
+                          "&:hover": { borderColor: "#b72025" },
+                          borderRadius: "0.4rem",
+                          boxShadow: "none",
+                          backgroundColor: state.isFocused
+                            ? "#fff3f3"
+                            : "white",
+                        }),
+                        singleValue: (provided, state) => ({
+                          ...provided,
+                          color: "#b72025",
+                          cursor: "pointer",
+                        }),
+                        option: (provided, state) => ({
+                          ...provided,
+                          whiteSpace: "nowrap",
+                          backgroundColor: state.isSelected
+                            ? "#b72025"
+                            : "white",
+                          color: state.isSelected ? "white" : "#333",
+                          cursor: "pointer",
+                          ":hover": {
+                            backgroundColor: "#f0f0f0",
+                          },
+                        }),
+                      }}
+                    />
+                  </div>
                 </div>
               </div>
 
-              <div className="flex gap-4 flex-wrap">
+              <div className="flex justify-between md:hidden md:hidden w-full">
+                <button
+                  className="flex-1 flex justify-start items-center gap-2 text-primary-900 "
+                  onClick={() => {
+                    setShowFilter((prev) => !prev);
+                  }}
+                >
+                  <FontAwesomeIcon icon={faFilter} />
+                  {showFilter ? "Close" : "Filter"}
+                </button>
+                {showFilter && (
+                  <button
+                    onClick={() => handleClickClearButton()}
+                    className="flex-1 py-2 rounded-md text-primary-900 cursor-pointer text-right"
+                  >
+                    Clear Filter
+                  </button>
+                )}
+              </div>
+
+              <div
+                className={`${
+                  showFilter ? "flex flex-col md:flex-row" : "hidden md:flex"
+                } gap-4 flex-wrap w-full md:w-max`}
+              >
                 <Select
                   id="filterDate"
                   value={selectedOptionDate}
@@ -843,7 +875,7 @@ const TableOrders: React.FC<{
                 )}
                 <button
                   onClick={() => handleClickClearButton()}
-                  className="px-2 py-2 text-primary-600 cursor-pointer"
+                  className="px-2 py-2 text-primary-600 cursor-pointer hidden md:inline-block"
                 >
                   Clear Filter
                 </button>

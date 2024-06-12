@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowDown,
   faArrowUp,
+  faFilter,
   faMagnifyingGlass,
   faPlus,
   faSearch,
@@ -153,6 +154,7 @@ const TableGame: React.FC<{ game: IGamePagination }> = ({ game }) => {
   const [games, setGames] = useRecoilState(gameAdminState);
   const [selected, setSelected] = useRecoilState(selectedAdminState);
   const [showDelete, setShowDelete] = useRecoilState(showDeleteState);
+  const [showFilter, setShowFilter] = useState(false);
 
   const getGames = async () => {
     setLoading(true);
@@ -353,7 +355,31 @@ const TableGame: React.FC<{ game: IGamePagination }> = ({ game }) => {
               </button>
             </div>
 
-            <div className="filter flex gap-4 w-full xl:w-max flex-wrap">
+            <div className="flex justify-between md:hidden md:hidden w-full">
+              <button
+                className="flex-1 flex justify-start items-center gap-2 text-primary-900 "
+                onClick={() => {
+                  setShowFilter((prev) => !prev);
+                }}
+              >
+                <FontAwesomeIcon icon={faFilter} />
+                {showFilter ? "Close" : "Filter"}
+              </button>
+              {showFilter && (
+                <button
+                  onClick={() => handleClickClearButton()}
+                  className="flex-1 py-2 rounded-md text-primary-900 cursor-pointer text-right"
+                >
+                  Clear Filter
+                </button>
+              )}
+            </div>
+
+            <div
+              className={`filter ${
+                showFilter ? "flex flex-col md:flex-row" : "hidden md:flex"
+              } gap-4 w-full xl:w-max flex-wrap`}
+            >
               {optionCategory && (
                 <div className="shrink-0">
                   <Select
@@ -621,7 +647,7 @@ const TableGame: React.FC<{ game: IGamePagination }> = ({ game }) => {
               )}
               <button
                 onClick={() => handleClickClearButton()}
-                className="px-1 py-2 text-primary-900 cursor-pointer"
+                className="px-1 py-2 text-primary-900 cursor-pointer hidden md:inline-block"
               >
                 Clear Filter
               </button>

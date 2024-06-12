@@ -7,6 +7,7 @@ import {
   faArrowDown,
   faArrowUp,
   faCheckCircle,
+  faFilter,
   faMagnifyingGlass,
   faMoneyBill,
   faSearch,
@@ -150,6 +151,7 @@ const TableDeposit: React.FC<{
   const [detailData, setDetailData] = useState<
     IOrderHistoryWithDetail | undefined
   >();
+  const [showFilter, setShowFilter] = useState(false);
 
   const [newData, setNewData] = useRecoilState(orderHistoryState);
 
@@ -475,7 +477,31 @@ const TableDeposit: React.FC<{
               />
             </div>
 
-            <div className="flex gap-4 flex-wrap">
+            <div className="flex justify-between md:hidden md:hidden w-full">
+              <button
+                className="flex-1 flex justify-start items-center gap-2 text-primary-900 "
+                onClick={() => {
+                  setShowFilter((prev) => !prev);
+                }}
+              >
+                <FontAwesomeIcon icon={faFilter} />
+                {showFilter ? "Close" : "Filter"}
+              </button>
+              {showFilter && (
+                <button
+                  onClick={() => handleClickClearButton()}
+                  className="flex-1 py-2 rounded-md text-primary-900 cursor-pointer text-right"
+                >
+                  Clear Filter
+                </button>
+              )}
+            </div>
+
+            <div
+              className={`${
+                showFilter ? "flex flex-col md:flex-row" : "hidden md:flex"
+              } gap-4 flex-wrap w-full md:w-max`}
+            >
               <Select
                 id="filterStatus"
                 value={selectedFilterStatus}
@@ -597,7 +623,7 @@ const TableDeposit: React.FC<{
               )}
               <button
                 onClick={() => handleClickClearButton()}
-                className="px-2 py-2 text-primary-600 cursor-pointer"
+                className="px-2 py-2 text-primary-600 cursor-pointer hidden md:inline-block"
               >
                 Clear Filter
               </button>

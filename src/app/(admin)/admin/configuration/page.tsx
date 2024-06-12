@@ -47,12 +47,12 @@ const Configuration = () => {
         <div className="website-config bg-white rounded-xl p-6 lg:p-8 mb-6 lg:mb-8">
           <div>
             <StatusWebsite />
-            <div className="flex flex-col xl:flex-row mt-6 lg:mt-8">
+            <div className="flex flex-col xl:flex-row mt-6 lg:mt-8 gap-6">
               <div className="mt-2 w-full xl:w-1/2">
                 <h1 className="mb-4 font-medium text-xl md:text-2xl text-neutral-800">
                   Logo Website
                 </h1>
-                <div className="flex flex-col md:flex-row gap-6 lg:gap-8">
+                <div className="flex flex-col sm:flex-row gap-6 lg:gap-8">
                   <ChangeLogo />
                   <ChangeLogoFooter />
                 </div>

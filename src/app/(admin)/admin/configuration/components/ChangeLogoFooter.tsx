@@ -121,8 +121,8 @@ const ChangeLogoFooter = () => {
   }, []);
 
   return (
-    <div>
-      <div className="h-64 aspect-square relative rounded-lg bg-slate-100 p-6 overflow-hidden group">
+    <div className="flex-1">
+      <div className="w-full aspect-square relative rounded-lg bg-slate-100 p-6 overflow-hidden group">
         <Image
           src={displayLogo || logoFooter?.value || ""}
           alt={`Logo Footer`}

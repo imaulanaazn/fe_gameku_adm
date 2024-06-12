@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowDown,
   faArrowUp,
+  faFilter,
   faMagnifyingGlass,
   faPlus,
   faSearch,
@@ -119,6 +120,7 @@ const TableYoutubeVideo: React.FC<{ data: INewsVideosPagination }> = ({
   const [newData, setNewData] = useRecoilState(newsVideosAdminState);
   const [selected, setSelected] = useRecoilState(selectedAdminState);
   const [showDelete, setShowDelete] = useRecoilState(showDeleteState);
+  const [showFilter, setShowFilter] = useState(false);
 
   const getNewData = async (pagination?: Partial<IPagination>) => {
     setLoading(true);
@@ -283,8 +285,8 @@ const TableYoutubeVideo: React.FC<{ data: INewsVideosPagination }> = ({
           </div>
 
           <div className="flex gap-4 items-center justify-between flex-wrap">
-            <div className="flex gap-4 flex-wrap">
-              <div className="relative md:w-max w-full">
+            <div className="flex gap-4 w-full md:w-max">
+              <div className="relative">
                 <input
                   type="text"
                   placeholder={`Cari Berdasarkan ${selectedOptionSearchBy.label}`}
@@ -360,9 +362,33 @@ const TableYoutubeVideo: React.FC<{ data: INewsVideosPagination }> = ({
               />
             </div>
 
-            <div className="filter flex gap-4">
+            <div className="flex justify-between md:hidden w-full">
+              <button
+                className="flex-1 flex justify-start items-center gap-2 text-primary-900 "
+                onClick={() => {
+                  setShowFilter((prev) => !prev);
+                }}
+              >
+                <FontAwesomeIcon icon={faFilter} />
+                {showFilter ? "Close" : "Filter"}
+              </button>
+              {showFilter && (
+                <button
+                  onClick={() => handleClickClearButton()}
+                  className="flex-1 py-2 rounded-md text-primary-900 cursor-pointer text-right"
+                >
+                  Clear Filter
+                </button>
+              )}
+            </div>
+
+            <div
+              className={`filter ${
+                showFilter ? "flex flex-col md:flex-row" : "hidden md:flex"
+              } gap-4 w-full md:w-max`}
+            >
               {optionLimit && (
-                <div>
+                <div className="w-full md:w-max">
                   <Select
                     id="filterLimit"
                     value={selectedFilterLimit}
@@ -417,7 +443,7 @@ const TableYoutubeVideo: React.FC<{ data: INewsVideosPagination }> = ({
               )}
               <button
                 onClick={() => handleClickClearButton()}
-                className="px-2 py-2 text-primary-900 cursor-pointer"
+                className="px-2 py-2 text-primary-900 cursor-pointer hidden md:inline-block"
               >
                 Clear Filter
               </button>

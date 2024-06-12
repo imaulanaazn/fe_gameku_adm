@@ -283,9 +283,9 @@ const TableSocialMedia: React.FC<{ data: ISocialMediaPagination }> = ({
               </button>
             </div>
 
-            <div className="flex gap-4 items-center">
+            <div className="flex gap-4 items-center justify-end flex-wrap w-full md:w-max">
               {optionLimit && (
-                <div>
+                <div className="w-full md:w-max">
                   <Select
                     id="filterLimit"
                     value={selectedFilterLimit}
@@ -340,7 +340,7 @@ const TableSocialMedia: React.FC<{ data: ISocialMediaPagination }> = ({
               )}
               <button
                 onClick={() => handleClickClearButton()}
-                className="px-2 py-2 text-primary-900 cursor-pointer"
+                className="px-2 py-2 text-primary-900 cursor-pointer  self-end"
               >
                 Clear Filter
               </button>

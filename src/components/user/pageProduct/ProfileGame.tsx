@@ -168,6 +168,11 @@ const ProfileGame = ({ denoms }: { denoms: IGameDetail }) => {
             </Stack>
           </Stack>
         </Stack>
+
+        <h1 className="text-base font-semibold text-gray-700 my-2">
+          Top Up {denoms.name}
+        </h1>
+
         <Typography
           variant="body2"
           sx={{ letterSpacing: "0.25px", marginTop: 1.5, color: "#4B5563" }}

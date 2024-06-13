@@ -14,8 +14,7 @@ const ProfileGame = ({ denoms }: { denoms: IGameDetail }) => {
       sx={{
         position: "relative",
         borderRadius: "0.75rem",
-        backgroundColor: "rgba(255,255,255,0.8)",
-        backdropFilter: "blur(40px)",
+        backgroundColor: "white",
       }}
     >
       <CardContent>

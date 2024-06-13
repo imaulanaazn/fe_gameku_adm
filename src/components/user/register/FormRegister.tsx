@@ -255,7 +255,7 @@ const FormRegister = () => {
         <input
           type="email"
           id="email"
-          className="w-full py-3 px-4 bg-slate-200 rounded-md text-sm placeholder:text-sm overflow-hidden border border-solid border-white focus:bg-white focus:ring-0 focus:border-primary-900"
+          className="w-full py-3 px-4 bg-slate-100 rounded-md text-sm placeholder:text-sm overflow-hidden border border-solid border-white focus:bg-white focus:ring-0 focus:border-primary-900"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
@@ -272,7 +272,7 @@ const FormRegister = () => {
         <input
           type="text"
           id="name"
-          className="w-full py-3 px-4 bg-slate-200 rounded-md text-sm placeholder:text-sm overflow-hidden border border-solid border-white focus:bg-white focus:ring-0 focus:border-primary-900"
+          className="w-full py-3 px-4 bg-slate-100 rounded-md text-sm placeholder:text-sm overflow-hidden border border-solid border-white focus:bg-white focus:ring-0 focus:border-primary-900"
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
@@ -289,7 +289,7 @@ const FormRegister = () => {
         <input
           type="text"
           id="mobileNumber"
-          className="w-full py-3 px-4 bg-slate-200 rounded-md text-sm placeholder:text-sm overflow-hidden border border-solid border-white focus:bg-white focus:ring-0 focus:border-primary-900"
+          className="w-full py-3 px-4 bg-slate-100 rounded-md text-sm placeholder:text-sm overflow-hidden border border-solid border-white focus:bg-white focus:ring-0 focus:border-primary-900"
           value={mobileNumber}
           onChange={(e) => setMobileNumber(e.target.value)}
           required
@@ -306,7 +306,7 @@ const FormRegister = () => {
         <input
           type="password"
           id="password"
-          className="w-full py-3 px-4 bg-slate-200 rounded-md text-sm placeholder:text-sm overflow-hidden border border-solid border-white focus:bg-white focus:ring-0 focus:border-primary-900"
+          className="w-full py-3 px-4 bg-slate-100 rounded-md text-sm placeholder:text-sm overflow-hidden border border-solid border-white focus:bg-white focus:ring-0 focus:border-primary-900"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
@@ -323,7 +323,7 @@ const FormRegister = () => {
         <input
           type="password"
           id="confirmPassword"
-          className="w-full py-3 px-4 bg-slate-200 rounded-md text-sm placeholder:text-sm overflow-hidden border border-solid border-white focus:bg-white focus:ring-0 focus:border-primary-900"
+          className="w-full py-3 px-4 bg-slate-100 rounded-md text-sm placeholder:text-sm overflow-hidden border border-solid border-white focus:bg-white focus:ring-0 focus:border-primary-900"
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
           required
@@ -346,7 +346,7 @@ const FormRegister = () => {
             <input
               type="text"
               id="otp"
-              className="w-full py-3 px-4 bg-slate-200 rounded-md text-sm placeholder:text-sm overflow-hidden border border-solid border-white focus:bg-white focus:ring-0 focus:border-primary-900"
+              className="w-full py-3 px-4 bg-slate-100 rounded-md text-sm placeholder:text-sm overflow-hidden border border-solid border-white focus:bg-white focus:ring-0 focus:border-primary-900"
               value={otp}
               onChange={(e) => setOtp(e.target.value)}
               required
@@ -355,7 +355,7 @@ const FormRegister = () => {
           </div>
           <div>
             {timeRemaining && timeRemaining > 0 ? (
-              <div className="h-full w-12 text-black flex items-center justify-center cursor-not-allowed rounded-md bg-slate-200">
+              <div className="h-full w-12 text-black flex items-center justify-center cursor-not-allowed rounded-md bg-slate-100">
                 {timeRemaining}
               </div>
             ) : (

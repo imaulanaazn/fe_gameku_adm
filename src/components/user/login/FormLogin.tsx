@@ -224,7 +224,7 @@ const FormLogin = () => {
         <input
           type="text"
           id="username"
-          className="w-full py-3 px-4 bg-slate-200 rounded-md text-sm placeholder:text-sm overflow-hidden border border-solid border-white focus:bg-white focus:ring-0 focus:border-primary-900"
+          className="w-full py-3 px-4 bg-slate-100 rounded-md text-sm placeholder:text-sm overflow-hidden border border-solid border-white focus:bg-white focus:ring-0 focus:border-primary-900"
           value={data.username}
           onChange={(e) =>
             setData((prev) => ({ ...prev, username: e.target.value }))
@@ -243,7 +243,7 @@ const FormLogin = () => {
         <input
           type="password"
           id="password"
-          className="w-full py-3 px-4 bg-slate-200 rounded-md text-sm placeholder:text-sm overflow-hidden border border-solid border-white focus:bg-white focus:ring-0 focus:border-primary-900"
+          className="w-full py-3 px-4 bg-slate-100 rounded-md text-sm placeholder:text-sm overflow-hidden border border-solid border-white focus:bg-white focus:ring-0 focus:border-primary-900"
           value={data.password}
           onChange={(e) =>
             setData((prev) => ({ ...prev, password: e.target.value }))
@@ -264,7 +264,7 @@ const FormLogin = () => {
             <input
               type="text"
               id="otp"
-              className="w-full py-3 px-4 bg-slate-200 rounded-md text-sm placeholder:text-sm overflow-hidden border border-solid border-white focus:bg-white focus:ring-0 focus:border-primary-900"
+              className="w-full py-3 px-4 bg-slate-100 rounded-md text-sm placeholder:text-sm overflow-hidden border border-solid border-white focus:bg-white focus:ring-0 focus:border-primary-900"
               value={data.otp}
               onChange={(e) =>
                 setData((prev) => ({ ...prev, otp: e.target.value }))
@@ -275,7 +275,7 @@ const FormLogin = () => {
           </div>
           <div>
             {timeRemaining && timeRemaining > 0 ? (
-              <div className="h-full w-12 text-black flex items-center justify-center cursor-not-allowed rounded-md bg-slate-200">
+              <div className="h-full w-12 text-black flex items-center justify-center cursor-not-allowed rounded-md bg-slate-100">
                 {timeRemaining}
               </div>
             ) : (
@@ -296,7 +296,7 @@ const FormLogin = () => {
         </div>
       </div>
       {loading ? (
-        <div className="w-full bg-slate-200 text-center py-3 px-4 rounded-md text-base font-semibold cursor-wait">
+        <div className="w-full bg-slate-100 text-center py-3 px-4 rounded-md text-base font-semibold cursor-wait">
           <FontAwesomeIcon icon={faSpinner} size="1x" spinPulse />
         </div>
       ) : allowed ? (

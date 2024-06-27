@@ -336,7 +336,7 @@ const Admin = () => {
               slidesPerView={1}
               breakpoints={carouselBreakpoints}
               freeMode={true}
-              className="flex items-center"
+              className="flex items-center w-full"
             >
               <SwiperSlide className="pb-1">
                 <DisplayTotal

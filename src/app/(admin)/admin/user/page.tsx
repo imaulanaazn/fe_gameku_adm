@@ -1,11 +1,11 @@
 "use client";
 
 import Header from "@/components/admin/Header";
-import TableUser from "./components/TableUser";
 import React, { useEffect, useState } from "react";
-import Loading from "./loading";
-import AdminNavbar from "@/app/(admin)/admin/(dashboard)/components/AdminNavbar";
+import Loading from "@/components/global/loading/CompLoading";
+import AdminNavbar from "@/components/admin/dashboard/AdminNavbar";
 import AdminHeader from "@/components/admin/AdminHeader";
+import TableUser from "@/components/admin/user/TableUser";
 
 const User = () => {
   const [data, setData] = useState<IUserPagination>();

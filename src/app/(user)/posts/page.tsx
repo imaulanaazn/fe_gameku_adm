@@ -1,5 +1,5 @@
-import Maintenance from "@/components/maintenance/Maintenance";
-import ListPosts from "@/components/posts/ListPosts";
+import Maintenance from "@/components/global/maintenance/Maintenance";
+import ListPosts from "@/components/user/posts/ListPosts";
 import sendRequest from "@/lib/baseApi";
 
 const Posts = async () => {

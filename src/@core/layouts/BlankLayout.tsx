@@ -8,6 +8,7 @@ import { BlankLayoutProps } from "./types";
 // Styled component for Blank Layout component
 const BlankLayoutWrapper = styled(Box)<BoxProps>(({ theme }) => ({
   height: "100vh",
+  overflowX: "hidden",
 
   // For V1 Blank layout pages
   "& .content-center": {
@@ -29,7 +30,7 @@ const BlankLayoutWrapper = styled(Box)<BoxProps>(({ theme }) => ({
 
 const BlankLayout = ({ children }: BlankLayoutProps) => {
   return (
-    <BlankLayoutWrapper className="layout-wrapper overflow-x-hidden">
+    <BlankLayoutWrapper className="layout-wrapper">
       <Box
         className="app-content"
         sx={{ minHeight: "100vh", position: "relative" }} //overflowX hidden is deleted because it makes the children position sticky not working

@@ -6,7 +6,7 @@ import Header from "@/components/global/header/Header";
 import { RecoilRoot } from "recoil";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Maintenance from "@/components/maintenance/Maintenance";
+import Maintenance from "@/components/global/maintenance/Maintenance";
 import { useEffect, useState } from "react";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
 import {
@@ -51,6 +51,12 @@ export default function RootLayout({
 
   return (
     <html lang="id">
+      <head>
+        <meta
+          name="google-site-verification"
+          content="KL7H3ffvol9INrM6-tucVmtIyHc5yalcGNcv_sfq37s"
+        />
+      </head>
       <Script
         strategy="lazyOnload"
         id="gtm"

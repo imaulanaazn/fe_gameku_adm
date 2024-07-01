@@ -1,8 +1,8 @@
 import { Metadata } from "next";
 import NotFound from "./not-found";
 import sendRequest from "@/lib/baseApi";
-import Maintenance from "@/components/maintenance/Maintenance";
-import NewFormTopup from "@/components/pageProduct/NewFormTopup";
+import Maintenance from "@/components/global/maintenance/Maintenance";
+import NewFormTopup from "@/components/user/pageProduct/NewFormTopup";
 import Container from "@/components/global/Container/Container";
 import Script from "next/script";
 interface IParams {

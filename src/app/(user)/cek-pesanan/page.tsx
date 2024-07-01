@@ -1,7 +1,7 @@
-import FormCekPesanan from "@/components/cek-pesanan/FormCekPesanan";
-import ResultCheckPesanan from "@/components/cek-pesanan/ResultCheckPesanan";
+import FormCekPesanan from "@/components/user/cek-pesanan/FormCekPesanan";
+import ResultCheckPesanan from "@/components/user/cek-pesanan/ResultCheckPesanan";
 import Container from "@/components/global/Container/Container";
-import Maintenance from "@/components/maintenance/Maintenance";
+import Maintenance from "@/components/global/maintenance/Maintenance";
 import sendRequest from "@/lib/baseApi";
 import { Metadata } from "next";
 import Image from "next/image";

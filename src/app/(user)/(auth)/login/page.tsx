@@ -1,5 +1,5 @@
-import FormLogin from "@/components/login/FormLogin";
-import Maintenance from "@/components/maintenance/Maintenance";
+import FormLogin from "@/components/user/login/FormLogin";
+import Maintenance from "@/components/global/maintenance/Maintenance";
 import sendRequest from "@/lib/baseApi";
 import { Metadata } from "next";
 import Image from "next/image";

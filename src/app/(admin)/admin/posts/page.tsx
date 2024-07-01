@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { INewsVideosPagination } from "@/interfaces/newsVideo";
-import Loading from "./loading";
-import TablePosts from "@/app/(admin)/admin/posts/components/TablePosts";
+import Loading from "@/components/global/loading/CompLoading";
+import TablePosts from "@/components/admin/posts/TablePosts";
 
 const Youtube = () => {
   const [data, setData] = useState<INewsVideosPagination | null>(null);

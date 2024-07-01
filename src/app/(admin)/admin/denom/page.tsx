@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Loading from "./loading";
-import AdminNavbar from "@/app/(admin)/admin/(dashboard)/components/AdminNavbar";
-import TableDenom from "./components/TableDenom";
+import Loading from "@/components/global/loading/CompLoading";
+import AdminNavbar from "@/components/admin/dashboard/AdminNavbar";
+import TableDenom from "../../../../components/admin/denom/TableDenom";
 import AdminHeader from "@/components/admin/AdminHeader";
 
 const Denom = () => {

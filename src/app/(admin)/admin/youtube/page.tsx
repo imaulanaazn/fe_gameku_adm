@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from "react";
 import Header from "@/components/admin/Header";
-import TableYoutubeVideo from "./components/TableYoutubeVideo";
+import TableYoutubeVideo from "../../../../components/admin/youtube/TableYoutubeVideo";
 import { IImageCarouselPagination } from "@/interfaces/carousels";
 import { INewsVideosPagination } from "@/interfaces/newsVideo";
-import Loading from "./loading";
-import AdminNavbar from "@/app/(admin)/admin/(dashboard)/components/AdminNavbar";
+import Loading from "@/components/global/loading/CompLoading";
+import AdminNavbar from "@/components/admin/dashboard/AdminNavbar";
 import AdminHeader from "@/components/admin/AdminHeader";
 
 const Youtube = () => {

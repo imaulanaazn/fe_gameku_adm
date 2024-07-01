@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Loading from "./loading";
-import TableCategoryProduct from "@/app/(admin)/admin/product-category/components/TableCategoryProduct";
+import Loading from "@/components/global/loading/CompLoading";
+import TableCategoryProduct from "@/components/admin/product-category/TableCategoryProduct";
 
 const Denom = () => {
   const [productCategory, setProductCategory] =

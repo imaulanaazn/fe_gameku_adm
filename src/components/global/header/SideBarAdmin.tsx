@@ -32,7 +32,7 @@ export const adminMenu = [
     title: "Admin",
     path: "/admin",
     icon: faUsersGear,
-    quote: "temukan ringkasan bisnismu disini",
+    quote: "kelola pengguna disini",
   },
   {
     title: "Artikel",

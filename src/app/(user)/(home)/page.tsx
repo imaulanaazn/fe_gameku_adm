@@ -1,7 +1,7 @@
 import Carousel from "../../../components/user/home/Carousel";
 import ListGames from "../../../components/user/home/ListGames";
 import PopularGames from "../../../components/user/home/PopularGames";
-import NewsPost from "../../../components/user/home/NewsPost";
+// import NewsPost from "../../../components/user/home/NewsPost";
 import Maintenance from "@/components/global/maintenance/Maintenance";
 import { IImageCarousel } from "@/interfaces/carousels";
 import sendRequest from "@/lib/baseApi";
@@ -33,9 +33,9 @@ const Home = async () => {
     "/v1/games-category"
   );
   const games = await sendRequest<IGame[]>("/v1/games");
-  const posts = await sendRequest<{ data: INewsPost[]; totalData: number }>(
-    "/v1/newest-articles?limit=3"
-  );
+  // const posts = await sendRequest<{ data: INewsPost[]; totalData: number }>(
+  //   "/v1/newest-articles?limit=3"
+  // );
   const youtubeVideo = await sendRequest<INewsVideos[]>("/v1/videos");
 
   return (
@@ -70,7 +70,7 @@ const Home = async () => {
 
         <NoGameFound />
 
-        {posts.data.data.length > 0 && <NewsPost posts={posts.data.data} />}
+        {/* {posts?.data?.data.length > 0 && <NewsPost posts={posts.data.data} />} */}
 
         <a
           href="https://api.whatsapp.com/send?phone=628112065672"

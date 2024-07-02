@@ -1,15 +1,13 @@
 "use client";
 
 import { userAdmin } from "@/atom/userAdminState";
-import dayjs from "dayjs";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
-import Pagination from "@/components/admin/Pagination";
-import Loading from "@/app/(admin)/admin/user/loading";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import FormAddUser from "./FormAddUser";
+import Loading from "./loading";
 
 const TableRole: React.FC<{ user: IUserPagination }> = ({ user }) => {
   const [customer, setCustomer] = useRecoilState(userAdmin);

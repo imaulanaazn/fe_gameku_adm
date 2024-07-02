@@ -7,7 +7,7 @@ export default function AdminHeader({
   children?: React.JSX.Element;
 }) {
   const path: string = usePathname();
-  const pageName = adminMenu.find((menu) => menu.link === path);
+  const pageName = adminMenu.find((menu) => "/admin" + menu.path === path);
   return (
     <div className="navbar-header lg:h-48 bg-[url('/images/bg-header-abstract.jpg')] bg-auto md:bg-cover rounded-b-2xl md:rounded-b-3xl text-white px-10 md:px-12 py-10 md:pt-10">
       <div className="flex flex-col lg:flex-row gap-4 justify-between lg:items-center">
@@ -16,7 +16,7 @@ export default function AdminHeader({
             Halo Admin
           </h1>
           <p className="text-base md:mt-2">
-            Selamat datang di halaman {pageName?.name}, {pageName?.quote}
+            Selamat datang di halaman {pageName?.title}, {pageName?.quote}
           </p>
         </div>
         <div className="right-header">{children}</div>

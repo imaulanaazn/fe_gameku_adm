@@ -2,23 +2,19 @@
 
 import {
   faArrowLeft,
-  faArrowRight,
   faCogs,
   faContactCard,
   faCreditCard,
   faCube,
-  faDoorOpen,
-  faFlag,
   faGamepad,
-  faGlobeAsia,
   faHistory,
   faHome,
   faImage,
   faRightFromBracket,
   faPenToSquare,
   faTicket,
-  faTrash,
   faUser,
+  faUsersGear,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
@@ -30,158 +26,153 @@ import { useRecoilState } from "recoil";
 import { imageAtom } from "@/atom/logo";
 import { faDiagramProject } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
-import { ROLES } from "@/enum";
-
-interface UserResponse {
-  createdAt: string; // Example: "2023-10-29T06:06:56.000Z"
-  exp: number; // Example: 1717656809
-  iat: number; // Example: 1717570409
-  id: string; // Example: "885495ac-5ce5-41f2-81a0-343b1077fe97"
-  name: string; // Example: "Admin"
-  role: string; // Example: "qwbdoudvbgwquo0vbgduoqwvdbuowqvbdopqw"
-  roleName: string; // Example: "admin"
-  updatedAt: string; // Example: "2023-10-29T06:06:56.000Z"
-  username: string; // Example: "gasskeuntopup"
-}
-
-const writerMenu = [
-  {
-    name: "Write",
-    icon: faPenToSquare,
-    link: "/writer",
-    quote: "temukan ringkasan bisnismu disini",
-  },
-  {
-    name: "Manage Blog",
-    icon: faPenToSquare,
-    link: "/writer/manage",
-    quote: "temukan ringkasan bisnismu disini",
-  },
-];
 
 export const adminMenu = [
   {
-    name: "Dashboard",
-    icon: faHome,
-    link: "/admin",
+    title: "Admin",
+    path: "/admin",
+    icon: faUsersGear,
     quote: "temukan ringkasan bisnismu disini",
   },
   {
-    name: "Konfigurasi",
-    icon: faCogs,
-    link: "/admin/configuration",
-    quote: "kelola website kamu sesuai kebutuhanmu",
+    title: "Artikel",
+    path: "/article",
+    icon: faPenToSquare,
+    quote: "temukan ringkasan bisnismu disini",
   },
   {
-    name: "Banner",
+    title: "Banner",
+    path: "/banner",
     icon: faImage,
-    link: "/admin/banner",
     quote: "buat banner untuk menarik lebih banyak pelanggan",
   },
   {
-    name: "Kode Promo",
-    icon: faTicket,
-    link: "/admin/promo-code",
-    quote: "kelola kebutuhan kode promo layananmu disini",
+    title: "Dashboard",
+    path: "",
+    icon: faHome,
+    quote: "temukan ringkasan bisnismu disini",
   },
   {
-    name: "User",
-    icon: faUser,
-    link: "/admin/user",
-    quote: "pantau informasi mengenai pelangganmu disini",
+    title: "Denom",
+    path: "/denom",
+    icon: faCube,
+    quote: "kelola item produkmu disini",
   },
   {
-    name: "Reseller",
-    icon: faDiagramProject,
-    link: "/admin/reseller",
-    quote: "pantau informasi mengenai reseller disini",
-  },
-  {
-    name: "Game",
+    title: "Game",
+    path: "/game",
     icon: faGamepad,
-    link: "/admin/game",
     quote: "kelola segala jenis produkmu disini",
   },
   {
-    name: "Denom",
-    icon: faCube,
-    link: "/admin/denom",
-    quote: "kelola item produkmu disini",
-  },
-  // {
-  //     name: "Kategori Denom",
-  //     icon: faCube,
-  //     link: "/admin/product-category",
-  //
-  {
-    name: "Voucher Game",
-    icon: faGamepad,
-    link: "/admin/game-voucher",
-    quote: "buat voucher untuk menarik lebih banyak pelanggan",
+    title: "Kode Promo",
+    path: "/promo-code",
+    icon: faTicket,
+    quote: "kelola kebutuhan kode promo layananmu disini",
   },
   {
-    name: "Metode Pembayaran",
-    icon: faCreditCard,
-    link: "/admin/payment-method",
-    quote: "kelola bagaimana pembayaran produkmu dilakukan",
+    title: "Konfigurasi",
+    path: "/configuration",
+    icon: faCogs,
+    quote: "kelola website kamu sesuai kebutuhanmu",
   },
-  // {
-  //     name: "Postingan",
-  //     icon: faGlobeAsia,
-  //     link: "/admin/posts",
-  //
   {
-    name: "Media Sosial",
+    title: "Media Sosial",
+    path: "/social-media",
     icon: faContactCard,
-    link: "/admin/social-media",
     quote: "kelola social media agar pelanggan lebih mengenalmu",
   },
   {
-    name: "Youtube Video",
-    icon: faYoutube,
-    link: "/admin/youtube",
-    quote: "buat video menarik agar bisa mendapatkan perhatian pelanggan",
+    title: "Metode Pembayaran",
+    path: "/payment-method",
+    icon: faCreditCard,
+    quote: "kelola bagaimana pembayaran produkmu dilakukan",
   },
   {
-    name: "Riwayat Pesanan",
+    title: "Reseller",
+    path: "/reseller",
+    icon: faDiagramProject,
+    quote: "pantau informasi mengenai reseller disini",
+  },
+  {
+    title: "Riwayat Deposit",
+    path: "/deposit-history",
     icon: faHistory,
-    link: "/admin/orders",
+    quote: "pantau riwayat deposit pelangganmu disini",
+  },
+  {
+    title: "Riwayat Pesanan",
+    path: "/order",
+    icon: faHistory,
     quote: "pantau riwayat pesanan pelangganmu disini",
   },
   {
-    name: "Riwayat Deposit",
-    icon: faHistory,
-    link: "/admin/deposit-history",
-    quote: "pantau riwayat deposit pelangganmu disini",
+    title: "User",
+    path: "/user",
+    icon: faUser,
+    quote: "pantau informasi mengenai pelangganmu disini",
+  },
+  {
+    title: "Voucher Game",
+    path: "/game-voucher",
+    icon: faGamepad,
+    quote: "buat voucher untuk menarik lebih banyak pelanggan",
+  },
+  {
+    title: "Youtube Video",
+    path: "/youtube",
+    icon: faYoutube,
+    quote: "buat video menarik agar bisa mendapatkan perhatian pelanggan",
   },
 ];
 
-const adminManagerMenu = [
-  ...adminMenu,
-  {
-    name: "Admin Manager",
-    icon: faHome,
-    link: "/admin/manager",
-    quote: "",
-  },
-];
+async function fetchAdminMenu() {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/v1/admin-menu`,
+      {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "ngrok-skip-browser-warning": "true",
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Failed to fetch admin menu:", error);
+    return null;
+  }
+}
 
 export default function SideBarAdmin() {
   const router = useRouter();
   const pathname = usePathname();
-  const [user, setUser] = useState<UserResponse | null>(null);
   const [showFullSidebar, setShowFullSidebar] = useState(true);
   const [logo, setLogo] = useRecoilState(imageAtom);
+  const [sidebarMenuItems, setSidebarMenuItems] = useState([]);
 
   useEffect(() => {
-    setTimeout(() => {
-      const data = JSON.parse(localStorage.getItem("admin") as any);
-      setUser(data);
-    }, 500);
-
-    if (!logo.logo) {
-      getLogo();
+    async function getMenuItems() {
+      const menuItems = await fetchAdminMenu();
+      if (menuItems.length > 0) {
+        const menuItemsTemp = menuItems.map(
+          (item: { path: string; title: string }) => ({
+            path: item.path === "/" ? "/admin" : "/admin" + item.path,
+            title: item.title,
+          })
+        );
+        setSidebarMenuItems(menuItemsTemp);
+      }
     }
+
+    getMenuItems();
+    getLogo();
   }, []);
 
   const getLogo = async () => {
@@ -241,19 +232,6 @@ export default function SideBarAdmin() {
     }
   };
 
-  const menu = (() => {
-    switch (user?.roleName) {
-      case ROLES.ADMIN:
-        return adminMenu;
-      case ROLES.ADMINMANAGER:
-        return adminManagerMenu;
-      case ROLES.WRITER:
-        return writerMenu;
-      default:
-        return [];
-    }
-  })();
-
   return (
     <div
       className={`w-full fixed top-0 left-0 z-50 lg:static ${
@@ -305,39 +283,41 @@ export default function SideBarAdmin() {
         </Link>
       </div>
       <div className="w-full px-4 overflow-y-auto">
-        {menu.map((menuItem, i) => (
-          <Link
-            key={i}
-            href={menuItem.link}
-            className={`${
-              pathname === menuItem.link
-                ? "bg-primary-900"
-                : "bg-transparent hover:bg-primary-100"
-            } w-full py-3 px-4 rounded-md flex gap-4 items-center group duration-500`}
-          >
-            <div
-              className={`icon text-base transition-all duration-500 ${
-                pathname === menuItem.link
-                  ? "text-white"
-                  : "text-neutral-500 group-hover:text-primary-900"
-              }`}
+        {sidebarMenuItems.map(
+          (menuItem: { path: string; title: string }, i) => (
+            <Link
+              key={i}
+              href={menuItem.path}
+              className={`${
+                pathname === menuItem.path
+                  ? "bg-primary-900"
+                  : "bg-transparent hover:bg-primary-100"
+              } w-full py-3 px-4 rounded-md flex gap-4 items-center group duration-500`}
             >
-              <FontAwesomeIcon icon={menuItem.icon} />
-            </div>
+              <div
+                className={`icon text-base transition-all duration-500 ${
+                  pathname === menuItem.path
+                    ? "text-white"
+                    : "text-neutral-500 group-hover:text-primary-900"
+                }`}
+              >
+                <FontAwesomeIcon icon={adminMenu[i].icon} />
+              </div>
 
-            <p
-              className={`font-base text-base transition-all duration-500 whitespace-nowrap ${
-                !showFullSidebar && "scale-0 opacity-0 -translate-x-full"
-              } ${
-                pathname === menuItem.link
-                  ? "text-white"
-                  : "text-neutral-500 group-hover:text-primary-900"
-              }`}
-            >
-              {menuItem.name}
-            </p>
-          </Link>
-        ))}
+              <p
+                className={`font-base text-base transition-all duration-500 whitespace-nowrap ${
+                  !showFullSidebar && "scale-0 opacity-0 -translate-x-full"
+                } ${
+                  pathname === menuItem.path
+                    ? "text-white"
+                    : "text-neutral-500 group-hover:text-primary-900"
+                }`}
+              >
+                {menuItem.title}
+              </p>
+            </Link>
+          )
+        )}
 
         <div className="border-t border-gray-200 w-full">
           <div

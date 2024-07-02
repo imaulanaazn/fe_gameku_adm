@@ -1,9 +1,9 @@
 "use client";
 import { useEffect, useState } from "react";
 import Loading from "./components/loading";
-import AdminNavbar from "../(dashboard)/components/AdminNavbar";
 import AdminHeader from "@/components/admin/AdminHeader";
 import TableRole from "./components/TableRole";
+import AdminNavbar from "@/components/admin/dashboard/AdminNavbar";
 
 const Manage = () => {
   const [data, setData] = useState<IUserPagination>();

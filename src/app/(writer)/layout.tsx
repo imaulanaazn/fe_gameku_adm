@@ -7,7 +7,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import AdminNavbar from "../(admin)/admin/(dashboard)/components/AdminNavbar";
+import AdminNavbar from "@/components/admin/dashboard/AdminNavbar";
 
 export default function RootLayout({
   children,

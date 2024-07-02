@@ -1,12 +1,12 @@
 "use client";
 import "../globals.css";
 import BlankLayout from "@/@core/layouts/BlankLayout";
-import Maintenance from "@/components/maintenance/Maintenance";
 import React, { useEffect, useState } from "react";
 import { ToastContainer } from "react-toastify";
 import BlogHeader from "./components/BlogHeader";
 import { RecoilRoot } from "recoil";
 import BlogFooter from "./components/BlogFooter";
+import Maintenance from "@/components/global/maintenance/Maintenance";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const [websiteStatus, setWebsiteStatus] = useState("");

@@ -301,7 +301,13 @@ export default function SideBarAdmin() {
                     : "text-neutral-500 group-hover:text-primary-900"
                 }`}
               >
-                <FontAwesomeIcon icon={adminMenu[i].icon} />
+                <FontAwesomeIcon
+                  icon={
+                    adminMenu.find(
+                      (menu) => "/admin" + menu.path === menuItem.path
+                    )?.icon!
+                  }
+                />
               </div>
 
               <p

@@ -5,190 +5,82 @@ import { faSpinner, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { DragEvent, FormEvent, useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
+import { IAdmin, IAdminRoles } from "../page";
+
+const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 
 interface IFormAddUser {
   handleShowForm: (value: boolean) => void;
-  getUsers: () => void;
   type?: string;
-  dataUser?: IImageCarousel;
+  onFormSubmit: () => void;
+  adminRoles: IAdminRoles[];
+}
+
+interface IAdminData {
+  name: string;
+  username: string;
+  password: string;
+  roleIds: string[];
 }
 
 const FormAddUser: React.FC<IFormAddUser> = ({
   handleShowForm,
-  getUsers,
   type,
-  dataUser,
+  adminRoles,
+  onFormSubmit,
 }) => {
-  const inputFileRef = useRef<HTMLInputElement | null>(null);
-  const [dragging, setDragging] = useState(false);
-  const [data, setData] = useState({
-    selectedImage: "",
-    name: "",
-    eventUrl: "",
-    external: "",
-    fileImage: {} as any,
-  });
-  const [hoverImage, setHoverImage] = useState(false);
-  const [typeForm, setTypeForm] = useState("");
+  const [typeForm, setTypeForm] = useState(type);
   const [loading, setLoading] = useState(false);
-  const [disabledButton, setDisabledButton] = useState(true);
+  const [disabledButton, setDisabledButton] = useState(false);
+  const [adminData, setAdminData] = useState<IAdminData>({
+    name: "",
+    username: "",
+    password: "",
+    roleIds: [],
+  });
 
-  const handleClick = () => {
-    if (inputFileRef.current) {
-      inputFileRef.current.click();
-    }
-  };
-
-  const handleDragEnter = (e: DragEvent<HTMLDivElement>) => {
+  const handleAddAdmin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setDragging(true);
-  };
-
-  const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setDragging(true);
-  };
-
-  const handleDragLeave = (e: DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setDragging(false);
-  };
-
-  const handleDrop = (e: DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setDragging(false);
-    displayImage(e.dataTransfer.files[0]);
-  };
-
-  const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    const files = e.target.files;
-    if (files && files.length > 0) {
-      const selectedFile = files[0];
-      displayImage(selectedFile);
-    }
-  };
-
-  const displayImage = (file: File) => {
-    if (
-      file.type !== "image/png" &&
-      file.type !== "image/jpg" &&
-      file.type !== "image/jpeg"
-    ) {
-      return toast.error("Format gambar tidak didukung", {
-        position: "top-right",
-        autoClose: 3000,
-      });
-    }
-
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const imageSrc = e.target?.result as string;
-        setData({ ...data, selectedImage: imageSrc, fileImage: file });
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const saveBanner = async (method: "PUT" | "POST") => {
-    setLoading(true);
-    const id = toast.loading("Sedang menyimpan data...");
-    const formData = new FormData();
-    if (typeForm === "edit" && dataUser) {
-      formData.append("id", dataUser.id);
-    }
-
-    if (
-      (typeForm === "edit" && data.selectedImage !== dataUser?.imageUrl) ||
-      typeForm === "add"
-    ) {
-      formData.append("bannerImage", data.fileImage);
-    }
-    formData.append("name", data.name);
-    formData.append("eventUrl", data.eventUrl);
-
-    const req = await fetch(process.env.NEXT_PUBLIC_BASE_URL + "/v1/banner", {
-      method,
-      credentials: "include",
-      headers: {
-        "ngrok-skip-browser-warning": "true",
-      },
-      body: formData,
-    });
-
-    const res = await req.json();
-    if (req.ok) {
-      getUsers();
-      toast.update(id, {
-        render: `Berhasil ${
-          typeForm === "add" ? "Menambahkan" : "Mengubah"
-        } Data Banner`,
-        type: "success",
-        isLoading: false,
-        position: "top-right",
-        autoClose: 3000,
-      });
-    } else {
-      toast.update(id, {
-        render: res.message,
-        type: "error",
-        isLoading: false,
-        position: "top-right",
-        autoClose: 3000,
-      });
-    }
-
-    setLoading(false);
     handleShowForm(false);
-  };
-
-  const handleAddBanner = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    saveBanner(typeForm === "add" ? "POST" : "PUT");
-  };
-
-  useEffect(() => {
-    if (type !== "add" && dataUser) {
-      setData({
-        selectedImage: dataUser.imageUrl,
-        name: dataUser.name,
-        eventUrl: dataUser.eventUrl,
-        external: "",
-        fileImage: {} as any,
+    try {
+      const response = await fetch(`${BASEURL}/v1/admin/admin`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "content-type": "application/json",
+          "ngrok-skip-browser-warning": "true",
+        },
+        body: JSON.stringify(adminData),
       });
-    }
 
-    setTypeForm(type || "");
-  }, []);
-
-  useEffect(() => {
-    if (typeForm === "edit") {
-      if (
-        !data.selectedImage ||
-        !data.name ||
-        (data.selectedImage === dataUser?.imageUrl &&
-          data.eventUrl === dataUser.eventUrl &&
-          data.name === dataUser.name)
-      ) {
-        setDisabledButton(true);
-      } else {
-        setDisabledButton(false);
+      if (!response.ok) {
+        const data = await response.json();
+        toast.error(data.message);
+        throw new Error(`HTTP error! Status: ${response.status}`);
       }
 
-      return;
+      toast.success("berhasil menambahkan admin baru");
+      onFormSubmit();
+    } catch (error) {
+      console.error("Failed to add admin:", error);
+      return null;
     }
+  };
 
-    if (typeForm === "add") {
-      if (!data.selectedImage || !data.name) {
-        setDisabledButton(true);
+  if (typeForm !== "add") {
+    setDisabledButton(true);
+  }
+
+  const handleRoles = (roleId: string) => {
+    setAdminData((prev) => {
+      const roleIndex = prev.roleIds.indexOf(roleId);
+      if (roleIndex >= 0) {
+        return { ...prev, roleIds: prev.roleIds.filter((id) => id !== roleId) };
       } else {
-        setDisabledButton(false);
+        return { ...prev, roleIds: [...prev.roleIds, roleId] };
       }
-
-      return;
-    }
-  }, [data.selectedImage, data.eventUrl, data.name, typeForm]);
+    });
+  };
 
   return (
     <div
@@ -196,12 +88,10 @@ const FormAddUser: React.FC<IFormAddUser> = ({
       onDragOver={(e) => e.preventDefault()}
       className="w-full h-screen bg-gray-800 bg-opacity-70 absolute top-0 left-0 flex items-center justify-center z-50"
     >
-      <div className="md:w-max h-screen md:h-max lg:h-auto md:max-h-screen w-full bg-white p-8  md:rounded-xl">
+      <div className="md:w-96 h-screen md:h-max lg:h-auto md:max-h-screen w-full bg-white p-8  md:rounded-xl">
         <div className="flex justify-between mb-6 lg:mb-8 items-center">
           <h1 className="font-medium text-xl md:text-2xl text-neutral-800">
-            {typeForm === "add"
-              ? "Tambah User Baru"
-              : `Ubah User ${dataUser?.name}`}
+            {typeForm === "add" ? "Tambah Admin Baru" : `Ubah Admin`}
           </h1>
           <div
             className="group w-8 h-8 flex items-center justify-center cursor-pointer bg-primary-100 hover:bg-primary-900 rounded-full transition-all"
@@ -213,93 +103,16 @@ const FormAddUser: React.FC<IFormAddUser> = ({
             />
           </div>
         </div>
-        <form onSubmit={handleAddBanner}>
+        <form onSubmit={handleAddAdmin}>
           <div className="">
-            <div className="flex flex-col gap-2">
-              {typeForm === "edit" && (
-                <label
-                  htmlFor="image"
-                  className="font-medium text-base text-neutral-900 inline-block"
-                >
-                  Pilih Gambar <span className="text-red-800 font-bold">*</span>
-                </label>
-              )}
-              {data.selectedImage ? (
-                <div
-                  onMouseEnter={() => setHoverImage(true)}
-                  onMouseLeave={() => setHoverImage(false)}
-                  className="w-full h-52 flex items-center justify-center relative"
-                >
-                  {hoverImage && typeForm !== "detail" && (
-                    <div className="flex items-center justify-center gap-4 w-full h-full absolute bg-gray-800 bg-opacity-30">
-                      <button
-                        onClick={() => {
-                          setData({ ...data, selectedImage: "" });
-                          setHoverImage(false);
-                        }}
-                        className="bg-primary-50 text-primary-900 px-4 py-3 rounded-md font-medium hover:bg-primary-900 hover:text-white transition-all"
-                      >
-                        Remove Image
-                      </button>
-                      {type === "detail" &&
-                        dataUser &&
-                        dataUser?.imageUrl !== data.selectedImage && (
-                          <button
-                            onClick={() => {
-                              setData({
-                                ...data,
-                                selectedImage: dataUser?.imageUrl,
-                              });
-                              setHoverImage(false);
-                            }}
-                            className="bg-primary-50 text-primary-900 px-4 py-3 rounded-md font-medium hover:bg-primary-900 hover:text-white transition-all"
-                          >
-                            Reset to Default
-                          </button>
-                        )}
-                    </div>
-                  )}
-                  <img
-                    src={data.selectedImage}
-                    alt="Preview Image Banner Gasskeun Topup"
-                    className="max-h-full max-w-full rounded-lg"
-                  />
-                </div>
-              ) : (
-                <div
-                  onClick={handleClick}
-                  onDragEnter={handleDragEnter}
-                  onDragOver={handleDragOver}
-                  onDragLeave={handleDragLeave}
-                  onDrop={handleDrop}
-                  className={`${
-                    dragging ? "bg-gray-100" : "bg-white"
-                  } w-full border-dashed h-52 border-2 border-primary-900 flex items-center justify-center rounded-md px-10 hover:cursor-pointer`}
-                >
-                  <input
-                    type="file"
-                    name="image"
-                    id="image"
-                    accept=".png, .jpg, .jpeg"
-                    hidden
-                    readOnly={typeForm === "detail"}
-                    ref={inputFileRef}
-                    onChange={handleFileInputChange}
-                  />
-                  <p className="text-primary-900 font-bold">
-                    Drag and Drop Banner or click here to upload
-                  </p>
-                </div>
-              )}
-            </div>
             <div className="mt-6">
               <div>
                 <label
                   htmlFor="name"
                   className="font-medium text-base text-neutral-900 inline-block"
                 >
-                  Username
-                  {typeForm === "edit" && (
+                  Name
+                  {typeForm === "add" && (
                     <span className="text-red-800 font-bold">*</span>
                   )}
                 </label>
@@ -308,12 +121,16 @@ const FormAddUser: React.FC<IFormAddUser> = ({
                     type="text"
                     name="name"
                     id="name"
+                    required={true}
                     placeholder="Nama"
                     autoComplete="off"
-                    value={data.name}
+                    value={adminData.name}
                     readOnly={typeForm === "detail"}
                     onChange={(e) =>
-                      setData((prev) => ({ ...prev, name: e.target.value }))
+                      setAdminData((prev) => ({
+                        ...prev,
+                        name: e.target.value,
+                      }))
                     }
                     className={`${
                       typeForm === "detail"
@@ -325,22 +142,60 @@ const FormAddUser: React.FC<IFormAddUser> = ({
               </div>
               <div className="mt-4">
                 <label
-                  htmlFor="name"
+                  htmlFor="username"
+                  className="font-medium text-base text-neutral-900 inline-block"
+                >
+                  Username
+                  {typeForm === "add" && (
+                    <span className="text-red-800 font-bold">*</span>
+                  )}
+                </label>
+                <div className="w-full">
+                  <input
+                    type="text"
+                    name="username"
+                    id="username"
+                    required={true}
+                    placeholder="Username"
+                    autoComplete="off"
+                    value={adminData.username}
+                    readOnly={typeForm === "detail"}
+                    onChange={(e) =>
+                      setAdminData((prev) => ({
+                        ...prev,
+                        username: e.target.value,
+                      }))
+                    }
+                    className={`${
+                      typeForm === "detail"
+                        ? "cursor-not-allowed text-neutral-700"
+                        : "text-primary-900"
+                    } py-3 px-2 w-full border mt-2 rounded-md border-primary-900 focus:border-primary-900 focus:bg-primary-50 text-sm placeholder:text-sm`}
+                  />
+                </div>
+              </div>
+              <div className="mt-4">
+                <label
+                  htmlFor="password"
                   className="font-medium text-base text-neutral-900 inline-block"
                 >
                   Password
                 </label>
                 <div className="w-full">
                   <input
-                    type="text"
-                    name="name"
-                    id="name"
-                    placeholder="URL"
+                    type="password"
+                    name="password"
+                    id="password"
+                    required={true}
+                    placeholder="password"
                     autoComplete="off"
-                    value={data.eventUrl}
+                    value={adminData.password}
                     readOnly={typeForm === "detail"}
                     onChange={(e) =>
-                      setData((prev) => ({ ...prev, eventUrl: e.target.value }))
+                      setAdminData((prev) => ({
+                        ...prev,
+                        password: e.target.value,
+                      }))
                     }
                     className={`${
                       typeForm === "detail"
@@ -352,37 +207,23 @@ const FormAddUser: React.FC<IFormAddUser> = ({
               </div>
               <div className="mt-4">
                 <span className="font-medium text-base text-neutral-900 inline-block">
-                  User Role
+                  Admin Role
                 </span>
 
                 <div className="flex mt-3 gap-4 items-center">
-                  <div className="flex gap-2 items-center">
-                    <input
-                      type="checkbox"
-                      name="super-admin"
-                      id="super-admin"
-                      className="rounded text-primary-900 focus:ring-primary-900"
-                    />{" "}
-                    <label htmlFor="super-admin">Super Admin</label>
-                  </div>
-                  <div className="flex gap-2 items-center">
-                    <input
-                      type="checkbox"
-                      name="admin"
-                      id="admin"
-                      className="rounded text-primary-900 focus:ring-primary-900"
-                    />{" "}
-                    <label htmlFor="admin">Admin</label>
-                  </div>
-                  <div className="flex gap-2 items-center">
-                    <input
-                      type="checkbox"
-                      name="writer"
-                      id="writer"
-                      className="rounded text-primary-900 focus:ring-primary-900"
-                    />{" "}
-                    <label htmlFor="writer">Writer</label>
-                  </div>
+                  {adminRoles.map((role) => (
+                    <div key={role.id} className="flex gap-2 items-center">
+                      <input
+                        type="checkbox"
+                        id={role.id}
+                        className="rounded text-primary-900 focus:ring-primary-900"
+                        onChange={() => {
+                          handleRoles(role.id);
+                        }}
+                      />{" "}
+                      <label htmlFor={role.id}>{role.name}</label>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>

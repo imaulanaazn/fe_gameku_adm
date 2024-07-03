@@ -55,7 +55,11 @@ const Login = () => {
         position: "top-right",
         autoClose: 3000,
       });
-      window.location.href = "/admin";
+      if (res.roles.includes("admin") || res.roles.includes("owner")) {
+        window.location.href = "/admin";
+      } else if (res.roles.includes("writer")) {
+        window.location.href = "/admin/article";
+      }
     }
     setLoading(false);
   };

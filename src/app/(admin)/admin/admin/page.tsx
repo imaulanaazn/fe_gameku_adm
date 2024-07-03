@@ -5,6 +5,8 @@ import AdminHeader from "@/components/admin/AdminHeader";
 import TableRole from "./components/TableRole";
 import AdminNavbar from "@/components/admin/dashboard/AdminNavbar";
 import { LargeNumberLike } from "crypto";
+import Unauthorized from "@/components/global/401";
+import { toast } from "react-toastify";
 
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -28,7 +30,7 @@ export interface IAdmin {
   id: string;
   name: string;
   username: string;
-  roles: string[];
+  roles: IAdminRoles[];
 }
 
 async function fetchAdminRoles() {
@@ -44,7 +46,6 @@ async function fetchAdminRoles() {
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
-
     return await response.json();
   } catch (error) {
     console.error("Failed to fetch admin menu:", error);
@@ -77,6 +78,7 @@ const Manage = () => {
   const [allAdminData, setAllAdminData] =
     useState<IAllAdminPaginationResponse>();
   const [rolesData, setRolesData] = useState<IAdminRoles[]>();
+  const [myData, setMyData] = useState<{ roles: string[] }>({ roles: [] });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -96,13 +98,28 @@ const Manage = () => {
 
     getAllAdminData();
     getAllAdminRoles();
+
+    if (typeof window !== "undefined") {
+      try {
+        const storedAdminData = localStorage.getItem("admin");
+        if (storedAdminData) {
+          setMyData(JSON.parse(storedAdminData));
+        } else {
+          console.error("No admin data found in localStorage");
+        }
+      } catch (err) {
+        console.error("Failed to parse admin data from localStorage", err);
+      }
+    }
   }, []);
 
-  console.log({ allAdminData, rolesData });
-
-  const myData = JSON.parse(localStorage.getItem("admin") || "");
-  if (!myData.roles.includes("owner"))
-    return <div>you&squo;re not authorized to access this page</div>;
+  if (!myData.roles?.includes("owner")) {
+    if (myData.roles?.includes("admin")) {
+      return <Unauthorized redirect={"/admin"} />;
+    } else if (myData.roles?.includes("writer")) {
+      return <Unauthorized redirect={"/admin/article"} />;
+    }
+  }
 
   return (
     <>

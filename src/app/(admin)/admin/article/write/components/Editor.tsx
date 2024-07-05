@@ -16,6 +16,8 @@ function redoChange(this: { quill: any; undo: () => void; redo: () => void }) {
   this.quill.history.redo();
 }
 
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+
 export const formats = [
   "header",
   "size",
@@ -75,16 +77,18 @@ const Editor: React.FC<IEditorProps> = (props: IEditorProps) => {
   const uploadToCloudinary = async (file: File): Promise<string> => {
     const formData = new FormData();
     formData.append("image", file);
-    const res = await fetch(
-      "https://api.imgbb.com/1/upload?key=901e7a98389326cac9ca985a414dc583",
-      {
-        method: "POST",
-        body: formData,
-      }
-    );
+    formData.append("folder", "blog");
+    const res = await fetch(`${BASE_URL}/v1/upload-image`, {
+      method: "POST",
+      cache: "no-cache",
+      credentials: "include",
+      headers: {
+        "ngrok-skip-browser-warning": "true",
+      },
+      body: formData,
+    });
     const result = await res.json();
-    const url = result.data.url || "";
-
+    const url = result.url || "";
     return url;
   };
 

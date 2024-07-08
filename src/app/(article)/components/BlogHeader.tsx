@@ -9,18 +9,14 @@ import {
   faMagnifyingGlass,
   faScrewdriverWrench,
   faHouse,
-  faCreditCard,
   faCircleDollarToSlot,
-  faUser,
-  faRightFromBracket,
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
-import { userState } from "@/atom/userState";
 import { useRecoilState } from "recoil";
 import { imageAtom } from "@/atom/logo";
-import { toast } from "react-toastify";
 import Container from "@/components/global/Container/Container";
+import SearchResultModal from "./SearchResultModal";
 
 const links = [
   {
@@ -53,6 +49,7 @@ const BlogHeader = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const modalContainerRef = useRef<HTMLDivElement>(null);
   const [searchKeyword, setSearchKeyword] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [logo, setLogo] = useRecoilState(imageAtom);
 
@@ -73,6 +70,20 @@ const BlogHeader = () => {
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     debouncedSetSearchKeyword(e.target.value);
+  };
+
+  const handleFocus = () => {
+    setIsModalOpen(true);
+  };
+
+  // Function to close the dropdown
+  const handleBlur = (e: { relatedTarget: Node | null }) => {
+    if (
+      modalContainerRef.current &&
+      !modalContainerRef.current.contains(e.relatedTarget)
+    ) {
+      setIsModalOpen(false);
+    }
   };
 
   const getLogo = async () => {
@@ -158,12 +169,18 @@ const BlogHeader = () => {
             </div>
 
             <div className="right-side flex gap-6 lg:gap-2 relative">
-              <div className="search-bar w-full relative">
+              <div
+                className="search-bar w-full relative"
+                ref={modalContainerRef}
+                tabIndex={0}
+                onFocus={handleFocus}
+                onBlur={handleBlur}
+              >
                 <input
                   type="text"
                   onChange={handleSearchChange}
                   placeholder="Cari Blog"
-                  className="peer py-2 px-4 border border-solid text-primary-900 rounded-md w-full md:w-80 lg:w-60 xl:w-80 text-start border-primary-900 focus:border-primary-900 focus:border-2"
+                  className="peer py-2 px-4 border border-solid text-primary-900 rounded-md w-full md:w-80 lg:w-96 text-start border-primary-900 focus:border-primary-900 focus:border-2"
                 />
                 <button>
                   <FontAwesomeIcon
@@ -171,6 +188,11 @@ const BlogHeader = () => {
                     className="absolute top-1/2 right-4 -translate-y-1/2 text-lg text-primary-900"
                   />
                 </button>
+
+                <SearchResultModal
+                  searchKeyword={searchKeyword}
+                  isModalOpen={isModalOpen}
+                />
               </div>
 
               {/* toggle menu button only show on mobile */}

@@ -52,14 +52,14 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           </BlankLayout>
         </RecoilRoot>
 
-        {/* <noscript>
+        <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-N8H8JT59"
             height="0"
             width="0"
             style={{ display: "none", visibility: "hidden" }}
           />
-        </noscript> */}
+        </noscript>
       </body>
     </html>
   );

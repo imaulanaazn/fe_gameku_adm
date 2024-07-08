@@ -95,7 +95,6 @@ function Page() {
           hasMore &&
           !loading
         ) {
-          console.log(hasMore);
           setPage((prevPage) => prevPage + 1);
         }
       }

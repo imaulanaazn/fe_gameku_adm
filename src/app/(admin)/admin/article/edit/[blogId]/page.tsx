@@ -195,7 +195,6 @@ export default function Page() {
   };
 
   function handleAddButton() {
-    console.log(tempActBtn);
     setContentSettings((prev) => ({
       ...prev,
       actionBtn: [
@@ -229,9 +228,6 @@ export default function Page() {
       return { ...prev, actionBtn: newActionBtn };
     });
   };
-
-  console.log(contentSettings);
-  console.log(content);
 
   if (loading) return <div>Loading...</div>;
   // if (!isAuthorized)

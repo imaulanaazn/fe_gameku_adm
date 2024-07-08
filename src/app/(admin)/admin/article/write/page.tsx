@@ -88,7 +88,6 @@ export default function Page() {
   useEffect(() => {
     async function getData() {
       try {
-        console.log("fetch some data");
         setIsLoading(false);
       } catch (error) {
         console.error("error fetching data");
@@ -172,7 +171,6 @@ export default function Page() {
   };
 
   function handleAddButton() {
-    console.log(tempActBtn);
     setContentSettings((prev) => ({
       ...prev,
       actionBtn: [

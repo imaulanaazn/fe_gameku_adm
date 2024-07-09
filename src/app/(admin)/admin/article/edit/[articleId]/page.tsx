@@ -1,6 +1,5 @@
 "use client";
 
-import { ROLES } from "@/enum";
 import {
   faChevronDown,
   faGear,
@@ -15,10 +14,10 @@ import React, { useEffect, useState } from "react";
 const Editor = dynamic(() => import("./components/Editor"), { ssr: false });
 import Image from "next/image";
 import dynamic from "next/dynamic";
-import Link from "next/link";
 import { toast } from "react-toastify";
 import { useParams } from "next/navigation";
 import { Tooltip as ReactTooltip } from "react-tooltip";
+import Loading from "@/components/global/loading/CompLoading";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -32,11 +31,15 @@ interface IContentSettings {
   }[];
 }
 
-const dummyCategories = [
-  { id: "1", name: "Games" },
-  { id: "2", name: "Valorant" },
-  { id: "3", name: "AOT" },
-];
+interface ICategory {
+  id: string;
+  name: string;
+  slug: string;
+  description: string;
+  deleted: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
 
 const initialConent = {
   title: "",
@@ -52,7 +55,6 @@ const initialContentSetting = {
 };
 
 export default function Page() {
-  const [isAuthorized, seIsAuthorized] = useState(false);
   const [content, setContent] = useState(initialConent);
   const [contentSettings, setContentSettings] = useState<IContentSettings>(
     initialContentSetting
@@ -60,16 +62,17 @@ export default function Page() {
   const [checked, setChecked] = useState("");
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [showOptions, setShowOptions] = useState(false);
-  const [categories, setCategories] = useState(dummyCategories);
+  const [categories, setCategories] = useState<ICategory[]>([]);
+  const [newCategory, setNewCategory] = useState({ name: "", slug: "" });
   const [tempActBtn, setTempActBtn] = useState({ name: "", url: "" });
   const [loading, setLoading] = useState(false);
-  const { blogId } = useParams();
+  const { articleId } = useParams();
 
   useEffect(() => {
     async function getArticle() {
       setLoading(true);
       try {
-        const response = await fetch(`${BASE_URL}/v1/article/${blogId}`, {
+        const response = await fetch(`${BASE_URL}/v1/article/${articleId}`, {
           cache: "no-cache",
           method: "GET",
           credentials: "include",
@@ -85,9 +88,10 @@ export default function Page() {
         const data = await response.json();
 
         setContentSettings({
-          contentPreview: data.content,
+          contentPreview: data.contentPreview,
           permalink: data.slug,
-          categories: data.categories,
+          // categories: data.categories,
+          categories: [],
           actionBtn: data.buttons,
         });
 
@@ -107,19 +111,7 @@ export default function Page() {
   }, []);
 
   useEffect(() => {
-    const result = localStorage.getItem("admin");
-    const user = result ? JSON.parse(result) : null;
-
-    const isAuthorized = (() => {
-      switch (user?.roleName) {
-        case ROLES.ADMINMANAGER:
-        case ROLES.WRITER:
-          return true;
-        default:
-          return false;
-      }
-    })();
-    seIsAuthorized(isAuthorized);
+    getCategories();
   }, []);
 
   useEffect(() => {
@@ -137,23 +129,36 @@ export default function Page() {
       return;
     }
 
-    const blob = new Blob([content.image], { type: "plain/text" });
-
     const formData = new FormData();
     formData.append("title", content.title);
     formData.append("slug", contentSettings.permalink);
     formData.append("content", content.content);
-    formData.append("contentPreview", contentSettings.contentPreview);
+    formData.append(
+      "contentPreview",
+      contentSettings.contentPreview.slice(0, 100) + "..."
+    );
     formData.append("button", JSON.stringify(contentSettings.actionBtn));
     formData.append("categoryIds", JSON.stringify(contentSettings.categories));
     formData.append("status", param.articleStatus);
     formData.append("isPopular", "false");
-    selectedImage
-      ? formData.append("banner", selectedImage)
-      : formData.append("banner", blob, "image.jpg");
+
+    if (selectedImage) {
+      formData.append("banner", selectedImage);
+    } else {
+      try {
+        const imageResponse = await fetch(content.image);
+        const imageBlob = await imageResponse.blob();
+        formData.append("banner", imageBlob, "image.jpg");
+      } catch (error) {
+        console.error("Error fetching image:", error);
+        alert("Failed to fetch image.");
+        return;
+      }
+    }
 
     try {
-      const response = await fetch(`${BASE_URL}/v1/article/${blogId}`, {
+      const id = toast.loading("Sedang memperbarui artikel...");
+      const response = await fetch(`${BASE_URL}/v1/article/${articleId}`, {
         cache: "no-cache",
         method: "PUT",
         credentials: "include",
@@ -164,22 +169,51 @@ export default function Page() {
       });
 
       if (response.ok) {
-        toast.success(
-          param.articleStatus === "PUBLISH"
-            ? "Blog dipublish"
-            : `Blog disimpan kedalam ${param.articleStatus}`
-        );
+        toast.update(id, {
+          render:
+            param.articleStatus === "PUBLISH"
+              ? "Artikel dipublish"
+              : `Artikel disimpan kedalam ${param.articleStatus}`,
+          type: "success",
+          isLoading: false,
+          position: "top-right",
+          autoClose: 3000,
+        });
       } else {
         const data = await response.json();
-        if (data.message) {
-          toast.error(data.message);
-        } else {
-          toast.error("Gagal mengunggah blog");
-        }
-        console.error("Blog upload failed");
+
+        toast.update(id, {
+          render: data.message || "Gagal mengunggah artikel",
+          type: "error",
+          isLoading: false,
+          position: "top-right",
+          autoClose: 3000,
+        });
       }
     } catch (error) {
-      console.error("Error uploading blog:", error);
+      console.error("Error uploading artikel:", error);
+    }
+  }
+
+  async function getCategories() {
+    try {
+      const response = await fetch(`${BASE_URL}/v1/article-category`, {
+        cache: "no-cache",
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "ngrok-skip-browser-warning": "true",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Error fetching data");
+      }
+
+      const data = await response.json();
+      setCategories(data.data);
+    } catch (error) {
+      console.error(error);
     }
   }
 
@@ -194,6 +228,88 @@ export default function Page() {
     });
   };
 
+  const handleNewCategory = async () => {
+    const toastId = toast.loading("Sedang menambahkan kategori...");
+    try {
+      const response = await fetch(`${BASE_URL}/v1/article-category`, {
+        cache: "no-cache",
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "content-type": "application/json",
+          "ngrok-skip-browser-warning": "true",
+        },
+        body: JSON.stringify({ ...newCategory, description: "description" }),
+      });
+
+      if (!response.ok) {
+        const err = await response.json();
+        toast.update(toastId, {
+          render: err.message || "Gagal menambahkan kategori",
+          type: "error",
+          isLoading: false,
+          position: "top-right",
+          autoClose: 3000,
+        });
+        throw new Error("Error fetching data");
+      }
+
+      setNewCategory({ name: "", slug: "" });
+      getCategories();
+      toast.update(toastId, {
+        render: "Berhasil menambahkan kategori",
+        type: "success",
+        isLoading: false,
+        position: "top-right",
+        autoClose: 3000,
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleRemoveCategory = async (categoryId: string) => {
+    const toastId = toast.loading("Sedang menghapus kategori...");
+    try {
+      const response = await fetch(
+        `${BASE_URL}/v1/article-category/${categoryId}`,
+        {
+          cache: "no-cache",
+          method: "DELETE",
+          credentials: "include",
+          headers: {
+            "ngrok-skip-browser-warning": "true",
+          },
+          body: JSON.stringify({ ...newCategory, description: "description" }),
+        }
+      );
+
+      if (!response.ok) {
+        const err = await response.json();
+
+        toast.update(toastId, {
+          render: err.message || "Gagal menghapus kategori",
+          type: "error",
+          isLoading: false,
+          position: "top-right",
+          autoClose: 3000,
+        });
+        throw new Error("Error fetching data");
+      }
+
+      toast.update(toastId, {
+        render: "Kategori dihapus",
+        type: "success",
+        isLoading: false,
+        position: "top-right",
+        autoClose: 3000,
+      });
+      getCategories();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   function handleAddButton() {
     setContentSettings((prev) => ({
       ...prev,
@@ -203,11 +319,6 @@ export default function Page() {
       ],
     }));
     setTempActBtn({ name: "", url: "" });
-  }
-
-  function clearForm() {
-    setContentSettings(initialContentSetting);
-    setContent(initialConent);
   }
 
   const isCategorySelected = (categoryId: string) => {
@@ -229,9 +340,7 @@ export default function Page() {
     });
   };
 
-  if (loading) return <div>Loading...</div>;
-  // if (!isAuthorized)
-  //   return <div>You don't have permission to access this page.</div>;
+  if (loading) return <Loading />;
 
   return (
     <div className="w-full relative h-screen overflow-y-scroll">
@@ -312,7 +421,7 @@ export default function Page() {
                 <Image
                   src={content.image}
                   fill={true}
-                  alt="blog-banner"
+                  alt="artikel-banner"
                   objectFit="cover"
                 />
               )}
@@ -454,18 +563,56 @@ export default function Page() {
                     isCategorySelected(category.id)
                       ? "bg-emerald-100 text-emerald-700"
                       : "bg-gray-100 text-gray-600"
-                  } w-max py-2 px-4 rounded-full hover:cursor-pointer`}
+                  } w-max py-1.5 pr-2 pl-4 rounded-full hover:cursor-pointer flex items-center gap-2`}
                   onClick={() => handleCategory(category.id)}
                 >
                   <p className="text-sm">{category.name}</p>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleRemoveCategory(category.id);
+                    }}
+                    className="bg-slate-100 rounded-full w-7 h-7 hover:bg-primary-900 hover:text-white"
+                  >
+                    <FontAwesomeIcon icon={faX} className="text-xs" />
+                  </button>
                 </div>
               ))}
-              <input
-                type="text"
-                onChange={() => {}}
-                className="w-full p-2 mt-2 rounded-md border-slate-300 focus:border-slate-500 text-sm"
-                placeholder="Add New Category"
-              />
+              <div className="form kategori baru">
+                <input
+                  type="text"
+                  value={newCategory.name}
+                  onChange={(e) => {
+                    setNewCategory((prev) => ({
+                      ...prev,
+                      name: e.target.value,
+                    }));
+                  }}
+                  className="w-full p-2 mt-2 rounded-md border-slate-300 focus:border-slate-500 text-sm"
+                  placeholder="Nama kategori baru"
+                />
+                <input
+                  type="text"
+                  value={newCategory.slug}
+                  onChange={(e) => {
+                    setNewCategory((prev) => ({
+                      ...prev,
+                      slug: e.target.value,
+                    }));
+                  }}
+                  className="w-full p-2 mt-2 rounded-md border-slate-300 focus:border-slate-500 text-sm"
+                  placeholder="Slug kategori baru"
+                />
+                <div className="flex justify-end mt-2">
+                  <button
+                    className="py-2 px-4 bg-primary-900 text-white rounded-md flex gap-2 items-center justify-center"
+                    onClick={handleNewCategory}
+                  >
+                    <FontAwesomeIcon icon={faPlus} />
+                    Tambah
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
 

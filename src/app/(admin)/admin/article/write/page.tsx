@@ -7,6 +7,7 @@ import {
   faMountainSun,
   faPaperPlane,
   faPlus,
+  faX,
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -30,11 +31,21 @@ interface IContentSettings {
   }[];
 }
 
-const dummyCategories = [
-  { id: "1", name: "Games" },
-  { id: "2", name: "Valorant" },
-  { id: "3", name: "AOT" },
-];
+interface ICategory {
+  id: string;
+  name: string;
+  slug: string;
+  description: string;
+  deleted: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// const dummyCategories = [
+//   { id: "1", name: "Games" },
+//   { id: "2", name: "Valorant" },
+//   { id: "3", name: "AOT" },
+// ];
 
 const initialConent = {
   title: "",
@@ -51,15 +62,16 @@ const initialContentSetting = {
 
 export default function Page() {
   const [isAuthorized, seIsAuthorized] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const [content, setContent] = useState(initialConent);
+  const [isLoading, setIsLoading] = useState(true);
   const [contentSettings, setContentSettings] = useState<IContentSettings>(
     initialContentSetting
   );
   const [checked, setChecked] = useState("");
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [showOptions, setShowOptions] = useState(false);
-  const [categories, setCategories] = useState(dummyCategories);
+  const [categories, setCategories] = useState<ICategory[]>([]);
+  const [newCategory, setNewCategory] = useState({ name: "", slug: "" });
   const [tempActBtn, setTempActBtn] = useState({ name: "", url: "" });
 
   const handleFileSelected = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -85,16 +97,31 @@ export default function Page() {
     seIsAuthorized(isAuthorized);
   }, []);
 
-  useEffect(() => {
-    async function getData() {
-      try {
-        setIsLoading(false);
-      } catch (error) {
-        console.error("error fetching data");
-        setIsLoading(false);
+  async function getCategories() {
+    try {
+      const response = await fetch(`${BASE_URL}/v1/article-category`, {
+        cache: "no-cache",
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "ngrok-skip-browser-warning": "true",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Error fetching data");
       }
+
+      const data = await response.json();
+
+      setCategories(data.data);
+    } catch (error) {
+      console.error(error);
     }
-    getData();
+  }
+
+  useEffect(() => {
+    getCategories();
   }, []);
 
   useEffect(() => {
@@ -116,7 +143,10 @@ export default function Page() {
     formData.append("title", content.title);
     formData.append("slug", contentSettings.permalink);
     formData.append("content", content.content);
-    formData.append("contentPreview", contentSettings.contentPreview);
+    formData.append(
+      "contentPreview",
+      contentSettings.contentPreview.slice(0, 100) + "..."
+    );
     formData.append("button", JSON.stringify(contentSettings.actionBtn));
     formData.append("categoryIds", JSON.stringify(contentSettings.categories));
     formData.append("status", param.articleStatus);
@@ -124,6 +154,7 @@ export default function Page() {
     formData.append("banner", selectedImage);
 
     try {
+      const id = toast.loading("Sedang mengunggah artikel...");
       const response = await fetch(`${BASE_URL}/v1/article`, {
         cache: "no-cache",
         method: "POST",
@@ -135,23 +166,30 @@ export default function Page() {
       });
 
       if (response.ok) {
-        toast.success(
-          param.articleStatus === "PUBLISH"
-            ? "Blog dipublish"
-            : `Blog disimpan kedalam ${param.articleStatus}`
-        );
+        toast.update(id, {
+          render:
+            param.articleStatus === "PUBLISH"
+              ? "Artikel dipublish"
+              : `Artikel disimpan kedalam ${param.articleStatus}`,
+          type: "success",
+          isLoading: false,
+          position: "top-right",
+          autoClose: 3000,
+        });
+
         clearForm();
       } else {
         const data = await response.json();
-        if (data.message) {
-          toast.error(data.message);
-        } else {
-          toast.error("Gagal mengunggah blog");
-        }
-        console.error("Blog upload failed");
+        toast.update(id, {
+          render: data.message || "Gagal mengunggah artikel",
+          type: "success",
+          isLoading: false,
+          position: "top-right",
+          autoClose: 3000,
+        });
       }
     } catch (error) {
-      console.error("Error uploading blog:", error);
+      console.error("Error uploading article:", error);
     }
   }
 
@@ -194,7 +232,87 @@ export default function Page() {
     });
   };
 
-  if (isLoading) return <div>Loading...</div>;
+  const handleNewCategory = async () => {
+    try {
+      const toastId = toast.loading("Sedang membuat kategori...");
+      const response = await fetch(`${BASE_URL}/v1/article-category`, {
+        cache: "no-cache",
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "content-type": "application/json",
+          "ngrok-skip-browser-warning": "true",
+        },
+        body: JSON.stringify({ ...newCategory, description: "description" }),
+      });
+
+      if (!response.ok) {
+        const err = await response.json();
+        toast.update(toastId, {
+          render: err.message || "Gagal menambahkan kategori baru",
+          type: "error",
+          isLoading: false,
+          position: "top-right",
+          autoClose: 3000,
+        });
+        throw new Error("Error fetching data");
+      }
+
+      setNewCategory({ name: "", slug: "" });
+      getCategories();
+      toast.update(toastId, {
+        render: "Kategori baru ditambahkan",
+        type: "success",
+        isLoading: false,
+        position: "top-right",
+        autoClose: 3000,
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleRemoveCategory = async (categoryId: string) => {
+    try {
+      const toastId = toast.loading("Sedang menghapus kategori...");
+      const response = await fetch(
+        `${BASE_URL}/v1/article-category/${categoryId}`,
+        {
+          cache: "no-cache",
+          method: "DELETE",
+          credentials: "include",
+          headers: {
+            "ngrok-skip-browser-warning": "true",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        const err = await response.json();
+        toast.update(toastId, {
+          render: err.message || "Gagal menghapus kategori",
+          type: "error",
+          isLoading: false,
+          position: "top-right",
+          autoClose: 3000,
+        });
+        throw new Error("Error fetching data");
+      }
+
+      getCategories();
+      toast.update(toastId, {
+        render: "kategori berhasil dihapus",
+        type: "success",
+        isLoading: false,
+        position: "top-right",
+        autoClose: 3000,
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // if (isLoading) return <div>Loading...</div>;
   // if (!isAuthorized)
   //   return <div>You don't have permission to access this page.</div>;
 
@@ -202,7 +320,7 @@ export default function Page() {
     <div className="w-full relative h-screen overflow-y-scroll">
       <div className="w-full py-4 bg-white sticky top-0 right-0 z-40">
         <div className="w-full px-12 mx-auto flex flex-col md:flex-row gap-4 justify-between items-center">
-          <h1 className="text-xl font-bold text-gray-800">Create New Blogs</h1>
+          <h1 className="text-xl font-bold text-gray-800">Buat Artikel Baru</h1>
           <div className="buttons flex lg:flex-col xl:flex-row gap-4 lg:gap-3 xl:gap-4 justify-center">
             <button
               onClick={() => {
@@ -277,7 +395,7 @@ export default function Page() {
                 <Image
                   src={content.image}
                   fill={true}
-                  alt="blog-banner"
+                  alt="artikel-banner"
                   objectFit="cover"
                 />
               )}
@@ -419,18 +537,56 @@ export default function Page() {
                     isCategorySelected(category.id)
                       ? "bg-emerald-100 text-emerald-700"
                       : "bg-gray-100 text-gray-600"
-                  } w-max py-2 px-4 rounded-full hover:cursor-pointer`}
+                  } w-max py-1.5 pr-2 pl-4 rounded-full hover:cursor-pointer flex items-center gap-2`}
                   onClick={() => handleCategory(category.id)}
                 >
                   <p className="text-sm">{category.name}</p>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleRemoveCategory(category.id);
+                    }}
+                    className="bg-slate-100 rounded-full w-7 h-7 hover:bg-primary-900 hover:text-white"
+                  >
+                    <FontAwesomeIcon icon={faX} className="text-xs" />
+                  </button>
                 </div>
               ))}
-              <input
-                type="text"
-                onChange={() => {}}
-                className="w-full p-2 mt-2 rounded-md border-slate-300 focus:border-slate-500 text-sm"
-                placeholder="Add New Category"
-              />
+              <div className="form kategori baru">
+                <input
+                  type="text"
+                  value={newCategory.name}
+                  onChange={(e) => {
+                    setNewCategory((prev) => ({
+                      ...prev,
+                      name: e.target.value,
+                    }));
+                  }}
+                  className="w-full p-2 mt-2 rounded-md border-slate-300 focus:border-slate-500 text-sm"
+                  placeholder="Nama kategori baru"
+                />
+                <input
+                  type="text"
+                  value={newCategory.slug}
+                  onChange={(e) => {
+                    setNewCategory((prev) => ({
+                      ...prev,
+                      slug: e.target.value,
+                    }));
+                  }}
+                  className="w-full p-2 mt-2 rounded-md border-slate-300 focus:border-slate-500 text-sm"
+                  placeholder="Slug kategori baru"
+                />
+                <div className="flex justify-end mt-2">
+                  <button
+                    className="py-2 px-4 bg-primary-900 text-white rounded-md flex gap-2 items-center justify-center"
+                    onClick={handleNewCategory}
+                  >
+                    <FontAwesomeIcon icon={faPlus} />
+                    Tambah
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
 

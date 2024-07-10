@@ -18,6 +18,7 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { toast } from "react-toastify";
 import { Tooltip as ReactTooltip } from "react-tooltip";
+import FilterSidebar from "../components/FilterSidebar";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -61,7 +62,6 @@ const initialContentSetting = {
 };
 
 export default function Page() {
-  const [isAuthorized, seIsAuthorized] = useState(false);
   const [content, setContent] = useState(initialConent);
   const [isLoading, setIsLoading] = useState(true);
   const [contentSettings, setContentSettings] = useState<IContentSettings>(
@@ -80,22 +80,6 @@ export default function Page() {
       setSelectedImage(selectedFile);
     }
   };
-
-  useEffect(() => {
-    const result = localStorage.getItem("admin");
-    const user = result ? JSON.parse(result) : null;
-
-    const isAuthorized = (() => {
-      switch (user?.roleName) {
-        case ROLES.ADMINMANAGER:
-        case ROLES.WRITER:
-          return true;
-        default:
-          return false;
-      }
-    })();
-    seIsAuthorized(isAuthorized);
-  }, []);
 
   async function getCategories() {
     try {
@@ -491,7 +475,7 @@ export default function Page() {
             </label>
             <div className="peer-checked:max-h-max max-h-0 basis-full border-b peer-checked:py-3 overflow-hidden transition-all select-text">
               <p className="text-gray-500">
-                https://gasskeuntopup.com/{contentSettings.permalink}
+                https://gasskeuntopup.com/article/{contentSettings.permalink}
               </p>
               <input
                 type="text"

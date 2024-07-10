@@ -110,11 +110,11 @@ export default function BlogCarousel() {
                 />
                 <div className="p-6 pt-20 group-hover:pt-28 absolute bottom-0 left-0 bg-gradient-to-t from-slate-900 to-[rgba(0,0,0,0)] w-full transition-all">
                   <div className="text-sm font-medium text-white flex gap-4">
-                    {article.categories.map((category) => (
-                      <span className="text-white" key={category.name}>
-                        {category.name}
-                      </span>
-                    ))}
+                    <span className="text-white">
+                      {article.categories
+                        .map((category) => category.name)
+                        .join(", ")}
+                    </span>
                   </div>
 
                   <h4 className="text-xl font-bold text-white">

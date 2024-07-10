@@ -12,6 +12,7 @@ import {
   faFilePen,
   faMagnifyingGlass,
   faPaperPlane,
+  faSliders,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { BusArticulatedEnd } from "mdi-material-ui";
@@ -19,6 +20,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
+import FilterSidebar from "./components/FilterSidebar";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -53,6 +55,12 @@ function Page() {
   const [searchKeyword, setSearchKeyword] = useState("");
   const [hasMore, setHasMore] = useState(true);
   const scrollableDivRef = useRef<HTMLDivElement | null>(null);
+
+  const [filterSidebarOpen, setFilterSidebarOpen] = useState(false);
+  const [searchFilter, setSearchFilter] = useState({
+    isPopular: false,
+    status: "",
+  });
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -176,9 +184,19 @@ function Page() {
   }
 
   const handleClickSearch = () => {
-    const fetchUrl = searchKeyword
-      ? `${BASE_URL}/v1/article?title=${searchKeyword}`
-      : `${BASE_URL}/v1/article`;
+    const queryParams = new URLSearchParams();
+
+    if (searchFilter.isPopular) {
+      queryParams.append("isPopular", searchFilter.isPopular.toString());
+    }
+    if (searchFilter.status) {
+      queryParams.append("status", searchFilter.status);
+    }
+    if (searchKeyword) {
+      queryParams.append("title", searchKeyword);
+    }
+
+    const fetchUrl = `${BASE_URL}/v1/article?${queryParams}`;
     const getArticleBySlug = async () => {
       try {
         setLoading(true);
@@ -223,6 +241,12 @@ function Page() {
         <div className="w-full px-12 mx-auto flex flex-col md:flex-row gap-4 justify-between items-center">
           <h1 className="text-xl font-bold text-gray-800">Your Blogs</h1>
           <div className="flex items-center gap-4">
+            <Link href="/admin/article/write">
+              <div className="py-2.5 px-4 bg-primary-900 text-white rounded-md flex items-center gap-2">
+                <span>Write New Article</span>
+                <FontAwesomeIcon icon={faFilePen} className="text-sm" />
+              </div>
+            </Link>
             <form id="search_form" name="gs" method="GET" action="#">
               <div className="relative md:w-max w-full">
                 <input
@@ -244,12 +268,16 @@ function Page() {
                 </button>
               </div>
             </form>
-            <Link href="/admin/article/write">
-              <div className="py-2.5 px-4 bg-primary-900 text-white rounded-md flex items-center gap-2">
-                <FontAwesomeIcon icon={faFilePen} className="text-sm" />
-                <span>Write New Article</span>
-              </div>
-            </Link>
+
+            <button
+              onClick={() => {
+                setFilterSidebarOpen(true);
+              }}
+              className="filter-btn py-2.5 px-4 text-primary-900 rounded-md flex items-center gap-2 border border-primary-900"
+            >
+              <span>Filter</span>
+              <FontAwesomeIcon icon={faSliders} className="text-sm" />
+            </button>
           </div>
         </div>
       </div>
@@ -341,6 +369,19 @@ function Page() {
         <div className="text-center my-4">
           {loading && <span>Loading articles...</span>}
         </div>
+      </div>
+      <div
+        className={`fixed top-0 right-0 w-80 bg-white h-screen z-50 ${
+          filterSidebarOpen ? "block" : "hidden"
+        }`}
+      >
+        <FilterSidebar
+          filter={searchFilter}
+          closeFilterSidebar={() => setFilterSidebarOpen(false)}
+          handleFilter={(filter: { isPopular: boolean; status: string }) => {
+            setSearchFilter(filter);
+          }}
+        />
       </div>
     </div>
   );

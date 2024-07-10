@@ -91,7 +91,10 @@ export default function Page() {
           contentPreview: data.contentPreview,
           permalink: data.slug,
           // categories: data.categories,
-          categories: [],
+          categories: data.categories.map(
+            (category: { id: string; name: string; slug: string }) =>
+              category.id
+          ),
           actionBtn: data.buttons,
         });
 
@@ -517,7 +520,7 @@ export default function Page() {
             </label>
             <div className="peer-checked:max-h-max max-h-0 basis-full border-b peer-checked:py-3 overflow-hidden transition-all select-text">
               <p className="text-gray-500">
-                https://gasskeuntopup.com/{contentSettings.permalink}
+                https://gasskeuntopup.com/article/{contentSettings.permalink}
               </p>
               <input
                 type="text"

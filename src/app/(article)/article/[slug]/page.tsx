@@ -76,14 +76,11 @@ export default async function Page({ params }: { params: { slug: string } }) {
               <div className="bg-white rounded-lg overflow-hidden">
                 <div className="pb-6">
                   <div className="flex">
-                    {article.categories.map((category) => (
-                      <span
-                        key={category.name}
-                        className="block text-base font-semibold text-primary-900"
-                      >
-                        {category.name}
-                      </span>
-                    ))}
+                    <span className="block text-base font-semibold text-primary-900">
+                      {article.categories
+                        .map((category) => category.name)
+                        .join(", ")}
+                    </span>
                   </div>
 
                   <h4 className="text-3xl md:text-4xl font-extrabold  text-gray-800 mt-2">
@@ -122,6 +119,18 @@ export default async function Page({ params }: { params: { slug: string } }) {
                 <div className="p-6">
                   <div dangerouslySetInnerHTML={{ __html: article.content }} />
                 </div>
+              </div>
+
+              <div className="action_buttons flex gap-2 flex-wrap">
+                {article.buttons.map((button) => (
+                  <a
+                    href={button.url}
+                    className="text-white bg-primary-900 py-1.5 px-3 rounded-full text-sm"
+                    key={button.name}
+                  >
+                    {button.name}
+                  </a>
+                ))}
               </div>
 
               <div className="mt-6 flex justify-between text-sm text-gray-500">

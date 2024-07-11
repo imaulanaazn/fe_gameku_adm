@@ -19,7 +19,7 @@ export default function FilterSidebar({
   handleFilter,
 }: IFilterSidebar) {
   return (
-    <div className="p-8 flex flex-col gap-5">
+    <div className="p-6 md:p-8 flex flex-col gap-5">
       <div className="flex justify-between items-center">
         <span className="text-lg text-gray-600">Search Filter</span>
         <button
@@ -56,7 +56,7 @@ export default function FilterSidebar({
                 handleFilter({ ...filter, status: status });
               }}
               key={status}
-              className={`py-2 px-4 rounded-full border text-sm  ${
+              className={`py-2 px-4 rounded-full border text-xs  ${
                 filter.status === status
                   ? "bg-primary-900 text-white"
                   : "border-primary-900 text-primary-900"

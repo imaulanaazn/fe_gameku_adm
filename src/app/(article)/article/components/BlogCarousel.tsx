@@ -8,6 +8,8 @@ import Image from "next/image";
 import dayjs from "dayjs";
 import Link from "next/link";
 
+import { Pagination, Autoplay } from "swiper/modules";
+
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 interface Article {
@@ -90,11 +92,16 @@ export default function BlogCarousel() {
   return (
     <section className="px-4 md:px-0">
       <Swiper
+        modules={[Pagination, Autoplay]}
         spaceBetween={28}
         slidesPerView={1}
         centeredSlides={true}
-        breakpoints={carouselBreakpoints}
         freeMode={true}
+        loop={popularArticles.length > 3}
+        autoplay={{
+          delay: 4000,
+        }}
+        breakpoints={carouselBreakpoints}
         className="flex items-center"
       >
         {popularArticles.map((article) => (

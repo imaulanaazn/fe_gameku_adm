@@ -238,57 +238,60 @@ function Page() {
       ref={scrollableDivRef}
     >
       <div className="w-full py-4 bg-white sticky top-0 right-0 z-40">
-        <div className="w-full px-12 mx-auto flex flex-col md:flex-row gap-4 justify-between items-center">
+        <div className="w-full px-8 md:px-12 mx-auto flex flex-col lg:flex-row gap-4 justify-between items-center">
           <h1 className="text-xl font-bold text-gray-800">Your Blogs</h1>
-          <div className="flex items-center gap-4">
-            <Link href="/admin/article/write">
-              <div className="py-2.5 px-4 bg-primary-900 text-white rounded-md flex items-center gap-2">
+          <div className="flex items-center gap-4 flex-wrap">
+            <Link href="/admin/article/write" className="flex-1">
+              <div className="py-2.5 px-4 bg-primary-900 text-white rounded-md flex items-center justify-center gap-2">
                 <span>Write New Article</span>
                 <FontAwesomeIcon icon={faFilePen} className="text-sm" />
               </div>
             </Link>
-            <form id="search_form" name="gs" method="GET" action="#">
-              <div className="relative md:w-max w-full">
-                <input
-                  type="text"
-                  placeholder={"Search blog"}
-                  value={searchKeyword}
-                  onChange={(e) => setSearchKeyword(e.target.value)}
-                  className="peer inline-flex items-center w-full md:w-auto px-4 md:px-6 py-2 rounded-md gap-x-2 focus:bg-primary-50 text-primary-900 placeholder:text-primary-900 border-primary-900 focus:border-primary-900"
-                />
-                <button
-                  type="button"
-                  onClick={(e) => handleClickSearch()}
-                  className="absolute top-1/2 right-1 md:right-3 -translate-y-1/2 peer-focus:bg-primary-50 h-[97%] w-auto aspect-square rounded-r-md"
-                >
-                  <FontAwesomeIcon
-                    icon={faMagnifyingGlass}
-                    className="text-primary-900 text-lg"
-                  />
-                </button>
-              </div>
-            </form>
 
-            <button
-              onClick={() => {
-                setFilterSidebarOpen(true);
-              }}
-              className="filter-btn py-2.5 px-4 text-primary-900 rounded-md flex items-center gap-2 border border-primary-900"
-            >
-              <span>Filter</span>
-              <FontAwesomeIcon icon={faSliders} className="text-sm" />
-            </button>
+            <div className="flex gap-4">
+              <form id="search_form" name="gs" method="GET" action="#">
+                <div className="relative md:w-max w-full">
+                  <input
+                    type="text"
+                    placeholder={"Search blog"}
+                    value={searchKeyword}
+                    onChange={(e) => setSearchKeyword(e.target.value)}
+                    className="peer inline-flex items-center w-full md:w-auto px-4 md:px-6 py-2 rounded-md gap-x-2 focus:bg-primary-50 text-primary-900 placeholder:text-primary-900 border-primary-900 focus:border-primary-900"
+                  />
+                  <button
+                    type="button"
+                    onClick={(e) => handleClickSearch()}
+                    className="absolute top-1/2 right-1 md:right-3 -translate-y-1/2 peer-focus:bg-primary-50 h-[97%] w-auto aspect-square rounded-r-md"
+                  >
+                    <FontAwesomeIcon
+                      icon={faMagnifyingGlass}
+                      className="text-primary-900 text-lg"
+                    />
+                  </button>
+                </div>
+              </form>
+
+              <button
+                onClick={() => {
+                  setFilterSidebarOpen(true);
+                }}
+                className="filter-btn py-2.5 px-4 text-primary-900 rounded-md flex items-center gap-2 border border-primary-900"
+              >
+                <span>Filter</span>
+                <FontAwesomeIcon icon={faSliders} className="text-sm" />
+              </button>
+            </div>
           </div>
         </div>
       </div>
-      <div className="w-full px-6 py-6">
+      <div className="w-full px-4 py-4 md:px-6 md:py-6">
         <div className="grid xl:grid-cols-2 grid-cols-1 gap-4">
           {articles.map((article, index) => (
             <div
               className="w-full mx-auto rounded-xl transform transition duration-300"
               key={index}
             >
-              <div className="bg-white rounded-xl p-6 md:p-6 flex flex-col md:flex-row items-center">
+              <div className="bg-white rounded-xl p-4 md:p-6 flex flex-col md:flex-row items-center">
                 <div className="w-full md:w-max flex-shrink-0">
                   <div className="w-full md:w-max">
                     <Image

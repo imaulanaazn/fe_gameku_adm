@@ -2,6 +2,7 @@
 
 import { ROLES } from "@/enum";
 import {
+  faBoxArchive,
   faChevronDown,
   faGear,
   faMountainSun,
@@ -19,6 +20,7 @@ import Link from "next/link";
 import { toast } from "react-toastify";
 import { Tooltip as ReactTooltip } from "react-tooltip";
 import FilterSidebar from "../components/FilterSidebar";
+import { faFirstdraft } from "@fortawesome/free-brands-svg-icons";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -303,16 +305,22 @@ export default function Page() {
   return (
     <div className="w-full relative h-screen overflow-y-scroll">
       <div className="w-full py-4 bg-white sticky top-0 right-0 z-40">
-        <div className="w-full px-12 mx-auto flex flex-col md:flex-row gap-4 justify-between items-center">
-          <h1 className="text-xl font-bold text-gray-800">Buat Artikel Baru</h1>
-          <div className="buttons flex lg:flex-col xl:flex-row gap-4 lg:gap-3 xl:gap-4 justify-center">
+        <div className="w-full px-8 mx-auto flex flex-col md:flex-row gap-4 justify-between items-center">
+          <h1 className="text-xl font-bold text-gray-800 md:pl-10">
+            Buat Artikel Baru
+          </h1>
+          <div className="buttons flex gap-4 lg:gap-3 xl:gap-4 justify-center">
             <button
               onClick={() => {
                 handleSubmit({ articleStatus: "ARCHIVE" });
               }}
               className="py-2 px-4 text-primary-900 border border-primary-900 rounded-md text-center"
             >
-              Save as Archived
+              <span className="hidden md:inline">Save as Archived</span>
+              <FontAwesomeIcon
+                icon={faBoxArchive}
+                className="inline md:hidden"
+              />
             </button>
             <button
               onClick={() => {
@@ -320,7 +328,11 @@ export default function Page() {
               }}
               className="py-2 px-4 text-primary-900 border border-primary-900 rounded-md text-center"
             >
-              Save as Draft
+              <span className="hidden md:inline">Save as Draft</span>
+              <FontAwesomeIcon
+                icon={faFirstdraft}
+                className="inline md:hidden"
+              />
             </button>
             <button
               className="py-2 px-4 bg-primary-900 text-white rounded-md flex gap-2 items-center justify-center text-center"
@@ -336,7 +348,7 @@ export default function Page() {
       </div>
       <div className="min-h-screen bg-gray-100 w-full flex relative">
         {/* BLOG EDITOR */}
-        <main className="w-full lg:w-9/12 xl mx-auto py-6 px-6">
+        <main className="w-full lg:w-9/12 xl mx-auto p-6 md:px-8">
           <form className="bg-white p-4 md:p-8 shadow-md rounded-lg flex flex-col gap-4">
             <button
               type="button"
@@ -357,7 +369,7 @@ export default function Page() {
                 id="title"
                 name="title"
                 value={content.title}
-                className="w-full px-0 py-2 palceholder:text-gray-100 font-bold text-4xl placeholder:text-4xl border-0"
+                className="w-full px-0 py-2 palceholder:text-gray-100 font-bold text-3xl md:text-4xl placeholder:text-4xl border-0"
                 placeholder="|Tambah Judul"
                 onChange={(e) => {
                   setContent((prev) => ({ ...prev, title: e.target.value }));
@@ -397,7 +409,7 @@ export default function Page() {
 
         {/* OPTIONS ASIDE */}
         <div
-          className={`options w-3/4 md:w-2/5 lg:w-3/12 px-4 py-8 md:py-6 bg-white h-[91vh] fixed lg:sticky top-16 right-0 transition-all duration-400 ${
+          className={`options w-3/4 md:w-2/5 lg:w-3/12 px-4 py-8 md:py-6 bg-white h-[91vh] fixed lg:sticky top-24 md:top-16 right-0 transition-all duration-400 ${
             showOptions ? "translate-x-0" : "translate-x-full lg:translate-x-0"
           }`}
         >

@@ -139,7 +139,7 @@ function Page() {
   useEffect(() => {
     if (typeof window !== "undefined") {
       try {
-        const storedAdminData = localStorage.getItem("admin");
+        const storedAdminData = localStorage.getItem("user");
         if (storedAdminData) {
           setMyData(JSON.parse(storedAdminData));
         } else {

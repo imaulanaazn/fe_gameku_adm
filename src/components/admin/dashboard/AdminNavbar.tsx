@@ -1,10 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
-  faArrowRight,
   faBars,
-  faMagnifyingGlass,
   faRightFromBracket,
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
@@ -14,6 +12,10 @@ import { useRouter } from "next/navigation";
 
 export default function AdminNavbar() {
   const router = useRouter();
+  const [myData, setMyData] = useState<{ name: string; roles: string[] }>({
+    name: "",
+    roles: [],
+  });
 
   const handleLogout = async () => {
     const toastId = toast.loading("Proses Logout...");
@@ -50,6 +52,23 @@ export default function AdminNavbar() {
       });
     }
   };
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const storedAdminData = localStorage.getItem("user");
+        if (storedAdminData) {
+          const parsedData = JSON.parse(storedAdminData);
+          setMyData({ name: parsedData.name, roles: parsedData.roles });
+        } else {
+          console.error("No admin data found in localStorage");
+        }
+      } catch (err) {
+        console.error("Failed to parse admin data from localStorage", err);
+      }
+    }
+  }, []);
+
   return (
     <nav className="flex flex-nowrap justify-start sticky top-0 right-0 bg-white z-40">
       <div className="navbar-inner flex w-full justify-between items-center px-6 py-3">
@@ -57,7 +76,7 @@ export default function AdminNavbar() {
           <div className="logo">
             {/* <Image src="" width={40} height={40} alt="gasskeun logo" /> */}
           </div>
-          <h4>Gasskeun Topup</h4>
+          <h4>{myData.name}</h4>
         </Link>
 
         <div className="search-input w-auto h-max relative flex flex-wrap items-center">
@@ -98,9 +117,13 @@ export default function AdminNavbar() {
                 />
                 <div className="caption">
                   <h6 className="text-lg font-medium text-neutral-700">
-                    Gasskeun Topup
+                    {myData.name}
                   </h6>
-                  <p className="text-neutral-600">Admin</p>
+                  <p className="text-neutral-600">
+                    {myData.roles.map((role, index) =>
+                      index === myData.roles.length - 1 ? role : `${role}, `
+                    )}
+                  </p>
                 </div>
               </a>
 

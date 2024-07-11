@@ -70,52 +70,49 @@ export default function Page() {
   const [loading, setLoading] = useState(false);
   const { articleId } = useParams();
 
-  useEffect(() => {
-    async function getArticle() {
-      setLoading(true);
-      try {
-        const response = await fetch(`${BASE_URL}/v1/article/${articleId}`, {
-          cache: "no-cache",
-          method: "GET",
-          credentials: "include",
-          headers: {
-            "ngrok-skip-browser-warning": "true",
-          },
-        });
+  async function getArticle() {
+    setLoading(true);
+    try {
+      const response = await fetch(`${BASE_URL}/v1/article/${articleId}`, {
+        cache: "no-cache",
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "ngrok-skip-browser-warning": "true",
+        },
+      });
 
-        if (!response.ok) {
-          throw new Error("Error fetching data");
-        }
-
-        const data = await response.json();
-
-        setContentSettings({
-          contentPreview: data.contentPreview,
-          permalink: data.slug,
-          categories: [],
-          // categories: data.categories.map(
-          //   (category: { id: string; name: string; slug: string }) =>
-          //     category.id
-          // ),
-          actionBtn: data.buttons,
-        });
-
-        setContent({
-          title: data.title,
-          image: data.bannerImage,
-          content: data.content,
-        });
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
+      if (!response.ok) {
+        throw new Error("Error fetching data");
       }
-    }
 
-    getArticle();
-  }, []);
+      const data = await response.json();
+
+      setContentSettings({
+        contentPreview: data.contentPreview,
+        permalink: data.slug,
+        categories: [],
+        // categories: data.categories.map(
+        //   (category: { id: string; name: string; slug: string }) =>
+        //     category.id
+        // ),
+        actionBtn: data.buttons,
+      });
+
+      setContent({
+        title: data.title,
+        image: data.bannerImage,
+        content: data.content,
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   useEffect(() => {
+    getArticle();
     getCategories();
   }, []);
 
@@ -184,6 +181,7 @@ export default function Page() {
           position: "top-right",
           autoClose: 3000,
         });
+        getArticle();
       } else {
         const data = await response.json();
 

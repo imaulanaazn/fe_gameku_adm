@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import BlogCarousel from "./components/BlogCarousel";
 import sendRequest from "@/lib/baseApi";
 import dayjs from "dayjs";
-import RecentPosts from "./components/RecentPosts";
+import RecentPosts from "./components/PopularArticle";
 import Categories from "./components/Categories";
 import PopularGames from "./components/PopularGames";
 import Link from "next/link";
@@ -44,7 +44,7 @@ interface IArticle {
 
 export default async function Article() {
   const articleResponse = await sendRequest<IListArticleResponse>(
-    "/v1/articles?page=1&limit=12"
+    "/v1/articles?page=1&limit=18"
   );
   const articles = articleResponse.data.data;
 
@@ -129,7 +129,9 @@ export default async function Article() {
                           </li> */}
                         </ul>
                         <p className="text-sm text-gray-600 my-5">
-                          {article.contentPreview}
+                          {article.contentPreview.length > 100
+                            ? article.contentPreview + "..."
+                            : article.contentPreview}
                         </p>
                         {/* <div className="mt-4">
                           <ul className="flex space-x-2 text-sm text-gray-500">

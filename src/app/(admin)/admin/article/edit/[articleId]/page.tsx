@@ -91,11 +91,9 @@ export default function Page() {
       setContentSettings({
         contentPreview: data.contentPreview,
         permalink: data.slug,
-        categories: [],
-        // categories: data.categories.map(
-        //   (category: { id: string; name: string; slug: string }) =>
-        //     category.id
-        // ),
+        categories: data.categories.map(
+          (category: { id: string; name: string; slug: string }) => category.id
+        ),
         actionBtn: data.buttons,
       });
 
@@ -137,7 +135,7 @@ export default function Page() {
     formData.append("content", content.content);
     formData.append(
       "contentPreview",
-      contentSettings.contentPreview.slice(0, 100) + "..."
+      contentSettings.contentPreview.slice(0, 120)
     );
     formData.append("button", JSON.stringify(contentSettings.actionBtn));
     formData.append("categoryIds", JSON.stringify(contentSettings.categories));

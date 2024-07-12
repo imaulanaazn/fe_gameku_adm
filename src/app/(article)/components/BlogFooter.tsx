@@ -197,12 +197,12 @@ const BlogFooter = () => {
 
             {/* LEGAL GRID ITEM */}
             <div className="flex flex-col">
-              <p className="text-white font-bold uppercase">Blog</p>
+              <p className="text-white font-bold uppercase">Artikel</p>
               <Link
                 className="text-neutral-400 w-max inline-block mt-3 border-b border-solid border-black hover:border-white hover:text-white"
-                href="#"
+                href="/article"
               >
-                Blog Terbaru
+                Artikel Terbaru
               </Link>
               <Link
                 className="text-neutral-400 w-max inline-block mt-3 border-b border-solid border-black hover:border-white hover:text-white"

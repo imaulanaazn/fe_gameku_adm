@@ -65,7 +65,6 @@ const initialContentSetting = {
 
 export default function Page() {
   const [content, setContent] = useState(initialConent);
-  const [isLoading, setIsLoading] = useState(true);
   const [contentSettings, setContentSettings] = useState<IContentSettings>(
     initialContentSetting
   );
@@ -131,7 +130,7 @@ export default function Page() {
     formData.append("content", content.content);
     formData.append(
       "contentPreview",
-      contentSettings.contentPreview.slice(0, 100) + "..."
+      contentSettings.contentPreview.slice(0, 120)
     );
     formData.append("button", JSON.stringify(contentSettings.actionBtn));
     formData.append("categoryIds", JSON.stringify(contentSettings.categories));

@@ -25,10 +25,12 @@ import { GetServerSideProps } from "next";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import React from "react";
-import RecentPosts from "../components/RecentPosts";
+import RecentPosts from "../components/PopularArticle";
 import Categories from "../components/Categories";
 import PopularGames from "../components/PopularGames";
 import CommentSection from "./components/CommentSection";
+// import "react-quill/dist/quill.core.css";
+import "react-quill/dist/quill.snow.css";
 
 interface IArticle {
   id: string;
@@ -116,16 +118,19 @@ export default async function Page({ params }: { params: { slug: string } }) {
                     className="w-full h-auto aspect-video object-cover"
                   />
                 </div>
-                <div className="p-6">
-                  <div dangerouslySetInnerHTML={{ __html: article.content }} />
+                <div>
+                  <div
+                    className="view ql-editor article"
+                    dangerouslySetInnerHTML={{ __html: article.content }}
+                  />
                 </div>
               </div>
 
-              <div className="action_buttons flex gap-2 flex-wrap">
+              <div className="action_buttons flex gap-4 flex-wrap">
                 {article.buttons.map((button) => (
                   <a
                     href={button.url}
-                    className="text-white bg-primary-900 py-1.5 px-3 rounded-full text-sm"
+                    className="text-white bg-primary-900 py-2 px-3 rounded-full text-sm"
                     key={button.name}
                   >
                     {button.name}
@@ -137,60 +142,60 @@ export default async function Page({ params }: { params: { slug: string } }) {
                 <ul className="flex space-x-2 text-primary-900">
                   <li className="font-medium">Share Stories</li>
                 </ul>
-                <ul className="flex gap-2 items-center">
-                  <li className="text-primary-900 flex items-center gap-2 hidden md:block">
-                    <FontAwesomeIcon icon={faShareNodes} className="text-xl" />
+                <ul className="flex gap-3 items-center">
+                  <li className="text-primary-900 flex items-center gap-4 hidden md:block">
+                    <FontAwesomeIcon icon={faShareNodes} className="text-2xl" />
                   </li>
-                  <li className="w-8 h-8 bg-blue-600 text-white rounded-full">
+                  <li className="w-10 h-10 bg-blue-600 text-white rounded-full">
                     <a
                       target="_blank"
                       href={`http://www.facebook.com/sharer/sharer.php?u=https://gasskeuntopup.com/article/${article.slug}&t=${article.title}`}
-                      className="w-full h-full flex items-center justify-center text-lg"
+                      className="w-full h-full flex items-center justify-center text-xl"
                     >
                       <FontAwesomeIcon icon={faFacebookF} />
                     </a>
                   </li>
-                  <li className="w-8 h-8 bg-green-600 text-white rounded-full">
+                  <li className="w-10 h-10 bg-green-600 text-white rounded-full">
                     <a
                       href={`whatsapp://send?text=Check out this page: https://gasskeuntopup.com/article/${article.slug}`}
                       data-action="share/whatsapp/share"
-                      className="hover:underline w-full h-full flex items-center justify-center text-lg"
+                      className="hover:underline w-full h-full flex items-center justify-center text-xl"
                     >
                       <FontAwesomeIcon icon={faWhatsappSquare} />
                     </a>
                   </li>
-                  <li className="w-8 h-8 bg-blue-700 text-white rounded-full">
+                  <li className="w-10 h-10 bg-blue-700 text-white rounded-full">
                     <a
                       target="_blank"
                       href={`https://www.linkedin.com/shareArticle?mini=true&url=https://gasskeuntopup.com/article/${article.slug}`}
-                      className="hover:underline w-full h-full flex items-center justify-center text-lg"
+                      className="hover:underline w-full h-full flex items-center justify-center text-xl"
                     >
                       <FontAwesomeIcon icon={faLinkedin} />
                     </a>
                   </li>
-                  <li className="w-8 h-8 bg-blue-400 text-white rounded-full">
+                  <li className="w-10 h-10 bg-blue-400 text-white rounded-full">
                     <a
                       target="_blank"
                       href={`https://t.me/share/url?url=https://gasskeuntopup.com/article/${article.slug}&title=${article.title}`}
-                      className="hover:underline w-full h-full flex items-center justify-center text-lg"
+                      className="hover:underline w-full h-full flex items-center justify-center text-xl"
                     >
                       <FontAwesomeIcon icon={faTelegram} />
                     </a>
                   </li>
-                  <li className="w-8 h-8 bg-blue-400 text-white rounded-full">
+                  <li className="w-10 h-10 bg-blue-400 text-white rounded-full">
                     <a
                       target="_blank"
                       href={`https://twitter.com/intent/tweet?url=https://gasskeuntopup.com/article/${article.slug}&text=${article.title}`}
-                      className="hover:underline w-full h-full flex items-center justify-center text-lg"
+                      className="hover:underline w-full h-full flex items-center justify-center text-xl"
                     >
                       <FontAwesomeIcon icon={faTwitter} />
                     </a>
                   </li>
-                  <li className="w-8 h-8 bg-gray-400 text-white rounded-full">
+                  <li className="w-10 h-10 bg-gray-400 text-white rounded-full">
                     <a
                       target="_blank"
                       href={`mailto:?subject=${article.title}&body=https://gasskeuntopup.com/article/${article.slug}`}
-                      className="hover:underline w-full h-full flex items-center justify-center text-lg text-white"
+                      className="hover:underline w-full h-full flex items-center justify-center text-xl text-white"
                     >
                       <FontAwesomeIcon icon={faEnvelope} />
                     </a>

@@ -38,20 +38,24 @@ interface IArticle {
 }
 export default async function RecentPosts() {
   const articleResponse = await sendRequest<IListArticleResponse>(
-    "/v1/articles?page=1&limit=5"
+    "/v1/articles?isPopular=true&limit=8"
   );
   const articles = articleResponse.data.data;
 
   return (
     <div className="">
       <div className="mb-4">
-        <h2 className="text-2xl font-bold text-gray-800">Artikel Terbaru</h2>
+        <h2 className="text-2xl font-bold text-gray-800">Artikel Populer</h2>
       </div>
       <ul className="flex flex-col gap-4">
         {articles.map((article) => (
-          <Link href={`/article/${article.slug}`} key={article.id}>
+          <Link
+            href={`/article/${article.slug}`}
+            key={article.id}
+            className="group"
+          >
             <li>
-              <h5 className="text-base font-semibold text-gray-700">
+              <h5 className="text-base font-semibold text-gray-700 group-hover:text-primary-900">
                 {article.title}
               </h5>
               <ul className="flex space-x-2 text-xs text-gray-500 mt-2">

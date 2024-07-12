@@ -21,8 +21,8 @@ import SearchResultModal from "./SearchResultModal";
 const links = [
   {
     id: 1,
-    name: "Beranda",
-    url: "/blog",
+    name: "Artikel",
+    url: "/article",
     icon: faHouse,
   },
   {

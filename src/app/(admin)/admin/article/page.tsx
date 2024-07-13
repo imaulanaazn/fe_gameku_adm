@@ -316,7 +316,7 @@ function Page() {
                   </h3>
                   <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                     <p className="mt-2 text-gray-600 w-full md:w-3/4">
-                      {article.contentPreview}
+                      {article.contentPreview + "..."}
                     </p>
                     {/* <div className="flex md:flex-col lg:flex-row shrink-0 gap-2 lg:gap-4 items-center">
                       <Image

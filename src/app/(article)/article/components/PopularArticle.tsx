@@ -42,6 +42,8 @@ export default async function RecentPosts() {
   );
   const articles = articleResponse.data.data;
 
+  if (articles.length < 1) return <div></div>;
+
   return (
     <div className="">
       <div className="mb-4">

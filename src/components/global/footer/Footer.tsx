@@ -37,6 +37,11 @@ const linkCepat = [
     name: "Reseller",
     url: "https://reseller.gasskeuntopup.com/",
   },
+  {
+    id: 6,
+    name: "Artikel",
+    url: "/article",
+  },
 ];
 
 interface DisplaySocialMedia {

@@ -3,11 +3,30 @@ import Container from "@/components/global/Container/Container";
 import Game from "@/components/global/game/Game";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const ListGames: React.FC<ListGameProps> = ({ title, data }) => {
-  const [limit, setLimit] = useState(12);
+  const [limit, setLimit] = useState(9);
   const slicedGames = data.slice(0, limit);
+
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => setScreenWidth(window.innerWidth);
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
+    if (screenWidth < 600) {
+      setLimit(9);
+    } else if (screenWidth < 900) {
+      setLimit(9);
+    } else {
+      setLimit(12);
+    }
+  }, [screenWidth]);
 
   const handleClickExpandGame = () => {
     if (limit > data.length) {

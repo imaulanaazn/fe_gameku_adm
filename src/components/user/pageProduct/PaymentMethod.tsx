@@ -184,6 +184,7 @@ const PaymentMethod = ({ value, data, onChange, position }: any) => {
                   alt="Logo payment method"
                   fill={true}
                   quality={55}
+                  loading="lazy"
                   objectFit="contain"
                 />
               </Box>

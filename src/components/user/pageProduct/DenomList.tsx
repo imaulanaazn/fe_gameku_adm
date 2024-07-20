@@ -9,6 +9,7 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
+import Image from "next/image";
 import React from "react";
 
 const DenomList = ({ position, data, onChange, value }: any) => {
@@ -107,11 +108,16 @@ const DenomList = ({ position, data, onChange, value }: any) => {
                       {currencyConverter(item.price)}
                     </Typography>
                   </Box>
-                  <Avatar
-                    src={item.logoDenom || data.logoDenom || data.logoUrl}
-                    variant="rounded"
-                    sx={{ width: 30, height: 30 }}
-                  />
+                  <Avatar variant="rounded">
+                    <Image
+                      alt="denom"
+                      src={item.logoDenom || data.logoDenom || data.logoUrl}
+                      width={30}
+                      height={30}
+                      loading="lazy"
+                      quality={55}
+                    />
+                  </Avatar>
                 </CardContent>
               </Card>
             </Grid>

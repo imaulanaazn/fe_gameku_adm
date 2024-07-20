@@ -152,7 +152,8 @@ const GroupedDenomList = ({ position, data, onChange, value }: any) => {
                             className="rounded-lg object-contain"
                             width="30"
                             height="30"
-                            quality={60}
+                            quality={55}
+                            loading="lazy"
                             style={{ borderRadius: 2 }}
                           />
                         </CardContent>

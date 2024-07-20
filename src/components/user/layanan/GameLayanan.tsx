@@ -10,8 +10,27 @@ import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 const GameLayanan: React.FC<{ games: IGame[] }> = ({ games }) => {
   const category = useRecoilValue(layananState);
   const [filteredGames, setFilteredGames] = useState<IGame[] | []>(games);
-  const [limit, setLimit] = useState(12);
+  const [limit, setLimit] = useState(9);
   const slicedGames = filteredGames.slice(0, limit);
+
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => setScreenWidth(window.innerWidth);
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
+    if (screenWidth < 600) {
+      setLimit(9);
+    } else if (screenWidth < 900) {
+      setLimit(9);
+    } else {
+      setLimit(12);
+    }
+  }, [screenWidth]);
 
   const handleClickExpandGame = () => {
     if (limit > games.length) {

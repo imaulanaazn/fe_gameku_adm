@@ -13,6 +13,8 @@ import ReactPaginate from "react-paginate";
 import { toast } from "react-toastify";
 import { useRecoilState } from "recoil";
 
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+
 const HistoryTopup = () => {
   // const [loading, setLoading] = useState(false);
   const [orderHistory, setOrderHistory] =
@@ -31,11 +33,8 @@ const HistoryTopup = () => {
 
   const getOrderHistory = async (pageNumber?: number) => {
     const result = await fetch(
-      process.env.NEXT_PUBLIC_BASE_URL +
-        "/v1/order-history?mobileNumber=" +
-        user.mobileNumber +
-        "&page=" +
-        (pageNumber || page),
+      `
+      ${BASE_URL}/v1/user/orders?type=order&page=${pageNumber || page}`,
       {
         method: "GET",
         cache: "no-cache",
@@ -112,16 +111,19 @@ const HistoryTopup = () => {
   return (
     <>
       <div className="flex flex-col items-center gap-3 mt-10  mb-6 md:mt-12 lg:mt-6 xl:mb-10 ">
-        <h1 className="font-semibold text-xl xl:text-2xl text-neutral-800">
+        <h1 className="font-semibold text-xl  text-neutral-800">
           Riwayat Topup
         </h1>
       </div>
       <div className="w-full">
         {isMobile && (
-          <div className="w-full rounded-xl shadow-md py-2">
+          <div className="w-full py-2">
             {orderHistory &&
               orderHistory.data.map((item, index) => (
-                <div className="bg-white text-black p-4 mb-2" key={index}>
+                <div
+                  className="bg-white text-black p-4 mb-4 shadow-md rounded-xl"
+                  key={index}
+                >
                   <div className="flex justify-between mt-2">
                     <div>
                       <p className="text-neutral-600 text-sm">No</p>
@@ -175,23 +177,23 @@ const HistoryTopup = () => {
         {!isMobile && (
           <table className="w-full text-gray-600 text-sm">
             <thead>
-              <tr className="bg-white">
-                <th className="py-2 px-4 sm:py-2 sm:px-6 md:py-3 md:px-4 lg:py-2 lg:px-6 text-neutral-600 xl:text-base">
+              <tr className="bg-gray-100">
+                <th className="font-medium py-2 px-4 sm:py-2 sm:px-6 md:py-3 md:px-4 lg:py-3 lg:px-6 text-neutral-700 xl:text-base">
                   No
                 </th>
-                <th className="py-2 px-4 sm:py-2 sm:px-6 md:py-3 md:px-4 lg:py-2 lg:px-6 text-neutral-600 xl:text-base">
+                <th className="font-medium py-2 px-4 sm:py-2 sm:px-6 md:py-3 md:px-4 lg:py-3 lg:px-6 text-neutral-700 xl:text-base">
                   Kode Transaksi
                 </th>
-                <th className="py-2 px-4 sm:py-2 sm:px-6 md:py-3 md:px-4 lg:py-2 lg:px-6 text-neutral-600 xl:text-base">
+                <th className="font-medium py-2 px-4 sm:py-2 sm:px-6 md:py-3 md:px-4 lg:py-3 lg:px-6 text-neutral-700 xl:text-base">
                   Produk
                 </th>
-                <th className="py-2 px-4 sm:py-2 sm:px-6 md:py-3 md:px-4 lg:py-2 lg:px-6 text-neutral-600 xl:text-base">
+                <th className="font-medium py-2 px-4 sm:py-2 sm:px-6 md:py-3 md:px-4 lg:py-3 lg:px-6 text-neutral-700 xl:text-base">
                   Denom
                 </th>
-                <th className="py-2 px-4 sm:py-2 sm:px-6 md:py-3 md:px-4 lg:py-2 lg:px-6 text-neutral-600 xl:text-base">
+                <th className="font-medium py-2 px-4 sm:py-2 sm:px-6 md:py-3 md:px-4 lg:py-3 lg:px-6 text-neutral-700 xl:text-base">
                   Harga
                 </th>
-                <th className="py-2 px-4 sm:py-2 sm:px-6 md:py-3 md:px-4 lg:py-2 lg:px-6 text-neutral-600 xl:text-base">
+                <th className="font-medium py-2 px-4 sm:py-2 sm:px-6 md:py-3 md:px-4 lg:py-3 lg:px-6 text-neutral-700 xl:text-base">
                   Status Pembayaran
                 </th>
               </tr>
@@ -242,8 +244,8 @@ const HistoryTopup = () => {
             forcePage={page - 1}
             containerClassName={"flex space-x-2 items-center"}
             pageLinkClassName="font-semibold rounded-md px-2 py-2"
-            nextLinkClassName="bg-white border-2 border-gray-400 text-gray-800 rounded-md px-3 py-2"
-            previousLinkClassName="bg-white border-2 border-gray-400 text-gray-800 rounded-md px-3 py-2"
+            nextLinkClassName="bg-white border-2 border-gray-300 text-gray-500 rounded-md px-3 py-2"
+            previousLinkClassName="bg-white border-2 border-gray-300 text-gray-500 rounded-md px-3 py-2"
             // nextLinkClassName={nextPaginationBtn}
             // previousLinkClassName={prevPaginationBtn}
             activeClassName={

@@ -1,5 +1,5 @@
 import Maintenance from "@/components/maintenance/Maintenance";
-import Profile from "@/components/profile/Profile";
+import Dashboard from "@/components/profile/dashboard/Dashboard";
 import sendRequest from "@/lib/baseApi";
 import { Metadata } from "next/types";
 
@@ -10,17 +10,8 @@ const Posts = async () => {
   if (statusWebsite.data[0].value === "maintenance") {
     return <Maintenance />;
   }
-  // const bg = await sendRequest<{ value: string }[]>(
-  //   "/v1/config?type=bg_profile"
-  // );
-  return (
-    <div className="w-full h-fit mx-auto grid align-middle">
-      <Profile />
-    </div>
-  );
+  return <Dashboard />;
 };
-
-
 
 export const generateMetadata: () => Promise<
   Metadata | undefined

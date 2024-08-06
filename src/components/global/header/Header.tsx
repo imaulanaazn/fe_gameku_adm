@@ -66,6 +66,30 @@ const Header = () => {
 
   const [logo, setLogo] = useRecoilState(imageAtom);
 
+  const getUser = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/v1/me`,
+        {
+          credentials: "include",
+          headers: {
+            "ngrok-skip-browser-warning": "true",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      setUser(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const handleDropdownToggle = () => {
     setIsDropdownOpen((prevVal) => !prevVal);
   };
@@ -175,6 +199,8 @@ const Header = () => {
   }, [sizeWidth, width]);
 
   useEffect(() => {
+    getUser();
+
     if (!logo.logo) {
       getLogo();
     }
@@ -241,7 +267,7 @@ const Header = () => {
               </nav>
             </div>
 
-            <div className="right-side flex gap-6 lg:gap-2 relative">
+            <div className="right-side flex gap-6 lg:gap-4 relative items-center">
               <div
                 className="search-bar w-full relative"
                 ref={modalContainerRef}
@@ -258,7 +284,7 @@ const Header = () => {
                 <button>
                   <FontAwesomeIcon
                     icon={faMagnifyingGlass}
-                    className="absolute top-1/2 right-4 -translate-y-1/2 text-lg text-primary-900"
+                    className="absolute top-1/2 right-6 -translate-y-1/2 text-lg text-primary-900"
                   />
                 </button>
 
@@ -275,8 +301,14 @@ const Header = () => {
                   onMouseEnter={handleDropdownToggle}
                   onMouseLeave={handleDropdownToggle}
                 >
-                  <button className="h-full rounded-full px-3 border border-slate-400 border-solid lg:ml-6">
-                    <FontAwesomeIcon icon={faUser} className="" />
+                  <button className="h-full w-auto rounded-full aspect-square">
+                    <Image
+                      src={user.image || "/images/user-fallback.png"}
+                      alt="user profile"
+                      width={50}
+                      height={50}
+                      objectFit="cover"
+                    />
                   </button>
                   <div
                     className={`${

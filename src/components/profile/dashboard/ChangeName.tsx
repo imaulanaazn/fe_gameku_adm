@@ -64,7 +64,7 @@ const ChangeName = () => {
   };
   return (
     <>
-      <div className="w-full h-full md:h-max px-6 py-8 md:px-10 md:py-10 xl:px-16 xl:py-16 flex flex-col justify-center shadow-md rounded-xl bg-white">
+      <div className="w-full h-full md:h-max px-6 py-8 md:px-10 md:py-10 xl:px-8 xl:py-10 flex flex-col justify-center shadow-md rounded-xl bg-white">
         <h2 className="font-semibold text-2xl mb-8 xl:mb-10 text-center">
           Ganti Nama
         </h2>

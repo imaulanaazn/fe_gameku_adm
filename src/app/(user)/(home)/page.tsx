@@ -68,7 +68,7 @@ const Home = async () => {
 
       <NoGameFound />
 
-      {posts.data.data.length > 0 && <NewsPost posts={posts.data.data} />}
+      {/* {posts.data.data.length > 0 && <NewsPost posts={posts.data.data} />} */}
 
       <a
         href="https://api.whatsapp.com/send?phone=628112065672"

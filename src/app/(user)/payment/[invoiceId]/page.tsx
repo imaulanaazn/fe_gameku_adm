@@ -1,8 +1,8 @@
 import { Metadata } from "next";
 import sendRequest from "@/lib/baseApi";
 import NotFound from "./not-found";
-import Invoices from "@/components/payment/Invoices";
-import Maintenance from "@/components/maintenance/Maintenance";
+import Invoices from "@/components/user/payment/Invoices";
+import Maintenance from "@/components/global/maintenance/Maintenance";
 import Container from "@/components/global/Container/Container";
 import { Box } from "@mui/material";
 

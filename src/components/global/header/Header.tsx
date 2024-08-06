@@ -22,33 +22,7 @@ import { imageAtom } from "@/atom/logo";
 import { toast } from "react-toastify";
 import Container from "../Container/Container";
 import SearchResultModal from "./SearchResultModal";
-
-const links = [
-  {
-    id: 1,
-    name: "Beranda",
-    url: "/",
-    icon: faHouse,
-  },
-  {
-    id: 2,
-    name: "Layanan",
-    url: "/layanan",
-    icon: faScrewdriverWrench,
-  },
-  {
-    id: 3,
-    name: "Cek transaksi",
-    url: "/cek-pesanan",
-    icon: faCreditCard,
-  },
-  {
-    id: 4,
-    name: "Reseller",
-    url: "https://reseller.gasskeuntopup.com/",
-    icon: faCircleDollarToSlot,
-  },
-];
+import { links } from "./constants";
 
 const Header = () => {
   const { push } = useRouter();

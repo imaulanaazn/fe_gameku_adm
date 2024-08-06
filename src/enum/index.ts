@@ -124,3 +124,12 @@ export enum PromotionType {
   RESELLER = "reseller",
   ALL = "all",
 }
+
+export enum ROLES {
+  ADMIN = "admin",
+  ADMINMANAGER = "super-admin",
+  WRITER = "writer",
+  USER = "user",
+  GUEST = "guest",
+  RESELLER = "reseller",
+}

@@ -37,6 +37,11 @@ const linkCepat = [
     name: "Reseller",
     url: "https://reseller.gasskeuntopup.com/",
   },
+  {
+    id: 6,
+    name: "Artikel",
+    url: "/article",
+  },
 ];
 
 interface DisplaySocialMedia {
@@ -113,13 +118,10 @@ const Footer = () => {
             <h2 className="flex-1 text-white text-2xl lg:text-3xl font-bold">
               Top-up Lebih Mudah Di Gasskeun Top-up
             </h2>
-            <a
-              href="/#"
-              className="hidden lg:block flex-1 flex items-center justify-center"
-            >
+            <div className="hidden lg:block flex-1 flex items-center justify-center">
               <Link href="/">
                 <Image
-                  src={logo.logo_footer}
+                  src={logo.logo_footer || ""}
                   alt="Logo Gasskeun Topup"
                   width="160"
                   height="160"
@@ -127,7 +129,7 @@ const Footer = () => {
                   className="object-contain mx-auto"
                 />
               </Link>
-            </a>
+            </div>
             <div className="flex-1 flex justify-end mt-8">
               <a
                 href="https://reseller.gasskeuntopup.com/"

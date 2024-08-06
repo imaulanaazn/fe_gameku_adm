@@ -1,16 +1,16 @@
 "use client";
 
 import { whatsappTemplateState } from "@/atom/whatsappTemplateState";
-import ChangeLogo from "./components/ChangeLogo";
-import StatusWebsite from "./components/StatusWebsite";
-import TemplateMessage from "./components/TemplateMessage";
-import Whatsapp from "./components/Whatsapp";
-import Xendit from "./components/Xendit";
+import ChangeLogo from "../../../../components/admin/configuration/ChangeLogo";
+import StatusWebsite from "../../../../components/admin/configuration/StatusWebsite";
+import TemplateMessage from "../../../../components/admin/configuration/TemplateMessage";
+import Whatsapp from "../../../../components/admin/configuration/Whatsapp";
+import Xendit from "../../../../components/admin/configuration/Xendit";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
-import BackgroungImages from "./components/BackgroungImages";
-import ChangeLogoFooter from "./components/ChangeLogoFooter";
-import AdminNavbar from "@/app/(admin)/admin/(dashboard)/components/AdminNavbar";
+import BackgroungImages from "../../../../components/admin/configuration/BackgroungImages";
+import ChangeLogoFooter from "../../../../components/admin/configuration/ChangeLogoFooter";
+import AdminNavbar from "@/components/admin/dashboard/AdminNavbar";
 import AdminHeader from "@/components/admin/AdminHeader";
 
 const Configuration = () => {
@@ -47,12 +47,12 @@ const Configuration = () => {
         <div className="website-config bg-white rounded-xl p-6 lg:p-8 mb-6 lg:mb-8">
           <div>
             <StatusWebsite />
-            <div className="flex flex-col xl:flex-row mt-6 lg:mt-8">
+            <div className="flex flex-col xl:flex-row mt-6 lg:mt-8 gap-6">
               <div className="mt-2 w-full xl:w-1/2">
                 <h1 className="mb-4 font-medium text-xl md:text-2xl text-neutral-800">
                   Logo Website
                 </h1>
-                <div className="flex flex-col md:flex-row gap-6 lg:gap-8">
+                <div className="flex flex-col sm:flex-row gap-6 lg:gap-8">
                   <ChangeLogo />
                   <ChangeLogoFooter />
                 </div>

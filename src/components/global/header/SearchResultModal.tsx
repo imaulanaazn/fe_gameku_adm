@@ -72,9 +72,9 @@ const SearchResultModal = ({
       <div className="result-container bg-white w-full mx-auto shadow-md rounded-lg overflow-hidden">
         <div className="result p-3 h-max">
           {!searchKeyword && (
-            <h1 className="font-semibold text-sm md:text-base text-neutral-900 pb-1">
+            <h2 className="font-semibold text-sm md:text-base text-neutral-900 pb-1">
               Popular Games
-            </h1>
+            </h2>
           )}
 
           {searchKeyword && games.length < 1 && (
@@ -89,7 +89,6 @@ const SearchResultModal = ({
             </div>
           )}
 
-          <h1></h1>
           <div className="max-h-96 overflow-y-auto">
             {games.map((game) => (
               <GameListItem data={game} key={game.id} />

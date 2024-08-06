@@ -20,14 +20,14 @@ const Game: React.FC<IGameProps> = ({ data }) => {
           width="100"
           height="100"
           quality={50}
-          sizes="(max-width: 768px) 20vw, (max-width: 1200px) 30vw, 25vw"
+          sizes="(max-width: 768px) 20vw, (max-width: 1200px) 28vw, 22vw"
           loading="lazy"
           className="w-full rounded-lg object-cover aspect-square"
         />
         <div className="pt-2 lg:pt-3 text-center">
-          <p className="md:font-semibold text-xs md:text-sm text-neutral-900">
+          <h3 className="md:font-semibold text-xs md:text-sm text-neutral-900">
             {data.name}
-          </p>
+          </h3>
         </div>
       </div>
     </Link>

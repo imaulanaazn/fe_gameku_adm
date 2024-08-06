@@ -1,11 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Loading from "./loading";
-import AdminNavbar from "@/app/(admin)/admin/(dashboard)/components/AdminNavbar";
-import TableGame from "./components/TableGame";
+import Loading from "@/components/global/loading/CompLoading";
+import AdminNavbar from "@/components/admin/dashboard/AdminNavbar";
+import TableGame from "../../../../components/admin/game/TableGame";
 import AdminHeader from "@/components/admin/AdminHeader";
-import PopularGameModal from "./components/PopularGameModal";
+import PopularGameModal from "../../../../components/admin/game/PopularGameModal";
 
 const AdminGame = () => {
   const [games, setGames] = useState<IGamePagination>();

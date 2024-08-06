@@ -1,9 +1,9 @@
 "use client";
 
-import ChartOrderHistory from "@/app/(admin)/admin/(dashboard)/components/ChartOrderHistory";
-import ChartPopulargame from "@/app/(admin)/admin/(dashboard)/components/ChartPopulargame";
-import DisplayTotal from "@/app/(admin)/admin/(dashboard)/components/DisplayTotal";
-import TableRecentOrders from "@/app/(admin)/admin/(dashboard)/components/TableRecentOrders";
+import ChartOrderHistory from "@/components/admin/dashboard/ChartOrderHistory";
+import ChartPopulargame from "@/components/admin/dashboard/ChartPopulargame";
+import DisplayTotal from "@/components/admin/dashboard/DisplayTotal";
+import TableRecentOrders from "@/components/admin/dashboard/TableRecentOrders";
 import Header from "@/components/admin/Header";
 import {
   faArrowRotateRight,
@@ -16,16 +16,17 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import dayjs from "dayjs";
-import Loading from "./loading";
+import Loading from "@/components/global/loading/CompLoading";
 import { io } from "socket.io-client";
-import AdminNavbar from "@/app/(admin)/admin/(dashboard)/components/AdminNavbar";
+import AdminNavbar from "@/components/admin/dashboard/AdminNavbar";
 import { Swiper, SwiperSlide } from "swiper/react";
 import DatePicker from "react-datepicker";
 import {
+  bgColorsInitState,
   carouselBreakpoints,
   initialStatusCounts,
   optionsStatsDate,
-} from "./utils";
+} from "./constants";
 import Select from "react-select";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -98,14 +99,7 @@ const Admin = () => {
   const [refresh, setRefresh] = useState(0);
   const [loading, setLoading] = useState(true);
   const [statsLoading, setStatsLoading] = useState(false);
-  const [bgColors, setBgColors] = useState({
-    orders: "bg-white",
-    ordersFailed: "bg-white",
-    ordersPending: "bg-white",
-    ordersExpired: "bg-white",
-    ordersSuccess: "bg-white",
-    registration: "bg-white",
-  });
+  const [bgColors, setBgColors] = useState(bgColorsInitState);
   const [bgColorsLatestOrder, setBgColorsLatestOrders] = useState("bg-white");
   // const [updateOrderId, setUpdateOrderId] = useState("");
 
@@ -342,7 +336,7 @@ const Admin = () => {
               slidesPerView={1}
               breakpoints={carouselBreakpoints}
               freeMode={true}
-              className="flex items-center"
+              className="flex items-center w-full"
             >
               <SwiperSlide className="pb-1">
                 <DisplayTotal

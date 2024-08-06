@@ -20,7 +20,7 @@ import { currencyConverter } from "@/@core/utils/currencyConverter";
 import dayjs from "dayjs";
 import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
 import { OrderStatuses } from "@/enum";
-import FeedbackModal from "@/components/PaymentSuccessPage/FeedbackModal";
+import FeedbackModal from "@/components/user/PaymentSuccessPage/FeedbackModal";
 import Loading from "./loading";
 
 interface IParams {

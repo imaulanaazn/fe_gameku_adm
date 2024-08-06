@@ -124,7 +124,7 @@ const ConfirmDelete: React.FC<IConfirmDeleteProps> = ({
             autoComplete="off"
             value={valueConfirmDelete}
             onChange={(e) => setValueConfirmDelete(e.target.value)}
-            className="py-3 px-2 w-full border mt-4 rounded-md border-primary-900 focus:outline-none focus:border-gray-300 bg-primary-50 text-sm placeholder:text-sm text-primary-900 placeholder:text-primary-900"
+            className="py-3 px-2 w-full border mt-4 rounded-md border-primary-900 focus:outline-none focus:border-primary-900 focus:bg-primary-50 text-sm placeholder:text-sm text-primary-900 placeholder:text-primary-900"
           />
           <div className="w-full flex justify-end">
             <button

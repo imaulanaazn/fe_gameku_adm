@@ -56,7 +56,13 @@ export default function RootLayout({
   }, [pathname]);
 
   return (
-    <html lang="en">
+    <html lang="id">
+      <head>
+        <meta
+          name="google-site-verification"
+          content="KL7H3ffvol9INrM6-tucVmtIyHc5yalcGNcv_sfq37s"
+        />
+      </head>
       <body className="overflow-y-hidden">
         <RecoilRoot>
           <ToastContainer
@@ -68,7 +74,7 @@ export default function RootLayout({
           />
           <div className="flex w-full text-sm">
             {pathname !== "/admin/auth/login" && <SideBarAdmin />}
-            <div className={`w-full bg-primary-25 overflow-y-scroll h-screen`}>
+            <div className={`w-full bg-primary-25 overflow-y-auto h-screen`}>
               {children}
             </div>
           </div>

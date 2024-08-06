@@ -4,12 +4,12 @@ import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCoffee, faHeart, faSmile } from "@fortawesome/free-solid-svg-icons";
 import Header from "@/components/admin/Header";
-import TableSocialMedia from "@/app/(admin)/admin/social-media/components/TableSocialMedia";
+import TableSocialMedia from "@/components/admin/social-media/TableSocialMedia";
 import { IPromotionPagination } from "@/interfaces/promotion";
 import { INewsVideosPagination } from "@/interfaces/newsVideo";
-import Loading from "../(dashboard)/loading";
+import Loading from "@/components/global/loading/CompLoading";
 import { ISocialMediaPagination } from "@/interfaces/socialMedia";
-import AdminNavbar from "@/app/(admin)/admin/(dashboard)/components/AdminNavbar";
+import AdminNavbar from "@/components/admin/dashboard/AdminNavbar";
 import AdminHeader from "@/components/admin/AdminHeader";
 
 function IconSelector() {

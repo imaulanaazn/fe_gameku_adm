@@ -42,7 +42,7 @@ const ListGames: React.FC<ListGameProps> = ({ title, data }) => {
           {title}
         </h2>
         <div className="text-center w-full">
-          <div className="mt-4 md:mt-6 lg:mt-10 grid grid-cols-auto-sm md:grid-cols-auto-md lg:grid-cols-auto-lg gap-3 lg:gap-6">
+          <div className="mt-4 md:mt-6 lg:mt-10 grid grid-cols-auto-xs xs:grid-cols-auto-sm md:grid-cols-auto-md lg:grid-cols-auto-lg gap-3 lg:gap-6">
             {slicedGames.map((game) => (
               <Game data={game} key={game.id} />
             ))}

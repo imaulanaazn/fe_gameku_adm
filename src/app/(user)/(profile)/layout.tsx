@@ -41,15 +41,16 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const [loading, setLoading] = useState(true);
   const inputFile = useRef<HTMLInputElement>(null);
   const { push } = useRouter();
   const [user, setUser] = useRecoilState(userState);
   const currentPath = usePathname();
+  const [previewImage, setPreviewImage] = useState(
+    user.image || "/images/user-fallback.png"
+  );
 
   const handleLogout = async () => {
     const toastId = toast.loading("Memproses logout...");
-    setLoading(true);
     const responseCustomer = await fetch(
       process.env.NEXT_PUBLIC_BASE_URL + "/v1/customer/logout",
       {
@@ -83,15 +84,14 @@ export default function RootLayout({
         autoClose: 3000,
       });
     }
-    setLoading(false);
   };
 
-  const uploadImage = async (file: any) => {
-    setLoading(true);
+  const uploadImage = async (file: File) => {
     const formData = new FormData();
     formData.append("image", file);
+
     const req = await fetch(
-      process.env.NEXT_PUBLIC_BASE_URL + "/v1/customer/image?id=" + user.id,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/v1/customer/image?id=${user.id}`,
       {
         cache: "no-cache",
         method: "PUT",
@@ -112,13 +112,27 @@ export default function RootLayout({
 
       localStorage.setItem("user", JSON.stringify({ ...user, ...res }));
     }
-    setLoading(false);
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0];
-    if (file) {
+    if (
+      file &&
+      file.size <= 2 * 1024 * 1024 &&
+      ["image/png", "image/jpg", "image/jpeg"].includes(file.type)
+    ) {
+      // Check file size and type
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+
       uploadImage(file);
+    } else {
+      alert(
+        "Please select a valid image file (png, jpg, jpeg) with size up to 2MB."
+      );
     }
   };
 
@@ -128,21 +142,52 @@ export default function RootLayout({
     }
   };
 
+  useEffect(() => {
+    const getUser = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/v1/me`,
+          {
+            credentials: "include",
+            headers: {
+              "ngrok-skip-browser-warning": "true",
+            },
+          }
+        );
+
+        if (!response.ok) {
+          push("/login");
+          throw new Error(`Error: ${response.status}`);
+        }
+
+        const data = await response.json();
+        if (!data.id) {
+          push("/login");
+        }
+      } catch (error) {
+        push("/login");
+        console.error(error);
+      }
+    };
+
+    getUser();
+  }, [push]);
+
   return (
     <Container className="w-full flex gap-8 pt-10 pb-12">
       <div className="sidebard w-3/12 bg-white rounded-lg hidden lg:block">
         <div className="bg-white rounded-lg p-6">
           <div className="flex flex-col items-center">
             <div
-              className="h-20 md:h-28 lg:h-14 aspect-square rounded-full bg-opacity-50 flex-shrink-0 relative group border-2 border-gray-400 lg:border-white"
+              className="h-20 md:h-28 lg:h-16 aspect-square rounded-full bg-opacity-50 flex-shrink-0 relative group border-2 border-gray-400 lg:border-white"
               onClick={handleClick}
             >
               <Image
-                src={user.image || "/images/user-fallback.png"}
+                src={previewImage}
                 width={140}
                 height={140}
                 alt="user profile"
-                className="w-full h-full"
+                className="w-full h-full rounded-full"
               />
               <div className="hidden group-hover:flex cursor-pointer bg-opacity-30 absolute top-0 left-0 bg-black w-full h-full z-50 aspect-square rounded-full justify-center items-center">
                 <span className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 z-40 text-white">

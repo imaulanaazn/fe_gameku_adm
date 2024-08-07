@@ -1,5 +1,4 @@
-import Container from "@/components/global/Container/Container";
-import Maintenance from "@/components/maintenance/Maintenance";
+import Maintenance from "@/components/global/maintenance/Maintenance";
 import ChangeEmail from "@/components/profile/dashboard/ChangeEmail";
 import ChangeName from "@/components/profile/dashboard/ChangeName";
 import ChangePassword from "@/components/profile/dashboard/ChangePassword";

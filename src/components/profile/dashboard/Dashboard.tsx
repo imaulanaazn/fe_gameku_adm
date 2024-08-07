@@ -2,10 +2,10 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import HistoryTopup from "./HistoryTopup";
-import Loading from "@/app/(user)/(home)/components/loading";
 import Image from "next/image";
 import Link from "next/link";
 import HistoryDeposit from "./HistoryDeposit";
+import Loading from "@/components/global/loading/CompLoading";
 
 const formatter = (data: number) => {
   return new Intl.NumberFormat("id-ID", {
@@ -76,7 +76,7 @@ const Dashboard = () => {
       {loading && <Loading />}
 
       {!loading && (
-        <div className="mx-auto py-0 lg:py-24 md:pt-12 lg:pt-24  h-fit min-h-screen text-center w-full lg:p-5 text-white flex flex-col items-center">
+        <div className="mx-auto py-0 lg:pb-24 md:py-12 h-fit min-h-screen text-center w-full lg:p-5 text-white flex flex-col items-center">
           <div className="w-full flex flex-col lg:flex-row justify-between items-center gap-8 mb-10 md:mb-12">
             <div className="w-full bg-gradient-to-tr from-rose-500 to-orange-300 mx-auto rounded-lg md:rounded-xl flex items-center justify-between gap-4 py-4 px-6  md:py-6 md:px-8">
               <div className="flex items-center gap-4 lg:gap-6">

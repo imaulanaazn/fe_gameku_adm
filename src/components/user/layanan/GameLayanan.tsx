@@ -76,7 +76,7 @@ const GameLayanan: React.FC<{ games: IGame[] }> = ({ games }) => {
   return (
     <>
       <div className="mt-4 md:mt-6">
-        <div className="grid grid-cols-auto-sm md:grid-cols-auto-md lg:grid-cols-auto-lg gap-3 lg:gap-6">
+        <div className="grid grid-cols-auto-xs xs:grid-cols-auto-sm md:grid-cols-auto-md lg:grid-cols-auto-lg gap-3 lg:gap-6">
           {slicedGames &&
             slicedGames.map((data) => <Game data={data} key={data.id} />)}
         </div>

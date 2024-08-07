@@ -50,7 +50,7 @@ const PopularGames: React.FC<IPopularGamesProps> = ({ popularGames }) => {
           mainkan game terpopuler saat ini dan segera top up 
         </p> */}
 
-        <div className="mt-4 md:mt-6 lg:mt-10 grid grid-cols-auto-sm md:grid-cols-auto-md lg:grid-cols-auto-lg gap-3 lg:gap-6">
+        <div className="mt-4 md:mt-6 lg:mt-10 grid grid-cols-auto-xs xs:grid-cols-auto-sm md:grid-cols-auto-md lg:grid-cols-auto-lg gap-3 lg:gap-6">
           {limitedPopularGames.map((data) => (
             <>
               <Game data={data} />

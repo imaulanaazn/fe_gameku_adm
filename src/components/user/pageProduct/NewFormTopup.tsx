@@ -19,6 +19,7 @@ import Link from "next/link";
 import MobileNumber from "./MobileNumber";
 import useDevice from "@/@core/hooks/useDevice";
 import ProductReview from "./ProductReview";
+import { toast } from "react-toastify";
 
 interface IFormProps {
   products: IGameDetail;
@@ -139,6 +140,29 @@ const NewFormTopup: React.FC<IFormProps> = ({ products, paymentsMethod }) => {
     }
   }, [products]);
 
+  useEffect(() => {
+    const getUserBalance = async () => {
+      const req = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/v1/user/balance`,
+        {
+          headers: {
+            "ngrok-skip-browser-warning": "true",
+          },
+          credentials: "include",
+        }
+      );
+
+      if (!req.ok) {
+        console.error("failed to fetch user balance status : " + req.status);
+      } else {
+        const balance = await req.json();
+        setBalance(balance.value || 0);
+      }
+    };
+
+    getUserBalance();
+  }, []);
+
   return (
     products && (
       <Box sx={{ position: "relative", pb: { xs: 12, md: 14 } }}>
@@ -191,6 +215,7 @@ const NewFormTopup: React.FC<IFormProps> = ({ products, paymentsMethod }) => {
                 onChange={(key: any, value: any) => handleChange(key, value)}
               />
               <PaymentMethod
+                balance={balance}
                 position={products.type === "topup" ? 4 : 3}
                 value={data}
                 data={paymentsMethod.length > 0 && paymentsMethod}
@@ -246,7 +271,12 @@ const NewFormTopup: React.FC<IFormProps> = ({ products, paymentsMethod }) => {
               variant="contained"
               size="large"
               sx={{ marginTop: 4 }}
-              onClick={() => setModalOpen(true)}
+              onClick={() => {
+                data.paymentMethod.cd === "GASSKEUN_USER" &&
+                balance < data.totalAmountBeforeFee
+                  ? toast.error("Gasskeun Coin mu Tidak Mencukupi")
+                  : setModalOpen(true);
+              }}
               disabled={isDisabled}
             >
               Beli Sekarang

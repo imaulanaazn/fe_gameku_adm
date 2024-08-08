@@ -252,32 +252,33 @@ export default function RootLayout({
 
       <div className="w-full lg:w-9/12">{children}</div>
 
-      <div className="lg:hidden fixed bottom-0 left-0 w-full bg-slate-100 py-6">
+      {/* Mobile Menu */}
+      <div className="lg:hidden fixed bottom-0 left-0 w-full bg-slate-100 pt-4 pb-3">
         <ul className="flex justify-evenly">
           {sidebarMenus.map((menu) => (
             <li key={menu.path}>
               <Link
                 href={menu.path}
-                className={`flex flex-col gap-3 items-center hover:text-primary-900 transition-all ${
+                className={`flex flex-col gap-2 items-center hover:text-primary-900 transition-all ${
                   menu.path === currentPath
                     ? "text-primary-900"
-                    : "text-gray-500"
+                    : "text-gray-400"
                 }`}
               >
                 <FontAwesomeIcon icon={menu.icon} className="text-xl" />
-                <span>{menu.name}</span>
+                <span className="text-sm">{menu.name}</span>
               </Link>
             </li>
           ))}
           <li>
             <button
               className={
-                "flex flex-col gap-3 items-center hover:text-primary-900 transition-all text-gray-500"
+                "flex flex-col gap-2 items-center hover:text-primary-900 transition-all text-gray-400"
               }
               onClick={handleLogout}
             >
               <FontAwesomeIcon icon={faRightFromBracket} className="text-xl" />
-              <span>Logout</span>
+              <span className="text-sm">Logout</span>
             </button>
           </li>
         </ul>

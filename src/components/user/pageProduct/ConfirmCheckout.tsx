@@ -63,7 +63,7 @@ const ConfirmCheckout = ({
   const requestCheckout = async () => {
     setStep(2);
     setWaiting(true);
-    const req = await fetch(process.env.NEXT_PUBLIC_BASE_URL + "/v2/order", {
+    const req = await fetch(process.env.NEXT_PUBLIC_BASE_URL + "/v3/order", {
       credentials: "include",
       headers: {
         "content-type": "application/json",

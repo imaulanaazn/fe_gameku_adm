@@ -25,7 +25,7 @@ const page = async ({ params }: IParams) => {
     return <NotFound />;
   }
   const paymentsMethod = await sendRequest<IPaymentMethod[]>(
-    "/v1/payments-method?query=9"
+    "/v1/payments-method?query=9&type=payment"
   );
 
   const ratings = await sendRequest<IReviewsResponse>(

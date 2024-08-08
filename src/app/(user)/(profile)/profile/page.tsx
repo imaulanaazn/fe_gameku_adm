@@ -1,6 +1,5 @@
 import Maintenance from "@/components/global/maintenance/Maintenance";
-import Profile from "@/components/user/profile/Profile";
-import Dashboard from "@/components/profile/dashboard/Dashboard";
+import Dashboard from "@/components/user/profile/dashboard/Dashboard";
 import sendRequest from "@/lib/baseApi";
 import { Metadata } from "next/types";
 

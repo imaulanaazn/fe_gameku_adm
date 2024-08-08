@@ -1,7 +1,7 @@
 import Maintenance from "@/components/global/maintenance/Maintenance";
-import ChangeEmail from "@/components/profile/dashboard/ChangeEmail";
-import ChangeName from "@/components/profile/dashboard/ChangeName";
-import ChangePassword from "@/components/profile/dashboard/ChangePassword";
+import ChangeEmail from "@/components/user/profile/settings/ChangeEmail";
+import ChangeName from "@/components/user/profile/settings/ChangeName";
+import ChangePassword from "@/components/user/profile/settings/ChangePassword";
 import sendRequest from "@/lib/baseApi";
 import React from "react";
 

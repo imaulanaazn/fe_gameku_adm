@@ -23,6 +23,10 @@ import { OrderStatuses } from "@/enum";
 import FeedbackModal from "@/components/user/PaymentSuccessPage/FeedbackModal";
 import Loading from "./loading";
 
+enum ORDER_TYPE {
+  DEPOSIT = "Gasskeun Coin",
+}
+
 interface IParams {
   params: {
     invoiceId: string;
@@ -123,59 +127,61 @@ export default function PaymentSuccess({ params }: IParams) {
                   Top Up {invoice?.game.name}
                 </Typography>
 
-                <Box>
-                  <Typography variant="body1" fontWeight="500">
-                    Item Detail
-                  </Typography>
-                  {invoice?.order?.userId && (
-                    <Stack
-                      direction="row"
-                      margin="0.25rem 0"
-                      justifyContent="space-between"
-                    >
-                      <Typography variant="body2" sx={{ fontWeight: 400 }}>
-                        User ID
-                      </Typography>
-                      {invoice?.order?.userId && (
+                {invoice?.game.name !== ORDER_TYPE.DEPOSIT && (
+                  <Box>
+                    <Typography variant="body1" fontWeight="500">
+                      Item Detail
+                    </Typography>
+                    {invoice?.order?.userId && (
+                      <Stack
+                        direction="row"
+                        margin="0.25rem 0"
+                        justifyContent="space-between"
+                      >
                         <Typography variant="body2" sx={{ fontWeight: 400 }}>
-                          {invoice?.order?.userId}
+                          User ID
                         </Typography>
-                      )}
-                    </Stack>
-                  )}
-                  {invoice?.order?.serverId && (
-                    <Stack
-                      direction="row"
-                      margin="0.25rem 0"
-                      justifyContent="space-between"
-                    >
-                      <Typography variant="body2" sx={{ fontWeight: 400 }}>
-                        Server ID
-                      </Typography>
-                      {invoice?.order?.serverId && (
+                        {invoice?.order?.userId && (
+                          <Typography variant="body2" sx={{ fontWeight: 400 }}>
+                            {invoice?.order?.userId}
+                          </Typography>
+                        )}
+                      </Stack>
+                    )}
+                    {invoice?.order?.serverId && (
+                      <Stack
+                        direction="row"
+                        margin="0.25rem 0"
+                        justifyContent="space-between"
+                      >
                         <Typography variant="body2" sx={{ fontWeight: 400 }}>
-                          {invoice?.order?.serverId}
+                          Server ID
                         </Typography>
-                      )}
-                    </Stack>
-                  )}
-                  {invoice?.order?.username && (
-                    <Stack
-                      direction="row"
-                      margin="0.25rem 0"
-                      justifyContent="space-between"
-                    >
-                      <Typography variant="body2" sx={{ fontWeight: 400 }}>
-                        Username
-                      </Typography>
-                      {invoice?.order?.username && (
+                        {invoice?.order?.serverId && (
+                          <Typography variant="body2" sx={{ fontWeight: 400 }}>
+                            {invoice?.order?.serverId}
+                          </Typography>
+                        )}
+                      </Stack>
+                    )}
+                    {invoice?.order?.username && (
+                      <Stack
+                        direction="row"
+                        margin="0.25rem 0"
+                        justifyContent="space-between"
+                      >
                         <Typography variant="body2" sx={{ fontWeight: 400 }}>
-                          {invoice?.order?.username}
+                          Username
                         </Typography>
-                      )}
-                    </Stack>
-                  )}
-                </Box>
+                        {invoice?.order?.username && (
+                          <Typography variant="body2" sx={{ fontWeight: 400 }}>
+                            {invoice?.order?.username}
+                          </Typography>
+                        )}
+                      </Stack>
+                    )}
+                  </Box>
+                )}
 
                 <Box sx={{ marginTop: "0.5rem" }}>
                   <Typography variant="body1" fontWeight="500">
@@ -289,31 +295,37 @@ export default function PaymentSuccess({ params }: IParams) {
                 Yaaay{" "}
                 <Typography component="span" fontWeight={800} color="white">
                   {" "}
-                  {invoice?.product.name}{" "}
+                  {invoice?.game.name === ORDER_TYPE.DEPOSIT
+                    ? invoice.game.name
+                    : invoice?.product.name}{" "}
                 </Typography>{" "}
                 berhasil dikirim ke akun{" "}
                 <Typography component="span" fontWeight={800} color="white">
                   {" "}
-                  {invoice?.game.name}{" "}
+                  {invoice?.game.name === ORDER_TYPE.DEPOSIT
+                    ? ""
+                    : invoice?.game.name}{" "}
                 </Typography>{" "}
                 anda Terimakasih telah menggunakan layanan gasskeun top up. kami
                 harap anda puas dengan pelayanan kami
               </Typography>
-              <Stack direction="row" gap={4} justifyContent={"center"}>
-                <Button
-                  onClick={handleOpen}
-                  sx={{
-                    backgroundColor: "white",
-                    color: "#38e08b",
-                    "&:hover": {
-                      backgroundColor: "aquamarine",
-                      color: "white",
-                    },
-                  }}
-                >
-                  Beri Ulasan
-                </Button>
-              </Stack>
+              {invoice?.game.name !== ORDER_TYPE.DEPOSIT && (
+                <Stack direction="row" gap={4} justifyContent={"center"}>
+                  <Button
+                    onClick={handleOpen}
+                    sx={{
+                      backgroundColor: "white",
+                      color: "#38e08b",
+                      "&:hover": {
+                        backgroundColor: "aquamarine",
+                        color: "white",
+                      },
+                    }}
+                  >
+                    Beri Ulasan
+                  </Button>
+                </Stack>
+              )}
             </Box>
           </Stack>
         </Container>

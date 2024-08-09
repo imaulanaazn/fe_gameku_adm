@@ -16,6 +16,7 @@ import Image from "next/image";
 import { toast } from "react-toastify";
 import formatter from "@/lib/formatter";
 import { Tooltip as ReactTooltip } from "react-tooltip";
+import { SelectionEllipseArrowInside } from "mdi-material-ui";
 registerLocale("id", id);
 
 interface IForm {
@@ -45,6 +46,7 @@ const FormDenom: React.FC<IForm> = ({
     price: 0,
     logoDenom: "",
     gameId: "",
+    digiflazzPrice: 0,
     fileImageLogoDenom: {} as any,
   });
 
@@ -81,8 +83,13 @@ const FormDenom: React.FC<IForm> = ({
     formData.append("code", newData.code);
     formData.append("name", newData.name);
     formData.append("price", newData.price.toString());
+    formData.append("digiflazzPrice", newData.digiflazzPrice.toString());
     formData.append("gameId", newData.gameId);
     formData.append("status", typeSubmit === "active" ? "active" : "archive");
+    if (typeForm === "add") {
+      formData.append("provider", " ");
+      formData.append("categoryId", " ");
+    }
 
     const req = await fetch(process.env.NEXT_PUBLIC_BASE_URL + "/v1/denom", {
       cache: "no-cache",
@@ -177,6 +184,9 @@ const FormDenom: React.FC<IForm> = ({
         price: data.price,
         priceBuy: data.priceBuy || 0,
         gameId: data.gameId,
+        digiflazzPrice:
+          data.digiflazzPrice ||
+          data.price - Math.ceil((data.price * 0.1) / 100),
         logoDenom: data.logoDenom,
         fileImageLogoDenom: {} as any,
       });
@@ -360,7 +370,16 @@ const FormDenom: React.FC<IForm> = ({
                   <>
                     {typeForm === "detail" ? (
                       <div className="w-full h-full bg-white border-2 rounded flex items-center justify-center p-4 text-xs text-neutral-600 text-center border-dashed border-gray-400">
-                        Tidak ada logo denom
+                        {newData.logoDenom || data?.logoUrl ? (
+                          <Image
+                            src={newData.logoDenom || data?.logoUrl || ""}
+                            width={100}
+                            height={100}
+                            alt={"logo denom"}
+                          />
+                        ) : (
+                          <span>Tidak ada logo denom</span>
+                        )}
                       </div>
                     ) : (
                       <div
@@ -503,7 +522,7 @@ const FormDenom: React.FC<IForm> = ({
               </label>
               <div className="w-full mt-2">
                 <input
-                  disabled={true}
+                  disabled={typeForm === "detail"}
                   required
                   type="text"
                   name="code"
@@ -536,7 +555,7 @@ const FormDenom: React.FC<IForm> = ({
               </label>
               <div className="w-full mt-2">
                 <input
-                  disabled={true}
+                  disabled={typeForm === "detail"}
                   required
                   type="text"
                   name="priceBuy"
@@ -583,9 +602,13 @@ const FormDenom: React.FC<IForm> = ({
                   onChange={(e) => {
                     const value = e.target.value.replace(/[^0-9]/g, "");
                     setPrice(value);
+
                     setNewData((prev) => ({
                       ...prev,
                       price: parseInt(value),
+                      digiflazzPrice:
+                        parseInt(value) -
+                        Math.ceil((parseInt(value) * 0.1) / 100),
                     }));
                   }}
                   className={`${
@@ -597,6 +620,44 @@ const FormDenom: React.FC<IForm> = ({
               </div>
             </div>
           </div>
+          <div className="w-1/2 mt-4">
+            <label
+              htmlFor="price"
+              className="font-medium text-base text-neutral-900 inline-block"
+            >
+              Harga Digiflazz{" "}
+              {typeForm !== "detail" && (
+                <span className="text-red-800 font-bold">*</span>
+              )}
+            </label>
+            <div className="w-full mt-2">
+              <input
+                disabled={typeForm === "detail"}
+                required
+                type="text"
+                name="price"
+                id="price"
+                placeholder="Rp. 10000"
+                autoComplete="off"
+                value={
+                  newData.digiflazzPrice && formatter(newData.digiflazzPrice)
+                }
+                onChange={(e) => {
+                  const value = e.target.value.replace(/[^0-9]/g, "");
+                  setNewData((prev) => ({
+                    ...prev,
+                    digiflazzPrice: parseInt(value),
+                  }));
+                }}
+                className={`${
+                  typeForm === "detail"
+                    ? "cursor-not-allowed text-neutral-600 bg-gray-100 border-0"
+                    : "focus:bg-primary-50 text-primary-900 border-primary-900 focus:border-primary-900"
+                } py-3 px-2 w-full border rounded-md text-sm placeholder:text-sm`}
+              />
+            </div>
+          </div>
+
           {/* <div className="mt-4 flex gap-4">
                         <div className="w-1/2">
                             <label htmlFor="name">
@@ -702,7 +763,7 @@ const FormDenom: React.FC<IForm> = ({
             </div>
           )}
           {typeForm !== "detail" && (
-            <div className="flex justify-end gap-4 bg-white mt-4">
+            <div className="flex justify-end gap-4 bg-white mt-6">
               {loading ? (
                 <>
                   <div className="bg-gray-300 text-gray-800 font-semibold w-24 text-center py-3 rounded-md cursor-not-allowed">
@@ -717,19 +778,21 @@ const FormDenom: React.FC<IForm> = ({
                 </>
               ) : (
                 <>
-                  <button
-                    type="submit"
-                    id="archive"
-                    onClick={() => setTypeSubmit("archive")}
-                    disabled={disableButtonSubmit}
-                    className={`${
-                      disableButtonSubmit
-                        ? "bg-opacity-50 cursor-not-allowed"
-                        : "bg-opacity-100 hover:bg-orange-400"
-                    } bg-orange-600  text-white font-semibold px-3 py-3 rounded-md`}
-                  >
-                    Simpan sebagai arsip
-                  </button>
+                  <div className="flex-1">
+                    <button
+                      type="submit"
+                      id="archive"
+                      onClick={() => setTypeSubmit("archive")}
+                      disabled={disableButtonSubmit}
+                      className={`${
+                        disableButtonSubmit
+                          ? "bg-opacity-50 cursor-not-allowed"
+                          : "bg-opacity-100 hover:bg-orange-400"
+                      } bg-orange-600  text-white font-semibold px-3 py-3 rounded-md`}
+                    >
+                      Simpan sebagai arsip
+                    </button>
+                  </div>
                   <button
                     onClick={() => handleShowForm(false)}
                     type="button"

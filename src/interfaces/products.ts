@@ -1,30 +1,31 @@
 interface IProductsGame {
-    id: string;
-    name: string;
-    price: number;
-    logoDenom: string;
-    gameId: string;
-    deleted: boolean;
-    createdAt: Date;
-    updatedAt: Date;
+  digiflazzPrice: number;
+  id: string;
+  name: string;
+  price: number;
+  logoDenom: string;
+  gameId: string;
+  deleted: boolean;
+  createdAt: Date;
+  updatedAt: Date;
 
-    priceBuy?: number;
-    code: string;
+  priceBuy?: number;
+  code: string;
 
-    gameName?: string;
-    totalSold?: number;
-    logoUrl?: string;
-    isActive: boolean;
+  gameName?: string;
+  totalSold?: number;
+  logoUrl?: string;
+  isActive: boolean;
 }
 
 interface IProductDetail extends IGame {
-    products: IProductsGame[];
+  products: IProductsGame[];
 }
 
 interface IProductPagination extends IPagination {
-    data: IProductsGame[];
+  data: IProductsGame[];
 }
 
 interface IProductPaginationWithSearch extends IProductPagination {
-    keySearch: string;
+  keySearch: string;
 }

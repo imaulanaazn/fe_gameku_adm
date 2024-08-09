@@ -364,10 +364,23 @@ const TableDenom: React.FC<{ denom: IProductPagination }> = ({ denom }) => {
         <Loading />
       ) : (
         <div className="w-full bg-white rounded-xl p-6 lg:p-8">
-          <div className="mb-4 flex justify-between items-center">
+          <div className="mb-4 flex flex-row justify-between items-center gap-4">
             <h1 className="font-medium text-xl md:text-2xl text-neutral-800">
               Denom
             </h1>
+
+            <div className="flex gap-6 lg:gap-8 items-center justify-between">
+              <button
+                onClick={() => {
+                  setShowForm(!showForm);
+                  setTypeForm("add");
+                }}
+                className="shrink-0 flex justify-between py-2 px-3 md:py-3 md:px-4 gap-2 md:gap-4 items-center bg-primary-900 hover:bg-red-600 text-white rounded-md cursor-pointer"
+              >
+                <p>Tambah Denom</p>
+                <FontAwesomeIcon icon={faPlus} size="lg" />
+              </button>
+            </div>
           </div>
 
           <div className="flex gap-4 items-center justify-between flex-wrap">

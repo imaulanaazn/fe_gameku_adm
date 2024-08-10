@@ -1,24 +1,35 @@
+interface GameCategory {
+  id: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string | null;
+}
+
 interface IGame {
   id: string;
+  provider: string;
   categoryId: string;
   name: string;
+  cd: string;
+  automatically: boolean;
+  type: string;
+  voucherType: string;
+  needCheckId: boolean;
+  needServerId: boolean;
+  typeServerId: string;
   logoUrl: string;
   isPopular: boolean;
   popSequence?: number;
   slug: string;
+  description: string;
   logoDenom: string;
-  deleted: boolean;
-  needServerId: boolean;
-  typeServerId: string;
-  type: string;
-  voucherType: string;
   createdAt: Date | string;
   updatedAt: Date | string;
-  description: string;
+  deleted: boolean;
+  gameCategory: GameCategory;
   categoryName?: string;
-
-  listServer?: IServer[];
   keywords?: string;
+  listServer?: IServer[];
 }
 
 interface ListGameProps {

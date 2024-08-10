@@ -9,6 +9,7 @@ import {
   faArrowDown,
   faArrowUp,
   faFilter,
+  faGear,
   faMagnifyingGlass,
   faPlus,
   faSearch,
@@ -110,7 +111,10 @@ const optionPopuler = [
   },
 ];
 
-const TableGame: React.FC<{ game: IGamePagination }> = ({ game }) => {
+const TableGame: React.FC<{
+  game: IGamePagination;
+  handlePopularGamesModal: (show: boolean) => void;
+}> = ({ game, handlePopularGamesModal }) => {
   const [query, setQuery] = useState<{
     search: {
       key: string;
@@ -333,6 +337,36 @@ const TableGame: React.FC<{ game: IGamePagination }> = ({ game }) => {
         <Loading />
       ) : (
         <>
+          <div className="flex justify-between items-center mb-4">
+            <h1 className="font-medium text-xl md:text-2xl text-neutral-800">
+              Game
+            </h1>
+
+            <div className="flex gap-4">
+              <div>
+                <button
+                  onClick={() => {
+                    setShowForm(!showForm);
+                    setTypeForm("add");
+                  }}
+                  className="shrink-0 flex justify-between py-2 px-3 md:py-3 md:px-4 gap-2 md:gap-4 items-center bg-primary-900 hover:bg-red-600 text-white rounded-md cursor-pointer"
+                >
+                  <span>Tambah Denom</span>
+                  <FontAwesomeIcon icon={faPlus} size="lg" />
+                </button>
+              </div>
+              <button
+                className="shrink-0 flex justify-between py-2 px-3 md:py-3 md:px-4 gap-2 md:gap-4 items-center bg-primary-900 hover:bg-red-600 text-white rounded-md cursor-pointer"
+                onClick={() => {
+                  handlePopularGamesModal(true);
+                }}
+              >
+                <span>Popular Games</span>
+                <FontAwesomeIcon icon={faGear} size="lg" />
+              </button>
+            </div>
+          </div>
+
           <div className="flex gap-4 items-center justify-between flex-wrap">
             <div className="relative md:w-max w-full">
               <input

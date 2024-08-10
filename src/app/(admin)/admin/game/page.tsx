@@ -45,21 +45,14 @@ const AdminGame = () => {
           )}
           <div className="wrapper w-full pb-6 lg:pb-8 px-6 lg:px-8 mt-6 lg:-mt-12 mb-6 lg:mb-8">
             <div className="w-full bg-white rounded-xl p-6 lg:p-8">
-              <div className="flex justify-between items-center mb-4">
-                <h1 className="font-medium text-xl md:text-2xl text-neutral-800">
-                  Game
-                </h1>
-                <button
-                  className="bg-primary-900 px-4 py-2 rounded-md text-white cursor-pointer hover:bg-red-600"
-                  onClick={() => {
-                    setShowPopularGamesModal(true);
+              {games && (
+                <TableGame
+                  game={games}
+                  handlePopularGamesModal={(show: boolean) => {
+                    setShowPopularGamesModal(show);
                   }}
-                >
-                  Popular Games
-                </button>
-              </div>
-
-              {games && <TableGame game={games} />}
+                />
+              )}
             </div>
           </div>
         </>

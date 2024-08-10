@@ -78,77 +78,63 @@ type InputData = {
   value: string;
 };
 
-const FormGame: React.FC<IForm> = ({
-  handleShowForm,
-  getNewData,
-  type,
-  data,
-  hideEdit,
-}) => {
-  const modules = {
-    toolbar: [
-      [{ header: [1, 2, 3, false] }],
-      ["bold", "italic", "underline", "strike", "blockquote"],
-      [
-        { list: "ordered" },
-        { list: "bullet" },
-        { indent: "-1" },
-        { indent: "+1" },
-      ],
-      ["link"],
-      ["clean"],
+const modules = {
+  toolbar: [
+    [{ header: [1, 2, 3, false] }],
+    ["bold", "italic", "underline", "strike", "blockquote"],
+    [
+      { list: "ordered" },
+      { list: "bullet" },
+      { indent: "-1" },
+      { indent: "+1" },
     ],
-  };
+    ["link"],
+    ["clean"],
+  ],
+};
 
+const newDataInitState = {
+  desc: "",
+  keywords: [] as string[],
+  categoryId: "",
+  name: "",
+  isPopular: false,
+  slug: "",
+  needServerId: false,
+  typeServerId: "",
+  type: "",
+  voucherType: "",
+  logoUrl: "",
+  logoDenom: "",
+  fileImageLogoUrl: {} as any,
+  fileImageLogoDenom: {} as any,
+};
+
+const FormGame: React.FC<IForm> = (props) => {
+  const { handleShowForm, getNewData, type, data, hideEdit } = props;
+  const [gameCategories, setGameCategories] = useState<
+    { id: string; name: string }[]
+  >([]);
   const [currentKeyword, setCurrentKeyword] = useState<string>("");
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const [inputData, setInputData] = useState<
     { label: string; value: string }[]
   >([]);
 
-  const handleAddInput = () => {
-    setInputData([...inputData, { label: "", value: "" }]);
-  };
-
-  const handleChange = (
-    index: number,
-    field: keyof InputData,
-    value: string
-  ) => {
-    const updatedData = [...inputData];
-    //@ts-ignore
-    updatedData[index][field] = value;
-    setInputData(updatedData);
-  };
-
   const inputFileLogoUrl = useRef<HTMLInputElement | null>(null);
   const inputFileLogoDenom = useRef<HTMLInputElement | null>(null);
   const [hoverImageLogoUrl, setHoverImageLogoUrl] = useState(false);
   const [hoverImageLogoDenom, setHoverImageLogoDenom] = useState(false);
-  const [newData, setNewData] = useState({
-    desc: "",
-    keywords: [] as string[],
-    categoryId: "",
-    name: "",
-    isPopular: false,
-    slug: "",
-    needServerId: false,
-    typeServerId: "",
-    type: "",
-    voucherType: "",
-    logoUrl: "",
-    logoDenom: "",
-    fileImageLogoUrl: {} as any,
-    fileImageLogoDenom: {} as any,
-  });
-  const [gameContent, setGameContent] = useState({
-    title: "default content",
-    description: "default content description",
-    faq: [{ question: "defaut question", answer: "default answer" }],
-    fill: "<h1>This is Heading</h1>",
-  });
+  const [newData, setNewData] = useState(newDataInitState);
 
-  const [typeForm, setTypeForm] = useState("");
+  // const [gameContent, setGameContent] = useState({
+  //   title: "default content",
+  //   description: "default content description",
+  //   faq: [{ question: "defaut question", answer: "default answer" }],
+  //   fill: "<h1>This is Heading</h1>",
+  // });
+
+  const [typeForm, setTypeForm] = useState("detail");
   const [loading, setLoading] = useState(false);
   const [isCheckedVoucherInternal, setIsCheckedVoucherInternal] =
     useState(false);
@@ -167,6 +153,21 @@ const FormGame: React.FC<IForm> = ({
 
   const [disableButtonSubmit, setDisableButtonSubmit] = useState(true);
 
+  const handleAddInput = () => {
+    setInputData([...inputData, { label: "", value: "" }]);
+  };
+
+  const handleChange = (
+    index: number,
+    field: keyof InputData,
+    value: string
+  ) => {
+    const updatedData = [...inputData];
+    //@ts-ignore
+    updatedData[index][field] = value;
+    setInputData(updatedData);
+  };
+
   const saveData = async () => {
     setLoading(true);
     const toastId = toast.loading(
@@ -177,8 +178,10 @@ const FormGame: React.FC<IForm> = ({
       formData.append("id", data.id);
     }
     if (
-      (typeForm === "edit" && newData.logoDenom !== data?.logoDenom) ||
-      (typeForm === "add" && Object.keys(newData.fileImageLogoDenom).length > 0)
+      (typeForm === "edit" &&
+        newData.logoDenom !== data?.logoDenom &&
+        newData.fileImageLogoDenom.name) ||
+      (typeForm === "add" && newData.fileImageLogoDenom.name)
     ) {
       formData.append("logoDenom", newData.fileImageLogoDenom);
     }
@@ -235,6 +238,37 @@ const FormGame: React.FC<IForm> = ({
     setLoading(false);
     handleShowForm(false);
   };
+
+  useEffect(() => {
+    if (typeForm !== "detail") {
+      const getGameCategories = async () => {
+        try {
+          const req = await fetch(
+            process.env.NEXT_PUBLIC_BASE_URL + "/v1/dropdown-game-category",
+            {
+              cache: "no-cache",
+              method: "GET",
+              credentials: "include",
+              headers: {
+                "ngrok-skip-browser-warning": "true",
+              },
+            }
+          );
+
+          if (!req.ok) {
+            throw new Error("error fetching data " + req.status);
+          }
+
+          const res = await req.json();
+          setGameCategories(res);
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
+      getGameCategories();
+    }
+  }, [typeForm]);
 
   useEffect(() => {
     if (
@@ -312,6 +346,7 @@ const FormGame: React.FC<IForm> = ({
       ) {
         setInputData(data.listServer);
       }
+
       const gameType = GAME_TYPE_OPTIONS.find(
         (item) => item.value === data?.type
       );
@@ -319,11 +354,11 @@ const FormGame: React.FC<IForm> = ({
         setSelectedGameType(gameType);
       }
 
-      const gameCategory = CATEGORY_ID_OPTIONS.find(
-        (item) => item.value === data?.categoryId
-      );
-      if (gameCategory) {
-        setSelectedCategoryId(gameCategory);
+      if (data.gameCategory) {
+        setSelectedCategoryId({
+          label: data.gameCategory.name,
+          value: data.gameCategory.id,
+        });
       }
 
       const serverId = SERVER_ID_TYPE.find(
@@ -765,7 +800,10 @@ const FormGame: React.FC<IForm> = ({
 
                       setSelectedCategoryId(e);
                     }}
-                    options={CATEGORY_ID_OPTIONS}
+                    options={gameCategories.map((cat) => ({
+                      label: cat.name,
+                      value: cat.id,
+                    }))}
                     isDisabled={typeForm === "detail"}
                     placeholder="Game Kategori"
                     styles={{
@@ -1118,8 +1156,8 @@ const FormGame: React.FC<IForm> = ({
                   className={`${
                     typeForm === "detail"
                       ? "bg-gray-400 text-white cursor-not-allowed"
-                      : "bg-green-400 text-gray-600 cursor-pointer"
-                  } w-full py-4 font-bold`}
+                      : "bg-emerald-300 text-emerald-900 cursor-pointer"
+                  } w-full py-4 font-bold rounded-b-lg`}
                 >
                   Tambah List Server Id
                 </button>

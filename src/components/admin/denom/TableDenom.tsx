@@ -347,7 +347,7 @@ const TableDenom: React.FC<{ denom: IProductPagination }> = ({ denom }) => {
     <>
       {showDelete && (
         <ConfirmDelete
-          path={"/v1/denom/delete-bulk"}
+          path={"/v1/denom-bulk"}
           method={"DELETE"}
           getNewData={() => getDenoms()}
         />
@@ -913,7 +913,15 @@ const TableDenom: React.FC<{ denom: IProductPagination }> = ({ denom }) => {
                             {denom.totalSold}
                           </td>
                           <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
-                            {denom.isActive ? "Dipublikasikan" : "Diarsipkan"}
+                            {denom.isActive ? (
+                              <span className="text-emerald-800 bg-emerald-100 block py-2 px-2 rounded-full text-center">
+                                Dipublikasi
+                              </span>
+                            ) : (
+                              <span className="text-gray-800 bg-gray-200 block py-2 px-2 rounded-full text-center">
+                                Diarsipkan
+                              </span>
+                            )}
                           </td>
                           <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
                             <div className="flex justify-end w-full">

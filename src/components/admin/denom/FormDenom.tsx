@@ -73,8 +73,10 @@ const FormDenom: React.FC<IForm> = ({
       formData.append("id", data.id);
     }
     if (
-      (typeForm === "edit" && newData.logoDenom !== data?.logoDenom) ||
-      (typeForm === "add" && Object.keys(newData.fileImageLogoDenom).length > 0)
+      (typeForm === "edit" &&
+        newData.logoDenom !== data?.logoDenom &&
+        newData.fileImageLogoDenom.name) ||
+      (typeForm === "add" && newData.fileImageLogoDenom.name)
     ) {
       formData.append("logoDenom", newData.fileImageLogoDenom);
     }
@@ -370,9 +372,9 @@ const FormDenom: React.FC<IForm> = ({
                   <>
                     {typeForm === "detail" ? (
                       <div className="w-full h-full bg-white border-2 rounded flex items-center justify-center p-4 text-xs text-neutral-600 text-center border-dashed border-gray-400">
-                        {newData.logoDenom || data?.logoUrl ? (
+                        {newData.logoDenom ? (
                           <Image
-                            src={newData.logoDenom || data?.logoUrl || ""}
+                            src={newData.logoDenom}
                             width={100}
                             height={100}
                             alt={"logo denom"}

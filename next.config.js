@@ -6,6 +6,7 @@ const nextConfig = {
       "firebasestorage.googleapis.com",
       "img.youtube.com",
       "localhost",
+      "image.gasskeuntopup.com",
     ],
   },
   output: "standalone",

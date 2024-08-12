@@ -20,28 +20,84 @@ interface TabPanelProps {
   [key: string]: any;
 }
 
-const PaymentMethod = ({ value, data, onChange, position }: any) => {
+const accordionTitle = (category: string) => {
+  let title;
+  switch (category) {
+    case PaymentsCategory.EWALLET:
+    case PaymentsCategory.QRIS:
+    case "1_2":
+      title = "Ewallet dan QRIS";
+      break;
+    case PaymentsCategory.RETAIL:
+      title = "Retail";
+      break;
+    case PaymentsCategory.INTERNAL:
+      title = "Internal";
+      break;
+    case PaymentsCategory.PULSA:
+      title = "Pulsa";
+      break;
+    case PaymentsCategory.VIRTUAL_ACCOUNT:
+      title = "Virtual Account";
+      break;
+    default:
+      title = "Saldo Gasskeun";
+      break;
+  }
+
+  return title;
+};
+
+function TabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props;
+
   return (
-    <Card
-      sx={{
-        borderRadius: "0.75rem",
-        background: `#ffffff url(/images/topup-form-step-${position}.svg) no-repeat right top`,
-        backgroundSize: "150px",
-      }}
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
     >
-      <CardHeader
-        title="Metode Pembayaran"
-        titleTypographyProps={{
-          sx: {
-            mb: 2.5,
-            lineHeight: "2rem !important",
-            letterSpacing: "0.15px !important",
-            color: "#1F2937",
-            fontWeight: "800",
-          },
-        }}
-      />
-      <CardContent sx={{ pt: (theme) => `${theme.spacing(3)} !important` }}>
+      {value === index && (
+        <Box sx={{ paddingX: 0, paddingY: "1rem" }}>{children}</Box>
+      )}
+    </div>
+  );
+}
+
+const PaymentMethod = ({ value, data, onChange, position }: any) => {
+  const [selectedTab, setSelectedTab] = React.useState(0);
+
+  const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
+    setSelectedTab(newValue);
+  };
+
+  const groupedPaymentMethods: { [category: string]: Array<IPaymentMethod> } =
+    {};
+  data.forEach((method: IPaymentMethod) => {
+    const unifiedCategory =
+      method.category === "1" || method.category === "2"
+        ? "1_2"
+        : method.category;
+
+    if (!groupedPaymentMethods[unifiedCategory]) {
+      groupedPaymentMethods[unifiedCategory] = [];
+    }
+
+    groupedPaymentMethods[unifiedCategory].push(method);
+  });
+
+  const categoryTabs = Object.keys(groupedPaymentMethods)
+    .sort()
+    .map((category, index) => {
+      return <Tab key={category} label={accordionTitle(category)} />;
+    });
+
+  const tabPanels = Object.entries(groupedPaymentMethods)
+    .sort()
+    .map(([category, methods], index) => (
+      <TabPanel value={selectedTab} index={index} key={category}>
         <Box
           sx={{
             display: "flex",
@@ -50,7 +106,7 @@ const PaymentMethod = ({ value, data, onChange, position }: any) => {
             justifyContent: "center",
           }}
         >
-          {data.map((method: any) => (
+          {methods.map((method) => (
             <Box
               key={method.id}
               onClick={() => {
@@ -179,6 +235,43 @@ const PaymentMethod = ({ value, data, onChange, position }: any) => {
             </Box>
           ))}
         </Box>
+      </TabPanel>
+    ));
+
+  return (
+    <Card
+      sx={{
+        borderRadius: "0.75rem",
+        background: `#ffffff url(/images/topup-form-step-${position}.svg) no-repeat right top`,
+        backgroundSize: "150px",
+      }}
+    >
+      <CardHeader
+        title="Metode Pembayaran"
+        titleTypographyProps={{
+          sx: {
+            mb: 2.5,
+            lineHeight: "2rem !important",
+            letterSpacing: "0.15px !important",
+            color: "#1F2937",
+            fontWeight: "800",
+          },
+        }}
+      />
+      <CardContent sx={{ pt: (theme) => `${theme.spacing(3)} !important` }}>
+        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+          <Tabs
+            value={selectedTab}
+            onChange={handleTabChange}
+            aria-label="payment methods tabs"
+            variant="scrollable"
+            scrollButtons="auto"
+            allowScrollButtonsMobile
+          >
+            {categoryTabs}
+          </Tabs>
+        </Box>
+        {tabPanels}
       </CardContent>
     </Card>
   );

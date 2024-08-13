@@ -5,22 +5,21 @@ import {
   CardContent,
   CardHeader,
   Typography,
+  Link,
   Tabs,
   Tab,
+  Divider,
 } from "@mui/material";
 import React from "react";
 import { FeeType, PaymentsCategory } from "@/enum";
 import { currencyConverter } from "@/lib/currencyConverter";
 import Image from "next/image";
 
-interface TabPanelProps {
-  children?: React.ReactNode;
-  value: number;
-  index: number;
-  [key: string]: any;
-}
-
 const PaymentMethod = ({ value, data, onChange, position }: any) => {
+  const sortedData = data.sort((a: any, b: any) =>
+    a.category > b.category ? 1 : b.category > a.category ? -1 : 0
+  );
+
   return (
     <Card
       sx={{
@@ -50,44 +49,10 @@ const PaymentMethod = ({ value, data, onChange, position }: any) => {
             justifyContent: "center",
           }}
         >
-          {data.map((method: any) => (
-            <Box
+          {sortedData.map((method: any) => (
+            <Link
+              href="#mobile_number"
               key={method.id}
-              onClick={() => {
-                let feeAmount;
-
-                if (
-                  method.providerCd === "TOKOPAY" &&
-                  method.category === "6"
-                ) {
-                  feeAmount =
-                    method.feeType === FeeType.PERCENTAGE
-                      ? (value.totalAmountBeforeFee * method.fee) / 100
-                      : method.fee;
-                  feeAmount =
-                    Math.ceil((value.totalAmountBeforeFee + feeAmount) / 1000) *
-                      1000 -
-                    value.totalAmountBeforeFee;
-                } else {
-                  feeAmount =
-                    method.feeType === FeeType.PERCENTAGE
-                      ? (value.totalAmountBeforeFee * method.fee) / 100
-                      : method.fee;
-                }
-
-                if (
-                  value.totalAmountBeforeFee &&
-                  value.totalAmountBeforeFee > method.minAmount &&
-                  value.totalAmountBeforeFee < method.maxAmount
-                ) {
-                  onChange("paymentMethodId", method.id);
-                  onChange("feeAmount", feeAmount);
-                  onChange("paymentMethodCd", method.cd);
-                  onChange("paymentMethod", method);
-                  onChange("promoCode", "");
-                  onChange("promo", "");
-                }
-              }}
               sx={{
                 width: {
                   xs: "100%",
@@ -104,79 +69,135 @@ const PaymentMethod = ({ value, data, onChange, position }: any) => {
                       ? "31%"
                       : "31%",
                 },
-                display: "flex",
-                justifyContent: { xs: "center", md: "space-between" },
-                alignItems: "center",
-                gap: 2,
-                padding: 4,
-                borderRadius: "0.4rem",
-                border: "1px solid #B72025",
-                ...(method.id === value.paymentMethodId && {
-                  outline: "2px solid #B72025",
-                  backgroundColor: "#FFE4E5",
-                }),
-                ...(value.totalAmountBeforeFee &&
-                value.totalAmountBeforeFee > method.minAmount &&
-                value.totalAmountBeforeFee < method.maxAmount
-                  ? { cursor: "pointer" }
-                  : { filter: "grayscale(100%)", cursor: "not-allowed" }),
               }}
             >
-              <Box position={"relative"} width={70} height={40}>
-                <Image
-                  src={method.logo}
-                  alt="Logo payment method"
-                  fill={true}
-                  quality={55}
-                  loading="lazy"
-                  objectFit="contain"
-                />
-              </Box>
-              <Typography
-                variant="body2"
+              <Box
+                onClick={() => {
+                  let feeAmount;
+
+                  if (
+                    method.providerCd === "TOKOPAY" &&
+                    method.category === "6"
+                  ) {
+                    feeAmount =
+                      method.feeType === FeeType.PERCENTAGE
+                        ? (value.totalAmountBeforeFee * method.fee) / 100
+                        : method.fee;
+                    feeAmount =
+                      Math.ceil(
+                        (value.totalAmountBeforeFee + feeAmount) / 1000
+                      ) *
+                        1000 -
+                      value.totalAmountBeforeFee;
+                  } else {
+                    feeAmount =
+                      method.feeType === FeeType.PERCENTAGE
+                        ? (value.totalAmountBeforeFee * method.fee) / 100
+                        : method.fee;
+                  }
+
+                  if (
+                    value.totalAmountBeforeFee &&
+                    value.totalAmountBeforeFee > method.minAmount &&
+                    value.totalAmountBeforeFee < method.maxAmount
+                  ) {
+                    onChange("paymentMethodId", method.id);
+                    onChange("feeAmount", feeAmount);
+                    onChange("paymentMethodCd", method.cd);
+                    onChange("paymentMethod", method);
+                    onChange("promoCode", "");
+                    onChange("promo", "");
+                  }
+                }}
                 sx={{
-                  color: "#1F2937",
+                  width: "100%",
+
+                  padding: 4,
+                  borderRadius: "0.4rem",
+                  border: "1px solid #B72025",
                   ...(method.id === value.paymentMethodId && {
-                    fontWeight: "700",
+                    outline: "2px solid #B72025",
+                    backgroundColor: "#FFE4E5",
                   }),
-                  textAlign: "right",
-                  maxWidth: "55%",
-                  ...(value.totalAmountBeforeFee ||
-                  value.totalAmountBeforeFee > method.maxAmount ||
-                  value.totalAmountBeforeFee < method.minAmount
-                    ? {
-                        fontWeight: "500",
-                      }
-                    : {
-                        fontWeight: "600",
-                      }),
+                  ...(value.totalAmountBeforeFee &&
+                  value.totalAmountBeforeFee > method.minAmount &&
+                  value.totalAmountBeforeFee < method.maxAmount
+                    ? { cursor: "pointer" }
+                    : { filter: "grayscale(100%)", cursor: "not-allowed" }),
                 }}
               >
-                {!value.totalAmountBeforeFee ||
-                value.totalAmountBeforeFee > method.maxAmount ||
-                value.totalAmountBeforeFee < method.minAmount
-                  ? ` (${
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    gap: 4,
+                  }}
+                >
+                  <Box position={"relative"} width={70} height={40}>
+                    <Image
+                      src={method.logo}
+                      alt="Logo payment method"
+                      fill={true}
+                      quality={55}
+                      loading="lazy"
+                      objectFit="contain"
+                    />
+                  </Box>
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      color: "#1F2937",
+                      ...(method.id === value.paymentMethodId && {
+                        fontWeight: "700",
+                      }),
+                      textAlign: "right",
+                      maxWidth: "55%",
+                      ...(value.totalAmountBeforeFee ||
+                      value.totalAmountBeforeFee > method.maxAmount ||
                       value.totalAmountBeforeFee < method.minAmount
-                        ? "Minimal " + currencyConverter(method.minAmount)
-                        : "Maximal " + currencyConverter(method.maxAmount)
-                    })`
-                  : currencyConverter(
-                      method.providerCd === "TOKOPAY" && method.category === "6"
-                        ? Math.ceil(
-                            (value.totalAmountBeforeFee +
-                              (method.feeType === FeeType.PERCENTAGE
-                                ? (value.totalAmountBeforeFee * method.fee) /
-                                  100
-                                : method.fee)) /
-                              1000
-                          ) * 1000
-                        : value.totalAmountBeforeFee +
-                            (method.feeType === FeeType.PERCENTAGE
-                              ? (value.totalAmountBeforeFee * method.fee) / 100
-                              : method.fee)
-                    )}
-              </Typography>
-            </Box>
+                        ? {
+                            fontWeight: "500",
+                          }
+                        : {
+                            fontWeight: "600",
+                          }),
+                    }}
+                  >
+                    {!value.totalAmountBeforeFee ||
+                    value.totalAmountBeforeFee > method.maxAmount ||
+                    value.totalAmountBeforeFee < method.minAmount
+                      ? ` (${
+                          value.totalAmountBeforeFee < method.minAmount
+                            ? "Minimal " + currencyConverter(method.minAmount)
+                            : "Maximal " + currencyConverter(method.maxAmount)
+                        })`
+                      : currencyConverter(
+                          method.providerCd === "TOKOPAY" &&
+                            method.category === "6"
+                            ? Math.ceil(
+                                (value.totalAmountBeforeFee +
+                                  (method.feeType === FeeType.PERCENTAGE
+                                    ? (value.totalAmountBeforeFee *
+                                        method.fee) /
+                                      100
+                                    : method.fee)) /
+                                  1000
+                              ) * 1000
+                            : value.totalAmountBeforeFee +
+                                (method.feeType === FeeType.PERCENTAGE
+                                  ? (value.totalAmountBeforeFee * method.fee) /
+                                    100
+                                  : method.fee)
+                        )}
+                  </Typography>
+                </Box>
+
+                <Divider />
+
+                <Typography fontSize={11}>{method.name}</Typography>
+              </Box>
+            </Link>
           ))}
         </Box>
       </CardContent>

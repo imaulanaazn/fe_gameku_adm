@@ -4,7 +4,17 @@ import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { cartState } from "@/atom/cartState";
 import { formCashtag } from "@/atom/formCashtag";
-import { Box, Breadcrumbs, Button, Grid, Typography, Stack } from "@/lib/mui";
+import {
+  Box,
+  Breadcrumbs,
+  Button,
+  Grid,
+  CardContent,
+  Typography,
+  Stack,
+  Avatar,
+  Card,
+} from "@/lib/mui";
 import AdditionalData from "./AdditionalData";
 import ConfirmCheckout from "./ConfirmCheckout";
 import DenomList from "./DenomList";
@@ -20,6 +30,9 @@ import MobileNumber from "./MobileNumber";
 import useDevice from "@/@core/hooks/useDevice";
 import ProductReview from "./ProductReview";
 import { toast } from "react-toastify";
+import Image from "next/image";
+import { formatCurrencyIDR } from "@/lib/currencyConverter";
+import formatter from "@/lib/formatter";
 
 interface IFormProps {
   products: IGameDetail;
@@ -266,11 +279,84 @@ const NewFormTopup: React.FC<IFormProps> = ({ products, paymentsMethod }) => {
                 </Grid>
               </Grid>
             </Stack>
+
+            {(data.productId || data.paymentMethodId) && (
+              <Card
+                sx={{
+                  display: { xs: "block", md: "none" },
+                  width: "100vw",
+                  borderRadius: "1.5rem 1.5rem 0 0",
+                  position: "fixed",
+                  bottom: 0,
+                  left: 0,
+                  backgroundColor: "rgba(255,255,255,0.4)",
+                  backdropFilter: "blur(10px)",
+                  zIndex: 50,
+                  padding: 4,
+                }}
+              >
+                <Stack direction="row" gap={4}>
+                  <Box>
+                    <Image
+                      alt={products.name}
+                      src={data.product.logoDenom}
+                      width={60}
+                      height={60}
+                    />
+                  </Box>
+                  <Box>
+                    <Box>
+                      <Typography
+                        variant="subtitle1"
+                        component="div"
+                        fontSize={12}
+                        fontWeight={500}
+                      >
+                        {data.product.name || "pilih product"} x {data.quantity}{" "}
+                        Qty
+                      </Typography>
+                      <Typography
+                        variant="h6"
+                        color="primary.main"
+                        fontSize={15}
+                        fontWeight={600}
+                      >
+                        {formatter(data.amount)} -{" "}
+                        {data.paymentMethod.name || "Pilih Metode Pembayaran"}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        fontSize={10}
+                      >
+                        proses instan
+                      </Typography>
+                    </Box>
+                  </Box>
+                </Stack>
+                <Button
+                  fullWidth
+                  variant="contained"
+                  size="large"
+                  sx={{ marginTop: 4 }}
+                  onClick={() => {
+                    data.paymentMethod.cd === "GASSKEUN_USER" &&
+                    balance < data.totalAmountBeforeFee
+                      ? toast.error("Gasskeun Coin mu Tidak Mencukupi")
+                      : setModalOpen(true);
+                  }}
+                  disabled={isDisabled}
+                >
+                  Beli Sekarang
+                </Button>
+              </Card>
+            )}
+
             <Button
               fullWidth
               variant="contained"
               size="large"
-              sx={{ marginTop: 4 }}
+              sx={{ marginTop: 4, display: { xs: "none", md: "block" } }}
               onClick={() => {
                 data.paymentMethod.cd === "GASSKEUN_USER" &&
                 balance < data.totalAmountBeforeFee
@@ -281,6 +367,7 @@ const NewFormTopup: React.FC<IFormProps> = ({ products, paymentsMethod }) => {
             >
               Beli Sekarang
             </Button>
+
             <ConfirmCheckout
               isOpen={modalOpen}
               onClose={() => setModalOpen(false)}

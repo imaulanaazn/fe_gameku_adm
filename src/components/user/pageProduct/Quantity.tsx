@@ -20,51 +20,53 @@ const Quantity = ({ data, value, onChange, position }: any) => {
     onChange("promo", "");
   }
   return (
-    <Card
-      sx={{
-        borderRadius: "0.75rem",
-        background: `#ffffff url(/images/topup-form-step-${position}.svg) no-repeat right top`,
-        backgroundSize: "150px",
-      }}
-    >
-      <CardHeader
-        title="Jumlah Pembelian"
-        titleTypographyProps={{
-          sx: {
-            mb: 2.5,
-            lineHeight: "2rem !important",
-            letterSpacing: "0.15px !important",
-            color: "#1F2937",
-          },
-        }}
-      />
-      <CardContent
+    <div id="quantity">
+      <Card
         sx={{
-          pt: (theme) => `${theme.spacing(3)} !important`,
-          display: "flex",
-          gap: "1rem",
-          paddingX: "1.25rem",
+          borderRadius: "0.75rem",
+          background: `#ffffff url(/images/topup-form-step-${position}.svg) no-repeat right top`,
+          backgroundSize: "150px",
         }}
       >
-        <TextField
-          value={value.quantity}
-          fullWidth
-          id="total"
-          label="Jumlah Pembelian"
-          sx={{
-            "& .MuiFormLabel-root": { color: "#B72025" },
-            "& input": {
-              border: "1px solid #B72025",
-              borderRadius: "0.4rem",
-            },
-            "& .MuiInputLabel-root": {
-              background: "white",
+        <CardHeader
+          title="Jumlah Pembelian"
+          titleTypographyProps={{
+            sx: {
+              mb: 2.5,
+              lineHeight: "2rem !important",
+              letterSpacing: "0.15px !important",
+              color: "#1F2937",
             },
           }}
-          onChange={handleInputChange}
         />
-      </CardContent>
-    </Card>
+        <CardContent
+          sx={{
+            pt: (theme) => `${theme.spacing(3)} !important`,
+            display: "flex",
+            gap: "1rem",
+            paddingX: "1.25rem",
+          }}
+        >
+          <TextField
+            value={value.quantity}
+            fullWidth
+            id="total"
+            label="Jumlah Pembelian"
+            sx={{
+              "& .MuiFormLabel-root": { color: "#B72025" },
+              "& input": {
+                border: "1px solid #B72025",
+                borderRadius: "0.4rem",
+              },
+              "& .MuiInputLabel-root": {
+                background: "white",
+              },
+            }}
+            onChange={handleInputChange}
+          />
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 

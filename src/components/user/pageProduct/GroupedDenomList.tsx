@@ -80,84 +80,86 @@ const GroupedDenomList = ({ position, data, onChange, value }: any) => {
                 <Grid container spacing={4}>
                   {category.denoms.map((item: any) => (
                     <Grid key={item.id} item xs={6} md={4}>
-                      <Card
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          height: "100%",
-                          position: "relative",
-                          cursor: "pointer",
-                          outline: "1px solid #B72025",
-                          ...(item.id === value.productId && {
-                            outline: "2px solid #B72025",
-                            backgroundColor: "#FFE4E5",
-                          }),
-                        }}
-                        onClick={(e) => {
-                          onChange("productId", item.id);
-                          onChange("amount", item.price);
-                          onChange("product", item);
-                          onChange("promoCode", "");
-                          onChange("promo", "");
-                        }}
-                      >
-                        <CardContent
+                      <a href="#quantity">
+                        <Card
                           sx={{
                             display: "flex",
-                            gap: 2,
                             alignItems: "center",
-                            justifyContent: "space-between",
-                            width: "100%",
+                            height: "100%",
+                            position: "relative",
+                            cursor: "pointer",
+                            outline: "1px solid #B72025",
+                            ...(item.id === value.productId && {
+                              outline: "2px solid #B72025",
+                              backgroundColor: "#FFE4E5",
+                            }),
+                          }}
+                          onClick={(e) => {
+                            onChange("productId", item.id);
+                            onChange("amount", item.price);
+                            onChange("product", item);
+                            onChange("promoCode", "");
+                            onChange("promo", "");
                           }}
                         >
-                          <Box
+                          <CardContent
                             sx={{
                               display: "flex",
-                              flexDirection: "column",
-                              gap: "0.25rem",
+                              gap: 2,
+                              alignItems: "center",
+                              justifyContent: "space-between",
+                              width: "100%",
                             }}
                           >
-                            <Typography
-                              variant="caption"
+                            <Box
                               sx={{
-                                letterSpacing: "0.25px",
-                                fontWeight: 600,
-                                color: "#B72025",
-                                ...(item.id === value.productId && {
-                                  fontWeight: 800,
-                                }),
+                                display: "flex",
+                                flexDirection: "column",
+                                gap: "0.25rem",
                               }}
                             >
-                              {item.name}
-                            </Typography>
-                            <Typography
-                              variant="caption"
-                              sx={{
-                                letterSpacing: "0.25px",
-                                fontWeight: 400,
-                                color: "#1F2937",
-                                ...(item.id === value.productId && {
+                              <Typography
+                                variant="caption"
+                                sx={{
+                                  letterSpacing: "0.25px",
                                   fontWeight: 600,
-                                }),
-                              }}
-                            >
-                              {currencyConverter(item.price)}
-                            </Typography>
-                          </Box>
-                          <Image
-                            src={
-                              item.logoDenom || data.logoDenom || data.logoUrl
-                            }
-                            alt="Logo Denom Gasskeun Topup"
-                            className="rounded-lg object-contain"
-                            width="30"
-                            height="30"
-                            quality={55}
-                            loading="lazy"
-                            style={{ borderRadius: 2 }}
-                          />
-                        </CardContent>
-                      </Card>
+                                  color: "#B72025",
+                                  ...(item.id === value.productId && {
+                                    fontWeight: 800,
+                                  }),
+                                }}
+                              >
+                                {item.name}
+                              </Typography>
+                              <Typography
+                                variant="caption"
+                                sx={{
+                                  letterSpacing: "0.25px",
+                                  fontWeight: 400,
+                                  color: "#1F2937",
+                                  ...(item.id === value.productId && {
+                                    fontWeight: 600,
+                                  }),
+                                }}
+                              >
+                                {currencyConverter(item.price)}
+                              </Typography>
+                            </Box>
+                            <Image
+                              src={
+                                item.logoDenom || data.logoDenom || data.logoUrl
+                              }
+                              alt="Logo Denom Gasskeun Topup"
+                              className="rounded-lg object-contain"
+                              width="30"
+                              height="30"
+                              quality={55}
+                              loading="lazy"
+                              style={{ borderRadius: 2 }}
+                            />
+                          </CardContent>
+                        </Card>
+                      </a>
                     </Grid>
                   ))}
                 </Grid>

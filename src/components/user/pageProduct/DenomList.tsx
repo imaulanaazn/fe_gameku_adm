@@ -43,83 +43,85 @@ const DenomList = ({ position, data, onChange, value }: any) => {
         <Grid container spacing={4}>
           {data.products.map((item: any) => (
             <Grid key={item.id} item xs={6} md={4}>
-              <Card
-                elevation={0}
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  height: "100%",
-                  position: "relative",
-                  cursor: "pointer",
-                  outline: "1px solid #B72025",
-                  ...(item.id === value.productId && {
-                    outline: "2px solid #B72025",
-                    backgroundColor: "#FFE4E5",
-                  }),
-                }}
-                onClick={(e) => {
-                  onChange("productId", item.id);
-                  onChange("amount", item.price);
-                  onChange("product", item);
-                  onChange("promoCode", "");
-                  onChange("promo", "");
-                }}
-              >
-                <CardContent
+              <a href="#quantity">
+                <Card
+                  elevation={0}
                   sx={{
                     display: "flex",
-                    gap: 2,
                     alignItems: "center",
-                    justifyContent: "space-between",
-                    width: "100%",
+                    height: "100%",
+                    position: "relative",
+                    cursor: "pointer",
+                    outline: "1px solid #B72025",
+                    ...(item.id === value.productId && {
+                      outline: "2px solid #B72025",
+                      backgroundColor: "#FFE4E5",
+                    }),
+                  }}
+                  onClick={(e) => {
+                    onChange("productId", item.id);
+                    onChange("amount", item.price);
+                    onChange("product", item);
+                    onChange("promoCode", "");
+                    onChange("promo", "");
                   }}
                 >
-                  <Box
+                  <CardContent
                     sx={{
                       display: "flex",
-                      flexDirection: "column",
-                      gap: "0.25rem",
+                      gap: 2,
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      width: "100%",
                     }}
                   >
-                    <Typography
-                      variant="caption"
+                    <Box
                       sx={{
-                        letterSpacing: "0.25px",
-                        fontWeight: 600,
-                        color: "#B72025",
-                        ...(item.id === value.productId && {
-                          fontWeight: 800,
-                        }),
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "0.25rem",
                       }}
                     >
-                      {item.name}
-                    </Typography>
-                    <Typography
-                      variant="caption"
-                      sx={{
-                        letterSpacing: "0.25px",
-                        fontWeight: 400,
-                        color: "#1F2937",
-                        ...(item.id === value.productId && {
+                      <Typography
+                        variant="caption"
+                        sx={{
+                          letterSpacing: "0.25px",
                           fontWeight: 600,
-                        }),
-                      }}
-                    >
-                      {currencyConverter(item.price)}
-                    </Typography>
-                  </Box>
-                  <Avatar variant="rounded">
-                    <Image
-                      alt="denom"
-                      src={item.logoDenom || data.logoDenom || data.logoUrl}
-                      width={30}
-                      height={30}
-                      loading="lazy"
-                      quality={55}
-                    />
-                  </Avatar>
-                </CardContent>
-              </Card>
+                          color: "#B72025",
+                          ...(item.id === value.productId && {
+                            fontWeight: 800,
+                          }),
+                        }}
+                      >
+                        {item.name}
+                      </Typography>
+                      <Typography
+                        variant="caption"
+                        sx={{
+                          letterSpacing: "0.25px",
+                          fontWeight: 400,
+                          color: "#1F2937",
+                          ...(item.id === value.productId && {
+                            fontWeight: 600,
+                          }),
+                        }}
+                      >
+                        {currencyConverter(item.price)}
+                      </Typography>
+                    </Box>
+                    <Avatar variant="rounded">
+                      <Image
+                        alt="denom"
+                        src={item.logoDenom || data.logoDenom || data.logoUrl}
+                        width={30}
+                        height={30}
+                        loading="lazy"
+                        quality={55}
+                      />
+                    </Avatar>
+                  </CardContent>
+                </Card>
+              </a>
             </Grid>
           ))}
         </Grid>

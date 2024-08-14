@@ -1,25 +1,23 @@
 import {
-  Avatar,
   Box,
   Card,
   CardContent,
   CardHeader,
   Typography,
   Link,
-  Tabs,
-  Tab,
   Divider,
 } from "@mui/material";
 import React from "react";
-import { FeeType, PaymentsCategory } from "@/enum";
+import { FeeType } from "@/enum";
 import { currencyConverter } from "@/lib/currencyConverter";
 import Image from "next/image";
+import { userState } from "@/atom/userState";
+import { useRecoilState } from "recoil";
 
 const PaymentMethod = ({ value, data, onChange, position }: any) => {
-  const sortedData = data.sort((a: any, b: any) =>
-    a.category > b.category ? 1 : b.category > a.category ? -1 : 0
-  );
-
+  const [user, setUser] = useRecoilState(userState);
+  console.log(value);
+  console.log(user);
   return (
     <Card
       sx={{
@@ -49,11 +47,20 @@ const PaymentMethod = ({ value, data, onChange, position }: any) => {
             justifyContent: "center",
           }}
         >
-          {sortedData.map((method: any) => (
+          {data.map((method: any) => (
             <Link
-              href="#mobile_number"
+              href={
+                value.totalAmountBeforeFee &&
+                value.totalAmountBeforeFee > method.minAmount &&
+                value.totalAmountBeforeFee < method.maxAmount
+                  ? method.isNeedLogin && !user.id
+                    ? "/login"
+                    : "#mobile_number"
+                  : "#"
+              }
               key={method.id}
               sx={{
+                height: "auto",
                 width: {
                   xs: "100%",
                   sm:
@@ -101,17 +108,22 @@ const PaymentMethod = ({ value, data, onChange, position }: any) => {
                     value.totalAmountBeforeFee > method.minAmount &&
                     value.totalAmountBeforeFee < method.maxAmount
                   ) {
-                    onChange("paymentMethodId", method.id);
-                    onChange("feeAmount", feeAmount);
-                    onChange("paymentMethodCd", method.cd);
-                    onChange("paymentMethod", method);
-                    onChange("promoCode", "");
-                    onChange("promo", "");
+                    if (
+                      !method.isNeedLogin ||
+                      (method.isNeedLogin && user.id)
+                    ) {
+                      onChange("paymentMethodId", method.id);
+                      onChange("feeAmount", feeAmount);
+                      onChange("paymentMethodCd", method.cd);
+                      onChange("paymentMethod", method);
+                      onChange("promoCode", "");
+                      onChange("promo", "");
+                    }
                   }
                 }}
                 sx={{
                   width: "100%",
-
+                  height: "100%",
                   padding: 4,
                   borderRadius: "0.4rem",
                   border: "1px solid #B72025",
@@ -195,7 +207,11 @@ const PaymentMethod = ({ value, data, onChange, position }: any) => {
 
                 <Divider />
 
-                <Typography fontSize={11}>{method.name}</Typography>
+                <Typography fontSize={11}>
+                  {method.isNeedLogin && !user.id
+                    ? "Login Untuk Menggunakan " + method.name
+                    : method.name}
+                </Typography>
               </Box>
             </Link>
           ))}

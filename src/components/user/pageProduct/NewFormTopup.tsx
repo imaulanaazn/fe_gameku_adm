@@ -9,10 +9,8 @@ import {
   Breadcrumbs,
   Button,
   Grid,
-  CardContent,
   Typography,
   Stack,
-  Avatar,
   Card,
 } from "@/lib/mui";
 import AdditionalData from "./AdditionalData";
@@ -31,8 +29,8 @@ import useDevice from "@/@core/hooks/useDevice";
 import ProductReview from "./ProductReview";
 import { toast } from "react-toastify";
 import Image from "next/image";
-import { formatCurrencyIDR } from "@/lib/currencyConverter";
-import formatter from "@/lib/formatter";
+import { currencyConverter } from "@/lib/currencyConverter";
+import { FeeType } from "@/enum";
 
 interface IFormProps {
   products: IGameDetail;
@@ -176,6 +174,12 @@ const NewFormTopup: React.FC<IFormProps> = ({ products, paymentsMethod }) => {
     getUserBalance();
   }, []);
 
+  useEffect(() => {
+    handleChange("productId", products.products[0].id);
+    handleChange("product", products.products[0]);
+    handleChange("amount", products.products[0].price);
+  }, []);
+
   return (
     products && (
       <Box sx={{ position: "relative", pb: { xs: 12, md: 14 } }}>
@@ -280,77 +284,98 @@ const NewFormTopup: React.FC<IFormProps> = ({ products, paymentsMethod }) => {
               </Grid>
             </Stack>
 
-            {(data.productId || data.paymentMethodId) && (
-              <Card
-                sx={{
-                  display: { xs: "block", md: "none" },
-                  width: "100vw",
-                  borderRadius: "1.5rem 1.5rem 0 0",
-                  position: "fixed",
-                  bottom: 0,
-                  left: 0,
-                  backgroundColor: "rgba(255,255,255,0.4)",
-                  backdropFilter: "blur(10px)",
-                  zIndex: 50,
-                  padding: 4,
+            <Card
+              sx={{
+                display: { xs: "block", md: "none" },
+                width: "100vw",
+                borderRadius: "1.5rem 1.5rem 0 0",
+                position: "fixed",
+                bottom: 0,
+                left: 0,
+                backgroundColor: "rgba(255,255,255,0.4)",
+                backdropFilter: "blur(10px)",
+                zIndex: 50,
+                padding: 4,
+              }}
+            >
+              <Stack direction="row" gap={4}>
+                <Box>
+                  <Image
+                    alt={products.name}
+                    src={data.product.logoDenom}
+                    width={60}
+                    height={60}
+                  />
+                </Box>
+                <Box>
+                  <Box>
+                    <Typography
+                      variant="subtitle1"
+                      component="div"
+                      fontSize={12}
+                      fontWeight={500}
+                    >
+                      {data.product.name || "pilih denom"} x{" "}
+                      {data.quantity || 0} Qty
+                    </Typography>
+                    <Typography
+                      variant="h6"
+                      color="primary.main"
+                      fontSize={15}
+                      fontWeight={600}
+                    >
+                      {data.paymentMethod.id &&
+                        currencyConverter(
+                          data.paymentMethod.providerCd === "TOKOPAY" &&
+                            data.paymentMethod.category === "6"
+                            ? Math.ceil(
+                                (data.totalAmountBeforeFee +
+                                  (data.paymentMethod.feeType ===
+                                  FeeType.PERCENTAGE
+                                    ? (data.totalAmountBeforeFee *
+                                        data.paymentMethod.fee) /
+                                      100
+                                    : data.paymentMethod.fee)) /
+                                  1000
+                              ) * 1000
+                            : data.totalAmountBeforeFee +
+                                (data.paymentMethod.feeType ===
+                                FeeType.PERCENTAGE
+                                  ? (data.totalAmountBeforeFee *
+                                      data.paymentMethod.fee) /
+                                    100
+                                  : data.paymentMethod.fee)
+                        )}
+                      {data.paymentMethod.id
+                        ? " - " + data.paymentMethod.name
+                        : "Pilih Metode Pembayaran"}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      fontSize={10}
+                    >
+                      proses instan
+                    </Typography>
+                  </Box>
+                </Box>
+              </Stack>
+              <Button
+                fullWidth
+                variant="contained"
+                size="large"
+                sx={{ marginTop: 4 }}
+                onClick={() => {
+                  data.paymentMethod.cd === "GASSKEUN_USER" &&
+                  balance < data.totalAmountBeforeFee
+                    ? toast.error("Gasskeun Coin mu Tidak Mencukupi")
+                    : setModalOpen(true);
                 }}
+                disabled={isDisabled}
               >
-                <Stack direction="row" gap={4}>
-                  <Box>
-                    <Image
-                      alt={products.name}
-                      src={data.product.logoDenom}
-                      width={60}
-                      height={60}
-                    />
-                  </Box>
-                  <Box>
-                    <Box>
-                      <Typography
-                        variant="subtitle1"
-                        component="div"
-                        fontSize={12}
-                        fontWeight={500}
-                      >
-                        {data.product.name || "pilih product"} x {data.quantity}{" "}
-                        Qty
-                      </Typography>
-                      <Typography
-                        variant="h6"
-                        color="primary.main"
-                        fontSize={15}
-                        fontWeight={600}
-                      >
-                        {formatter(data.amount)} -{" "}
-                        {data.paymentMethod.name || "Pilih Metode Pembayaran"}
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        color="text.secondary"
-                        fontSize={10}
-                      >
-                        proses instan
-                      </Typography>
-                    </Box>
-                  </Box>
-                </Stack>
-                <Button
-                  fullWidth
-                  variant="contained"
-                  size="large"
-                  sx={{ marginTop: 4 }}
-                  onClick={() => {
-                    data.paymentMethod.cd === "GASSKEUN_USER" &&
-                    balance < data.totalAmountBeforeFee
-                      ? toast.error("Gasskeun Coin mu Tidak Mencukupi")
-                      : setModalOpen(true);
-                  }}
-                  disabled={isDisabled}
-                >
-                  Beli Sekarang
-                </Button>
-              </Card>
-            )}
+                Beli Sekarang
+              </Button>
+            </Card>
 
             <Button
               fullWidth

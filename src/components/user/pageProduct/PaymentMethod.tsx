@@ -16,8 +16,6 @@ import { useRecoilState } from "recoil";
 
 const PaymentMethod = ({ value, data, onChange, position }: any) => {
   const [user, setUser] = useRecoilState(userState);
-  console.log(value);
-  console.log(user);
   return (
     <Card
       sx={{

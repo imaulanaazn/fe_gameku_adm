@@ -26,15 +26,17 @@ const ProfileGame = ({ denoms }: { denoms: IGameDetail }) => {
           <Box
             width={{ xs: 70, md: 80, lg: 100 }}
             height={{ xs: 70, md: 80, lg: 100 }}
-            borderRadius={{ xs: 1, lg: 2 }}
+            borderRadius={{ xs: 1.5, lg: 2 }}
             overflow={"hidden"}
             position={"relative"}
+            sx={{ flexShrink: "0" }}
           >
             <Image
               src={denoms.logoUrl}
               fill={true}
               alt="denom image"
               quality={60}
+              objectFit={"cover"}
             />
           </Box>
           <Typography

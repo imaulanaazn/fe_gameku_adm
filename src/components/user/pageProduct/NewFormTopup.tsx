@@ -175,9 +175,11 @@ const NewFormTopup: React.FC<IFormProps> = ({ products, paymentsMethod }) => {
   }, []);
 
   useEffect(() => {
-    handleChange("productId", products.products[0].id);
-    handleChange("product", products.products[0]);
-    handleChange("amount", products.products[0].price);
+    if (products.products.length) {
+      handleChange("productId", products.products[0].id);
+      handleChange("product", products.products[0]);
+      handleChange("amount", products.products[0].price);
+    }
   }, []);
 
   return (
@@ -299,10 +301,10 @@ const NewFormTopup: React.FC<IFormProps> = ({ products, paymentsMethod }) => {
               }}
             >
               <Stack direction="row" gap={4}>
-                <Box>
+                <Box borderRadius={{ xs: 1.5, lg: 2 }} overflow={"hidden"}>
                   <Image
                     alt={products.name}
-                    src={data.product.logoDenom}
+                    src={data.product.logoDenom || products.logoUrl}
                     width={60}
                     height={60}
                   />

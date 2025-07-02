@@ -247,20 +247,25 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
               <Stack spacing={6}>
                 {/* INFORMASI PRODUCT CARD */}
                 <Paper
-                  sx={{ position: "relative", padding: 6, borderRadius: 2 }}
+                  sx={{
+                    position: "relative",
+                    padding: 6,
+                    borderRadius: 2,
+                    backgroundColor: "#161721",
+                  }}
                   elevation={0}
                 >
                   <Box
                     sx={{
                       marginBottom: 4,
-                      backgroundColor: "#FFE4E5",
+                      backgroundColor: "#fb923c21",
                       padding: 4,
                       borderRadius: 1,
                     }}
                   >
                     <Typography
                       variant="body1"
-                      sx={{ fontWeight: 600, color: "#B72025" }}
+                      sx={{ fontWeight: 600, color: "#fb923ce6" }}
                     >
                       Informasi Produk
                     </Typography>
@@ -291,6 +296,7 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                             letterSpacing: "0.25px",
                             fontWeight: 600,
                             marginTop: 1.5,
+                            color: "#ffffff",
                           }}
                         >
                           {order.product.name}
@@ -301,6 +307,7 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                             letterSpacing: "0.25px",
                             fontWeight: 600,
                             marginTop: 1.5,
+                            color: "#ffffff",
                           }}
                         >
                           {order.game.name}
@@ -312,7 +319,7 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                         variant="body2"
                         sx={{
                           fontWeight: 600,
-                          color: "gray",
+                          color: "#ffffff",
                           marginTop: 1.5,
                         }}
                       >
@@ -320,7 +327,11 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                       </Typography>
                       <Typography
                         variant="body2"
-                        sx={{ fontWeight: 600, marginTop: 1.5 }}
+                        sx={{
+                          fontWeight: 600,
+                          marginTop: 1.5,
+                          color: "#ffffff",
+                        }}
                       >
                         {currencyConverter(order.order.totalAmt)}
                       </Typography>
@@ -333,7 +344,7 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                       order.order?.username) && (
                       <Typography
                         variant="body1"
-                        sx={{ fontWeight: 600, color: "#374151" }}
+                        sx={{ fontWeight: 600, color: "#ffffff" }}
                       >
                         Data game :
                       </Typography>
@@ -345,14 +356,22 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                       <Stack direction="row" justifyContent="space-between">
                         <Typography
                           variant="body2"
-                          sx={{ fontWeight: 500, marginTop: 2 }}
+                          sx={{
+                            fontWeight: 500,
+                            marginTop: 2,
+                            color: "#d1d5db",
+                          }}
                         >
                           User ID
                         </Typography>
                         {order?.order?.userId && (
                           <Typography
                             variant="body2"
-                            sx={{ fontWeight: 500, marginTop: 2 }}
+                            sx={{
+                              fontWeight: 500,
+                              marginTop: 2,
+                              color: "#d1d5db",
+                            }}
                           >
                             {order?.order?.userId}
                           </Typography>
@@ -400,20 +419,25 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
 
                 {/* INFROMASI PESANAN CARD */}
                 <Paper
-                  sx={{ position: "relative", padding: 6, borderRadius: 2 }}
+                  sx={{
+                    position: "relative",
+                    padding: 6,
+                    borderRadius: 2,
+                    backgroundColor: "#161721",
+                  }}
                   elevation={0}
                 >
                   <Box
                     sx={{
                       marginBottom: 4,
-                      backgroundColor: "#FFE4E5",
+                      backgroundColor: "#fb923c21",
                       padding: 4,
                       borderRadius: 1,
                     }}
                   >
                     <Typography
                       variant="body1"
-                      sx={{ fontWeight: 600, color: "#B72025" }}
+                      sx={{ fontWeight: 600, color: "#fb923ce6" }}
                     >
                       Informasi Pesanan
                     </Typography>
@@ -426,10 +450,13 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                       justifyContent: "space-between",
                     }}
                   >
-                    <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                    <Typography
+                      variant="body2"
+                      sx={{ fontWeight: 600, color: "#ffffff" }}
+                    >
                       {order.product.name}
                     </Typography>
-                    <Typography variant="body2">
+                    <Typography variant="body2" sx={{ color: "#ffffff" }}>
                       {currencyConverter(order.order ? order.order.amount : 0)}
                     </Typography>
                   </Box>
@@ -442,8 +469,10 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                       justifyContent: "space-between",
                     }}
                   >
-                    <Typography variant="body2">Kuantitas</Typography>
-                    <Typography variant="body2">
+                    <Typography variant="body2" sx={{ color: "#d1d5db" }}>
+                      Kuantitas
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: "#d1d5db" }}>
                       {order.order?.quantity}
                     </Typography>
                   </Box>
@@ -456,10 +485,13 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                       marginTop: 2,
                     }}
                   >
-                    <Typography variant="body2" sx={{ fontWeight: 400 }}>
+                    <Typography
+                      variant="body2"
+                      sx={{ fontWeight: 400, color: "#d1d5db" }}
+                    >
                       Subtotal
                     </Typography>
-                    <Typography variant="body2">
+                    <Typography variant="body2" sx={{ color: "#d1d5db" }}>
                       {order.order?.amount && order.order?.quantity
                         ? currencyConverter(
                             order.order.amount * order.order.quantity
@@ -476,10 +508,13 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                       marginTop: 2,
                     }}
                   >
-                    <Typography variant="body2" sx={{ fontWeight: 400 }}>
+                    <Typography
+                      variant="body2"
+                      sx={{ fontWeight: 400, color: "#d1d5db" }}
+                    >
                       Biaya Admin
                     </Typography>
-                    <Typography variant="body2">
+                    <Typography variant="body2" sx={{ color: "#d1d5db" }}>
                       {currencyConverter(order.order.feeAmt)}
                     </Typography>
                   </Box>
@@ -492,10 +527,13 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                       marginTop: 2,
                     }}
                   >
-                    <Typography variant="body2" sx={{ fontWeight: 400 }}>
+                    <Typography
+                      variant="body2"
+                      sx={{ fontWeight: 400, color: "#d1d5db" }}
+                    >
                       Diskon
                     </Typography>
-                    <Typography variant="body2">
+                    <Typography variant="body2" sx={{ color: "#d1d5db" }}>
                       {currencyConverter(order.order.discAmt)}
                     </Typography>
                   </Box>
@@ -511,7 +549,7 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                   >
                     <Typography
                       variant="body1"
-                      sx={{ fontWeight: 600, color: "#374151" }}
+                      sx={{ fontWeight: 600, color: "#ffffff" }}
                     >
                       Total
                     </Typography>
@@ -519,7 +557,7 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                       variant="body1"
                       sx={{
                         fontWeight: 700,
-                        color: "#374151",
+                        color: "#ffffff",
                         fontSize: "1rem",
                       }}
                     >
@@ -536,20 +574,25 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                 flexDirection={{ xs: "column-reverse", md: "column" }}
               >
                 <Paper
-                  sx={{ position: "relative", padding: 6, borderRadius: 2 }}
+                  sx={{
+                    position: "relative",
+                    padding: 6,
+                    borderRadius: 2,
+                    backgroundColor: "#161721",
+                  }}
                   elevation={0}
                 >
                   <Box
                     sx={{
                       marginBottom: 4,
-                      backgroundColor: "#FFE4E5",
+                      backgroundColor: "#fb923c21",
                       padding: 4,
                       borderRadius: 1,
                     }}
                   >
                     <Typography
                       variant="body1"
-                      sx={{ fontWeight: 600, color: "#B72025" }}
+                      sx={{ fontWeight: 600, color: "#fb923ce6" }}
                     >
                       Informasi Pembayaran
                     </Typography>
@@ -584,7 +627,10 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                       justifyContent="space-between"
                       sx={{ marginBottom: 2 }}
                     >
-                      <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                      <Typography
+                        variant="body2"
+                        sx={{ fontWeight: 500, color: "#d1d5db" }}
+                      >
                         Status
                       </Typography>
                       {
@@ -599,13 +645,16 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                       justifyContent="space-between"
                       sx={{ marginBottom: 2 }}
                     >
-                      <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                      <Typography
+                        variant="body2"
+                        sx={{ fontWeight: 500, color: "#d1d5db" }}
+                      >
                         Nomor Invoice
                       </Typography>
                       <Typography
                         noWrap
                         variant="body2"
-                        sx={{ fontWeight: 500 }}
+                        sx={{ fontWeight: 500, color: "#d1d5db" }}
                       >
                         {order.order.invoiceId}
                       </Typography>
@@ -615,13 +664,16 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                       justifyContent="space-between"
                       sx={{ marginBottom: 2 }}
                     >
-                      <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                      <Typography
+                        variant="body2"
+                        sx={{ fontWeight: 500, color: "#d1d5db" }}
+                      >
                         Tanggal Order
                       </Typography>
                       <Typography
                         noWrap
                         variant="body2"
-                        sx={{ fontWeight: 500 }}
+                        sx={{ fontWeight: 500, color: "#d1d5db" }}
                       >
                         {dayjs(order.order.createdAt).format(
                           "DD MMM YYYY HH:mm:ss"
@@ -633,13 +685,16 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                       justifyContent="space-between"
                       sx={{ marginBottom: 2 }}
                     >
-                      <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                      <Typography
+                        variant="body2"
+                        sx={{ fontWeight: 500, color: "#d1d5db" }}
+                      >
                         Metode Pembayaran
                       </Typography>
                       <Typography
                         noWrap
                         variant="body2"
-                        sx={{ fontWeight: 500 }}
+                        sx={{ fontWeight: 500, color: "#d1d5db" }}
                       >
                         {order.payment.name}
                       </Typography>
@@ -651,10 +706,16 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                         justifyContent="space-between"
                         sx={{ marginBottom: 2 }}
                       >
-                        <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                        <Typography
+                          variant="body2"
+                          sx={{ fontWeight: 500, color: "#d1d5db" }}
+                        >
                           Nomor OVO
                         </Typography>
-                        <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                        <Typography
+                          variant="body2"
+                          sx={{ fontWeight: 500, color: "#d1d5db" }}
+                        >
                           {"mobileNumber" in order.payment.action &&
                             order.payment.action.mobileNumber.replace(
                               "+62",
@@ -670,10 +731,16 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                         justifyContent="space-between"
                         sx={{ marginBottom: 2 }}
                       >
-                        <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                        <Typography
+                          variant="body2"
+                          sx={{ fontWeight: 500, color: "#d1d5db" }}
+                        >
                           Cashtag
                         </Typography>
-                        <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                        <Typography
+                          variant="body2"
+                          sx={{ fontWeight: 500, color: "#d1d5db" }}
+                        >
                           {"cashtag" in order.payment.action &&
                             order.payment.action.cashtag}
                         </Typography>
@@ -813,7 +880,7 @@ const NewPayment = ({ invoices }: { invoices: IInvoice }) => {
                                         variant="outlined"
                                         sx={{
                                           width: "100%",
-                                          backgroundColor: "#FFE4E5",
+                                          backgroundColor: "#fb923c21",
                                           display: "flex",
                                           gap: 2,
                                         }}
@@ -962,7 +1029,7 @@ function PaymentPendingCountdown({
           Waktu Tersisa{"  "}
           <Typography
             variant="caption"
-            sx={{ color: "#B72025", fontWeight: 600, fontSize: "inherit" }}
+            sx={{ color: "#fb923ce6", fontWeight: 600, fontSize: "inherit" }}
           >
             {" "}
             {timeRemaining.days}d {timeRemaining.hours}h {timeRemaining.minutes}

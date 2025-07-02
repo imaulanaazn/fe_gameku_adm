@@ -28,7 +28,7 @@ const Payment = async ({ params }: IParams) => {
   }
 
   return (
-    <Box sx={{ backgroundColor: "#FFF3F3", pb: 20, pt: 10 }}>
+    <Box sx={{ backgroundColor: "#0f0f14", pb: 20, pt: 10 }}>
       <Container>
         <Invoices invoice={invoice.data} />
       </Container>

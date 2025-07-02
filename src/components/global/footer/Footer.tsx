@@ -149,7 +149,7 @@ const Footer = () => {
             </p>
             <ul>
               {linkCepat.map((link) => (
-                <li className="text-neutral-400 mt-3" key={link.id}>
+                <li className="text-neutral-300 mt-3" key={link.id}>
                   <Link
                     className="border-b border-solid border-black hover:border-white hover:text-white"
                     href={link.url}
@@ -168,7 +168,7 @@ const Footer = () => {
             </p>
             <ul>
               {socialMedia.map((item) => (
-                <li className="text-neutral-400 mt-3" key={item.title}>
+                <li className="text-neutral-300 mt-3" key={item.title}>
                   <Link
                     className="border-b border-solid border-black hover:border-white hover:text-white"
                     target="_blank"
@@ -185,13 +185,13 @@ const Footer = () => {
           <div className="flex flex-col">
             <p className="text-white font-bold uppercase">Legal</p>
             <Link
-              className="text-neutral-400 inline-block mt-3 border-b border-solid border-black hover:border-white hover:text-white"
+              className="text-neutral-300 inline-block mt-3 border-b border-solid border-black hover:border-white hover:text-white"
               href="#"
             >
               Privacy Policy
             </Link>
             <Link
-              className="text-neutral-400 inline-block mt-3 border-b border-solid border-black hover:border-white hover:text-white"
+              className="text-neutral-300 inline-block mt-3 border-b border-solid border-black hover:border-white hover:text-white"
               href="#"
             >
               Terms & Conditions

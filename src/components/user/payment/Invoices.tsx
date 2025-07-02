@@ -23,12 +23,10 @@ const Invoices: React.FC<IInvoicesProps> = ({ invoice }) => {
     <>
       <Box maxWidth="lg" marginX={"auto"}>
         <Breadcrumbs aria-label="breadcrumb" sx={{ pb: { xs: 0, lg: 8 } }}>
-          <Link href="/" className=" text-primary-900">
+          <Link href="/" className="text-primary-900">
             Home
           </Link>
-          <Typography color="text.primary">
-            {invoice.order.invoiceId}
-          </Typography>
+          <Typography color="#fb923ce6">{invoice.order.invoiceId}</Typography>
         </Breadcrumbs>
         <NewPayment invoices={invoice} />
       </Box>

@@ -21,7 +21,7 @@ const GroupedDenomList = ({ position, data, onChange, value }: any) => {
     <Card
       sx={{
         borderRadius: "0.75rem",
-        background: `#ffffff url(/images/topup-form-step-${position}.svg) no-repeat right top`,
+        background: `#161721 url(/images/topup-form-step-${position}.svg) no-repeat right top`,
         backgroundSize: "150px",
       }}
     >
@@ -32,7 +32,7 @@ const GroupedDenomList = ({ position, data, onChange, value }: any) => {
             mb: 2.5,
             lineHeight: "2rem !important",
             letterSpacing: "0.15px !important",
-            color: "#1F2937",
+            color: "#ffffff",
             fontWeight: "800",
           },
         }}
@@ -54,7 +54,7 @@ const GroupedDenomList = ({ position, data, onChange, value }: any) => {
               scrollButtons="auto"
               aria-label="scrollable auto tabs example"
               sx={{
-                backgroundColor: "white",
+                backgroundColor: "#ffffff0a",
                 marginTop: -6,
               }}
             >
@@ -77,7 +77,7 @@ const GroupedDenomList = ({ position, data, onChange, value }: any) => {
                 key={category.id}
                 sx={{ marginTop: 4, padding: "0px" }}
               >
-                <Grid container spacing={4}>
+                <Grid container spacing={3}>
                   {category.denoms.map((item: any) => (
                     <Grid key={item.id} item xs={6} md={4}>
                       <a href="#quantity">
@@ -88,10 +88,10 @@ const GroupedDenomList = ({ position, data, onChange, value }: any) => {
                             height: "100%",
                             position: "relative",
                             cursor: "pointer",
-                            outline: "1px solid #B72025",
+                            backgroundColor: "#ffffff0a",
                             ...(item.id === value.productId && {
-                              outline: "2px solid #B72025",
-                              backgroundColor: "#FFE4E5",
+                              outline: "2px solid #fb923ce6",
+                              backgroundColor: "#ffffff1a",
                             }),
                           }}
                           onClick={(e) => {
@@ -106,6 +106,7 @@ const GroupedDenomList = ({ position, data, onChange, value }: any) => {
                             sx={{
                               display: "flex",
                               gap: 2,
+                              padding: "12px",
                               alignItems: "center",
                               justifyContent: "space-between",
                               width: "100%",
@@ -119,24 +120,28 @@ const GroupedDenomList = ({ position, data, onChange, value }: any) => {
                               }}
                             >
                               <Typography
-                                variant="caption"
+                                variant="body2"
                                 sx={{
                                   letterSpacing: "0.25px",
-                                  fontWeight: 600,
-                                  color: "#B72025",
+                                  fontWeight: 500,
+                                  color: "#fb923ce6",
                                   ...(item.id === value.productId && {
                                     fontWeight: 800,
                                   }),
                                 }}
                               >
-                                {item.name}
+                                {item.name.includes("(")
+                                  ? item.name
+                                      .substring(0, item.name.indexOf("("))
+                                      .trim()
+                                  : item.name}
                               </Typography>
                               <Typography
-                                variant="caption"
+                                variant="body2"
                                 sx={{
                                   letterSpacing: "0.25px",
                                   fontWeight: 400,
-                                  color: "#1F2937",
+                                  color: "#ffffff",
                                   ...(item.id === value.productId && {
                                     fontWeight: 600,
                                   }),
@@ -145,18 +150,6 @@ const GroupedDenomList = ({ position, data, onChange, value }: any) => {
                                 {currencyConverter(item.price)}
                               </Typography>
                             </Box>
-                            <Image
-                              src={
-                                item.logoDenom || data.logoDenom || data.logoUrl
-                              }
-                              alt="Logo Denom Gasskeun Topup"
-                              className="rounded-lg object-contain"
-                              width="30"
-                              height="30"
-                              quality={55}
-                              loading="lazy"
-                              style={{ borderRadius: 2 }}
-                            />
                           </CardContent>
                         </Card>
                       </a>

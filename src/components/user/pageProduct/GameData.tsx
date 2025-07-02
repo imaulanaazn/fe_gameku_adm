@@ -20,7 +20,7 @@ const GameData = ({ data, onChange, value, position }: any) => {
       <Card
         sx={{
           borderRadius: "0.75rem",
-          background: `#ffffff url(/images/topup-form-step-${position}.svg) no-repeat right top`,
+          background: `#161721 url(/images/topup-form-step-${position}.svg) no-repeat right top`,
           backgroundSize: "150px",
         }}
         elevation={1}
@@ -32,7 +32,7 @@ const GameData = ({ data, onChange, value, position }: any) => {
               mb: 2.5,
               lineHeight: "2rem !important",
               letterSpacing: "0.15px !important",
-              color: "#1F2937",
+              color: "#ffffff",
               fontWeight: "900",
             },
           }}
@@ -53,13 +53,14 @@ const GameData = ({ data, onChange, value, position }: any) => {
                 label={labelGameData}
                 sx={{
                   marginBottom: 2.5,
-                  "& .MuiFormLabel-root": { color: "#B72025" },
+                  "& .MuiFormLabel-root": { color: "#fb923ce6" },
                   "& input": {
-                    border: "1px solid #B72025",
+                    border: "1px solid #fb923ce6",
                     borderRadius: "0.4rem",
+                    color: "#ffffff",
                   },
                   "& .MuiInputLabel-root": {
-                    background: "white",
+                    background: "#161721",
                   },
                 }}
                 onChange={(e) => onChange("userId", e.target.value)}
@@ -78,13 +79,14 @@ const GameData = ({ data, onChange, value, position }: any) => {
                     label="Server ID"
                     sx={{
                       marginBottom: 2.5,
-                      "& .MuiFormLabel-root": { color: "#B72025" },
+                      "& .MuiFormLabel-root": { color: "#fb923ce6" },
                       "& input": {
-                        border: "1px solid #B72025",
+                        border: "1px solid #fb923ce6",
                         borderRadius: "0.4rem",
+                        color: "#ffffff",
                       },
                       "& .MuiInputLabel-root": {
-                        background: "white",
+                        background: "#161721",
                       },
                     }}
                     onChange={(e) => onChange("serverId", e.target.value)}
@@ -99,7 +101,7 @@ const GameData = ({ data, onChange, value, position }: any) => {
                   <FormControl fullWidth>
                     <InputLabel
                       id="demo-simple-select-label"
-                      sx={{ background: "white", color: "#B72025" }}
+                      sx={{ background: "white", color: "#EAEAEA" }}
                     >
                       Server ID
                     </InputLabel>
@@ -108,7 +110,7 @@ const GameData = ({ data, onChange, value, position }: any) => {
                       id="demo-simple-select"
                       value={value.serverId}
                       label="Age"
-                      sx={{ border: "1px solid #B72025" }}
+                      sx={{ border: "1px solid #EAEAEA", color: "#ffffff" }}
                       onChange={(e) => onChange("serverId", e.target.value)}
                     >
                       {data.listServer.map((item: any) => (

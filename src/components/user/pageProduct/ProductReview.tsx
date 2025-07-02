@@ -78,7 +78,7 @@ function ProductReview({ gameId }: { gameId: string }) {
   return (
     <Card
       sx={{
-        bgcolor: "white",
+        bgcolor: "#161721",
         borderRadius: "0.75rem",
         px: 2,
         py: 4,
@@ -93,7 +93,7 @@ function ProductReview({ gameId }: { gameId: string }) {
             sx={{
               fontWeight: "500",
               mb: 2,
-              color: "#1F2937",
+              color: "#ffffff",
             }}
           >
             Ulasan Pengguna
@@ -113,7 +113,7 @@ function ProductReview({ gameId }: { gameId: string }) {
               <Typography
                 variant="body1"
                 sx={{ fontWeight: "bold", ml: 2, fontSize: "2rem" }}
-                color="#B72025"
+                color="#fb923ce6"
               >
                 {reviews.averageRating?.toFixed(1) || 0}/5
               </Typography>
@@ -121,11 +121,11 @@ function ProductReview({ gameId }: { gameId: string }) {
             <Rating value={reviews.averageRating} precision={0.1} readOnly />
           </Box>
           {reviews.reviews.length > 0 ? (
-            <Typography variant="body2" sx={{ mt: 1 }}>
+            <Typography variant="body2" sx={{ mt: 1, color: "#fcfcfda8" }}>
               {reviews.totalRating} Ulasan
             </Typography>
           ) : (
-            <Typography variant="body1" sx={{ mt: 1 }}>
+            <Typography variant="body1" sx={{ mt: 1, color: "#fcfcfda8" }}>
               Belum ada ulasan
             </Typography>
           )}
@@ -148,7 +148,10 @@ function ProductReview({ gameId }: { gameId: string }) {
                       justifyContent="center"
                       alignItems="center"
                     >
-                      <Typography variant="body2" sx={{ flexGrow: 0, mr: 1 }}>
+                      <Typography
+                        variant="body2"
+                        sx={{ flexGrow: 0, mr: 1, color: "#fcfcfda8" }}
+                      >
                         {item.rating}
                       </Typography>
                       <Rating
@@ -172,14 +175,16 @@ function ProductReview({ gameId }: { gameId: string }) {
                         />
                       </Box>
                     </Box>
-                    <Typography variant="body2">{item.totalRating}</Typography>
+                    <Typography variant="body2" sx={{ color: "#fcfcfda8" }}>
+                      {item.totalRating}
+                    </Typography>
                   </li>
                 )
               )}
             </ul>
           </Stack>
 
-          {reviews.reviews.length > 0 &&
+          {/* {reviews.reviews.length > 0 &&
             reviews.reviews.map((review: IReview) => (
               <ProductCommentCard review={review} key={review.createdAt} />
             ))}
@@ -201,7 +206,7 @@ function ProductReview({ gameId }: { gameId: string }) {
                 <FontAwesomeIcon icon={faArrowRight} />
               </Stack>
             </Link>
-          )}
+          )} */}
         </Box>
       </CardContent>
     </Card>

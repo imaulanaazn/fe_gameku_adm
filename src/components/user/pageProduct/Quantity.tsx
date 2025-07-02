@@ -24,7 +24,7 @@ const Quantity = ({ data, value, onChange, position }: any) => {
       <Card
         sx={{
           borderRadius: "0.75rem",
-          background: `#ffffff url(/images/topup-form-step-${position}.svg) no-repeat right top`,
+          background: `#161721 url(/images/topup-form-step-${position}.svg) no-repeat right top`,
           backgroundSize: "150px",
         }}
       >
@@ -35,7 +35,7 @@ const Quantity = ({ data, value, onChange, position }: any) => {
               mb: 2.5,
               lineHeight: "2rem !important",
               letterSpacing: "0.15px !important",
-              color: "#1F2937",
+              color: "white",
             },
           }}
         />
@@ -53,13 +53,14 @@ const Quantity = ({ data, value, onChange, position }: any) => {
             id="total"
             label="Jumlah Pembelian"
             sx={{
-              "& .MuiFormLabel-root": { color: "#B72025" },
+              "& .MuiFormLabel-root": { color: "#fb923ce6" },
               "& input": {
-                border: "1px solid #B72025",
+                border: "1px solid #fb923ce6",
                 borderRadius: "0.4rem",
+                color: "#ffffff",
               },
               "& .MuiInputLabel-root": {
-                background: "white",
+                background: "#161721",
               },
             }}
             onChange={handleInputChange}

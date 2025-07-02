@@ -38,11 +38,11 @@ const ListGames: React.FC<ListGameProps> = ({ title, data }) => {
   return (
     <Container>
       <section className="mt-10 md:mt-12 lg:mt-20">
-        <h2 className="text-neutral-900 text-2xl md:text-3xl lg:text-4xl font-bold text-center">
+        <h2 className="text-white text-xl md:text-3xl lg:text-4xl font-bold text-left">
           {title}
         </h2>
         <div className="text-center w-full">
-          <div className="mt-4 md:mt-6 lg:mt-10 grid grid-cols-auto-xs xs:grid-cols-auto-sm md:grid-cols-auto-md lg:grid-cols-auto-lg gap-3 lg:gap-6">
+          <div className="mt-4 md:mt-6 lg:mt-10 grid grid-cols-auto-xs xs:grid-cols-auto-sm md:grid-cols-auto-md lg:grid-cols-auto-lg gap-4 lg:gap-6">
             {slicedGames.map((game) => (
               <Game data={game} key={game.id} />
             ))}
@@ -52,7 +52,7 @@ const ListGames: React.FC<ListGameProps> = ({ title, data }) => {
           {limit < data.length && (
             <button
               onClick={handleClickExpandGame}
-              className="flex items-center gap-2 bg-white text-sm text-primary-900 rounded-md py-2 px-4 font-medium hover:bg-primary-100"
+              className="flex items-center gap-2 bg-darkPrimary text-sm text-primary-900 rounded-md py-2 px-4 font-medium hover:bg-primary-100"
             >
               Muat lebih banyak
               <FontAwesomeIcon icon={faChevronDown} className="text-sm" />

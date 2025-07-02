@@ -20,7 +20,7 @@ const PaymentMethod = ({ value, data, onChange, position }: any) => {
     <Card
       sx={{
         borderRadius: "0.75rem",
-        background: `#ffffff url(/images/topup-form-step-${position}.svg) no-repeat right top`,
+        background: `#161721 url(/images/topup-form-step-${position}.svg) no-repeat right top`,
         backgroundSize: "150px",
       }}
     >
@@ -31,7 +31,7 @@ const PaymentMethod = ({ value, data, onChange, position }: any) => {
             mb: 2.5,
             lineHeight: "2rem !important",
             letterSpacing: "0.15px !important",
-            color: "#1F2937",
+            color: "white",
             fontWeight: "800",
           },
         }}
@@ -123,11 +123,12 @@ const PaymentMethod = ({ value, data, onChange, position }: any) => {
                   width: "100%",
                   height: "100%",
                   padding: 4,
+                  backgroundColor: "#ffffff0a",
                   borderRadius: "0.4rem",
-                  border: "1px solid #B72025",
+                  // border: "1px solid #fb923ce6",
                   ...(method.id === value.paymentMethodId && {
-                    outline: "2px solid #B72025",
-                    backgroundColor: "#FFE4E5",
+                    outline: "2px solid #fb923ce6",
+                    backgroundColor: "#ffffff1a",
                   }),
                   ...(value.totalAmountBeforeFee &&
                   value.totalAmountBeforeFee > method.minAmount &&
@@ -144,7 +145,7 @@ const PaymentMethod = ({ value, data, onChange, position }: any) => {
                     gap: 4,
                   }}
                 >
-                  <Box position={"relative"} width={70} height={40}>
+                  <Box position={"relative"} width={50} height={20}>
                     <Image
                       src={method.logo}
                       alt="Logo payment method"
@@ -157,7 +158,7 @@ const PaymentMethod = ({ value, data, onChange, position }: any) => {
                   <Typography
                     variant="body2"
                     sx={{
-                      color: "#1F2937",
+                      color: "#fb923ce6",
                       ...(method.id === value.paymentMethodId && {
                         fontWeight: "700",
                       }),
@@ -205,7 +206,7 @@ const PaymentMethod = ({ value, data, onChange, position }: any) => {
 
                 <Divider />
 
-                <Typography fontSize={11}>
+                <Typography variant="body1" color="#ffffff">
                   {method.isNeedLogin && !user.id
                     ? "Login Untuk Menggunakan " + method.name
                     : method.name}

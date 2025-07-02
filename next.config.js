@@ -7,6 +7,8 @@ const nextConfig = {
       "img.youtube.com",
       "localhost",
       "image.gasskeuntopup.com",
+      "cdn.aplikasikreasi.id",
+      "i.ibb.co.com",
     ],
   },
   output: "standalone",

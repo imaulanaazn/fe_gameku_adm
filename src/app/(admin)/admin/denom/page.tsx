@@ -31,6 +31,8 @@ const Denom = () => {
     getDenoms();
   }, []);
 
+  console.log(denoms);
+
   return (
     <>
       {loading && <Loading />}

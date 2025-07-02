@@ -17,12 +17,12 @@ import Script from "next/script";
 import { breadcrumbSchema, defaultCategory } from "./constants";
 
 const Home = async () => {
-  const statusWebsite = await sendRequest<{ value: string }[]>(
-    "/v1/config?type=website_status"
-  );
-  if (statusWebsite.data[0].value === "maintenance") {
-    return <Maintenance />;
-  }
+  // const statusWebsite = await sendRequest<{ value: string }[]>(
+  //   "/v1/config?type=website_status"
+  // );
+  // if (statusWebsite.data[0].value === "maintenance") {
+  //   return <Maintenance />;
+  // }
 
   const slides = await sendRequest<IImageCarousel[]>("/v1/banners");
   const popularGames = await sendRequest<IGame[]>("/v1/games?isPopular=true");
@@ -36,8 +36,6 @@ const Home = async () => {
   // const posts = await sendRequest<{ data: INewsPost[]; totalData: number }>(
   //   "/v1/newest-articles?limit=3"
   // );
-  const youtubeVideo = await sendRequest<INewsVideos[]>("/v1/videos");
-
   return (
     <>
       <Script
@@ -45,7 +43,7 @@ const Home = async () => {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
-      <div className="bg-blurry-red">
+      <div className="bg-darkPrimary">
         {slides.data.length > 0 && <Carousel slides={slides.data} />}
 
         {popularGames.data.length > 0 && (
@@ -58,17 +56,17 @@ const Home = async () => {
           gameCategories={gameCategories.data}
         />
 
-        {categoriesAndGames.data.map((data, index) => (
+        {/* {categoriesAndGames.data.map((data, index) => (
           <ListGames key={index} title={data.name} data={data.games} />
-        ))}
+        ))} */}
 
-        <AboutGasskeun />
+        {/* <AboutGasskeun /> */}
 
-        {youtubeVideo.data.length > 0 && (
+        {/* {youtubeVideo.data.length > 0 && (
           <NewsVideo videos={youtubeVideo.data} />
-        )}
+        )} */}
 
-        <NoGameFound />
+        {/* <NoGameFound /> */}
 
         {/* {posts?.data?.data.length > 0 && <NewsPost posts={posts.data.data} />} */}
 

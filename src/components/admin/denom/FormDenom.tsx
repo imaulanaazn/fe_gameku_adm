@@ -264,6 +264,8 @@ const FormDenom: React.FC<IForm> = ({
     saveData();
   };
 
+  console.log(newData);
+
   return (
     <div className="w-full h-screen bg-gray-800 bg-opacity-70 absolute top-0 left-0 flex items-center justify-center z-50">
       <div className="xl:w-2/5 md:w-3/4 w-full h-screen md:h-max bg-white shadow p-6 lg:p-8 md:rounded-xl overflow-y-hidden relative">

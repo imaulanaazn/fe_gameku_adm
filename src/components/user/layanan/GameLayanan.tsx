@@ -85,7 +85,7 @@ const GameLayanan: React.FC<{ games: IGame[] }> = ({ games }) => {
         {limit < filteredGames.length && (
           <button
             onClick={handleClickExpandGame}
-            className="flex items-center gap-2 bg-white text-sm text-primary-900 rounded-md py-2 px-4 font-medium hover:bg-primary-100"
+            className="flex items-center gap-2 bg-darkPrimary text-sm text-primary-900 rounded-md py-2 px-4 font-medium hover:bg-primary-100"
           >
             Muat lebih banyak
             <FontAwesomeIcon icon={faChevronDown} className="text-sm" />

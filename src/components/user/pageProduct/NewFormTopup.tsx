@@ -190,7 +190,9 @@ const NewFormTopup: React.FC<IFormProps> = ({ products, paymentsMethod }) => {
             <Link href="/" className="text-primary-900">
               Home
             </Link>
-            <Typography color="text.primary">{products.name}</Typography>
+            <Typography color="#fb923ce6" sx={{ opacity: 0.7 }}>
+              {products.name}
+            </Typography>
           </Breadcrumbs>
         </Box>
         <Grid container spacing={6}>
@@ -294,7 +296,7 @@ const NewFormTopup: React.FC<IFormProps> = ({ products, paymentsMethod }) => {
                 position: "fixed",
                 bottom: 0,
                 left: 0,
-                backgroundColor: "rgba(255,255,255,0.4)",
+                backgroundColor: "rgba(255,255,255,0.8)",
                 backdropFilter: "blur(10px)",
                 zIndex: 50,
                 padding: 4,
@@ -305,11 +307,11 @@ const NewFormTopup: React.FC<IFormProps> = ({ products, paymentsMethod }) => {
                   <Image
                     alt={products.name}
                     src={data.product.logoDenom || products.logoUrl}
-                    width={60}
-                    height={60}
+                    width={70}
+                    height={70}
                   />
                 </Box>
-                <Box>
+                <Box sx={{ flex: "1" }}>
                   <Box>
                     <Typography
                       variant="subtitle1"
@@ -320,63 +322,74 @@ const NewFormTopup: React.FC<IFormProps> = ({ products, paymentsMethod }) => {
                       {data.product.name || "pilih denom"} x{" "}
                       {data.quantity || 0} Qty
                     </Typography>
-                    <Typography
-                      variant="h6"
-                      color="primary.main"
-                      fontSize={15}
-                      fontWeight={600}
+                    <Box
+                      sx={{
+                        width: "100%",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        gap: 1,
+                        marginTop: 2,
+                      }}
                     >
-                      {data.paymentMethod.id &&
-                        currencyConverter(
-                          data.paymentMethod.providerCd === "TOKOPAY" &&
-                            data.paymentMethod.category === "6"
-                            ? Math.ceil(
-                                (data.totalAmountBeforeFee +
-                                  (data.paymentMethod.feeType ===
-                                  FeeType.PERCENTAGE
-                                    ? (data.totalAmountBeforeFee *
-                                        data.paymentMethod.fee) /
-                                      100
-                                    : data.paymentMethod.fee)) /
-                                  1000
-                              ) * 1000
-                            : data.totalAmountBeforeFee +
-                                (data.paymentMethod.feeType ===
-                                FeeType.PERCENTAGE
-                                  ? (data.totalAmountBeforeFee *
-                                      data.paymentMethod.fee) /
-                                    100
-                                  : data.paymentMethod.fee)
-                        )}
-                      {data.paymentMethod.id
-                        ? " - " + data.paymentMethod.name
-                        : "Pilih Metode Pembayaran"}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      color="text.secondary"
-                      fontSize={10}
-                    >
-                      proses instan
-                    </Typography>
+                      <Box>
+                        <Typography
+                          variant="body2"
+                          color="primary.main"
+                          fontSize={15}
+                          fontWeight={600}
+                        >
+                          {data.paymentMethod.id &&
+                            currencyConverter(
+                              data.paymentMethod.providerCd === "TOKOPAY" &&
+                                data.paymentMethod.category === "6"
+                                ? Math.ceil(
+                                    (data.totalAmountBeforeFee +
+                                      (data.paymentMethod.feeType ===
+                                      FeeType.PERCENTAGE
+                                        ? (data.totalAmountBeforeFee *
+                                            data.paymentMethod.fee) /
+                                          100
+                                        : data.paymentMethod.fee)) /
+                                      1000
+                                  ) * 1000
+                                : data.totalAmountBeforeFee +
+                                    (data.paymentMethod.feeType ===
+                                    FeeType.PERCENTAGE
+                                      ? (data.totalAmountBeforeFee *
+                                          data.paymentMethod.fee) /
+                                        100
+                                      : data.paymentMethod.fee)
+                            )}
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          color="text.secondary"
+                          fontSize={12}
+                        >
+                          {data.paymentMethod.id
+                            ? data.paymentMethod.name
+                            : "Pilih Metode Pembayaran"}
+                        </Typography>
+                      </Box>
+                      <Button
+                        variant="contained"
+                        size="medium"
+                        sx={{ width: "fit-content" }}
+                        onClick={() => {
+                          data.paymentMethod.cd === "GASSKEUN_USER" &&
+                          balance < data.totalAmountBeforeFee
+                            ? toast.error("Gasskeun Coin mu Tidak Mencukupi")
+                            : setModalOpen(true);
+                        }}
+                        disabled={isDisabled}
+                      >
+                        Lanjutkan
+                      </Button>
+                    </Box>
                   </Box>
                 </Box>
               </Stack>
-              <Button
-                fullWidth
-                variant="contained"
-                size="large"
-                sx={{ marginTop: 4 }}
-                onClick={() => {
-                  data.paymentMethod.cd === "GASSKEUN_USER" &&
-                  balance < data.totalAmountBeforeFee
-                    ? toast.error("Gasskeun Coin mu Tidak Mencukupi")
-                    : setModalOpen(true);
-                }}
-                disabled={isDisabled}
-              >
-                Beli Sekarang
-              </Button>
             </Card>
 
             <Button

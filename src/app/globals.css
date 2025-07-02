@@ -84,13 +84,13 @@ code[class*="language-"] {
 }
 
 .custom-pagination .swiper-pagination-bullet {
-  /* background-color: rgb(138, 30, 30);
-  opacity: 0.5; */
+  background-color: white;
+  opacity: 0.5;
   border-radius: 50%;
 }
 
 .custom-pagination .swiper-pagination-bullet-active {
-  background-color: #b72025;
+  background-color: #ffffff;
   border-radius: 50%;
 }
 
@@ -98,16 +98,21 @@ code[class*="language-"] {
   width: fit-content;
 }
 
+.swiper-slide.category {
+  width: max-content;
+}
+
 .edit > .ql-toolbar.ql-snow,
 .edit > .ql-container.ql-snow {
   border-color: #b72025 !important;
 }
 
-.bg-blurry-red {
+/* .bg-blurry-red {
   background-image: url("/images/red-blurry.jpg");
   background-repeat: repeat-y;
   background-size: 100% auto;
-}
+  background-color: rgba(17, 16, 23, 1);
+} */
 
 @media screen and (max-width: 600px) {
   .bg-blurry-red {

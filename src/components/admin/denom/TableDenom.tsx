@@ -343,6 +343,8 @@ const TableDenom: React.FC<{ denom: IProductPagination }> = ({ denom }) => {
     }
   }, [denoms.data.length, selected.length, selectAll]);
 
+  console.log(detailData);
+
   return (
     <>
       {showDelete && (

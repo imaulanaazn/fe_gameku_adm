@@ -35,12 +35,6 @@ export const links = [
     url: "/cek-pesanan",
     icon: faCreditCard,
   },
-  {
-    id: 4,
-    name: "Reseller",
-    url: "https://reseller.gasskeuntopup.com/",
-    icon: faCircleDollarToSlot,
-  },
 ];
 
 export const SIDEBAR_MENU = [

@@ -42,7 +42,7 @@ const Carousel = ({ slides }: { slides: IImageCarousel[] }) => {
           autoplay={{
             delay: 4000,
           }}
-          navigation={{ nextEl: "#next-el", prevEl: "#prev-el" }}
+          // navigation={{ nextEl: "#next-el", prevEl: "#prev-el" }}
           pagination={{
             clickable: true,
             el: ".custom-pagination",
@@ -88,12 +88,12 @@ const Carousel = ({ slides }: { slides: IImageCarousel[] }) => {
         {loading && <Skeleton classes="h-3 w-52" />}
         {!loading && (
           <>
-            <FontAwesomeIcon
+            {/* <FontAwesomeIcon
               icon={faAngleLeft}
               size="1x"
               className="cursor-pointer px-2 text-primary-900"
               id="prev-el"
-            />
+            /> */}
             <div className="custom-pagination flex justify-center gap-2 items-center mx-2">
               {slides &&
                 slides.map((slide, index) => (
@@ -101,18 +101,18 @@ const Carousel = ({ slides }: { slides: IImageCarousel[] }) => {
                     key={index}
                     icon={faCircle}
                     size="lg"
-                    className={`text-primary-900 cursor-pointer ${
+                    className={`text-white cursor-pointer ${
                       index === 0 ? "active" : ""
                     }`}
                   />
                 ))}
             </div>
-            <FontAwesomeIcon
+            {/* <FontAwesomeIcon
               icon={faAngleRight}
               size="1x"
               className="cursor-pointer px-2 text-primary-900"
               id="next-el"
-            />
+            /> */}
           </>
         )}
       </div>

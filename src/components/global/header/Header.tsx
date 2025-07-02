@@ -204,7 +204,7 @@ const Header = () => {
 
   return (
     <>
-      <header className="sticky top-0 w-full z-50 bg-white">
+      <header className="sticky top-0 w-full z-50 bg-darkSecondary">
         <Container>
           <div className="flex justify-between items-center gap-4 md:gap-6 h-[4.5rem]">
             <div className="left-side flex items-center gap-6 xl:gap-8">
@@ -253,12 +253,12 @@ const Header = () => {
                   type="text"
                   onChange={handleSearchChange}
                   placeholder="Cari game"
-                  className="peer py-2 px-4 border border-solid text-primary-900 rounded-md w-full md:w-80 lg:w-60 xl:w-80 text-start border-primary-900 focus:border-primary-900 focus:border-2"
+                  className="peer py-2 px-4 border border-solid text-primary-900 rounded-md w-full md:w-80 lg:w-60 xl:w-80 focus:border-2 focus:border-primary-900 bg-darkSecondary"
                 />
-                <button>
+                <button className="peer-focus:text-primary-900 text-gray-500">
                   <FontAwesomeIcon
                     icon={faMagnifyingGlass}
-                    className="absolute top-1/2 right-6 -translate-y-1/2 text-lg text-primary-900"
+                    className="absolute top-1/2 right-4 -translate-y-1/2 text-lg "
                   />
                 </button>
 
@@ -267,58 +267,6 @@ const Header = () => {
                   isModalOpen={isModalOpen}
                 />
               </div>
-
-              {/* Show profile icon when user is logged in */}
-              {isLogged ? (
-                <div
-                  className="relative hidden md:block"
-                  onMouseEnter={handleDropdownToggle}
-                  onMouseLeave={handleDropdownToggle}
-                >
-                  <button className="h-full w-auto rounded-full aspect-square">
-                    <Image
-                      src={user.image || "/images/user-fallback.png"}
-                      alt="user profile"
-                      width={50}
-                      height={50}
-                      objectFit="cover"
-                    />
-                  </button>
-                  <div
-                    className={`${
-                      !isDropdownOpen && "hidden"
-                    } absolute top-0 pt-14 right-0 z-10 w-max`}
-                  >
-                    <div className="bg-white border rounded-md shadow-lg text-slate-600 overflow-hidden">
-                      <p className="px-4 py-2 text-sm cursor-default">
-                        Sign in as {user.email}
-                      </p>
-                      <Link
-                        href={"/profile"}
-                        className="px-4 py-2 text-sm hover:bg-slate-200 cursor-pointer block"
-                      >
-                        Profile
-                      </Link>
-                      <p
-                        className="px-4 py-2 text-sm cursor-pointer hover:bg-slate-200"
-                        onClick={handleLogout}
-                      >
-                        Logout
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <>
-                  {/* Show authentication button when user not authenticated */}
-                  <button className="hidden lg:inline bg-white lg:text-sm text-primary-900 rounded-md py-2 px-4 font-semibold lg:font-medium">
-                    <Link href="/login">Masuk</Link>
-                  </button>
-                  <button className="hidden lg:inline bg-primary-900 lg:text-sm text-white rounded-md py-2 px-4 font-semibold lg:font-medium hover:bg-black hover:text-white">
-                    <Link href="/register">Daftar</Link>
-                  </button>
-                </>
-              )}
 
               {/* toggle menu button only show on mobile */}
               <button
@@ -342,7 +290,7 @@ const Header = () => {
         <div
           className={`mobile-menu ${
             !activeSideMenu && "translate-x-full opacity-0"
-          } lg:hidden absolute translate-x-0 opacity-100 top-18 right-0 w-10/12 md:w-1/2 h-screen bg-white z-10 text-left px-12 shadow-sm transition-all duration-400`}
+          } lg:hidden absolute translate-x-0 opacity-100 top-18 right-0 w-10/12 md:w-1/2 h-screen bg-darkPrimary z-10 text-left px-12 shadow-sm transition-all duration-400`}
         >
           <nav>
             <ul>
@@ -358,37 +306,8 @@ const Header = () => {
                   <Link href={link.url}>{link.name}</Link>
                 </li>
               ))}
-
-              {/* Show this menu when user is logged in */}
-              {isLogged && (
-                <>
-                  <li className="font-semibold text-primary-900 text-base my-8 flex gap-4 items-center">
-                    <FontAwesomeIcon icon={faUser} />
-                    <Link href="/profile">Profile</Link>
-                  </li>
-                  <li
-                    onClick={handleLogout}
-                    className="font-semibold text-primary-900 text-base my-8 flex gap-4 items-center"
-                  >
-                    <FontAwesomeIcon icon={faRightFromBracket} />
-                    <Link href="/#">Logout</Link>
-                  </li>
-                </>
-              )}
             </ul>
           </nav>
-
-          {/* Show this authentication button when user is not logged in */}
-          {!isLogged && (
-            <div className="auth-buttons flex gap-2 mt-6 md:hidden">
-              <button className="text-primary-900 flex-1 w-full font-semibold">
-                <Link href="/login">Masuk</Link>
-              </button>
-              <button className="bg-primary-900 text-white rounded-md py-2 flex-1 w-full font-semibold hover:bg-black hover:text-white">
-                <Link href="/register">Daftar</Link>
-              </button>
-            </div>
-          )}
         </div>
       </header>
     </>

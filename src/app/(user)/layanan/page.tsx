@@ -2,6 +2,7 @@ import CompLayanan from "@/components/user/layanan/CompLayanan";
 import Maintenance from "@/components/global/maintenance/Maintenance";
 import sendRequest from "@/lib/baseApi";
 import { Metadata } from "next";
+import ListGames from "@/components/user/home/ListGames";
 
 const defaultCategory = [
   {
@@ -22,15 +23,24 @@ const Layanan = async () => {
   const gameCategories = await sendRequest<IGameCategory[]>(
     "/v1/games-category"
   );
+
   const games = await sendRequest<IGame[]>("/v1/games");
 
+  const categoriesAndGames = await sendRequest<IGameCategoryWithGame[]>(
+    "/v1/games-category?withGame=true"
+  );
+
   return (
-    <div className="container mx-auto mt-10 px-5 lg:px-0 pb-20">
+    <div className="container mx-auto pt-10 bg-darkPrimary">
       <CompLayanan
         defaultCategory={defaultCategory}
         gameCategories={gameCategories.data}
         games={games.data}
       />
+
+      {categoriesAndGames.data.map((data, index) => (
+        <ListGames key={index} title={data.name} data={data.games} />
+      ))}
     </div>
   );
 };

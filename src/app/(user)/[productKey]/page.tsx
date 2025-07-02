@@ -68,7 +68,7 @@ const page = async ({ params }: IParams) => {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaMarkup) }}
       />
-      <div className="bg-blurry-red pb-10">
+      <div className="bg-darkPrimary pb-10">
         <Container>
           {/* <div className="mx-auto "> */}
           <NewFormTopup

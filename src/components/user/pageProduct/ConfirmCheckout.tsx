@@ -26,7 +26,7 @@ const style = {
   width: "90%",
   maxHeight: "80vh",
   overflowY: "auto",
-  bgcolor: "background.paper",
+  bgcolor: "#161721",
   boxShadow: 24,
   p: 4,
 
@@ -130,7 +130,7 @@ const ConfirmCheckout = ({
           sx={{
             width: 40,
             height: 40,
-            color: "darkred",
+            color: "orange",
           }}
         />
       );
@@ -158,7 +158,7 @@ const ConfirmCheckout = ({
                 sx: {
                   lineHeight: "1.2 !important",
                   letterSpacing: "0.31px !important",
-                  color: "#1F2937",
+                  color: "#ffffff",
                   fontWeight: "800",
                 },
               }}
@@ -189,20 +189,21 @@ const ConfirmCheckout = ({
                     src={dataCheckout.products.logoUrl}
                     variant="rounded"
                   />
-                  <Box sx={{ display: "flex", flexDirection: "column" }}>
-                    <Typography variant="body2" sx={{ fontWeight: 800 }}>
-                      {dataCheckout.product.name}
-                    </Typography>
-                    <Typography variant="body2" sx={{ fontWeight: 800 }}>
-                      {dataCheckout.products.name}
-                    </Typography>
-                  </Box>
+
+                  <Typography
+                    variant="body2"
+                    sx={{ fontWeight: 600, color: "#ffffff" }}
+                  >
+                    {dataCheckout.product.name +
+                      " - " +
+                      dataCheckout.products.name}
+                  </Typography>
                 </Box>
-                <Typography>
+                <Typography sx={{ color: "#ffffff" }}>
                   {currencyConverter(dataCheckout.product.price)}
                 </Typography>
               </Box>
-              <Divider sx={{ marginY: 6 }} />
+              <Divider sx={{ marginY: 6, borderColor: "#ffffff30" }} />
               {dataCheckout.userId && (
                 <Box
                   sx={{
@@ -212,8 +213,13 @@ const ConfirmCheckout = ({
                     justifyContent: "space-between",
                   }}
                 >
-                  <Typography variant="body2">{labelGameData}</Typography>
-                  <Typography variant="body2" sx={{ fontWeight: 800 }}>
+                  <Typography variant="body2" sx={{ color: "#ffffffa1" }}>
+                    {labelGameData}
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    sx={{ fontWeight: 800, color: "#ffffffa1" }}
+                  >
                     {dataCheckout.userId}
                   </Typography>
                 </Box>
@@ -227,8 +233,13 @@ const ConfirmCheckout = ({
                     justifyContent: "space-between",
                   }}
                 >
-                  <Typography variant="body2">Server ID</Typography>
-                  <Typography variant="body2" sx={{ fontWeight: 800 }}>
+                  <Typography variant="body2" sx={{ color: "#ffffffa1" }}>
+                    Server ID
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    sx={{ fontWeight: 800, color: "#ffffffa1" }}
+                  >
                     {dataCheckout.serverId}
                   </Typography>
                 </Box>
@@ -241,8 +252,13 @@ const ConfirmCheckout = ({
                   justifyContent: "space-between",
                 }}
               >
-                <Typography variant="body2">Subtotal</Typography>
-                <Typography variant="body2" sx={{ fontWeight: 800 }}>
+                <Typography variant="body2" sx={{ color: "#ffffffa1" }}>
+                  Subtotal
+                </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{ fontWeight: 800, color: "#ffffffa1" }}
+                >
                   {currencyConverter(dataCheckout.product.price)}
                 </Typography>
               </Box>
@@ -254,8 +270,13 @@ const ConfirmCheckout = ({
                   justifyContent: "space-between",
                 }}
               >
-                <Typography variant="body2">Jumlah Pembelian</Typography>
-                <Typography variant="body2" sx={{ fontWeight: 800 }}>
+                <Typography variant="body2" sx={{ color: "#ffffffa1" }}>
+                  Jumlah Pembelian
+                </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{ fontWeight: 800, color: "#ffffffa1" }}
+                >
                   {dataCheckout.quantity}
                 </Typography>
               </Box>
@@ -267,8 +288,13 @@ const ConfirmCheckout = ({
                   justifyContent: "space-between",
                 }}
               >
-                <Typography variant="body2">Biaya Admin</Typography>
-                <Typography variant="body2" sx={{ fontWeight: 800 }}>
+                <Typography variant="body2" sx={{ color: "#ffffffa1" }}>
+                  Biaya Admin
+                </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{ fontWeight: 800, color: "#ffffffa1" }}
+                >
                   {currencyConverter(dataCheckout.feeAmount)}
                 </Typography>
               </Box>
@@ -280,8 +306,13 @@ const ConfirmCheckout = ({
                   justifyContent: "space-between",
                 }}
               >
-                <Typography variant="body2">Diskon</Typography>
-                <Typography variant="body2" sx={{ fontWeight: 800 }}>
+                <Typography variant="body2" sx={{ color: "#ffffffa1" }}>
+                  Diskon
+                </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{ fontWeight: 800, color: "#ffffffa1" }}
+                >
                   {currencyConverter(dataCheckout.promoAmount)}
                 </Typography>
               </Box>
@@ -293,8 +324,13 @@ const ConfirmCheckout = ({
                   justifyContent: "space-between",
                 }}
               >
-                <Typography variant="body2">Kode Promo</Typography>
-                <Typography variant="body2" sx={{ fontWeight: 800 }}>
+                <Typography variant="body2" sx={{ color: "#ffffffa1" }}>
+                  Kode Promo
+                </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{ fontWeight: 800, color: "#ffffffa1" }}
+                >
                   {dataCheckout.promo.code || "---"}
                 </Typography>
               </Box>
@@ -306,8 +342,13 @@ const ConfirmCheckout = ({
                   justifyContent: "space-between",
                 }}
               >
-                <Typography variant="body2">Metode Pembayaran</Typography>
-                <Typography variant="body2" sx={{ fontWeight: 800 }}>
+                <Typography variant="body2" sx={{ color: "#ffffffa1" }}>
+                  Metode Pembayaran
+                </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{ fontWeight: 800, color: "#ffffffa1" }}
+                >
                   {dataCheckout.paymentMethod.name}
                 </Typography>
               </Box>
@@ -321,8 +362,13 @@ const ConfirmCheckout = ({
                       justifyContent: "space-between",
                     }}
                   >
-                    <Typography variant="body2">Nomor OVO</Typography>
-                    <Typography variant="body2" sx={{ fontWeight: 800 }}>
+                    <Typography variant="body2" sx={{ color: "#ffffffa1" }}>
+                      Nomor OVO
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      sx={{ fontWeight: 800, color: "#ffffffa1" }}
+                    >
                       {dataCheckout.mobileNumber}
                     </Typography>
                   </Box>
@@ -336,15 +382,20 @@ const ConfirmCheckout = ({
                     justifyContent: "space-between",
                   }}
                 >
-                  <Typography variant="body2">Cashtag</Typography>
-                  <Typography variant="body2" sx={{ fontWeight: 800 }}>
+                  <Typography variant="body2" sx={{ color: "#ffffffa1" }}>
+                    Cashtag
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    sx={{ fontWeight: 800, color: "#ffffffa1" }}
+                  >
                     {dataCheckout.cashtag.startsWith("$")
                       ? dataCheckout.cashtag
                       : `$${dataCheckout.cashtag}`}
                   </Typography>
                 </Box>
               )}
-              <Divider sx={{ marginY: 6 }} />
+              <Divider sx={{ marginY: 6, borderColor: "#ffffff30" }} />
               {dataCheckout.paymentMethod.cd === "GASSKEUN" && (
                 <Box
                   sx={{
@@ -354,8 +405,13 @@ const ConfirmCheckout = ({
                     justifyContent: "space-between",
                   }}
                 >
-                  <Typography variant="body1">Sisa Saldo</Typography>
-                  <Typography variant="body1" sx={{ fontWeight: 800 }}>
+                  <Typography variant="body1" sx={{ color: "#ffffff" }}>
+                    Sisa Saldo
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    sx={{ fontWeight: 800, color: "#ffffff" }}
+                  >
                     {currencyConverter(balance)}
                   </Typography>
                 </Box>
@@ -368,8 +424,13 @@ const ConfirmCheckout = ({
                   justifyContent: "space-between",
                 }}
               >
-                <Typography variant="body1">Total</Typography>
-                <Typography variant="body1" sx={{ fontWeight: 800 }}>
+                <Typography variant="body1" sx={{ color: "#ffffff" }}>
+                  Total
+                </Typography>
+                <Typography
+                  variant="body1"
+                  sx={{ fontWeight: 800, color: "#ffffff" }}
+                >
                   {currencyConverter(totalCheckout)}
                 </Typography>
               </Box>
@@ -406,7 +467,7 @@ const ConfirmCheckout = ({
                 gap: 2,
               }}
             >
-              <Typography>{msg}</Typography>
+              <Typography sx={{ color: "#ffffff" }}>{msg}</Typography>
               <Box sx={{ display: "flex" }}>{getIcon()}</Box>
             </Box>
           </CardContent>

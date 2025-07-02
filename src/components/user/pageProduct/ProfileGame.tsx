@@ -14,7 +14,7 @@ const ProfileGame = ({ denoms }: { denoms: IGameDetail }) => {
       sx={{
         position: "relative",
         borderRadius: "0.75rem",
-        backgroundColor: "white",
+        backgroundColor: "rgb(251 146 60 / 0.9)",
       }}
     >
       <CardContent>
@@ -42,7 +42,7 @@ const ProfileGame = ({ denoms }: { denoms: IGameDetail }) => {
           <Typography
             variant="h6"
             sx={{
-              color: "#1F2937",
+              color: "#ffffff",
               fontWeight: "800",
               fontSize: { sm: "1.2rem" },
             }}
@@ -62,26 +62,26 @@ const ProfileGame = ({ denoms }: { denoms: IGameDetail }) => {
               gap={2}
               alignItems="center"
               sx={{
-                backgroundColor: "grey.200",
+                backgroundColor: "rgba(255,255,255,.4)",
                 padding: 2,
                 borderRadius: 10,
                 justifyContent: "center",
               }}
             >
               <FontAwesomeIcon
-                fontSize="0.75rem"
-                className="text-neutral-600"
+                fontSize="0.7rem"
+                color="#ffffff"
                 icon={faHeadphones}
               />
               <Typography
                 variant="caption"
                 sx={{
-                  color: "#4B5563",
-                  fontWeight: 500,
-                  fontSize: "0.725rem",
+                  color: "#ffffff",
+                  fontWeight: 400,
+                  fontSize: "0.7rem",
                 }}
               >
-                Layanan Pelanggan 24/7
+                Layanan 24/7
               </Typography>
             </Stack>
             <Stack
@@ -89,23 +89,23 @@ const ProfileGame = ({ denoms }: { denoms: IGameDetail }) => {
               gap={2}
               alignItems="center"
               sx={{
-                backgroundColor: "grey.200",
+                backgroundColor: "rgba(255,255,255,.4)",
                 padding: 2,
                 borderRadius: 10,
                 justifyContent: "center",
               }}
             >
               <FontAwesomeIcon
-                fontSize="0.75rem"
-                className="text-neutral-600"
+                fontSize="0.7rem"
+                color="#ffffff"
                 icon={faUserShield}
               />
               <Typography
                 variant="caption"
                 sx={{
-                  color: "#4B5563",
-                  fontWeight: 500,
-                  fontSize: "0.725rem",
+                  color: "#ffffff",
+                  fontWeight: 400,
+                  fontSize: "0.7rem",
                 }}
               >
                 Garansi Layanan
@@ -118,26 +118,26 @@ const ProfileGame = ({ denoms }: { denoms: IGameDetail }) => {
               gap={2}
               alignItems="center"
               sx={{
-                backgroundColor: "grey.200",
+                backgroundColor: "rgba(255,255,255,.4)",
                 padding: 2,
                 borderRadius: 10,
                 justifyContent: "center",
               }}
             >
               <FontAwesomeIcon
-                fontSize="0.75rem"
-                className="text-neutral-600"
+                fontSize="0.7rem"
+                color="#ffffff"
                 icon={faCreditCard}
               />
               <Typography
                 variant="caption"
                 sx={{
-                  color: "#4B5563",
-                  fontWeight: 500,
-                  fontSize: "0.725rem",
+                  color: "#ffffff",
+                  fontWeight: 400,
+                  fontSize: "0.7rem",
                 }}
               >
-                Pembayaran yang Aman
+                Pembayaran Aman
               </Typography>
             </Stack>
             <Stack
@@ -145,23 +145,23 @@ const ProfileGame = ({ denoms }: { denoms: IGameDetail }) => {
               gap={2}
               alignItems="center"
               sx={{
-                backgroundColor: "grey.200",
+                backgroundColor: "rgba(255,255,255,.4)",
                 padding: 2,
                 borderRadius: 10,
                 justifyContent: "center",
               }}
             >
               <FontAwesomeIcon
-                fontSize="0.75rem"
-                className="text-neutral-600"
+                fontSize="0.7rem"
+                color="#ffffff"
                 icon={faBolt}
               />
               <Typography
                 variant="caption"
                 sx={{
-                  color: "#4B5563",
-                  fontWeight: 500,
-                  fontSize: "0.725rem",
+                  color: "#ffffff",
+                  fontWeight: 400,
+                  fontSize: "0.7rem",
                 }}
               >
                 Pengiriman Instan
@@ -170,13 +170,18 @@ const ProfileGame = ({ denoms }: { denoms: IGameDetail }) => {
           </Stack>
         </Stack>
 
-        <h1 className="text-base font-semibold text-gray-700 my-2">
+        <h1 className="text-base font-semibold text-white my-2">
           Top Up {denoms.name}
         </h1>
 
         <Typography
           variant="body2"
-          sx={{ letterSpacing: "0.25px", marginTop: 1.5, color: "#4B5563" }}
+          sx={{
+            letterSpacing: "0.25px",
+            marginTop: 1.5,
+            color: "white",
+            opacity: "0.9",
+          }}
           dangerouslySetInnerHTML={{ __html: denoms.description }}
         ></Typography>
       </CardContent>

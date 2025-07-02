@@ -15,18 +15,18 @@ const ListCategory: React.FC<IDataProps> = ({ data }) => {
   const [category, setCategory] = useRecoilState(layananState);
 
   return (
-    <a href="#layanan">
-      <div
-        onClick={() => setCategory({ ...category, id: data.id, search: "" })}
-        className={`${
-          category.id === data.id
-            ? "bg-primary-900 text-white"
-            : "bg-white text-neutral-700"
-        } px-5 py-2 rounded-full md:text-sm cursor-pointer text-xs font-medium w-max shrink-0`}
-      >
-        {data.name}
-      </div>
-    </a>
+    // <a href="#layanan">
+    <div
+      onClick={() => setCategory({ ...category, id: data.id, search: "" })}
+      className={`${
+        category.id === data.id
+          ? "bg-primary-900 text-white font-medium"
+          : "border border-white/70 text-white/70"
+      } px-5 py-2.5 rounded-full md:text-sm cursor-pointer text-xs w-max shrink-0`}
+    >
+      {data.name}
+    </div>
+    // </a>
   );
 };
 

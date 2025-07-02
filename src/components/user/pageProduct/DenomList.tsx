@@ -19,7 +19,7 @@ const DenomList = ({ position, data, onChange, value }: any) => {
     <Card
       sx={{
         borderRadius: "0.75rem",
-        background: `#ffffff url(/images/topup-form-step-${position}.svg) no-repeat right top`,
+        background: `#161721 url(/images/topup-form-step-${position}.svg) no-repeat right top`,
         backgroundSize: "150px",
       }}
     >
@@ -30,7 +30,7 @@ const DenomList = ({ position, data, onChange, value }: any) => {
             mb: 2.5,
             lineHeight: "2rem !important",
             letterSpacing: "0.15px !important",
-            color: "#1F2937",
+            color: "#ffffff",
             fontWeight: "800",
           },
         }}
@@ -40,7 +40,7 @@ const DenomList = ({ position, data, onChange, value }: any) => {
           pt: (theme) => `${theme.spacing(3)} !important`,
         }}
       >
-        <Grid container spacing={4}>
+        <Grid container spacing={3}>
           {data.products.map((item: any) => (
             <Grid key={item.id} item xs={6} md={4}>
               <a href="#quantity">
@@ -52,10 +52,10 @@ const DenomList = ({ position, data, onChange, value }: any) => {
                     height: "100%",
                     position: "relative",
                     cursor: "pointer",
-                    outline: "1px solid #B72025",
+                    backgroundColor: "#ffffff0a",
                     ...(item.id === value.productId && {
-                      outline: "2px solid #B72025",
-                      backgroundColor: "#FFE4E5",
+                      outline: "2px solid #fb923ce6",
+                      backgroundColor: "#ffffff1a",
                     }),
                   }}
                   onClick={(e) => {
@@ -68,6 +68,7 @@ const DenomList = ({ position, data, onChange, value }: any) => {
                 >
                   <CardContent
                     sx={{
+                      padding: 4,
                       display: "flex",
                       gap: 2,
                       alignItems: "center",
@@ -87,20 +88,24 @@ const DenomList = ({ position, data, onChange, value }: any) => {
                         sx={{
                           letterSpacing: "0.25px",
                           fontWeight: 600,
-                          color: "#B72025",
+                          color: "#fb923ce6",
                           ...(item.id === value.productId && {
                             fontWeight: 800,
                           }),
                         }}
                       >
-                        {item.name}
+                        {item.name.includes("(")
+                          ? item.name
+                              .substring(0, item.name.indexOf("("))
+                              .trim()
+                          : item.name}
                       </Typography>
                       <Typography
                         variant="caption"
                         sx={{
                           letterSpacing: "0.25px",
                           fontWeight: 400,
-                          color: "#1F2937",
+                          color: "#ffffff",
                           ...(item.id === value.productId && {
                             fontWeight: 600,
                           }),
@@ -109,16 +114,6 @@ const DenomList = ({ position, data, onChange, value }: any) => {
                         {currencyConverter(item.price)}
                       </Typography>
                     </Box>
-                    <Avatar variant="rounded">
-                      <Image
-                        alt="denom"
-                        src={item.logoDenom || data.logoDenom || data.logoUrl}
-                        width={30}
-                        height={30}
-                        loading="lazy"
-                        quality={55}
-                      />
-                    </Avatar>
                   </CardContent>
                 </Card>
               </a>

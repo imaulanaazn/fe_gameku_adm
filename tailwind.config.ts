@@ -17,7 +17,7 @@ const config: Config = {
         inter: ["Inter", "sans-serif"],
       },
       colors: {
-        "primary-900": "#B72025",
+        "primary-900": "rgb(251 146 60 / 0.9)",
         "primary-600": "#EF4046",
         "primary-300": "#FAB4B6",
         "primary-100": "#FFE4E5",
@@ -39,6 +39,11 @@ const config: Config = {
         "auto-md": "repeat(auto-fill, minmax(140px, 1fr))",
         "auto-sm": "repeat(auto-fill, minmax(100px, 1fr))",
         "auto-xs": "repeat(auto-fill, minmax(75px, 1fr))",
+      },
+      backgroundColor: {
+        darkPrimary: "#0f0f14",
+        darkSecondary: "#161721 ",
+        darkAccent: "orange-400/90",
       },
     },
     screens: {

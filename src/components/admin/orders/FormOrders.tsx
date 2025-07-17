@@ -11,6 +11,7 @@ import formatter from "@/lib/formatter";
 import { toast } from "react-toastify";
 registerLocale("id", id);
 import { Tooltip as ReactTooltip } from "react-tooltip";
+import { OrderStatuses } from "@/enum";
 interface IForm {
   handleShowForm: (defaultValue: boolean) => void;
   getNewData: () => void;
@@ -120,14 +121,16 @@ const FormOrders: React.FC<IForm> = ({
       return "Kadaluarsa";
     } else if (status === "6") {
       return "Sedang Diproses";
+    } else if (status === "7") {
+      return "Refunded";
     }
   };
 
-  const handleClickPaid = async () => {
+  async function updateStatusOrder(status: string) {
     setLoading(true);
-    const toastId = toast.loading("Sedang menyimpan data promo...");
+    const toastId = toast.loading("Sedang mengupdate data");
     const req = await fetch(
-      process.env.NEXT_PUBLIC_BASE_URL + "/v1/order/" + newData.id,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/v1/order/${newData.id}?status=${status}`,
       {
         cache: "no-cache",
         method: "PUT",
@@ -141,7 +144,10 @@ const FormOrders: React.FC<IForm> = ({
     if (req.ok) {
       getNewData();
       toast.update(toastId, {
-        render: "Berhasil menyelesaikan status order",
+        render:
+          status === "3"
+            ? "Berhasil menyelesaikan order"
+            : "Berhasil mengupdate status order",
         type: "success",
         isLoading: false,
         position: "top-right",
@@ -159,6 +165,14 @@ const FormOrders: React.FC<IForm> = ({
     }
     setLoading(false);
     handleShowForm(false);
+  }
+
+  const handleClickDone = async () => {
+    updateStatusOrder(OrderStatuses.SUCCESS);
+  };
+
+  const handleRefund = async () => {
+    updateStatusOrder(OrderStatuses.REFUNDED);
   };
 
   const handleClickCopyTrx: any = () => {
@@ -169,47 +183,6 @@ const FormOrders: React.FC<IForm> = ({
         data?.productName
       } (${data?.quantity}x)\n${data?.game}`
     );
-  };
-
-  const handleResendOrder = async () => {
-    setLoading(true);
-    const toastId = toast.loading("Sedang mengirim ulang transaksi...");
-    const req = await fetch(
-      process.env.NEXT_PUBLIC_BASE_URL + "/v1/order/resend",
-      {
-        cache: "no-cache",
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "content-type": "application/json",
-        },
-        body: JSON.stringify({
-          orderId: newData.id,
-        }),
-      }
-    );
-
-    if (req.ok) {
-      getNewData();
-      toast.update(toastId, {
-        render: "Berhasil mengirim ulang transaksi",
-        type: "success",
-        isLoading: false,
-        position: "top-right",
-        autoClose: 3000,
-      });
-    } else {
-      const res = await req.json();
-      toast.update(toastId, {
-        render: res.message,
-        type: "error",
-        isLoading: false,
-        position: "top-right",
-        autoClose: 3000,
-      });
-    }
-    setLoading(false);
-    handleShowForm(false);
   };
 
   return (
@@ -599,18 +572,6 @@ const FormOrders: React.FC<IForm> = ({
 
             <div className="flex justify-end gap-4 bg-white mt-4">
               <div className="relative flex gap-4">
-                {/* {newData.status === "6" &&
-                newData.isError &&
-                newData.isCanResend && ( */}
-                <button
-                  type="button"
-                  disabled={false}
-                  onClick={handleResendOrder}
-                  className={`hover:bg-emerald-400 bg-emerald-600 text-white font-semibold py-3 px-5 rounded-md`}
-                >
-                  Resend Order
-                </button>
-                {/* )} */}
                 <button
                   type="button"
                   onClick={handleClickCopyTrx}
@@ -629,8 +590,18 @@ const FormOrders: React.FC<IForm> = ({
                     delayHide={1000}
                   />
                 </button>
+                {newData.status === "4" && (
+                  <button
+                    type="button"
+                    disabled={false}
+                    onClick={handleRefund}
+                    className={`hover:bg-emerald-400 bg-emerald-600 text-white font-semibold py-3 px-5 rounded-md`}
+                  >
+                    Refund
+                  </button>
+                )}
               </div>
-              {newData.status === "2" && (
+              {newData.status === "4" && (
                 <>
                   {loading ? (
                     <div className="bg-gray-300 text-gray-800 font-semibold w-24 text-center py-3 rounded-md cursor-not-allowed">
@@ -640,14 +611,14 @@ const FormOrders: React.FC<IForm> = ({
                     <button
                       type="button"
                       disabled={false}
-                      onClick={handleClickPaid}
+                      onClick={handleClickDone}
                       className={`${
                         false
                           ? "bg-opacity-50 cursor-not-allowed"
                           : "bg-opacity-100 hover:bg-emerald-400"
                       } bg-emerald-600 text-white font-semibold py-3 px-5 rounded-md`}
                     >
-                      Selesaikan
+                      Selesaikan Order
                     </button>
                   )}
                 </>

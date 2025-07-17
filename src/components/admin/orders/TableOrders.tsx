@@ -185,6 +185,7 @@ const TableOrders: React.FC<{
   >();
 
   const [newData, setNewData] = useRecoilState(orderHistoryState);
+  console.log(newData);
 
   const getNewData = async () => {
     setLoading(true);

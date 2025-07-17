@@ -9,6 +9,7 @@ const nextConfig = {
       "image.gasskeuntopup.com",
       "cdn.aplikasikreasi.id",
       "i.ibb.co.com",
+      "ik.imagekit.io",
     ],
   },
   output: "standalone",

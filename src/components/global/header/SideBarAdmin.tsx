@@ -34,12 +34,12 @@ export const adminMenu = [
     icon: faUsersGear,
     quote: "kelola pengguna disini",
   },
-  {
-    title: "Artikel",
-    path: "/article",
-    icon: faPenToSquare,
-    quote: "temukan ringkasan bisnismu disini",
-  },
+  // {
+  //   title: "Artikel",
+  //   path: "/article",
+  //   icon: faPenToSquare,
+  //   quote: "temukan ringkasan bisnismu disini",
+  // },
   {
     title: "Banner",
     path: "/banner",
@@ -88,12 +88,12 @@ export const adminMenu = [
     icon: faCreditCard,
     quote: "kelola bagaimana pembayaran produkmu dilakukan",
   },
-  {
-    title: "Reseller",
-    path: "/reseller",
-    icon: faDiagramProject,
-    quote: "pantau informasi mengenai reseller disini",
-  },
+  // {
+  //   title: "Reseller",
+  //   path: "/reseller",
+  //   icon: faDiagramProject,
+  //   quote: "pantau informasi mengenai reseller disini",
+  // },
   {
     title: "Riwayat Deposit",
     path: "/deposit-history",
@@ -118,12 +118,12 @@ export const adminMenu = [
     icon: faGamepad,
     quote: "buat voucher untuk menarik lebih banyak pelanggan",
   },
-  {
-    title: "Youtube Video",
-    path: "/youtube",
-    icon: faYoutube,
-    quote: "buat video menarik agar bisa mendapatkan perhatian pelanggan",
-  },
+  // {
+  //   title: "Youtube Video",
+  //   path: "/youtube",
+  //   icon: faYoutube,
+  //   quote: "buat video menarik agar bisa mendapatkan perhatian pelanggan",
+  // },
 ];
 
 async function fetchAdminMenu() {

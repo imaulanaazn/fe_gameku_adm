@@ -12,7 +12,6 @@ import {
   faArrowRotateRight,
   faCheckCircle,
   faMoneyBill,
-  faShoppingCart,
 } from "@fortawesome/free-solid-svg-icons";
 import { useDateRange } from "./customHooks";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

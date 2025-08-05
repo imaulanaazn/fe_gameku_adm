@@ -167,7 +167,53 @@ const FormOrders: React.FC<IForm> = ({
     handleShowForm(false);
   }
 
-  const handleClickDone = async () => {
+  async function processOrder() {
+    setLoading(true);
+    const toastId = toast.loading("Sedang membuat pesanan");
+    const req = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/v1/webhook/manual`,
+      {
+        cache: "no-cache",
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          order_id: newData.invoiceId,
+          transaction_status: "settlement",
+        }),
+      }
+    );
+
+    if (req.ok) {
+      getNewData();
+      toast.update(toastId, {
+        render: "Berhasil memproses order",
+        type: "success",
+        isLoading: false,
+        position: "top-right",
+        autoClose: 3000,
+      });
+    } else {
+      const res = await req.json();
+      toast.update(toastId, {
+        render: res.message,
+        type: "error",
+        isLoading: false,
+        position: "top-right",
+        autoClose: 3000,
+      });
+    }
+    setLoading(false);
+    handleShowForm(false);
+  }
+
+  const handleClickPaid = async () => {
+    processOrder();
+  };
+
+  const handleSuccess = async () => {
     updateStatusOrder(OrderStatuses.SUCCESS);
   };
 
@@ -595,12 +641,34 @@ const FormOrders: React.FC<IForm> = ({
                     type="button"
                     disabled={false}
                     onClick={handleRefund}
-                    className={`hover:bg-emerald-400 bg-emerald-600 text-white font-semibold py-3 px-5 rounded-md`}
+                    className={`hover:bg-orange-400 bg-orange-600 text-white font-semibold py-3 px-5 rounded-md`}
                   >
                     Refund
                   </button>
                 )}
               </div>
+              {newData.status === "1" && (
+                <>
+                  {loading ? (
+                    <div className="bg-gray-300 text-gray-800 font-semibold w-24 text-center py-3 rounded-md cursor-not-allowed">
+                      <FontAwesomeIcon icon={faSpinner} spin />
+                    </div>
+                  ) : (
+                    <button
+                      type="button"
+                      disabled={false}
+                      onClick={handleClickPaid}
+                      className={`${
+                        false
+                          ? "bg-opacity-50 cursor-not-allowed"
+                          : "bg-opacity-100 hover:bg-emerald-400"
+                      } bg-emerald-600 text-white font-semibold py-3 px-5 rounded-md`}
+                    >
+                      Sudah Bayar
+                    </button>
+                  )}
+                </>
+              )}
               {newData.status === "4" && (
                 <>
                   {loading ? (
@@ -611,14 +679,14 @@ const FormOrders: React.FC<IForm> = ({
                     <button
                       type="button"
                       disabled={false}
-                      onClick={handleClickDone}
+                      onClick={handleSuccess}
                       className={`${
                         false
                           ? "bg-opacity-50 cursor-not-allowed"
                           : "bg-opacity-100 hover:bg-emerald-400"
                       } bg-emerald-600 text-white font-semibold py-3 px-5 rounded-md`}
                     >
-                      Selesaikan Order
+                      Selesaikan
                     </button>
                   )}
                 </>

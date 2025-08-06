@@ -15,6 +15,7 @@ import {
   faTicket,
   faUser,
   faUsersGear,
+  faCartShopping,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
@@ -34,12 +35,6 @@ export const adminMenu = [
     icon: faUsersGear,
     quote: "kelola pengguna disini",
   },
-  // {
-  //   title: "Artikel",
-  //   path: "/article",
-  //   icon: faPenToSquare,
-  //   quote: "temukan ringkasan bisnismu disini",
-  // },
   {
     title: "Banner",
     path: "/banner",
@@ -88,12 +83,6 @@ export const adminMenu = [
     icon: faCreditCard,
     quote: "kelola bagaimana pembayaran produkmu dilakukan",
   },
-  // {
-  //   title: "Reseller",
-  //   path: "/reseller",
-  //   icon: faDiagramProject,
-  //   quote: "pantau informasi mengenai reseller disini",
-  // },
   {
     title: "Riwayat Deposit",
     path: "/deposit-history",
@@ -102,8 +91,8 @@ export const adminMenu = [
   },
   {
     title: "Riwayat Pesanan",
-    path: "/order",
-    icon: faHistory,
+    path: "/orders",
+    icon: faCartShopping,
     quote: "pantau riwayat pesanan pelangganmu disini",
   },
   {
@@ -264,7 +253,7 @@ export default function SideBarAdmin() {
             {logo.logo && (
               <Image
                 src={logo.logo}
-                alt="Logo Gasskeun Topup"
+                alt="Logo Topup Gameku"
                 className="rounded-lg object-contain"
                 width="0"
                 height="0"
@@ -278,7 +267,7 @@ export default function SideBarAdmin() {
               !showFullSidebar && "scale-0 opacity-0 -translate-x-full"
             }`}
           >
-            Gasskeun Topup
+            Topup Gameku{" "}
           </h6>
         </Link>
       </div>

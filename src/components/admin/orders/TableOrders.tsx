@@ -883,154 +883,114 @@ const TableOrders: React.FC<{
               </div>
             </div>
 
-            <div className="flex flex-col mt-8">
-              <div className="overflow-x-auto">
-                <div className="w-full inline-block align-middle">
-                  <div className="overflow-x-auto">
-                    <table className="min-w-full divide-y divide-gray-200">
-                      <thead className="p-4 bg-slate-100">
-                        <tr>
-                          {column.map((item) => (
-                            <th
-                              key={item.id}
-                              scope="col"
-                              className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-left"
-                            >
-                              <div
-                                className="flex gap-4 cursor-pointer items-center"
-                                onClick={() =>
-                                  setQuery((prev) => ({
-                                    ...prev,
-                                    sort: item.id,
-                                    order:
-                                      query.sort === item.id &&
-                                      query.order === "ASC"
-                                        ? "DESC"
-                                        : "ASC",
-                                  }))
-                                }
-                              >
-                                <p>{item.name}</p>
-                                {query.sort === item.id && (
-                                  <FontAwesomeIcon
-                                    icon={
-                                      query.order === "ASC"
-                                        ? faArrowUp
-                                        : faArrowDown
-                                    }
-                                  />
-                                )}
-                              </div>
-                            </th>
-                          ))}
-                          {/* <th
-                                                        scope="col"
-                                                        className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase "
-                                                    >
-                                                        Denom
-                                                    </th> */}
-                          <th
-                            scope="col"
-                            className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase"
+            <div className="mt-8 overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-slate-100">
+                  <tr>
+                    {column.map((item) => (
+                      <th
+                        key={item.id}
+                        scope="col"
+                        className="p-4 text-xs font-bold text-left text-neutral-600 uppercase whitespace-nowrap"
+                      >
+                        <div
+                          className="flex gap-2 items-center cursor-pointer"
+                          onClick={() =>
+                            setQuery((prev) => ({
+                              ...prev,
+                              sort: item.id,
+                              order:
+                                query.sort === item.id && query.order === "ASC"
+                                  ? "DESC"
+                                  : "ASC",
+                            }))
+                          }
+                        >
+                          <p>{item.name}</p>
+                          {query.sort === item.id && (
+                            <FontAwesomeIcon
+                              icon={
+                                query.order === "ASC" ? faArrowUp : faArrowDown
+                              }
+                            />
+                          )}
+                        </div>
+                      </th>
+                    ))}
+                    <th className="p-4 text-xs font-bold text-left text-neutral-600 uppercase whitespace-nowrap">
+                      Akun
+                    </th>
+                    <th className="p-4 text-xs font-bold text-left text-neutral-600 uppercase whitespace-nowrap">
+                      No. Whatsapp
+                    </th>
+                    <th className="p-4 text-xs font-bold text-left text-neutral-600 uppercase whitespace-nowrap">
+                      Waktu
+                    </th>
+                    <th className="p-4 text-xs font-bold text-right text-neutral-600 uppercase whitespace-nowrap">
+                      Aksi
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  {newData.data.map((data) => (
+                    <tr key={data.id} className="bg-white">
+                      <td className="px-4 py-4 whitespace-nowrap">
+                        <div className="flex gap-4 items-center">
+                          <div className="h-10 aspect-square">
+                            <Image
+                              src={data.logoUrl}
+                              alt="Logo Game"
+                              width={40}
+                              height={40}
+                              className="rounded-lg object-cover"
+                            />
+                          </div>
+                          <div>
+                            <p className="font-medium text-gray-800 text-sm whitespace-nowrap">
+                              {data.game}
+                            </p>
+                            <p className="text-sm text-gray-500 whitespace-nowrap">
+                              {data.productName}
+                            </p>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
+                        {formatter(data.totalAmt)}
+                      </td>
+                      <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
+                        <StatusesOrder value={data.status} />
+                      </td>
+                      <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
+                        {data.custName}
+                      </td>
+                      <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
+                        {data.mobileNumber}
+                      </td>
+                      <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
+                        {dayjs(data.createdAt).format("YYYY-MM-DD HH:mm")}
+                      </td>
+                      <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
+                        <div className="flex justify-end">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setShowForm(true);
+                              setTypeForm("detail");
+                              setDetailData(data);
+                            }}
+                            className="bg-primary-900 px-4 py-2 rounded-md text-white hover:bg-red-600"
                           >
-                            Akun
-                          </th>
-                          <th
-                            scope="col"
-                            className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase"
-                          >
-                            No. Whatsapp
-                          </th>
-                          <th
-                            scope="col"
-                            className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase"
-                          >
-                            Waktu
-                          </th>
-                          {/* <th
-                                                        scope="col"
-                                                        className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase "
-                                                    >
-                                                        Total
-                                                    </th>
-                                                    <th
-                                                        scope="col"
-                                                        className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase "
-                                                    >
-                                                        Status
-                                                    </th> */}
-                          <th
-                            scope="col"
-                            className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-right text-neutral-600 uppercase"
-                          >
-                            Aksi
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-gray-200">
-                        {newData.data.map((data) => (
-                          <tr key={data.id} className={`bg-white`}>
-                            <td className="px-4 py-4">
-                              <div className="flex gap-4 items-center">
-                                <div className="h-10 aspect-square flex items-center">
-                                  <Image
-                                    src={data.logoUrl}
-                                    alt={`Logo Game`}
-                                    width="0"
-                                    height="0"
-                                    sizes="100vw"
-                                    style={{ width: "100%", height: "100%" }}
-                                    className="rounded-lg object-cover"
-                                  />
-                                </div>
-                                <div>
-                                  <p className="font-medium text-gray-800 text-sm whitespace-nowrap">
-                                    {data.game}
-                                  </p>
-                                  <p className="text-sm text-gray-500 whitespace-nowrap">
-                                    {data.productName}
-                                  </p>
-                                </div>
-                              </div>
-                            </td>
-                            <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
-                              {formatter(data.totalAmt)}
-                            </td>
-                            <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
-                              <StatusesOrder value={data.status} />
-                            </td>
-                            <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
-                              {data.custName}
-                            </td>
-                            <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
-                              {data.mobileNumber}
-                            </td>
-                            <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
-                              {dayjs(data.createdAt).format("YYYY-MM-DD HH:mm")}
-                            </td>
-                            <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
-                              <div className="flex justify-end w-full">
-                                <div
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    setShowForm(true);
-                                    setTypeForm("detail");
-                                    setDetailData(data);
-                                  }}
-                                  className="bg-primary-900 px-4 py-2 rounded-md text-white cursor-pointer hover:bg-red-600"
-                                >
-                                  Lihat
-                                </div>
-                              </div>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
+                            Lihat
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
+
             <Pagination
               onPageChange={handlePageClick}
               page={newData.page}
